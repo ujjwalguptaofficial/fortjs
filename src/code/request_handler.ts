@@ -3,10 +3,14 @@ import { HTTP_STATUS_CODE, HTTP_METHOD, MIME_TYPE, ERROR_TYPE } from "./enums";
 import { getRouteDetail, getRouteFromPath } from "./helper";
 import { ActionResult } from "./model";
 import * as url from 'url';
-import { Controller } from "./controller";
-import { Util } from "./util";
-import { ContentType } from "./constant";
+import { Controller } from "./abstracts/controller";
+import { ContentType, AppName, Cookie, AppSessionIdentifier } from "./constant";
 import * as qs from 'querystring';
+import { Global } from "./global";
+import { IHttpRequest } from "./interfaces/http_request";
+import { SessionProvider } from "./abstracts";
+import { parseCookie } from "./helpers/parse_cookie";
+import { CookieManager } from "./model/cookie_manager";
 
 export class RequestHandler {
     private request_: http.IncomingMessage;
@@ -55,16 +59,17 @@ export class RequestHandler {
 
     private execute_(body) {
         try {
-            this.response_.setHeader('X-Powered-By', 'infinity');
+            this.response_.setHeader('X-Powered-By', AppName);
             const urlDetail = url.parse(this.request_.url, true);
             const path = urlDetail.pathname.toLowerCase();
             const routeUrlDetail = getRouteDetail(path);
             const routeInfo = getRouteFromPath(routeUrlDetail.controllerName);
-            const requestType = this.request_.method as HTTP_METHOD;
+
             if (routeInfo == null) {
                 this.onNotFound_();
             }
             else {
+                const requestType = this.request_.method as HTTP_METHOD;
                 const actionInfo = routeInfo.actions.find(x => x.action === routeUrlDetail.actionName);
                 if (actionInfo == null) {
                     this.onNotFound_();
@@ -74,10 +79,17 @@ export class RequestHandler {
                 }
                 else {
                     var controllerObj: Controller = new (routeInfo.controller as any)();
-                    controllerObj.request = this.request_;
+                    controllerObj.request = this.request_ as IHttpRequest;
                     controllerObj.response = this.response_;
                     controllerObj.query = urlDetail.query;
                     controllerObj.body = body;
+                    if (Global.shouldParseCookie === true) {
+                        const rawCookie = this.request_.headers[Cookie] as string;
+                        const parsedCookies = parseCookie(rawCookie);
+                        Global.sessionProvider.sessionId = parsedCookies[AppSessionIdentifier];
+                        controllerObj.session = Global.sessionProvider;
+                        controllerObj.cookies = new CookieManager(rawCookie, parsedCookies)
+                    }
                     const result: ActionResult = controllerObj[actionInfo.action]();
                     result.execute().then((result) => {
                         this.response_.writeHead(result.statusCode, result.contentType);
@@ -97,7 +109,7 @@ export class RequestHandler {
         if (this.request_.method === HTTP_METHOD.Get) {
             this.execute_(null);
         }
-        else {
+        else if (Global.shouldParsePost === true) {
             this.handlePostData_().then(body => {
                 this.execute_(body);
             }).catch((err) => {

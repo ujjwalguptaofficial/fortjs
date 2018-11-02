@@ -7,8 +7,10 @@ export class DefaultController extends Controller {
         this.response.end(`${JSON.stringify(this.query)}`);
     }
 
-    @action([HTTP_METHOD.POST])
+    @action([HTTP_METHOD.Get])
     text(): ActionResult {
+        console.log(this.cookies);
+        console.log(this.session);
         return new TextResult("Hey this is text mate");
     }
 

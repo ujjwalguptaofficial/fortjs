@@ -1,6 +1,7 @@
 import * as http from "http";
 import { IRouteInfo } from "./interfaces";
 import { ViewEngine } from "./model/view_engine";
+import { SessionProvider } from "./abstracts/session_provider";
 
 const routerCollection: IRouteInfo[] = [];
 export class Global {
@@ -8,6 +9,11 @@ export class Global {
     static response: http.ServerResponse;
     static port: number;
     static viewPath: string;
+    static shouldParseCookie: boolean;
+    static shouldParsePost: boolean;
+    static sessionProvider: SessionProvider;
+    static sessionTimeOut?: number;
+    
     static get routerCollection() {
         return routerCollection;
     }

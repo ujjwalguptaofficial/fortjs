@@ -1,10 +1,4 @@
-import { ViewEngine } from "./model/view_engine";
 import { HTTP_METHOD } from "./enums";
-
-export interface IOption {
-    port?: number;
-    viewEngine?: ViewEngine;
-}
 
 export interface IRouteUrlDetail {
     controllerName: string;
@@ -24,7 +18,3 @@ export interface IRouteActionInfo {
 }
 
 
-export interface IError {
-    type: string;
-    message: string;
-}

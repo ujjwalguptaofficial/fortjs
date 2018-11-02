@@ -1,6 +1,6 @@
 import { Global } from "../global";
-import { LogHelper } from "../log_helper";
 import { ERROR_TYPE } from "../enums";
+import { LogHelper } from "../helpers/log_helper";
 
 export function declareController(path?: string): ClassDecorator {
     return (target: any) => {

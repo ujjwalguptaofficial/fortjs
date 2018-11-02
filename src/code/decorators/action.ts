@@ -15,9 +15,6 @@ export function action(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
 
 function addActionIntoController(controllerName: string, actionInfo: IRouteActionInfo) {
     const index = Global.routerCollection.findIndex(x => x.controllerName === controllerName);
-    console.log("---------addActionIntoController--------------");
-    console.log(Global.routerCollection);
-    console.log(controllerName);
     if (index >= 0) {
         Global.routerCollection[index].actions.push(actionInfo);
     }
@@ -29,5 +26,4 @@ function addActionIntoController(controllerName: string, actionInfo: IRouteActio
             path: null
         } as IRouteInfo)
     }
-    console.log(Global.routerCollection);
 }

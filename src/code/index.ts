@@ -1,5 +1,5 @@
 export * from './interfaces';
-export * from './controller';
+export * from './abstracts/index';
 export * from './decorators/index';
 export * from './start';
 export * from './interfaces/index';
