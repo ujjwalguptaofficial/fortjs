@@ -1,13 +1,12 @@
 import * as http from "http";
 import { HTTP_STATUS_CODE, HTTP_METHOD, MIME_TYPE, ERROR_TYPE } from "./enums";
-import { getRouteDetail, getController } from "./helper";
+import { getRouteDetail, getRouteFromPath } from "./helper";
 import { ActionResult } from "./model";
 import * as url from 'url';
 import { Controller } from "./controller";
 import { Util } from "./util";
 import { ContentType } from "./constant";
 import * as qs from 'querystring';
-
 
 export class RequestHandler {
     private request_: http.IncomingMessage;
@@ -59,22 +58,27 @@ export class RequestHandler {
             this.response_.setHeader('X-Powered-By', 'infinity');
             const urlDetail = url.parse(this.request_.url, true);
             const path = urlDetail.pathname.toLowerCase();
-            const routeDetail = getRouteDetail(path);
-            const controller = getController(routeDetail.controllerName);
-            if (controller == null) {
+            const routeUrlDetail = getRouteDetail(path);
+            const routeInfo = getRouteFromPath(routeUrlDetail.controllerName);
+            const requestType = this.request_.method as HTTP_METHOD;
+            if (routeInfo == null) {
                 this.onNotFound_();
             }
             else {
-                var controllerObj: Controller = new controller();
-                if (Util.isUnDefined(controllerObj[routeDetail.actionName])) {
+                const actionInfo = routeInfo.actions.find(x => x.action === routeUrlDetail.actionName);
+                if (actionInfo == null) {
                     this.onNotFound_();
                 }
+                else if (actionInfo.methodsAllowed.indexOf(requestType) < 0) {
+                    this.onMethodNotAllowed_(actionInfo.methodsAllowed);
+                }
                 else {
+                    var controllerObj: Controller = new (routeInfo.controller as any)();
                     controllerObj.request = this.request_;
                     controllerObj.response = this.response_;
                     controllerObj.query = urlDetail.query;
                     controllerObj.body = body;
-                    const result: ActionResult = controllerObj[routeDetail.actionName]();
+                    const result: ActionResult = controllerObj[actionInfo.action]();
                     result.execute().then((result) => {
                         this.response_.writeHead(result.statusCode, result.contentType);
                         this.response_.end(result.responseData);
@@ -118,6 +122,12 @@ export class RequestHandler {
     private onNotFound_() {
         this.response_.writeHead(HTTP_STATUS_CODE.Not_Found, { [ContentType]: MIME_TYPE.Text });
         this.response_.end(`The requested resource ${this.request_.url} was not found.`);
+    }
+
+    private onMethodNotAllowed_(allowedMethods: HTTP_METHOD[]) {
+        this.response_.setHeader("Allow", allowedMethods.join(","));
+        this.response_.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [ContentType]: MIME_TYPE.Text });
+        this.response_.end(`Not allowed.`);
     }
 
     private onErrorOccured_(error) {

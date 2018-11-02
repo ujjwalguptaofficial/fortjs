@@ -1,4 +1,4 @@
-import { Controller, declareController, ActionResult, TextResult, JsonResult, HtmlResult } from "infinity";
+import { Controller, declareController, ActionResult, TextResult, JsonResult, HtmlResult, action, HTTP_METHOD } from "infinity";
 
 @declareController()
 export class DefaultController extends Controller {
@@ -7,6 +7,7 @@ export class DefaultController extends Controller {
         this.response.end(`${JSON.stringify(this.query)}`);
     }
 
+    @action([HTTP_METHOD.POST])
     text(): ActionResult {
         return new TextResult("Hey this is text mate");
     }
