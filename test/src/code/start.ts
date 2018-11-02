@@ -1,5 +1,4 @@
-import * as Server from "server";
-// import { DefaultController } from "./controller/default_controller";
+import * as Server from "infinity";
 export const initApp = () => {
     // console.log(DefaultController.name)
     Server.start({

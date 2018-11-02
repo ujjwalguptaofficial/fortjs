@@ -2,7 +2,6 @@ import { ViewEngine } from "./model/view_engine";
 
 export interface IOption {
     port?: number;
-    viewPath?: string;
     viewEngine?: ViewEngine;
 }
 

@@ -43,6 +43,9 @@ export class LogHelper implements IError {
             case ERROR_TYPE.InvalidControllerName:
                 errMsg = `Invalid controller name - '${this.info_}'. Controller name must contain 'controller'.`
                 break;
+            case ERROR_TYPE.InvalidContentType:
+                errMsg = `Content type - '${this.info_}' is not valid. Please create an issue if you think this is valid type.`
+                break;
             default:
                 errMsg = this.message;
                 break;

@@ -1,4 +1,3 @@
-export * from './app';
 export * from './interfaces';
 export * from './controller';
 export * from './decorators/index';

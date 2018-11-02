@@ -1,9 +1,10 @@
-import { Controller, declareController, ActionResult, TextResult, JsonResult, HtmlResult } from "server";
+import { Controller, declareController, ActionResult, TextResult, JsonResult, HtmlResult } from "infinity";
 
 @declareController()
 export class DefaultController extends Controller {
     default() {
-        this.response.end("hey there, you got me");
+        console.log(this.query);
+        this.response.end(`${JSON.stringify(this.query)}`);
     }
 
     text(): ActionResult {
@@ -14,7 +15,13 @@ export class DefaultController extends Controller {
         return new JsonResult({ key: 'ass', value: 'ass' });
     }
 
-    html():ActionResult{
+    html(): ActionResult {
         return new HtmlResult('<h1>Hey i am html</h1>');
+    }
+
+    post(): ActionResult {
+        return new JsonResult({
+            body: this.body
+        });
     }
 }

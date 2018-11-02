@@ -1,0 +1,8 @@
+# node module
+node_modules
+
+#packed files
+*.tgz
+
+output/
+dist/

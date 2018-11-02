@@ -4,7 +4,7 @@ const merge = require('webpack-merge');
 
 const libraryTarget = [{
     type: "commonjs2",
-    name: 'server.commonjs2.js'
+    name: 'infinity.commonjs2.js'
 }];
 
 function getConfigForTaget(target) {
@@ -13,7 +13,7 @@ function getConfigForTaget(target) {
         output: {
             path: path.join(__dirname, "./../output"),
             filename: target.name,
-            library: 'Server',
+            library: 'Infinity',
             libraryTarget: target.type
         }
     }
