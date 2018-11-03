@@ -1,18 +1,19 @@
-import { Global } from "./global";
-import { IRouteUrlDetail, IRouteInfo } from "./interfaces";
+import { IRouteUrlDetail } from "./interfaces";
 import { Util } from "./util";
+import { RouteHandler } from "./route_handler";
+import { IRouteInfo } from "./interfaces/route_info";
 
-export function getRouteFromPath(path: string): IRouteInfo {
-    let controller = null;
-    Global.routerCollection.every((value) => {
-        if (value.path === path) {
-            controller = value;
-            return false;
-        }
-        return true;
-    })
-    return controller;
-}
+// export function getRouteFromPath(path: string): IRouteInfo {
+//     let controller = null;
+//     RouteHandler.routerCollection.every((value) => {
+//         if (value.path === path) {
+//             controller = value;
+//             return false;
+//         }
+//         return true;
+//     })
+//     return controller;
+// }
 
 export function getRouteDetail(url: string): IRouteUrlDetail {
     const splittedValue = url.split('/');

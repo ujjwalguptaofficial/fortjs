@@ -47,29 +47,29 @@ export class MemorySessionProvider extends SessionProvider {
 
     set(key: string, val: any): Promise<null> {
         return promise<null>((resolve, reject) => {
-            //  means session has not been created yet
-            if (Util.isNullOrEmpty(this.sessionId)) {
-                sessionValues.push({
-                    identifier: this.sessionId,
-                    datas: [{
-                        key: key,
-                        value: val
-                    }]
-                })
-                this.onSet().then(resolve).catch(reject);
-            }
-            else {
-                const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
-                if (index >= 0) {
-                    const savedValue = sessionValues[index];
-                    savedValue.datas.push({
-                        key: key,
-                        value: val
+            this.onSet().then(sessionId => {
+                if (sessionId == null) { // session already created
+                    const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
+                    if (index >= 0) {
+                        const savedValue = sessionValues[index];
+                        savedValue.datas.push({
+                            key: key,
+                            value: val
+                        })
+                    }
+                    resolve(null);
+                }
+                else { // session created
+                    this.sessionId = sessionId;
+                    sessionValues.push({
+                        identifier: this.sessionId,
+                        datas: [{
+                            key: key,
+                            value: val
+                        }]
                     })
                 }
-                resolve(null);
-            }
-
+            });
         });
     }
 
@@ -80,9 +80,4 @@ export class MemorySessionProvider extends SessionProvider {
     remove(key: string): Promise<null> {
         return null;
     }
-
-    update(key: string, val: any): Promise<null> {
-        return null;
-    }
-
 }

@@ -1,11 +1,7 @@
 import { HTTP_STATUS_CODE } from "../enums";
-
-export interface IActionResult {
-    statusCode: HTTP_STATUS_CODE;
-    responseData: any;
-    contentType: string;
-}
+import { IActionExecuteResult } from "../interfaces/action_execute_result";
 
 export abstract class ActionResult {
-    abstract execute(): Promise<IActionResult>;
+    statusCode: HTTP_STATUS_CODE = HTTP_STATUS_CODE.Ok;
+    abstract execute(): Promise<IActionExecuteResult>;
 }

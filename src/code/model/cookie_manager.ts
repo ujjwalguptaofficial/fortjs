@@ -1,12 +1,16 @@
 import { HttpCookie } from "./http_cookie";
 
 export class CookieManager {
-    private rawValue: string;
-    private values: object;
+    private responseCookie_: string[] = [];
+    private cookieCollection_: HttpCookie[] = [];
 
-    constructor(rawValue: string, values: object) {
-        this.rawValue = rawValue;
-        this.values = values;
+    constructor(rawValue: string, parsedValue: object) {
+        for (var key in parsedValue) {
+            this.cookieCollection_.push({
+                name: key,
+                value: parsedValue[key]
+            })
+        }
     }
 
     /**
@@ -17,10 +21,7 @@ export class CookieManager {
      * @memberof CookieManager
      */
     getCookie(name: string) {
-        return {
-            name: name,
-            value: this.values[name]
-        } as HttpCookie
+        return this.cookieCollection_.find(val => val.name === name);
     }
 
     /**
@@ -30,8 +31,8 @@ export class CookieManager {
      * @memberof CookieManager
      */
     addCookie(cookie: HttpCookie) {
-        this.values[cookie.name] = cookie.value;
-        //TODO- Add cookie value to rawValues
+        this.cookieCollection_.push(cookie);
+        this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
     }
 
     /**
@@ -41,7 +42,8 @@ export class CookieManager {
      * @memberof CookieManager
      */
     removeCookie(name: string) {
-        this.values[name] = null;
+        const index = this.cookieCollection_.findIndex(val => val.name === name);
+        this.cookieCollection_.splice(index, 1);
         //TODO- remove cookie value from rawValues
     }
 
@@ -52,14 +54,7 @@ export class CookieManager {
      * @memberof CookieManager
      */
     get cookieCollection() {
-        const cookies: HttpCookie[] = [];
-        for (var key in this.values) {
-            cookies.push({
-                name: key,
-                value: this.values[key]
-            })
-        }
-        return cookies;
+        return this.cookieCollection_;
     }
 
     /**
@@ -70,6 +65,36 @@ export class CookieManager {
      * @memberof CookieManager
      */
     isExist(name: string) {
-        return this.values[name] != null;
+        return this.cookieCollection_.findIndex(val => val.name === name) >= 0;
     }
+
+    private getCookieStringFromCookie_(cookie: HttpCookie) {
+        let cookieString = `${cookie.name}=${cookie.value};`
+        if (cookie.expires) {
+            cookieString += ` Expires =${cookie.expires.toUTCString()};`
+        }
+        if (cookie.httpOnly === true) {
+            cookieString += " HttpOnly;"
+        }
+        if (cookie.maxAge != null) {
+            cookieString += ` Max-Age=${cookie.maxAge}`;
+        }
+        if (cookie.path) {
+            cookieString += ` Path=${cookie.path};`
+        }
+        if (cookie.domain) {
+            cookieString += ` Domain=${cookie.path};`
+        }
+        return cookieString;
+        // return `${cookie.name}="${cookie.value}; expires =${cookie.expires.getTime()}; path=${path};"`
+    }
+
+    // public getRawCookieForResponse() {
+    //     const cookies: string[] = [];
+    //     this.cookieCollection_.forEach((cookie) => {
+    //         cookies.push(this.getCookieStringFromCookie_(cookie));
+    //     });
+    //     console.log(cookies);
+    //     return cookies;
+    // }
 }

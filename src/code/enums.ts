@@ -3,7 +3,8 @@ export enum HTTP_STATUS_CODE {
     Ok = 200,
     Internal_Server_Error = 500,
     Bad_Request = 400,
-    MethodNotAllowed = 405
+    MethodNotAllowed = 405,
+    Forbidden = 403
 }
 
 export enum ERROR_TYPE {

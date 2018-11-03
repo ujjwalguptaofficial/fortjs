@@ -1,6 +1,7 @@
 import { Global } from "../global";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper } from "../helpers/log_helper";
+import { RouteHandler } from "../route_handler";
 
 export function declareController(path?: string): ClassDecorator {
     return (target: any) => {
@@ -17,11 +18,12 @@ export function declareController(path?: string): ClassDecorator {
         else {
             path = path.toLowerCase();
         }
-        Global.addToRouterCollection({
+        RouteHandler.addToRouterCollection({
             controller: target,
             controllerName: className,
             path: path,
-            actions: []
+            actions: [],
+            guards: []
         })
     };
 }

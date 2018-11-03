@@ -1,2 +1,2 @@
 export * from "./start";
-export * from "./controller/default_controller";
+export * from "./controllers/index";

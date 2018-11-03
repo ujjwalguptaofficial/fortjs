@@ -1,16 +1,18 @@
-import { IActionResult, ActionResult } from "./action_result";
 import { HTTP_STATUS_CODE } from "../enums";
+import { ActionResult } from "./action_result";
+import { IActionExecuteResult } from "../interfaces/action_execute_result";
 
-export class HtmlResult implements ActionResult {
+export class HtmlResult extends ActionResult {
 
     html: string;
     constructor(html: string) {
+        super();
         this.html = html;
     }
 
-    execute(): Promise<IActionResult> {
+    execute(): Promise<IActionExecuteResult> {
         return new Promise((resolve, reject) => {
-            const result: IActionResult = {
+            const result: IActionExecuteResult = {
                 contentType: 'text/html',
                 responseData: this.html,
                 statusCode: HTTP_STATUS_CODE.Ok,

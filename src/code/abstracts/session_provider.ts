@@ -7,8 +7,8 @@ import { Global } from "../global";
 
 export abstract class SessionProvider {
 
-    sessionId: string;
-    cookie: CookieManager;
+    protected sessionId: string;
+    protected cookie: CookieManager;
 
     abstract get(key: string): Promise<ISessionValue>;
     abstract isExist(key: string): Promise<boolean>;
@@ -16,19 +16,24 @@ export abstract class SessionProvider {
     abstract set(key: string, val: any): Promise<null>;
     abstract setMany(values: ISessionValue[]);
     abstract remove(key: string): Promise<null>;
-    abstract update(key: string, val: any): Promise<null>;
 
-    onSet(): Promise<null> {
+    protected onSet(): Promise<string> {
         return promise((resolve, reject) => {
             if (!this.cookie.isExist(this.sessionId)) {
                 const now = new Date();
+                const sessionId = getUniqId();
                 this.cookie.addCookie({
                     name: AppSessionIdentifier,
-                    value: getUniqId(),
+                    value: sessionId,
+                    httpOnly: true,
+                    path: "/",
                     expires: new Date(now.setMinutes(now.getMinutes() + Global.sessionTimeOut))
                 });
+                resolve(sessionId);
             }
-            resolve();
+            else {
+                resolve(null);
+            }
         });
     }
 }

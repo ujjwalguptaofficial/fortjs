@@ -1,19 +1,22 @@
-import { IActionResult, ActionResult } from "./action_result";
 import { HTTP_STATUS_CODE } from "../enums";
-import { Global } from "../global";
+import { ActionResult } from "./action_result";
+import { IActionExecuteResult } from "../interfaces/action_execute_result";
 import { IViewOption } from "../interfaces/view_option";
+import { Global } from "../global";
 
-export class ViewResult implements ActionResult {
+
+export class ViewResult extends ActionResult {
 
     option: IViewOption;
     constructor(option: IViewOption) {
+        super();
         this.option = option;
     }
 
-    execute(): Promise<IActionResult> {
+    execute(): Promise<IActionExecuteResult> {
         return new Promise((resolve, reject) => {
             Global.viewEngine.render(this.option).then(viewData => {
-                const result: IActionResult = {
+                const result: IActionExecuteResult = {
                     contentType: 'text/html',
                     responseData: viewData,
                     statusCode: HTTP_STATUS_CODE.Ok,
