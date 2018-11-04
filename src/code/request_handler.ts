@@ -12,9 +12,17 @@ import { parseCookie } from "./helpers/parse_cookie";
 import { CookieManager } from "./model/cookie_manager";
 import { RouteHandler } from "./route_handler";
 import { IHttpResponse } from "./interfaces/http_response";
+import { GenericShield } from "./model/generic_shield";
+import { SessionProvider } from "./abstracts";
+import { GenericController } from "./model/generic_controller";
+import { IRouteActionInfo } from "./interfaces/route_action_info";
 
 export class RequestHandler {
     private request_: http.IncomingMessage;
+    private body_: any;
+    private cookieManager_: CookieManager;
+    private session_: SessionProvider;
+    private query_: any;
     private response_: http.ServerResponse
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
         this.request_ = request;
@@ -58,7 +66,52 @@ export class RequestHandler {
         });
     }
 
-    private execute_(body) {
+    private runController_(controller: typeof GenericController, actionName: string) {
+        var controllerObj: Controller = new controller();
+        controllerObj.request = this.request_ as IHttpRequest;
+        controllerObj.response = this.response_;
+        controllerObj.query = this.query_;
+        controllerObj.body = this.body_;
+        controllerObj.session = Global.sessionProvider;
+        controllerObj.cookies = this.cookieManager_;
+
+        const result: ActionResult = controllerObj[actionName]();
+        result.execute().then((result) => {
+            if (this.cookieManager_ != null) {
+                ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
+                    this.response_.setHeader(SetCookie, value);
+                });
+            }
+            this.response_.writeHead(result.statusCode, { [ContentType]: result.contentType });
+            this.response_.end(result.responseData);
+        }).catch(this.onErrorOccured_.bind(this))
+    }
+
+    private executeShieldsProtection_(shields: typeof GenericShield[]) {
+        const shieldsPromise = [];
+        shields.forEach(shield => {
+            var shieldObj = new shield();
+            shieldObj.body = this.body_;
+            shieldObj.cookies = this.cookieManager_;
+            shieldObj.query = this.query_;
+            shieldObj.session = Global.sessionProvider;
+            shieldObj.request = this.request_ as IHttpRequest;
+            shieldObj.response = this.response_ as IHttpResponse;
+            shieldsPromise.push(shieldObj.protect());
+        });
+        return Promise.all(shieldsPromise);
+    }
+
+    private executeGuardsCheck_(action: IRouteActionInfo) {
+        const guardPromise = [];
+        action.guards.forEach(guard => {
+            const guardObj = new guard();
+            guardPromise.push(guardObj.check());
+        });
+        return Promise.all(guardPromise);
+    }
+
+    private execute_() {
         try {
             this.response_.setHeader('X-Powered-By', AppName);
             const urlDetail = url.parse(this.request_.url, true);
@@ -78,45 +131,23 @@ export class RequestHandler {
                     this.onMethodNotAllowed_(actionInfo.methodsAllowed);
                 }
                 else {
-                    var controllerObj: Controller = new (routeInfo.controller as any)();
-                    let cookieManager: CookieManager;
+                    this.query_ = urlDetail.query;
                     if (Global.shouldParseCookie === true) {
                         const rawCookie = this.request_.headers[Cookie] as string;
                         const parsedCookies = parseCookie(rawCookie);
-                        (Global.sessionProvider as any).sessionId = parsedCookies[AppSessionIdentifier];
-                        cookieManager = new CookieManager(rawCookie, parsedCookies);
-                        (Global.sessionProvider as any).cookie = cookieManager;
-                        controllerObj.session = Global.sessionProvider;
-                        controllerObj.cookies = cookieManager;
+                        Global.sessionProvider.sessionId = parsedCookies[AppSessionIdentifier];
+                        this.cookieManager_ = new CookieManager(parsedCookies);
+                        Global.sessionProvider.cookies = this.cookieManager_;
                     }
-                    const guardsPromise = [];
-                    routeInfo.guards.forEach(guard => {
-                        guard.body = body;
-                        guard.cookies = cookieManager;
-                        guard.query = urlDetail.query;
-                        guard.session = Global.sessionProvider;
-                        guard.request = this.request_ as IHttpRequest;
-                        guard.response = this.response_ as IHttpResponse;
-                        guardsPromise.push(guard.check());
-                    });
-                    Promise.all(guardsPromise).then((results: Boolean[]) => {
-                        const shouldBlockRequest = results.indexOf(false) >= 0;
-                        if (shouldBlockRequest === false) {
-                            controllerObj.request = this.request_ as IHttpRequest;
-                            controllerObj.response = this.response_;
-                            controllerObj.query = urlDetail.query;
-                            controllerObj.body = body;
-
-                            const result: ActionResult = controllerObj[actionInfo.action]();
-                            result.execute().then((result) => {
-                                if (cookieManager != null) {
-                                    ((cookieManager as any).responseCookie_ as string[]).forEach(value => {
-                                        this.response_.setHeader(SetCookie, value);
-                                    });
+                    this.executeShieldsProtection_(routeInfo.shields).then((shieldProtectionResult: Boolean[]) => {
+                        const isRejectedByShield = shieldProtectionResult.indexOf(false) >= 0;
+                        if (isRejectedByShield === false) {
+                            this.executeGuardsCheck_(actionInfo).then(guardsCheckResult => {
+                                const isRejectedByGuard = guardsCheckResult.indexOf(false) >= 0;
+                                if (isRejectedByGuard === false) {
+                                    this.runController_(routeInfo.controller, actionInfo.action);
                                 }
-                                this.response_.writeHead(result.statusCode, { [ContentType]: result.contentType });
-                                this.response_.end(result.responseData);
-                            }).catch(this.onErrorOccured_.bind(this))
+                            }).catch(this.onErrorOccured_.bind(this));
                         }
                         else {
                             this.onForbiddenRequest_();
@@ -132,11 +163,12 @@ export class RequestHandler {
 
     handle() {
         if (this.request_.method === HTTP_METHOD.Get) {
-            this.execute_(null);
+            this.execute_();
         }
         else if (Global.shouldParsePost === true) {
             this.handlePostData_().then(body => {
-                this.execute_(body);
+                this.body_ = body;
+                this.execute_();
             }).catch((err) => {
                 this.onBadRequest_(err);
             })

@@ -5,9 +5,4 @@ export interface IRouteUrlDetail {
     actionName: string;
 }
 
-export interface IRouteActionInfo {
-    action: string;
-    methodsAllowed: HTTP_METHOD[]
-}
-
 

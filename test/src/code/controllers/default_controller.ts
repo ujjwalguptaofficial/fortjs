@@ -1,15 +1,14 @@
-import { Controller, declareController, ActionResult, TextResult, JsonResult, HtmlResult, action, HTTP_METHOD, guard } from "infinity";
-import { AuthenticationGuard } from "../guards/authentication_guard";
+import { Controller, shields, declareController, ActionResult, TextResult, JsonResult, HtmlResult, action, HTTP_METHOD } from "infinity";
+import { AuthenticationShield } from "../guards/authentication_shield";
 
-const authGuardObj = new AuthenticationGuard();
 @declareController()
-@guard([authGuardObj])
+@shields([AuthenticationShield])
 export class DefaultController extends Controller {
     default() {
         console.log(this.query);
     }
 
-    
+
 
     @action([HTTP_METHOD.Get])
     text(): ActionResult {

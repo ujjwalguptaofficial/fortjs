@@ -1,14 +1,15 @@
 import { HTTP_METHOD } from "../enums";
-import { IRouteActionInfo } from "../interfaces";
 import { RouteHandler } from "../route_handler";
+import { IRouteActionInfo } from "../interfaces/route_action_info";
 
 export function action(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
-    return function (target: any, methodName: string | symbol, descriptor: PropertyDescriptor) {
+    return function (target: any, methodName: string, descriptor: PropertyDescriptor) {
         const className = (target.constructor.name as string);
-        const actionInfo = {
+        const actionInfo: IRouteActionInfo = {
             action: methodName,
-            methodsAllowed: allowedMethods
-        } as IRouteActionInfo
+            methodsAllowed: allowedMethods,
+            guards: []
+        };
         RouteHandler.addAction(actionInfo, className);
     }
 }

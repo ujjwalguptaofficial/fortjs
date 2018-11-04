@@ -1,10 +1,10 @@
+import { Controller } from "./controller";
 import { IHttpRequest } from "../interfaces/http_request";
 import { IHttpResponse } from "../interfaces/http_response";
 import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
-import { Controller } from "./controller";
 
-export abstract class Guard implements Controller {
+export abstract class Shield implements Controller {
     request: IHttpRequest;
     response: IHttpResponse;
     query: object;
@@ -12,5 +12,6 @@ export abstract class Guard implements Controller {
     session: SessionProvider;
     cookies: CookieManager;
 
-    abstract check(): Promise<boolean>;
+    abstract protect(): Promise<boolean>;
 }
+

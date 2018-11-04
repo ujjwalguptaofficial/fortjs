@@ -47,7 +47,7 @@ export class MemorySessionProvider extends SessionProvider {
 
     set(key: string, val: any): Promise<null> {
         return promise<null>((resolve, reject) => {
-            this.onSet().then(sessionId => {
+            this.createSession().then(sessionId => {
                 if (sessionId == null) { // session already created
                     const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
                     if (index >= 0) {
@@ -74,10 +74,25 @@ export class MemorySessionProvider extends SessionProvider {
     }
 
     setMany(values: ISessionValue[]) {
-        return null;
+        return promise<null>((resolve, reject) => {
+            const promises: Promise<null>[] = [];
+            values.forEach(value => {
+                promises.push(this.set(value.key, value.value));
+            })
+            Promise.all(promises).then(results => {
+                resolve();
+            }).catch(reject);
+        });
     }
 
     remove(key: string): Promise<null> {
-        return null;
+        return promise<null>((resolve, reject) => {
+            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+            if (savedValue != null) {
+                const index = savedValue.datas.findIndex(q => q.key === key);
+                savedValue.datas.splice(index, 1);
+            }
+            resolve(null);
+        });
     }
 }
