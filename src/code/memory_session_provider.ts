@@ -1,7 +1,6 @@
 import { SessionProvider } from "./abstracts";
 import { ISessionValue } from "./interfaces/session_value";
 import { promise } from "./helpers/promise";
-import { Util } from "./util";
 
 interface ISessionValueFormat {
     identifier: string;
@@ -47,20 +46,9 @@ export class MemorySessionProvider extends SessionProvider {
 
     set(key: string, val: any): Promise<null> {
         return promise<null>((resolve, reject) => {
-            this.createSession().then(sessionId => {
-                if (sessionId == null) { // session already created
-                    const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
-                    if (index >= 0) {
-                        const savedValue = sessionValues[index];
-                        savedValue.datas.push({
-                            key: key,
-                            value: val
-                        })
-                    }
-                    resolve(null);
-                }
-                else { // session created
-                    this.sessionId = sessionId;
+            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+            if (savedValue == null) {
+                this.createSession().then(() => {
                     sessionValues.push({
                         identifier: this.sessionId,
                         datas: [{
@@ -68,8 +56,38 @@ export class MemorySessionProvider extends SessionProvider {
                             value: val
                         }]
                     })
-                }
-            });
+                });
+            }
+            else {
+                savedValue.datas.push({
+                    key: key,
+                    value: val
+                })
+            }
+            // this.createSession().then(sessionId => {
+            //     if (sessionId == null) { // session already created
+            //         const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
+            //         if (index >= 0) {
+            //             const savedValue = sessionValues[index];
+            //             savedValue.datas.push({
+            //                 key: key,
+            //                 value: val
+            //             })
+            //         }
+            //         resolve(null);
+            //     }
+            //     else { // session created
+
+            //         this.sessionId = sessionId;
+            //         sessionValues.push({
+            //             identifier: this.sessionId,
+            //             datas: [{
+            //                 key: key,
+            //                 value: val
+            //             }]
+            //         })
+            //     }
+            // });
         });
     }
 

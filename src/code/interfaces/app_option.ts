@@ -6,7 +6,7 @@ export interface IAppOption {
     viewEngine?: ViewEngine;
     shouldParseCookie?: boolean;
     shouldParsePost?: boolean;
-    sessionProvider?: SessionProvider;
+    sessionProvider?: typeof SessionProvider;
 
     /**
      * session timeout in minute - default is 60 minute

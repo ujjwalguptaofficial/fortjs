@@ -1,4 +1,3 @@
-export * from './interfaces';
 export * from './abstracts/index';
 export * from './decorators/index';
 export * from './start';

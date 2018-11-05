@@ -4,7 +4,7 @@ import { Guard } from "../abstracts/guard";
 
 export function guards(guards: typeof Guard[]): MethodDecorator {
     return (function (target: any, methodName: string, descriptor: PropertyDescriptor) {
-        const className = target.name;
+        const className = (target.constructor.name as string);
         RouteHandler.addGuards(guards as typeof GenericGuard[], className, methodName);
     })
 }

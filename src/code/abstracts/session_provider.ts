@@ -17,22 +17,18 @@ export abstract class SessionProvider {
     abstract setMany(values: ISessionValue[]): Promise<null>;
     abstract remove(key: string): Promise<null>;
 
-    protected createSession(): Promise<string> {
+    protected createSession(): Promise<null> {
         return promise((resolve, reject) => {
-            if (this.cookies.isExist(AppSessionIdentifier) === true) {
-                resolve(null);
-            }
-            else {
-                const now = new Date();
-                this.sessionId = getUniqId();
-                this.cookies.addCookie({
-                    name: AppSessionIdentifier,
-                    value: this.sessionId,
-                    httpOnly: true,
-                    path: "/",
-                    expires: new Date(now.setMinutes(now.getMinutes() + Global.sessionTimeOut))
-                });
-            }
+            const now = new Date();
+            this.sessionId = getUniqId();
+            this.cookies.addCookie({
+                name: AppSessionIdentifier,
+                value: this.sessionId,
+                httpOnly: true,
+                path: "/",
+                expires: new Date(now.setMinutes(now.getMinutes() + Global.sessionTimeOut))
+            });
+            resolve();
         });
     }
 }

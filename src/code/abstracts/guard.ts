@@ -11,6 +11,7 @@ export abstract class Guard implements Controller {
     body: object;
     session: SessionProvider;
     cookies: CookieManager;
+    params: any;
 
     abstract check(): Promise<boolean>;
 }

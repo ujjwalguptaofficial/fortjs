@@ -1,16 +1,12 @@
 import { HttpCookie } from "./http_cookie";
+import { IHttpCookie } from "../interfaces/http_cookie";
 
 export class CookieManager {
     private responseCookie_: string[] = [];
-    private cookieCollection_: HttpCookie[] = [];
+    private cookieCollection_: object;
 
     constructor(parsedValue: object) {
-        for (var key in parsedValue) {
-            this.cookieCollection_.push({
-                name: key,
-                value: parsedValue[key]
-            })
-        }
+        this.cookieCollection_ = parsedValue;
     }
 
     /**
@@ -20,8 +16,11 @@ export class CookieManager {
      * @returns
      * @memberof CookieManager
      */
-    getCookie(name: string) {
-        return this.cookieCollection_.find(val => val.name === name);
+    getCookie(name: string): HttpCookie {
+        return {
+            name: name,
+            value: this.cookieCollection_[name]
+        } as IHttpCookie;
     }
 
     /**
@@ -31,7 +30,7 @@ export class CookieManager {
      * @memberof CookieManager
      */
     addCookie(cookie: HttpCookie) {
-        this.cookieCollection_.push(cookie);
+        this.cookieCollection_[cookie.name] = cookie.value;
         this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
     }
 
@@ -42,9 +41,13 @@ export class CookieManager {
      * @memberof CookieManager
      */
     removeCookie(name: string) {
-        const index = this.cookieCollection_.findIndex(val => val.name === name);
-        this.cookieCollection_.splice(index, 1);
-        //TODO- remove cookie value from rawValues
+        this.cookieCollection_[name] = null;
+        const now = new Date();
+        this.responseCookie_.push(this.getCookieStringFromCookie_({
+            name: name,
+            value: null,
+            expires: new Date(now.setMinutes(now.getMinutes() - 100))
+        }));
     }
 
     /**
@@ -65,7 +68,7 @@ export class CookieManager {
      * @memberof CookieManager
      */
     isExist(name: string) {
-        return this.cookieCollection_.findIndex(val => val.name === name) >= 0;
+        return this.cookieCollection_[name] != null;
     }
 
     private getCookieStringFromCookie_(cookie: HttpCookie) {
@@ -86,15 +89,5 @@ export class CookieManager {
             cookieString += ` Domain=${cookie.path};`
         }
         return cookieString;
-        // return `${cookie.name}="${cookie.value}; expires =${cookie.expires.getTime()}; path=${path};"`
     }
-
-    // public getRawCookieForResponse() {
-    //     const cookies: string[] = [];
-    //     this.cookieCollection_.forEach((cookie) => {
-    //         cookies.push(this.getCookieStringFromCookie_(cookie));
-    //     });
-    //     console.log(cookies);
-    //     return cookies;
-    // }
 }

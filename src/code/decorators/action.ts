@@ -8,7 +8,8 @@ export function action(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
         const actionInfo: IRouteActionInfo = {
             action: methodName,
             methodsAllowed: allowedMethods,
-            guards: []
+            guards: [],
+            pattern: methodName.toLowerCase()
         };
         RouteHandler.addAction(actionInfo, className);
     }

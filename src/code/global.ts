@@ -10,7 +10,7 @@ export class Global {
     static viewPath: string;
     static shouldParseCookie: boolean;
     static shouldParsePost: boolean;
-    static sessionProvider: GenericSessionProvider;
+    static sessionProvider: typeof GenericSessionProvider;
     static sessionTimeOut?: number;
     static viewEngine: ViewEngine;
 

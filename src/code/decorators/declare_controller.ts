@@ -1,4 +1,3 @@
-import { Global } from "../global";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper } from "../helpers/log_helper";
 import { RouteHandler } from "../route_handler";
@@ -22,7 +21,7 @@ export function declareController(path?: string): ClassDecorator {
         RouteHandler.addToRouterCollection({
             controller: target as typeof GenericController,
             controllerName: className,
-            path: path,
+            alias: path,
             actions: [],
             shields: []
         })

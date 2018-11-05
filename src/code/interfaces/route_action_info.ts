@@ -5,4 +5,5 @@ export interface IRouteActionInfo {
     action: string;
     methodsAllowed: HTTP_METHOD[]
     guards: typeof GenericGuard[];
+    pattern: string;
 }
