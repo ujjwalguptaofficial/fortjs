@@ -1,7 +1,7 @@
-import { HTTP_STATUS_CODE } from "../enums";
+import { HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
 
 export interface IActionExecuteResult {
     statusCode: HTTP_STATUS_CODE;
-    responseData: string|Buffer
-    contentType: string;
+    responseData: any;
+    contentType: MIME_TYPE;
 }

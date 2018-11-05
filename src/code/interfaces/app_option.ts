@@ -15,4 +15,6 @@ export interface IAppOption {
      * @memberof IAppOption
      */
     sessionTimeOut?: number;
+
+    filesPathAllowed?: string[]
 }

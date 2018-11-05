@@ -13,5 +13,5 @@ export class Global {
     static sessionProvider: typeof GenericSessionProvider;
     static sessionTimeOut?: number;
     static viewEngine: ViewEngine;
-
+    static filesPathAllowed: string[];
 }

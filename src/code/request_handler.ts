@@ -3,7 +3,7 @@ import { HTTP_STATUS_CODE, HTTP_METHOD, MIME_TYPE, ERROR_TYPE } from "./enums";
 import { ActionResult } from "./model";
 import * as url from 'url';
 import { Controller } from "./abstracts/controller";
-import { ContentType, AppName, Cookie, AppSessionIdentifier, SetCookie } from "./constant";
+import { Content__Type, App__Name, Cookie, App__Session__Identifier, Set__Cookie } from "./constant";
 import * as qs from 'querystring';
 import { Global } from "./global";
 import { IHttpRequest } from "./interfaces/http_request";
@@ -14,6 +14,9 @@ import { GenericSessionProvider } from "./model/generic_session_provider";
 import { GenericGuard } from "./model/generic_guard";
 import { parseAndMatchRoute } from "./helpers/parse_match_route";
 import { IRouteMatch } from "./interfaces/route_match";
+import * as path from 'path';
+import { Util } from "./util";
+import { FileHandler } from "./file_handler";
 
 export class RequestHandler {
     private request_: http.IncomingMessage;
@@ -47,7 +50,7 @@ export class RequestHandler {
             }).on('end', () => {
                 const bodyBuffer = Buffer.concat(body);
                 try {
-                    const contentType = this.request_.headers[ContentType];
+                    const contentType = this.request_.headers[Content__Type];
                     switch (contentType) {
                         case MIME_TYPE.Json:
                             postData = JSON.parse(bodyBuffer.toString()); break;
@@ -81,10 +84,10 @@ export class RequestHandler {
         result.execute().then((result) => {
             if (this.cookieManager_ != null) {
                 ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
-                    this.response_.setHeader(SetCookie, value);
+                    this.response_.setHeader(Set__Cookie, value);
                 });
             }
-            this.response_.writeHead(result.statusCode, { [ContentType]: result.contentType });
+            this.response_.writeHead(result.statusCode, { [Content__Type]: result.contentType });
             this.response_.end(result.responseData);
         }).catch(this.onErrorOccured_.bind(this))
     }
@@ -121,46 +124,57 @@ export class RequestHandler {
 
     private execute_() {
         try {
-            this.response_.setHeader('X-Powered-By', AppName);
+            this.response_.setHeader('X-Powered-By', App__Name);
             const urlDetail = url.parse(this.request_.url, true);
-            const path = urlDetail.pathname.toLowerCase();
-            this.routeMatchInfo_ = parseAndMatchRoute(path);
-            if (this.routeMatchInfo_ == null) {
-                this.onNotFound_();
+            let pathUrl = urlDetail.pathname.toLowerCase();
+            const extension = path.parse(pathUrl).ext;
+            if (!Util.isNullOrEmpty(extension)) {
+                //console.log("file",path.parse(pathUrl));
+                const fileHandlerObj = new FileHandler(pathUrl, extension);
+                fileHandlerObj.execute().then(result => {
+                    this.response_.writeHead(result.statusCode, { [Content__Type]: result.contentType });
+                    this.response_.end(result.responseData);
+                }).catch(this.onErrorOccured_.bind(this));
             }
             else {
-                const requestType = this.request_.method as HTTP_METHOD;
-                const actionInfo = this.routeMatchInfo_.actionInfo;
-                if (actionInfo.methodsAllowed != null && actionInfo.methodsAllowed.indexOf(requestType) < 0) {
-                    this.onMethodNotAllowed_(actionInfo.methodsAllowed);
+                this.routeMatchInfo_ = parseAndMatchRoute(pathUrl);
+                if (this.routeMatchInfo_ == null) {
+                    this.onNotFound_();
                 }
                 else {
-                    this.query_ = urlDetail.query;
-                    if (Global.shouldParseCookie === true) {
-                        const rawCookie = this.request_.headers[Cookie] as string;
-                        const parsedCookies = parseCookie(rawCookie);
-                        this.session_ = new Global.sessionProvider();
-                        this.cookieManager_ = new CookieManager(parsedCookies);
-                        this.session_.sessionId = parsedCookies[AppSessionIdentifier];
-                        this.session_.cookies = this.cookieManager_;
+                    const requestType = this.request_.method as HTTP_METHOD;
+                    const actionInfo = this.routeMatchInfo_.actionInfo;
+                    if (actionInfo.methodsAllowed != null && actionInfo.methodsAllowed.indexOf(requestType) < 0) {
+                        this.onMethodNotAllowed_(actionInfo.methodsAllowed);
                     }
-                    this.executeShieldsProtection_().then((shieldProtectionResult: Boolean[]) => {
-                        const isRejectedByShield = shieldProtectionResult.indexOf(false) >= 0;
-                        if (isRejectedByShield === false) {
-                            this.executeGuardsCheck_(actionInfo.guards).then(guardsCheckResult => {
-                                const isRejectedByGuard = guardsCheckResult.indexOf(false) >= 0;
-                                if (isRejectedByGuard === false) {
-                                    this.runController_();
-                                }
-                                else {
-                                    this.onForbiddenRequest_();
-                                }
-                            }).catch(this.onErrorOccured_.bind(this));
+                    else {
+                        this.query_ = urlDetail.query;
+                        if (Global.shouldParseCookie === true) {
+                            const rawCookie = this.request_.headers[Cookie] as string;
+                            const parsedCookies = parseCookie(rawCookie);
+                            this.session_ = new Global.sessionProvider();
+                            this.cookieManager_ = new CookieManager(parsedCookies);
+                            this.session_.sessionId = parsedCookies[App__Session__Identifier];
+                            this.session_.cookies = this.cookieManager_;
                         }
-                        else {
-                            this.onForbiddenRequest_();
-                        }
-                    }).catch(this.onErrorOccured_.bind(this));
+                        this.executeShieldsProtection_().then((shieldProtectionResult: Boolean[]) => {
+                            const isRejectedByShield = shieldProtectionResult.indexOf(false) >= 0;
+                            if (isRejectedByShield === false) {
+                                this.executeGuardsCheck_(actionInfo.guards).then(guardsCheckResult => {
+                                    const isRejectedByGuard = guardsCheckResult.indexOf(false) >= 0;
+                                    if (isRejectedByGuard === false) {
+                                        this.runController_();
+                                    }
+                                    else {
+                                        this.onForbiddenRequest_();
+                                    }
+                                }).catch(this.onErrorOccured_.bind(this));
+                            }
+                            else {
+                                this.onForbiddenRequest_();
+                            }
+                        }).catch(this.onErrorOccured_.bind(this));
+                    }
                 }
             }
         }
@@ -185,7 +199,7 @@ export class RequestHandler {
 
     private onBadRequest_(error) {
         if (this.response_.headersSent === false) {
-            this.response_.writeHead(HTTP_STATUS_CODE.Bad_Request, { [ContentType]: MIME_TYPE.Html });
+            this.response_.writeHead(HTTP_STATUS_CODE.Bad_Request, { [Content__Type]: MIME_TYPE.Html });
             let errMessage = `<h1>Bad Request</h1>
         <h3>message : ${error.message}</h3>`;
             if (error.stack) {
@@ -200,7 +214,7 @@ export class RequestHandler {
 
     private onForbiddenRequest_() {
         if (this.response_.headersSent === false) {
-            this.response_.writeHead(HTTP_STATUS_CODE.Forbidden, { [ContentType]: MIME_TYPE.Html });
+            this.response_.writeHead(HTTP_STATUS_CODE.Forbidden, { [Content__Type]: MIME_TYPE.Html });
             let errMessage = `<h1>Forbidden</h1>`
             this.response_.end(errMessage);
         }
@@ -208,7 +222,7 @@ export class RequestHandler {
 
     private onNotFound_() {
         if (this.response_.headersSent === false) {
-            this.response_.writeHead(HTTP_STATUS_CODE.Not_Found, { [ContentType]: MIME_TYPE.Text });
+            this.response_.writeHead(HTTP_STATUS_CODE.Not_Found, { [Content__Type]: MIME_TYPE.Text });
             this.response_.end(`The requested resource ${this.request_.url} was not found.`);
         }
     }
@@ -216,14 +230,14 @@ export class RequestHandler {
     private onMethodNotAllowed_(allowedMethods: HTTP_METHOD[]) {
         if (this.response_.headersSent === false) {
             this.response_.setHeader("Allow", allowedMethods.join(","));
-            this.response_.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [ContentType]: MIME_TYPE.Text });
+            this.response_.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [Content__Type]: MIME_TYPE.Text });
             this.response_.end(`Not allowed.`);
         }
     }
 
     private onErrorOccured_(error) {
         if (this.response_.headersSent === false) {
-            this.response_.writeHead(HTTP_STATUS_CODE.Internal_Server_Error, { [ContentType]: MIME_TYPE.Html });
+            this.response_.writeHead(HTTP_STATUS_CODE.Internal_Server_Error, { [Content__Type]: MIME_TYPE.Html });
             let errMessage = `<h1>internal server error</h1>
             <h3>message : ${error.message}</h3>`;
             if (error.stack) {

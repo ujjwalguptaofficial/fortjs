@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CODE } from "../enums";
+import { HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
 import { ActionResult } from "./action_result";
 import { IActionExecuteResult } from "../interfaces/action_execute_result";
 
@@ -13,7 +13,7 @@ export class JsonResult extends ActionResult {
     execute(): Promise<IActionExecuteResult> {
         return new Promise((resolve, reject) => {
             resolve({
-                contentType: 'text/json',
+                contentType: MIME_TYPE.Json,
                 responseData: JSON.stringify(this.value),
                 statusCode: HTTP_STATUS_CODE.Ok
             })

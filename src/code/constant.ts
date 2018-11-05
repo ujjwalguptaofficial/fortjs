@@ -1,5 +1,6 @@
-export const ContentType = "content-type";
-export const AppName = "infinity";
-export const AppSessionIdentifier = "infinity_session_id";
+export const Content__Type = "content-type";
+export const App__Name = "infinity";
+export const App__Session__Identifier = "infinity_session_id";
 export const Cookie = "cookie";
-export const SetCookie = 'set-cookie';
+export const Set__Cookie = 'set-cookie';
+export const Current__Directory = process.cwd();

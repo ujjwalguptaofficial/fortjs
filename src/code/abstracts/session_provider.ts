@@ -1,7 +1,7 @@
 import { ISessionValue } from "../interfaces/session_value";
 import { CookieManager } from "../model/cookie_manager";
 import { promise } from "../helpers/promise";
-import { AppSessionIdentifier } from "../constant";
+import { App__Session__Identifier } from "../constant";
 import * as getUniqId from "uniqid";
 import { Global } from "../global";
 
@@ -22,7 +22,7 @@ export abstract class SessionProvider {
             const now = new Date();
             this.sessionId = getUniqId();
             this.cookies.addCookie({
-                name: AppSessionIdentifier,
+                name: App__Session__Identifier,
                 value: this.sessionId,
                 httpOnly: true,
                 path: "/",
