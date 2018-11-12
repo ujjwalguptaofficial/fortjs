@@ -1,6 +1,6 @@
 import { RouteHandler } from "../route_handler";
 import { IRouteMatch } from "../interfaces/route_match";
-import { File_Extension } from "../enums";
+import { File_Extension } from "../enums/file_extension";
 
 function isRequestFileType(urlParts: string[]) {
     const splitByDotValues = urlParts[urlParts.length - 1].split(".");

@@ -1,4 +1,5 @@
-import { Controller, action, HTTP_METHOD, HtmlResult, TextResult, declareController } from "infinity";
+import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult } from "infinity";
+import * as fs from "fs";
 
 @declareController()
 export class UserController extends Controller {
@@ -8,17 +9,35 @@ export class UserController extends Controller {
         const pwd = this.body.password;
         if (userId != null && pwd != null) {
             this.session.set('userId', userId);
-            return new HtmlResult("authenticated");
+            return new Promise((resolve, reject) => {
+                resolve(htmlResult(`<h1>Authenticated</h1>`));
+            });
         }
         else {
-            const result = new TextResult("Invalid credential");
-            return result;
+            const result = textResult("Invalid credential");
+            return new Promise((resolve, reject) => {
+                resolve(result);
+            });
         }
     }
 
     @action()
     authenticate() {
         this.session.set('userId', 123);
-        return new HtmlResult("authenticated");
+        return new Promise((resolve, reject) => {
+            resolve(htmlResult("authenticated"));
+        });
+    }
+
+    @action()
+    file() {
+        const filePath = this.query.file;
+        console.log(filePath);
+        fs.exists(filePath, (isExist) => {
+            console.log(isExist);
+        });
+        return new Promise((resolve, reject) => {
+            resolve(textResult("checking file"));
+        });
     }
 }

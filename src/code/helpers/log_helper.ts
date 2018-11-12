@@ -1,5 +1,6 @@
 import { IError } from "../interfaces/error";
-import { ERROR_TYPE } from "../enums";
+import { ERROR_TYPE } from "../enums/error_type";
+
 
 
 export class LogHelper implements IError {

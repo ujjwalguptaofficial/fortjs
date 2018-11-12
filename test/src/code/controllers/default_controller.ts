@@ -1,5 +1,6 @@
-import { Controller, shields, declareController, ActionResult, TextResult, JsonResult, HtmlResult, action, HTTP_METHOD } from "infinity";
-import { AuthenticationShield } from "../guards/authentication_shield";
+import { Controller, shields, declareController, action, HTTP_METHOD, guards, route, IActionResult, MIME_TYPE, jsonResult, htmlResult, textResult } from "infinity";
+import { AuthenticationShield } from "../shields/authentication_shield";
+import { JsonGuard } from "../guards/json_guard";
 
 @declareController()
 @shields([AuthenticationShield])
@@ -8,24 +9,32 @@ export class DefaultController extends Controller {
         console.log(this.query);
     }
 
-
-
     @action([HTTP_METHOD.Get])
-    text(): ActionResult {
-        return new TextResult("Hey this is text mate");
+    @route("text/{userId}") // render url - default/text/{userid}
+    text() {
+        return new Promise((resolve, reject) => {
+            resolve(jsonResult(this.params));
+        });
     }
 
-    json(): ActionResult {
-        return new JsonResult({ key: 'ass', value: 'ass' });
+    @action()
+    @guards([JsonGuard])
+    json() {
+        return new Promise((resolve, reject) => {
+            resolve(jsonResult({ key: 'ass', value: 'ass' }));
+        });
     }
 
-    html(): ActionResult {
-        return new HtmlResult('<h1>Hey i am html</h1>');
+    html() {
+        return new Promise((resolve, reject) => {
+            resolve(htmlResult(`<h1>hey there i am html</h1>`));
+        });
     }
 
-    post(): ActionResult {
-        return new JsonResult({
-            body: this.body
+    @action()
+    post() {
+        return new Promise((resolve, reject) => {
+            resolve(jsonResult(this.body));
         });
     }
 }

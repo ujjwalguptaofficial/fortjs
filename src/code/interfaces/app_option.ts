@@ -1,9 +1,10 @@
-import { ViewEngine } from "../model/view_engine";
 import { SessionProvider } from "../abstracts/session_provider";
+import { Wall } from "../abstracts/wall";
+import { ViewEngine } from "../abstracts/view_engine";
 
 export interface IAppOption {
     port?: number;
-    viewEngine?: ViewEngine;
+    viewEngine?: typeof ViewEngine;
     shouldParseCookie?: boolean;
     shouldParsePost?: boolean;
     sessionProvider?: typeof SessionProvider;
@@ -16,5 +17,6 @@ export interface IAppOption {
      */
     sessionTimeOut?: number;
 
-    filesPathAllowed?: string[]
+    foldersAllowed?: string[];
+    walls?: typeof Wall[];
 }

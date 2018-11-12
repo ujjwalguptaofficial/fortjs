@@ -1,7 +1,7 @@
-import { ERROR_TYPE } from "../enums";
 import { LogHelper } from "../helpers/log_helper";
 import { RouteHandler } from "../route_handler";
 import { GenericController } from "../model/generic_controller";
+import { ERROR_TYPE } from "../enums/error_type";
 
 export function declareController(path?: string): ClassDecorator {
     return (target: any) => {

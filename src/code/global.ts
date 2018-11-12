@@ -1,7 +1,7 @@
 import * as http from "http";
-import { ViewEngine } from "./model/view_engine";
-import { SessionProvider } from "./abstracts/session_provider";
 import { GenericSessionProvider } from "./model/generic_session_provider";
+import { GenericWall } from "./model/generic_wall";
+import { ViewEngine } from "./abstracts/view_engine";
 
 export class Global {
     static request: http.IncomingMessage;
@@ -13,5 +13,6 @@ export class Global {
     static sessionProvider: typeof GenericSessionProvider;
     static sessionTimeOut?: number;
     static viewEngine: ViewEngine;
-    static filesPathAllowed: string[];
+    static foldersAllowed: string[];
+    static walls?: typeof GenericWall[];
 }
