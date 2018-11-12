@@ -1,4 +1,4 @@
-import { Guard } from "infinity";
+import { Guard } from "fort";
 
 export class JsonGuard extends Guard {
     check(): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { Controller, shields, declareController, action, HTTP_METHOD, guards, route, IActionResult, MIME_TYPE, jsonResult, htmlResult, textResult } from "infinity";
+import { Controller, shields, declareController, action, HTTP_METHOD, guards, route, IActionResult, MIME_TYPE, jsonResult, htmlResult, textResult } from "fort";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { JsonGuard } from "../guards/json_guard";
 

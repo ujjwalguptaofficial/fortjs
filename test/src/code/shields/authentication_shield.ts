@@ -1,4 +1,4 @@
-import { Shield } from "infinity";
+import { Shield } from "fort";
 export class AuthenticationShield extends Shield {
     protect(): Promise<boolean> {
         return new Promise((resolve, reject) => {

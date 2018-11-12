@@ -1,4 +1,4 @@
-import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult } from "infinity";
+import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult } from "fort";
 import * as fs from "fs";
 
 @declareController()

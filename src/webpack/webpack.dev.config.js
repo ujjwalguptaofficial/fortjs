@@ -4,7 +4,7 @@ const merge = require('webpack-merge');
 
 const libraryTarget = [{
     type: "commonjs2",
-    name: 'infinity.commonjs2.js'
+    name: 'fort.commonjs2.js'
 }];
 
 function getConfigForTaget(target) {
