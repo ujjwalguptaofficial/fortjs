@@ -9,6 +9,7 @@ export abstract class Controller {
     body: any;
     session: SessionProvider;
     cookies: CookieManager;
-
     params: any;
+
+    data: any;
 }

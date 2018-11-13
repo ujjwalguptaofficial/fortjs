@@ -12,7 +12,7 @@ export abstract class Shield implements Controller {
     session: SessionProvider;
     cookies: CookieManager;
     params: any;
-
+    data: any;
     abstract protect(): Promise<boolean>;
 }
 

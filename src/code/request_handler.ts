@@ -25,7 +25,7 @@ export class RequestHandler extends RequestHandlerHelper {
     private cookieManager_: CookieManager;
     private session_: GenericSessionProvider;
     private query_: any;
-
+    private data_ = {};
     private routeMatchInfo_: IRouteMatch;
 
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
@@ -81,6 +81,7 @@ export class RequestHandler extends RequestHandlerHelper {
             wallObj.session = this.session_;
             wallObj.request = this.request as IHttpRequest;
             wallObj.response = this.response as IHttpResponse;
+            wallObj.data = this.data_;
             wallsPromise.push(wallObj.block());
         });
         return Promise.all(wallsPromise);
@@ -95,6 +96,7 @@ export class RequestHandler extends RequestHandlerHelper {
         controllerObj.session = this.session_;
         controllerObj.cookies = this.cookieManager_;
         controllerObj.params = this.routeMatchInfo_.params;
+        controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: IActionResult) => {
             if (this.cookieManager_ != null) {
                 ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
@@ -117,6 +119,7 @@ export class RequestHandler extends RequestHandlerHelper {
             shieldObj.session = this.session_;
             shieldObj.request = this.request as IHttpRequest;
             shieldObj.response = this.response as IHttpResponse;
+            shieldObj.data = this.data_;
             shieldsPromise.push(shieldObj.protect());
         });
         return Promise.all(shieldsPromise);
@@ -132,6 +135,7 @@ export class RequestHandler extends RequestHandlerHelper {
             guardObj.session = this.session_;
             guardObj.request = this.request as IHttpRequest;
             guardObj.response = this.response as IHttpResponse;
+            guardObj.data = this.data_;
             guardPromise.push(guardObj.check());
         });
         return Promise.all(guardPromise);
