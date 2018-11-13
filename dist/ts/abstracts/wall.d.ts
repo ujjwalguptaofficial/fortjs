@@ -11,5 +11,6 @@ export declare abstract class Wall implements Controller {
     session: SessionProvider;
     cookies: CookieManager;
     params: any;
+    data: any;
     abstract block(): Promise<boolean>;
 }

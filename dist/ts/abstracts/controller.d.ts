@@ -10,4 +10,5 @@ export declare abstract class Controller {
     session: SessionProvider;
     cookies: CookieManager;
     params: any;
+    data: any;
 }

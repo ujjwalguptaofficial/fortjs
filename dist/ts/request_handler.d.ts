@@ -6,6 +6,7 @@ export declare class RequestHandler extends RequestHandlerHelper {
     private cookieManager_;
     private session_;
     private query_;
+    private data_;
     private routeMatchInfo_;
     constructor(request: http.IncomingMessage, response: http.ServerResponse);
     private registerEvents;
