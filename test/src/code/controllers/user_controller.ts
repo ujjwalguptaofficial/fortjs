@@ -1,4 +1,4 @@
-import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult } from "fort";
+import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult, viewResult } from "fortjs";
 import * as fs from "fs";
 
 @declareController()
@@ -39,5 +39,10 @@ export class UserController extends Controller {
         return new Promise((resolve, reject) => {
             resolve(textResult("checking file"));
         });
+    }
+
+    @action()
+    view() {
+        return viewResult('index', { title: 'fort' });
     }
 }

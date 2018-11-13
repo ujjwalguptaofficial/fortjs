@@ -1,4 +1,4 @@
-import { Guard } from "fort";
+import { Guard } from "fortjs";
 
 export class JsonGuard extends Guard {
     check(): Promise<boolean> {

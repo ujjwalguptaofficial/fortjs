@@ -1,8 +1,10 @@
-import * as Server from "infinity";
+import * as fort from "fortjs";
+import { FortViewEngine } from "eshtml";
 export const initApp = () => {
-    Server.start({
+    fort.start({
         port: 8080,
-        filesPathAllowed: ["contents"]
+        foldersAllowed: ["contents"],
+        viewEngine: FortViewEngine
     })
     console.log(`server runing at 8080`);
 }

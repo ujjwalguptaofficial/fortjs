@@ -1,5 +1,5 @@
 {
-  "name": "fort",
+  "name": "fortjs",
   "version": "0.1.0",
   "description": "Simple & structured MVC web framework for nodejs targeting good code structures, modularity.",
   "main": "dist/fort.commonjs2.js",
