@@ -6,9 +6,10 @@ import { IAppOption } from "./interfaces/app_option";
 import { MemorySessionProvider } from "./memory_session_provider";
 import { GenericSessionProvider } from "./model/generic_session_provider";
 import { GenericWall } from "./model/generic_wall";
+import { ErrorHandler } from "./model";
 
-
-export function start(option: IAppOption) {
+export let app: http.Server;
+export function create(option: IAppOption) {
     if (!Util.isNull(option)) {
         Global.port = Util.isNull(option.port) ? 4000 : option.port;
         Global.viewEngine = new (option.viewEngine as any)();
@@ -18,8 +19,9 @@ export function start(option: IAppOption) {
         Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
         Global.foldersAllowed = Util.isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
         Global.walls = Util.isNull(option.walls) ? [] : option.walls as typeof GenericWall[];
+        Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
     }
-    http.createServer((req, res) => {
+    app = http.createServer((req, res) => {
         new RequestHandler(req, res).handle();
     }).listen(Global.port);
 }

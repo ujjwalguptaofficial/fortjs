@@ -1,4 +1,4 @@
-import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult, viewResult } from "fortjs";
+import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult, viewResult, renderView } from "fortjs";
 import * as fs from "fs";
 
 @declareController()
@@ -43,6 +43,10 @@ export class UserController extends Controller {
 
     @action()
     view() {
-        return viewResult('index', { title: 'fort' });
+        return new Promise((resolve, reject) => {
+            renderView('index', { title: 'fort' }).then(viewData => {
+                resolve(htmlResult(viewData));
+            });
+        });
     }
 }

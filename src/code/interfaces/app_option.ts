@@ -1,6 +1,7 @@
 import { SessionProvider } from "../abstracts/session_provider";
 import { Wall } from "../abstracts/wall";
 import { ViewEngine } from "../abstracts/view_engine";
+import { ErrorHandler } from "../model";
 
 export interface IAppOption {
     port?: number;
@@ -19,4 +20,6 @@ export interface IAppOption {
 
     foldersAllowed?: string[];
     walls?: typeof Wall[];
+
+    errorHandler?: typeof ErrorHandler;
 }

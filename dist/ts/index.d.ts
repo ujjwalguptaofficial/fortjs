@@ -4,3 +4,4 @@ export * from './start';
 export * from './interfaces/index';
 export * from './enums';
 export * from './helpers/index';
+export * from './model/index';

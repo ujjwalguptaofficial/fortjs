@@ -121,12 +121,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _start__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "start", function() { return _start__WEBPACK_IMPORTED_MODULE_2__["start"]; });
 
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(41);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_METHOD", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["HTTP_METHOD"]; });
 
-/* harmony import */ var _helpers_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(40);
+/* harmony import */ var _helpers_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(42);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["viewResult"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["jsonResult"]; });
@@ -134,6 +134,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["textResult"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["htmlResult"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "renderView", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["renderView"]; });
+
+/* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _model_index__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"]; });
+
 
 
 
@@ -685,6 +691,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(23);
 /* harmony import */ var _memory_session_provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
+/* harmony import */ var _model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
+
 
 
 
@@ -700,6 +708,7 @@ function start(option) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.walls) ? [] : option.walls;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"] : option.errorHandler;
     }
     http__WEBPACK_IMPORTED_MODULE_0__["createServer"](function (req, res) {
         new _request_handler__WEBPACK_IMPORTED_MODULE_3__["RequestHandler"](req, res).handle();
@@ -1446,6 +1455,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
+
 
 
 
@@ -1467,11 +1478,17 @@ var RequestHandlerHelper = /** @class */ (function () {
         }
     };
     RequestHandlerHelper.prototype.onForbiddenRequest = function () {
+        var _this = this;
         var _a;
         if (this.response.headersSent === false) {
             this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            var errMessage = "<h1>Forbidden</h1>";
-            this.response.end(errMessage);
+            // let errMessage = `<h1>Forbidden</h1>`
+            // this.response.end(errMessage);
+            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onForbiddenRequest().then(function (errMessage) {
+                _this.response.end(errMessage);
+            }).catch(function (err) {
+                _this.response.end(JSON.stringify(err));
+            });
         }
     };
     RequestHandlerHelper.prototype.onNotFound = function () {
@@ -1490,17 +1507,24 @@ var RequestHandlerHelper = /** @class */ (function () {
         }
     };
     RequestHandlerHelper.prototype.onErrorOccured = function (error) {
+        var _this = this;
         var _a;
         if (this.response.headersSent === false) {
             this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Internal_Server_Error, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            var errMessage = "<h1>internal server error</h1>\n            <h3>message : " + error.message + "</h3>";
-            if (error.stack) {
-                errMessage += "<p><b>stacktrace:</b> " + error.stack + "</p>";
-            }
-            else if (error.type) {
-                errMessage += "<p><b>type:</b> " + error.type + "</p>";
-            }
-            this.response.end(errMessage);
+            // let errMessage = `<h1>internal server error</h1>
+            // <h3>message : ${error.message}</h3>`;
+            // if (error.stack) {
+            //     errMessage += `<p><b>stacktrace:</b> ${error.stack}</p>`
+            // }
+            // else if (error.type) {
+            //     errMessage += `<p><b>type:</b> ${error.type}</p>`
+            // }
+            // this.response.end(errMessage);
+            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
+                _this.response.end(result);
+            }).catch(function (err) {
+                _this.response.end(JSON.stringify(err));
+            });
         }
         else {
             console.error(error);
@@ -1654,6 +1678,53 @@ var MemorySessionProvider = /** @class */ (function (_super) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _error_handler__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"]; });
+
+
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return ErrorHandler; });
+/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+var ErrorHandler = /** @class */ (function () {
+    function ErrorHandler() {
+    }
+    ErrorHandler.prototype.onServerError = function (ex) {
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
+            var errMessage = "<h1>internal server error</h1>\n            <h3>message : " + ex.message + "</h3>";
+            if (ex.stack) {
+                errMessage += "<p><b>stacktrace:</b> " + ex.stack + "</p>";
+            }
+            if (ex.type) {
+                errMessage += "<p><b>type:</b> " + ex.type + "</p>";
+            }
+            resolve(errMessage);
+        });
+    };
+    ErrorHandler.prototype.onForbiddenRequest = function () {
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
+            var errMessage = "<h1>We are sorry, but you are not allowed access to this resource.</h1>";
+            resolve(errMessage);
+        });
+    };
+    return ErrorHandler;
+}());
+
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mime_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _mime_type__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"]; });
 
@@ -1665,68 +1736,61 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 40 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _view_result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _view_result__WEBPACK_IMPORTED_MODULE_0__["viewResult"]; });
-
-/* harmony import */ var _json_result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return _json_result__WEBPACK_IMPORTED_MODULE_1__["jsonResult"]; });
-
-/* harmony import */ var _text_result__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return _text_result__WEBPACK_IMPORTED_MODULE_2__["textResult"]; });
-
-/* harmony import */ var _html_result__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return _html_result__WEBPACK_IMPORTED_MODULE_3__["htmlResult"]; });
-
-
-
-
-
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return viewResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var _promise__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-
-
-
-
-function viewResult(vieWname, model) {
-    return Object(_promise__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (resolve, reject) {
-        _global__WEBPACK_IMPORTED_MODULE_2__["Global"].viewEngine.render({
-            view: vieWname,
-            model: model
-        }).then(function (result) {
-            resolve({
-                contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html,
-                responseData: result,
-                statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
-            });
-        }).catch(reject);
-    });
-}
-
-
-/***/ }),
 /* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _view_result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(43);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _view_result__WEBPACK_IMPORTED_MODULE_0__["viewResult"]; });
+
+/* harmony import */ var _json_result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(44);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return _json_result__WEBPACK_IMPORTED_MODULE_1__["jsonResult"]; });
+
+/* harmony import */ var _text_result__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(45);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return _text_result__WEBPACK_IMPORTED_MODULE_2__["textResult"]; });
+
+/* harmony import */ var _html_result__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(46);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return _html_result__WEBPACK_IMPORTED_MODULE_3__["htmlResult"]; });
+
+/* harmony import */ var _render_view__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(47);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "renderView", function() { return _render_view__WEBPACK_IMPORTED_MODULE_4__["renderView"]; });
+
+
+
+
+
+
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return viewResult; });
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
+
+
+function viewResult(vieWData) {
+    return {
+        contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html,
+        responseData: vieWData,
+        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
+    };
+}
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return jsonResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
 
 
@@ -1740,13 +1804,13 @@ function jsonResult(value) {
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return textResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
 
 
@@ -1760,13 +1824,13 @@ function textResult(text) {
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return htmlResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(39);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(34);
 
 
@@ -1776,6 +1840,23 @@ function htmlResult(html) {
         responseData: html,
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
     };
+}
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderView", function() { return renderView; });
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
+
+function renderView(vieWname, model) {
+    return _global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine.render({
+        view: vieWname,
+        model: model
+    });
 }
 
 

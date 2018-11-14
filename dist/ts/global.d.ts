@@ -3,6 +3,7 @@ import * as http from "http";
 import { GenericSessionProvider } from "./model/generic_session_provider";
 import { GenericWall } from "./model/generic_wall";
 import { ViewEngine } from "./abstracts/view_engine";
+import { ErrorHandler } from "./model/error_handler";
 export declare class Global {
     static request: http.IncomingMessage;
     static response: http.ServerResponse;
@@ -14,5 +15,6 @@ export declare class Global {
     static sessionTimeOut?: number;
     static viewEngine: ViewEngine;
     static foldersAllowed: string[];
-    static walls?: typeof GenericWall[];
+    static walls: typeof GenericWall[];
+    static errorHandler: typeof ErrorHandler;
 }
