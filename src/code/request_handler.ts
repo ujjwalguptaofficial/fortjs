@@ -17,8 +17,8 @@ import { Util } from "./util";
 import { FileHandler } from "./file_handler";
 import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
-import { IActionResult } from "./interfaces/action_result";
 import { RequestHandlerHelper } from "./request_handler_helper";
+import { ActionResult } from "./types/action_result";
 
 export class RequestHandler extends RequestHandlerHelper {
     private body_: any;
@@ -54,7 +54,12 @@ export class RequestHandler extends RequestHandlerHelper {
                     const contentType = this.request.headers[Content__Type];
                     switch (contentType) {
                         case MIME_TYPE.Json:
-                            postData = JSON.parse(bodyBuffer.toString()); break;
+                            try {
+                                postData = JSON.parse(bodyBuffer.toString()); break;
+                            }
+                            catch (ex) {
+                                reject("Post data is invalid");
+                            }
                         case MIME_TYPE.Text:
                         case MIME_TYPE.Html:
                             postData = bodyBuffer.toString(); break;
@@ -97,7 +102,7 @@ export class RequestHandler extends RequestHandlerHelper {
         controllerObj.cookies = this.cookieManager_;
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
-        controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: IActionResult) => {
+        controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: ActionResult) => {
             if (this.cookieManager_ != null) {
                 ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
                     this.response.setHeader(Set__Cookie, value);

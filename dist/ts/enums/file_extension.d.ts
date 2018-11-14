@@ -1,4 +1,4 @@
-export declare enum File_Extension {
+export declare enum FILE_EXTENSION {
     Ico = ".ico",
     Html = ".html",
     Js = ".js",

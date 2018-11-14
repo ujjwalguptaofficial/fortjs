@@ -1,4 +1,4 @@
-import { Controller, shields, declareController, action, HTTP_METHOD, guards, route, IActionResult, MIME_TYPE, jsonResult, htmlResult, textResult } from "fortjs";
+import { Controller, shields, declareController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { JsonGuard } from "../guards/json_guard";
 

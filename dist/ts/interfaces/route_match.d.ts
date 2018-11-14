@@ -6,5 +6,4 @@ export interface IRouteMatch {
     actionInfo: IRouteActionInfo;
     params: any;
     shields: typeof GenericShield[];
-    isRequestTypeFile: boolean;
 }

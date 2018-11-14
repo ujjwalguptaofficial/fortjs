@@ -22,4 +22,12 @@ export interface IAppOption {
     walls?: typeof Wall[];
 
     errorHandler?: typeof ErrorHandler;
+    
+    /**
+     * path to be used when url is root.
+     *
+     * @type {string}
+     * @memberof IAppOption
+     */
+    defaultPath?: string;
 }

@@ -5,7 +5,7 @@ import { Global } from "./global";
 import * as path from "path";
 import { Current__Directory } from "./constant";
 import { MIME_TYPE } from "./enums/mime_type";
-import { IActionResult } from "./interfaces/action_result";
+import { ActionResult } from "./types/action_result";
 export class FileHandler {
 
     // path: string;
@@ -35,7 +35,7 @@ export class FileHandler {
         return "/";
     }
 
-    execute(): Promise<IActionResult> {
+    execute(): Promise<ActionResult> {
         return promise((resolve, reject) => {
             const folderRequired = this.getRequiredFolder_(this.relativeFilePath);
             if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
@@ -51,7 +51,7 @@ export class FileHandler {
                                     statusCode: HTTP_STATUS_CODE.Ok,
                                     contentType: MIME_TYPE[this.extension] || MIME_TYPE.Text,
                                     responseData: data
-                                } as IActionResult);
+                                } as ActionResult);
                             }).catch(reject)
                         }).catch(reject);
                     }
@@ -60,7 +60,7 @@ export class FileHandler {
                             statusCode: HTTP_STATUS_CODE.Not_Found,
                             contentType: MIME_TYPE.Text,
                             responseData: `File ${this.relativeFilePath} not found`
-                        } as IActionResult);
+                        } as ActionResult);
                     }
 
                 }).catch(reject);
@@ -70,7 +70,7 @@ export class FileHandler {
                     statusCode: HTTP_STATUS_CODE.Not_Found,
                     contentType: MIME_TYPE.Text,
                     responseData: `File ${this.relativeFilePath} not found`
-                } as IActionResult);
+                } as ActionResult);
             }
         });
     }

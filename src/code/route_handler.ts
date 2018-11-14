@@ -1,4 +1,3 @@
-
 import { IRouteInfo } from "./interfaces/route_info";
 import { GenericShield } from "./model/generic_shield";
 import { IRouteActionInfo } from "./interfaces/route_action_info";
@@ -44,7 +43,7 @@ export class RouteHandler {
         }
     }
 
-    static addAction(newAction: IRouteActionInfo, className: string) {
+    static addAction(newAction: IRouteActionInfo, className: string, isDefault?: boolean) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({
@@ -52,10 +51,14 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                alias: null
+                alias: null,
+                defaultAction: isDefault === true ? newAction.action : ""
             });
         }
         else {
+            if (isDefault === true) {
+                router.defaultAction = newAction.action
+            }
             const savedAction = router.actions.find(val => val.action === newAction.action);
             if (savedAction == null) {
                 newAction.pattern = router.alias == null ? newAction.pattern : `/${router.alias}/${newAction.pattern}`;

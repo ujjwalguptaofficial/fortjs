@@ -1,2 +1,2 @@
-import { IActionResult } from "../interfaces/action_result";
-export declare function jsonResult(value: any): IActionResult;
+import { ActionResult } from "../types/action_result";
+export declare function jsonResult(value: any): ActionResult;

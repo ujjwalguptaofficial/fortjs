@@ -1,8 +1,16 @@
-import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult, viewResult, renderView } from "fortjs";
+import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult, renderView, defaultAction } from "fortjs";
 import * as fs from "fs";
 
 @declareController()
 export class UserController extends Controller {
+
+    @defaultAction()
+    default() {
+        return new Promise((resolve, reject) => {
+            resolve(htmlResult("default action"));
+        });
+    }
+
     @action([HTTP_METHOD.POST])
     login() {
         const userId = this.body.userId;
