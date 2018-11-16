@@ -7,11 +7,11 @@ import { Controller } from "./controller";
 export abstract class Guard implements Controller {
     request: IHttpRequest;
     response: IHttpResponse;
-    query: object;
-    body: object;
+    query: { [key: string]: any };
+    body: { [key: string]: any };
     session: SessionProvider;
     cookies: CookieManager;
-    params: any;
-    data: any;
+    params: { [key: string]: any };
+    data: { [key: string]: any };
     abstract check(): Promise<boolean>;
 }

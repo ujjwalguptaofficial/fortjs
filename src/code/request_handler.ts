@@ -143,9 +143,22 @@ export class RequestHandler extends FileHandler {
             const negotiatedMiMeType = this.getContentTypeFromNegotiation(contentType);
             if (negotiatedMiMeType != null) {
                 if (result.file == null) {
-                    this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                        { [Content__Type]: negotiatedMiMeType });
-                    this.response.end(getData());
+                    if (result.responseFormat == null) {
+                        this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
+                            { [Content__Type]: negotiatedMiMeType });
+                        this.response.end(getData());
+                    }
+                    else {
+                        const key = Object.keys(result.responseFormat).find(qry => qry === negotiatedMiMeType);
+                        if (key != null) {
+                            this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
+                                { [Content__Type]: negotiatedMiMeType });
+                            this.response.end(result.responseFormat[key]());
+                        }
+                        else {
+                            this.onNotAcceptableRequest();
+                        }
+                    }
                 }
                 else {
                     if (result.file.shouldDownload === true) {

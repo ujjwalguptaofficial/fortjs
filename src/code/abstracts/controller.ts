@@ -5,11 +5,10 @@ import { CookieManager } from "../model/cookie_manager";
 export abstract class Controller {
     request: IHttpRequest;
     response: IHttpResponse;
-    query: any;
-    body: any;
+    query: { [key: string]: any };
+    body: { [key: string]: any };
     session: SessionProvider;
     cookies: CookieManager;
-    params: any;
-
-    data: any;
+    params: { [key: string]: any };
+    data: { [key: string]: any };
 }

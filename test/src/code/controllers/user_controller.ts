@@ -1,4 +1,4 @@
-import { Controller, action, HTTP_METHOD, declareAsController, htmlResult, textResult, renderView, defaultAction } from "fortjs";
+import { Controller, action, HTTP_METHOD, declareAsController, htmlResult, textResult, renderView, defaultAction, HttpResult, MIME_TYPE } from "fortjs";
 import * as fs from "fs";
 
 @declareAsController()
@@ -55,6 +55,26 @@ export class UserController extends Controller {
             renderView('index', { title: 'fort' }).then(viewData => {
                 resolve(htmlResult(viewData));
             });
+        });
+    }
+
+    formatter() {
+        return new Promise((resolve, reject) => {
+            resolve({
+                contentType: MIME_TYPE.Text,
+                responseData: null,
+                statusCode: 400,
+                responseFormat: {
+                    [MIME_TYPE.Text]: function () {
+                        return 'Text';
+                    },
+                    [MIME_TYPE.Json]: function () {
+                        return {
+                            result: 'Text'
+                        }
+                    }
+                }
+            } as HttpResult)
         });
     }
 }

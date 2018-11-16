@@ -7,6 +7,9 @@ export type HttpResult = {
     statusCode: HTTP_STATUS_CODE;
     responseData: any;
     contentType: MIME_TYPE;
-    file?: FileResultInfo
+    file?: FileResultInfo;
+    responseFormat?: {
+        [type: string]: () => any;
+    }
 }
 

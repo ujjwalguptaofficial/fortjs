@@ -22,6 +22,8 @@ export function create(option: AppOption) {
         Global.foldersAllowed = Util.isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
         Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        Global.connectonKeepAliveTimeout = option.connectonKeepAliveTimeout == null ? 5000 : option.connectonKeepAliveTimeout;
+
     }
     else {
         Global.port = 4000;
@@ -43,5 +45,6 @@ export function create(option: AppOption) {
             throw err;
         }
     });
+    app.keepAliveTimeout = Global.connectonKeepAliveTimeout;
 }
 

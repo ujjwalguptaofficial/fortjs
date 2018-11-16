@@ -951,7 +951,7 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.action]().then(function (result) {
-            var _a;
+            var _a, _b;
             var getData = function () {
                 switch (negotiatedMiMeType) {
                     case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Json:
@@ -977,8 +977,20 @@ var RequestHandler = /** @class */ (function (_super) {
             var negotiatedMiMeType = _this.getContentTypeFromNegotiation(contentType);
             if (negotiatedMiMeType != null) {
                 if (result.file == null) {
-                    _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType, _a));
-                    _this.response.end(getData());
+                    if (result.responseFormat == null) {
+                        _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType, _a));
+                        _this.response.end(getData());
+                    }
+                    else {
+                        var key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiatedMiMeType; });
+                        if (key != null) {
+                            _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_b = {}, _b[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType, _b));
+                            _this.response.end(result.responseFormat[key]());
+                        }
+                        else {
+                            _this.onNotAcceptableRequest();
+                        }
+                    }
                 }
                 else {
                     if (result.file.shouldDownload === true) {
