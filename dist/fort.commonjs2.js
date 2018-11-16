@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.4.0 - 16/11/2018
+ * @license :fortjs - V0.5.0 - 16/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -758,6 +758,7 @@ function create(option) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"] : option.errorHandler;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].connectonKeepAliveTimeout = option.connectonKeepAliveTimeout == null ? 5000 : option.connectonKeepAliveTimeout;
     }
     else {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = 4000;
@@ -779,6 +780,7 @@ function create(option) {
             throw err;
         }
     });
+    app.keepAliveTimeout = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].connectonKeepAliveTimeout;
 }
 
 
