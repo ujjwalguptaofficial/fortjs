@@ -1,31 +1,12 @@
-import { promise } from "./helpers/promise";
 import { FileHelper } from "./helpers/file_helper";
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { Global } from "./global";
 import * as path from "path";
-import { Current__Directory } from "./constant";
-import { MIME_TYPE } from "./enums/mime_type";
-import { ActionResult } from "./types/action_result";
-export class FileHandler {
-
-    // path: string;
-    extension: string;
-    //folderRequired: string;
-    relativeFilePath: string;
-    constructor(filePath: string, extension: string) {
-
-        // extract URL path
-        // Avoid https://en.wikipedia.org/wiki/Directory_traversal_attack
-        // e.g curl --path-as-is http://localhost:9000/../fileInDanger.txt
-        // by limiting the path to current directory only
-        // console.log("dirname", __dirname);
-        //console.log("filePath", filePath);
-        this.relativeFilePath = filePath;
-        // this.folderRequired = this.getRequiredFolder_(filePath);
-        // this.path = path.join(Current__Directory, filePath);
-        //.normalize(path).replace(/^(\.\.[\/\\])+/, '');
-        this.extension = extension.substr(1);
-    }
+import { Current__Directory, Content__Type } from "./constant";
+import { RequestHandlerHelper } from "./request_handler_helper";
+import * as Fs from "fs";
+import { getMimeTypeFromExtension } from "./helpers/get_mime_type_from_extension";
+export class FileHandler extends RequestHandlerHelper {
 
     private getRequiredFolder_(path: string) {
         const splittedValue = path.split("/");
@@ -35,43 +16,54 @@ export class FileHandler {
         return "/";
     }
 
-    execute(): Promise<ActionResult> {
-        return promise((resolve, reject) => {
-            const folderRequired = this.getRequiredFolder_(this.relativeFilePath);
-            if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-                let absolutePath = path.join(Current__Directory, this.relativeFilePath);
-                FileHelper.isPathExist(absolutePath).then(isExist => {
-                    if (isExist === true) {
-                        FileHelper.isDirectory(absolutePath).then(isDirectory => {
-                            if (isDirectory === true) {
-                                absolutePath += '/index.html';
-                            }
-                            FileHelper.readFile(absolutePath).then(data => {
-                                resolve({
-                                    statusCode: HTTP_STATUS_CODE.Ok,
-                                    contentType: MIME_TYPE[this.extension] || MIME_TYPE.Text,
-                                    responseData: data
-                                } as ActionResult);
-                            }).catch(reject)
-                        }).catch(reject);
-                    }
-                    else {
-                        resolve({
-                            statusCode: HTTP_STATUS_CODE.Not_Found,
-                            contentType: MIME_TYPE.Text,
-                            responseData: `File ${this.relativeFilePath} not found`
-                        } as ActionResult);
-                    }
 
-                }).catch(reject);
-            }
-            else {
-                resolve({
-                    statusCode: HTTP_STATUS_CODE.Not_Found,
-                    contentType: MIME_TYPE.Text,
-                    responseData: `File ${this.relativeFilePath} not found`
-                } as ActionResult);
-            }
-        });
+    protected handleFileRequest(filePath: string, fileType: string) {
+        const folderRequired = this.getRequiredFolder_(filePath);
+        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+            let absolutePath = path.join(Current__Directory, filePath);
+            FileHelper.isPathExist(absolutePath).then(isExist => {
+                if (isExist === true) {
+                    FileHelper.isDirectory(absolutePath).then(isDirectory => {
+                        if (isDirectory === true) {
+                            absolutePath += '/index.html';
+                            FileHelper.isPathExist(absolutePath).then(isFileExist => {
+                                if (isFileExist === true) {
+                                    this.sendFile_(absolutePath, fileType);
+                                }
+                                else {
+                                    this.onNotFound();
+                                }
+                            });
+                        }
+                        else {
+                            this.sendFile_(absolutePath, fileType);
+                        }
+                    }).catch(this.onErrorOccured.bind(this));
+                }
+                else {
+                    this.onNotFound();
+                }
+
+            }).catch(this.onErrorOccured.bind(this));
+        }
+        else {
+            this.onNotFound();
+        }
+    }
+
+    private sendFile_(path: string, fileType: string) {
+        const readStream = Fs.createReadStream(path);
+        // Handle non-existent file
+        readStream.on('error', this.onErrorOccured.bind(this));
+        this.response.statusCode = HTTP_STATUS_CODE.Ok;
+        let mimeType;
+        if (fileType[0] === '.') { // its extension
+            mimeType = getMimeTypeFromExtension(fileType);
+        }
+        else { // mime type
+            mimeType = fileType;
+        }
+        this.response.setHeader(Content__Type, mimeType);
+        readStream.pipe(this.response);
     }
 }

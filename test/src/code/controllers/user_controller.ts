@@ -1,7 +1,7 @@
-import { Controller, action, HTTP_METHOD, declareController, htmlResult, textResult, renderView, defaultAction } from "fortjs";
+import { Controller, action, HTTP_METHOD, declareAsController, htmlResult, textResult, renderView, defaultAction } from "fortjs";
 import * as fs from "fs";
 
-@declareController()
+@declareAsController()
 export class UserController extends Controller {
 
     @defaultAction()

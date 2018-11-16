@@ -17,16 +17,20 @@ import { Util } from "./util";
 import { FileHandler } from "./file_handler";
 import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
-import { RequestHandlerHelper } from "./request_handler_helper";
-import { ActionResult } from "./types/action_result";
+import { HttpResult } from "./types/http_result";
+import { HTTP_STATUS_CODE } from "./enums/http_status_code";
+import * as jsontoxml from "jsontoxml";
+import { Wall } from "./abstracts/wall";
 
-export class RequestHandler extends RequestHandlerHelper {
+export class RequestHandler extends FileHandler {
     private body_: any;
     private cookieManager_: CookieManager;
     private session_: GenericSessionProvider;
     private query_: any;
     private data_ = {};
     private routeMatchInfo_: IRouteMatch;
+
+    private wallInstances_: Wall[];
 
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
         super();
@@ -37,9 +41,7 @@ export class RequestHandler extends RequestHandlerHelper {
 
     private registerEvents() {
         this.request.on('error', this.onBadRequest);
-        this.response.on('error', (err) => {
-            this.onErrorOccured(err);
-        });
+        this.response.on('error', this.onErrorOccured.bind(this));
     }
 
     private handlePostData_() {
@@ -55,11 +57,13 @@ export class RequestHandler extends RequestHandlerHelper {
                     switch (contentType) {
                         case MIME_TYPE.Json:
                             try {
-                                postData = JSON.parse(bodyBuffer.toString()); break;
+                                postData = JSON.parse(bodyBuffer.toString());
                             }
                             catch (ex) {
                                 reject("Post data is invalid");
+                                return;
                             }
+                            break;
                         case MIME_TYPE.Text:
                         case MIME_TYPE.Html:
                             postData = bodyBuffer.toString(); break;
@@ -76,8 +80,16 @@ export class RequestHandler extends RequestHandlerHelper {
         });
     }
 
-    private executeWallBlock_() {
+    private runWallOutgoing_() {
         const wallsPromise = [];
+        this.wallInstances_.forEach(wallObj => {
+            wallsPromise.push(wallObj.onOutgoing());
+        });
+        return Promise.all(wallsPromise);
+    }
+
+    private runWallIncoming_() {
+        const wallsPromise = this.wallInstances_ = [];
         Global.walls.forEach(wall => {
             var wallObj = new wall();
             wallObj.body = this.body_;
@@ -87,13 +99,15 @@ export class RequestHandler extends RequestHandlerHelper {
             wallObj.request = this.request as IHttpRequest;
             wallObj.response = this.response as IHttpResponse;
             wallObj.data = this.data_;
-            wallsPromise.push(wallObj.block());
+            this.wallInstances_.push(wallObj);
+            wallsPromise.push(wallObj.onIncoming());
         });
         return Promise.all(wallsPromise);
     }
 
     private runController_() {
-        var controllerObj: Controller = new this.routeMatchInfo_.controller();
+
+        const controllerObj: Controller = new this.routeMatchInfo_.controller();
         controllerObj.request = this.request as IHttpRequest;
         controllerObj.response = this.response;
         controllerObj.query = this.query_;
@@ -102,15 +116,53 @@ export class RequestHandler extends RequestHandlerHelper {
         controllerObj.cookies = this.cookieManager_;
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
-        controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: ActionResult) => {
+        controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: HttpResult) => {
+            const getData = () => {
+                switch (negotiatedMiMeType) {
+                    case MIME_TYPE.Json:
+                        if (typeof result.responseData === 'object') {
+                            return JSON.stringify(result.responseData);
+                        }
+                        return result.responseData;
+                    case MIME_TYPE.Xml:
+                        if (typeof result.responseData === 'object') {
+                            return jsontoxml(result.responseData);
+                        }
+                        return result.responseData;
+                    default:
+                        return result.responseData;
+
+                }
+            }
             if (this.cookieManager_ != null) {
                 ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
                     this.response.setHeader(Set__Cookie, value);
                 });
             }
-            this.response.writeHead(result.statusCode,
-                { [Content__Type]: result.contentType });
-            this.response.end(result.responseData);
+            const contentType = result.contentType || MIME_TYPE.Text;
+            const negotiatedMiMeType = this.getContentTypeFromNegotiation(contentType);
+            if (negotiatedMiMeType != null) {
+                if (result.file == null) {
+                    this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
+                        { [Content__Type]: negotiatedMiMeType });
+                    this.response.end(getData());
+                }
+                else {
+                    if (result.file.shouldDownload === true) {
+                        const parsedPath = path.parse(result.file.filePath);
+                        const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                        this.response.setHeader(
+                            "Content-Disposition",
+                            `attachment;filename=${fileName}.${parsedPath.ext}`
+                        )
+                    }
+                    this.handleFileRequest(result.file.filePath, negotiatedMiMeType);
+                }
+            }
+            else {
+                this.onNotAcceptableRequest();
+            }
+
         }).catch(this.onErrorOccured.bind(this))
     }
 
@@ -149,18 +201,14 @@ export class RequestHandler extends RequestHandlerHelper {
     private execute_() {
         try {
             this.response.setHeader('X-Powered-By', App__Name);
-            this.executeWallBlock_().then(wallProtectionResult => {
+            this.runWallIncoming_().then(wallProtectionResult => {
                 const isRejectedByWall = wallProtectionResult.indexOf(false) >= 0;
                 if (isRejectedByWall === false) {
                     const urlDetail = url.parse(this.request.url, true);
                     let pathUrl = urlDetail.pathname.toLowerCase();
                     const extension = path.parse(pathUrl).ext;
                     if (!Util.isNullOrEmpty(extension)) {
-                        const fileHandlerObj = new FileHandler(pathUrl, extension);
-                        fileHandlerObj.execute().then(result => {
-                            this.response.writeHead(result.statusCode, { [Content__Type]: result.contentType });
-                            this.response.end(result.responseData);
-                        }).catch(this.onErrorOccured.bind(this));
+                        this.handleFileRequest(pathUrl, extension);
                     }
                     else {
                         this.routeMatchInfo_ = parseAndMatchRoute(pathUrl);

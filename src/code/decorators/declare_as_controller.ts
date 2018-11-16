@@ -3,7 +3,7 @@ import { RouteHandler } from "../route_handler";
 import { GenericController } from "../model/generic_controller";
 import { ERROR_TYPE } from "../enums/error_type";
 
-export function declareController(path?: string): ClassDecorator {
+export function declareAsController(path?: string): ClassDecorator {
     return (target: any) => {
         const className = target.name;
         const classNameLower = className.toLowerCase();

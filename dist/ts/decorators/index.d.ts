@@ -1,4 +1,4 @@
-export * from "./declare_controller";
+export * from "./declare_as_controller";
 export * from './action';
 export * from './shields';
 export * from './guards';

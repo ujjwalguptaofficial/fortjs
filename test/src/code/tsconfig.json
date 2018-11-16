@@ -11,7 +11,7 @@
         "preserveConstEnums": true,
         "declaration": true,
         "module": "es6",
-        "outDir": "output/ts",
+        "outDir": "output",
         "lib": [
             "es2015",
             "dom"

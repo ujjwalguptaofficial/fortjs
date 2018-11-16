@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.4.0 - 14/11/2018
+ * @license :fortjs - V0.4.0 - 16/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -108,7 +108,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEngine", function() { return _abstracts_index__WEBPACK_IMPORTED_MODULE_0__["ViewEngine"]; });
 
 /* harmony import */ var _decorators_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareController", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["declareController"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareAsController", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["declareAsController"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "action", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["action"]; });
 
@@ -125,12 +125,12 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "create", function() { return _create__WEBPACK_IMPORTED_MODULE_2__["create"]; });
 
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(40);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_METHOD", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["HTTP_METHOD"]; });
 
-/* harmony import */ var _helpers_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
+/* harmony import */ var _helpers_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(46);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["jsonResult"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["textResult"]; });
@@ -139,10 +139,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "renderView", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["renderView"]; });
 
-/* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(40);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "downloadResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["downloadResult"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["fileResult"]; });
+
+/* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _model_index__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"]; });
 
-/* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(48);
+/* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(53);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "destroy", function() { return _destroy__WEBPACK_IMPORTED_MODULE_6__["destroy"]; });
 
 
@@ -299,6 +303,7 @@ __webpack_require__.r(__webpack_exports__);
 var Global = /** @class */ (function () {
     function Global() {
     }
+    Global.walls = [];
     return Global;
 }());
 
@@ -340,8 +345,8 @@ var ViewEngine = /** @class */ (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _declare_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareController", function() { return _declare_controller__WEBPACK_IMPORTED_MODULE_0__["declareController"]; });
+/* harmony import */ var _declare_as_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareAsController", function() { return _declare_as_controller__WEBPACK_IMPORTED_MODULE_0__["declareAsController"]; });
 
 /* harmony import */ var _action__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "action", function() { return _action__WEBPACK_IMPORTED_MODULE_1__["action"]; });
@@ -372,14 +377,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declareController", function() { return declareController; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declareAsController", function() { return declareAsController; });
 /* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
 
 
 
-function declareController(path) {
+function declareAsController(path) {
     return function (target) {
         var className = target.name;
         var classNameLower = className.toLowerCase();
@@ -470,6 +475,7 @@ var ERROR_TYPE;
 (function (ERROR_TYPE) {
     ERROR_TYPE["InvalidControllerName"] = "invalid_controller_name";
     ERROR_TYPE["InvalidContentType"] = "invalid_content_type";
+    ERROR_TYPE["PortInUse"] = "port_in_use";
 })(ERROR_TYPE || (ERROR_TYPE = {}));
 
 
@@ -728,8 +734,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(23);
 /* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24);
-/* harmony import */ var _memory_session_provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
-/* harmony import */ var _model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(40);
+/* harmony import */ var _memory_session_provider__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
+/* harmony import */ var _model__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
+/* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(13);
+/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(14);
+
+
 
 
 
@@ -746,7 +756,6 @@ function create(option) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _memory_session_provider__WEBPACK_IMPORTED_MODULE_4__["MemorySessionProvider"] : option.sessionProvider;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.walls) ? [] : option.walls;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"] : option.errorHandler;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
     }
@@ -763,9 +772,12 @@ function create(option) {
     app = http__WEBPACK_IMPORTED_MODULE_0__["createServer"](function (req, res) {
         new _request_handler__WEBPACK_IMPORTED_MODULE_3__["RequestHandler"](req, res).handle();
     }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
-        console.log("errcode", err.code);
-        console.log("err", err);
-        throw err;
+        if (err.code === 'EADDRINUSE') {
+            throw new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_6__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_7__["ERROR_TYPE"].PortInUse).get();
+        }
+        else {
+            throw err;
+        }
     });
 }
 
@@ -820,9 +832,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(23);
 /* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(32);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(36);
-/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(37);
-/* harmony import */ var _request_handler_helper__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(38);
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(37);
+/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(41);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(35);
+/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(42);
+/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_13__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -849,6 +863,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 
 
+
 var RequestHandler = /** @class */ (function (_super) {
     __extends(RequestHandler, _super);
     function RequestHandler(request, response) {
@@ -860,11 +875,8 @@ var RequestHandler = /** @class */ (function (_super) {
         return _this;
     }
     RequestHandler.prototype.registerEvents = function () {
-        var _this = this;
         this.request.on('error', this.onBadRequest);
-        this.response.on('error', function (err) {
-            _this.onErrorOccured(err);
-        });
+        this.response.on('error', this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.handlePostData_ = function () {
         var _this = this;
@@ -881,11 +893,12 @@ var RequestHandler = /** @class */ (function (_super) {
                         case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Json:
                             try {
                                 postData = JSON.parse(bodyBuffer.toString());
-                                break;
                             }
                             catch (ex) {
                                 reject("Post data is invalid");
+                                return;
                             }
+                            break;
                         case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Text:
                         case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Html:
                             postData = bodyBuffer.toString();
@@ -902,9 +915,16 @@ var RequestHandler = /** @class */ (function (_super) {
             });
         });
     };
-    RequestHandler.prototype.executeWallBlock_ = function () {
-        var _this = this;
+    RequestHandler.prototype.runWallOutgoing_ = function () {
         var wallsPromise = [];
+        this.wallInstances_.forEach(function (wallObj) {
+            wallsPromise.push(wallObj.onOutgoing());
+        });
+        return Promise.all(wallsPromise);
+    };
+    RequestHandler.prototype.runWallIncoming_ = function () {
+        var _this = this;
+        var wallsPromise = this.wallInstances_ = [];
         _global__WEBPACK_IMPORTED_MODULE_3__["Global"].walls.forEach(function (wall) {
             var wallObj = new wall();
             wallObj.body = _this.body_;
@@ -914,7 +934,8 @@ var RequestHandler = /** @class */ (function (_super) {
             wallObj.request = _this.request;
             wallObj.response = _this.response;
             wallObj.data = _this.data_;
-            wallsPromise.push(wallObj.block());
+            _this.wallInstances_.push(wallObj);
+            wallsPromise.push(wallObj.onIncoming());
         });
         return Promise.all(wallsPromise);
     };
@@ -931,13 +952,46 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.action]().then(function (result) {
             var _a;
+            var getData = function () {
+                switch (negotiatedMiMeType) {
+                    case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Json:
+                        if (typeof result.responseData === 'object') {
+                            return JSON.stringify(result.responseData);
+                        }
+                        return result.responseData;
+                    case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Xml:
+                        if (typeof result.responseData === 'object') {
+                            return jsontoxml__WEBPACK_IMPORTED_MODULE_13__(result.responseData);
+                        }
+                        return result.responseData;
+                    default:
+                        return result.responseData;
+                }
+            };
             if (_this.cookieManager_ != null) {
                 _this.cookieManager_.responseCookie_.forEach(function (value) {
                     _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_1__["Set__Cookie"], value);
                 });
             }
-            _this.response.writeHead(result.statusCode, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = result.contentType, _a));
-            _this.response.end(result.responseData);
+            var contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Text;
+            var negotiatedMiMeType = _this.getContentTypeFromNegotiation(contentType);
+            if (negotiatedMiMeType != null) {
+                if (result.file == null) {
+                    _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType, _a));
+                    _this.response.end(getData());
+                }
+                else {
+                    if (result.file.shouldDownload === true) {
+                        var parsedPath = path__WEBPACK_IMPORTED_MODULE_7__["parse"](result.file.filePath);
+                        var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                        _this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+                    }
+                    _this.handleFileRequest(result.file.filePath, negotiatedMiMeType);
+                }
+            }
+            else {
+                _this.onNotAcceptableRequest();
+            }
         }).catch(this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
@@ -976,19 +1030,14 @@ var RequestHandler = /** @class */ (function (_super) {
         var _this = this;
         try {
             this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["App__Name"]);
-            this.executeWallBlock_().then(function (wallProtectionResult) {
+            this.runWallIncoming_().then(function (wallProtectionResult) {
                 var isRejectedByWall = wallProtectionResult.indexOf(false) >= 0;
                 if (isRejectedByWall === false) {
                     var urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](_this.request.url, true);
                     var pathUrl = urlDetail.pathname.toLowerCase();
                     var extension = path__WEBPACK_IMPORTED_MODULE_7__["parse"](pathUrl).ext;
                     if (!_util__WEBPACK_IMPORTED_MODULE_8__["Util"].isNullOrEmpty(extension)) {
-                        var fileHandlerObj = new _file_handler__WEBPACK_IMPORTED_MODULE_9__["FileHandler"](pathUrl, extension);
-                        fileHandlerObj.execute().then(function (result) {
-                            var _a;
-                            _this.response.writeHead(result.statusCode, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = result.contentType, _a));
-                            _this.response.end(result.responseData);
-                        }).catch(_this.onErrorOccured.bind(_this));
+                        _this.handleFileRequest(pathUrl, extension);
                     }
                     else {
                         _this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_6__["parseAndMatchRoute"])(pathUrl);
@@ -1056,7 +1105,7 @@ var RequestHandler = /** @class */ (function (_super) {
         }
     };
     return RequestHandler;
-}(_request_handler_helper__WEBPACK_IMPORTED_MODULE_12__["RequestHandlerHelper"]));
+}(_file_handler__WEBPACK_IMPORTED_MODULE_9__["FileHandler"]));
 
 
 
@@ -1312,14 +1361,29 @@ module.exports = require("path");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileHandler", function() { return FileHandler; });
-/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-/* harmony import */ var _helpers_file_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(33);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(31);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
+/* harmony import */ var _helpers_file_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(31);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _request_handler_helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(34);
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(39);
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 
 
 
@@ -1327,19 +1391,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var FileHandler = /** @class */ (function () {
-    function FileHandler(filePath, extension) {
-        // extract URL path
-        // Avoid https://en.wikipedia.org/wiki/Directory_traversal_attack
-        // e.g curl --path-as-is http://localhost:9000/../fileInDanger.txt
-        // by limiting the path to current directory only
-        // console.log("dirname", __dirname);
-        //console.log("filePath", filePath);
-        this.relativeFilePath = filePath;
-        // this.folderRequired = this.getRequiredFolder_(filePath);
-        // this.path = path.join(Current__Directory, filePath);
-        //.normalize(path).replace(/^(\.\.[\/\\])+/, '');
-        this.extension = extension.substr(1);
+
+var FileHandler = /** @class */ (function (_super) {
+    __extends(FileHandler, _super);
+    function FileHandler() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     FileHandler.prototype.getRequiredFolder_ = function (path) {
         var splittedValue = path.split("/");
@@ -1348,47 +1404,56 @@ var FileHandler = /** @class */ (function () {
         }
         return "/";
     };
-    FileHandler.prototype.execute = function () {
+    FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
         var _this = this;
-        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
-            var folderRequired = _this.getRequiredFolder_(_this.relativeFilePath);
-            if (_global__WEBPACK_IMPORTED_MODULE_3__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
-                var absolutePath_1 = path__WEBPACK_IMPORTED_MODULE_4__["join"](_constant__WEBPACK_IMPORTED_MODULE_5__["Current__Directory"], _this.relativeFilePath);
-                _helpers_file_helper__WEBPACK_IMPORTED_MODULE_1__["FileHelper"].isPathExist(absolutePath_1).then(function (isExist) {
-                    if (isExist === true) {
-                        _helpers_file_helper__WEBPACK_IMPORTED_MODULE_1__["FileHelper"].isDirectory(absolutePath_1).then(function (isDirectory) {
-                            if (isDirectory === true) {
-                                absolutePath_1 += '/index.html';
-                            }
-                            _helpers_file_helper__WEBPACK_IMPORTED_MODULE_1__["FileHelper"].readFile(absolutePath_1).then(function (data) {
-                                resolve({
-                                    statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__["HTTP_STATUS_CODE"].Ok,
-                                    contentType: _enums_mime_type__WEBPACK_IMPORTED_MODULE_6__["MIME_TYPE"][_this.extension] || _enums_mime_type__WEBPACK_IMPORTED_MODULE_6__["MIME_TYPE"].Text,
-                                    responseData: data
-                                });
-                            }).catch(reject);
-                        }).catch(reject);
-                    }
-                    else {
-                        resolve({
-                            statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__["HTTP_STATUS_CODE"].Not_Found,
-                            contentType: _enums_mime_type__WEBPACK_IMPORTED_MODULE_6__["MIME_TYPE"].Text,
-                            responseData: "File " + _this.relativeFilePath + " not found"
-                        });
-                    }
-                }).catch(reject);
-            }
-            else {
-                resolve({
-                    statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__["HTTP_STATUS_CODE"].Not_Found,
-                    contentType: _enums_mime_type__WEBPACK_IMPORTED_MODULE_6__["MIME_TYPE"].Text,
-                    responseData: "File " + _this.relativeFilePath + " not found"
-                });
-            }
-        });
+        var folderRequired = this.getRequiredFolder_(filePath);
+        if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
+            var absolutePath_1 = path__WEBPACK_IMPORTED_MODULE_3__["join"](_constant__WEBPACK_IMPORTED_MODULE_4__["Current__Directory"], filePath);
+            _helpers_file_helper__WEBPACK_IMPORTED_MODULE_0__["FileHelper"].isPathExist(absolutePath_1).then(function (isExist) {
+                if (isExist === true) {
+                    _helpers_file_helper__WEBPACK_IMPORTED_MODULE_0__["FileHelper"].isDirectory(absolutePath_1).then(function (isDirectory) {
+                        if (isDirectory === true) {
+                            absolutePath_1 += '/index.html';
+                            _helpers_file_helper__WEBPACK_IMPORTED_MODULE_0__["FileHelper"].isPathExist(absolutePath_1).then(function (isFileExist) {
+                                if (isFileExist === true) {
+                                    _this.sendFile_(absolutePath_1, fileType);
+                                }
+                                else {
+                                    _this.onNotFound();
+                                }
+                            });
+                        }
+                        else {
+                            _this.sendFile_(absolutePath_1, fileType);
+                        }
+                    }).catch(_this.onErrorOccured.bind(_this));
+                }
+                else {
+                    _this.onNotFound();
+                }
+            }).catch(this.onErrorOccured.bind(this));
+        }
+        else {
+            this.onNotFound();
+        }
+    };
+    FileHandler.prototype.sendFile_ = function (path, fileType) {
+        var readStream = fs__WEBPACK_IMPORTED_MODULE_6__["createReadStream"](path);
+        // Handle non-existent file
+        readStream.on('error', this.onErrorOccured.bind(this));
+        this.response.statusCode = _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok;
+        var mimeType;
+        if (fileType[0] === '.') { // its extension
+            mimeType = Object(_helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_7__["getMimeTypeFromExtension"])(fileType);
+        }
+        else { // mime type
+            mimeType = fileType;
+        }
+        this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_4__["Content__Type"], mimeType);
+        readStream.pipe(this.response);
     };
     return FileHandler;
-}());
+}(_request_handler_helper__WEBPACK_IMPORTED_MODULE_5__["RequestHandlerHelper"]));
 
 
 
@@ -1479,11 +1544,123 @@ var HTTP_STATUS_CODE;
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Bad_Request"] = 400] = "Bad_Request";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["MethodNotAllowed"] = 405] = "MethodNotAllowed";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Forbidden"] = 403] = "Forbidden";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Not_Acceptable"] = 406] = "Not_Acceptable";
 })(HTTP_STATUS_CODE || (HTTP_STATUS_CODE = {}));
 
 
 /***/ }),
 /* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandlerHelper", function() { return RequestHandlerHelper; });
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(37);
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
+/* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(38);
+/* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+var RequestHandlerHelper = /** @class */ (function () {
+    function RequestHandlerHelper() {
+    }
+    RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
+        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_4__(this.request);
+        var availableTypes = this.getAvailableTypes_(type);
+        if (availableTypes == null) {
+            availableTypes = [type];
+        }
+        return negotiator.mediaType(availableTypes);
+    };
+    RequestHandlerHelper.prototype.getAvailableTypes_ = function (type) {
+        switch (type) {
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Json:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Xml:
+                return [_enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Json, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Xml];
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Css:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Csv:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Js:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Rtf:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Text:
+                return [_enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Text, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Js,
+                    _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Css, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Rtf, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Csv];
+        }
+        return null;
+    };
+    RequestHandlerHelper.prototype.onBadRequest = function (error) {
+        var _this = this;
+        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onBadRequest(error).then(function (errMessage) {
+            var _a;
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Bad_Request, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.end(errMessage);
+        }).catch(function (err) {
+            _this.response.end(JSON.stringify(err));
+        });
+    };
+    RequestHandlerHelper.prototype.onForbiddenRequest = function () {
+        var _this = this;
+        var _a;
+        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onForbiddenRequest().then(function (errMessage) {
+            _this.response.end(errMessage);
+        }).catch(function (err) {
+            _this.response.end(JSON.stringify(err));
+        });
+    };
+    RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
+        var _this = this;
+        var _a;
+        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Acceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotAcceptableRequest().then(function (errMessage) {
+            _this.response.end(errMessage);
+        }).catch(function (err) {
+            _this.response.end(JSON.stringify(err));
+        });
+    };
+    RequestHandlerHelper.prototype.onNotFound = function () {
+        var _this = this;
+        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotFound(this.request.url).then(function (result) {
+            var _a;
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.end(result);
+        }).catch(function (err) {
+            _this.response.end(JSON.stringify(err));
+        });
+    };
+    RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
+        var _this = this;
+        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onMethodNotAllowed().then(function (result) {
+            var _a;
+            _this.response.setHeader("Allow", allowedMethods.join(","));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.end(result);
+        }).catch(function (err) {
+            _this.response.end(JSON.stringify(err));
+        });
+    };
+    RequestHandlerHelper.prototype.onErrorOccured = function (error) {
+        var _this = this;
+        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
+            var _a;
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Internal_Server_Error, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.end(result);
+        }).catch(function (err) {
+            _this.response.end(JSON.stringify(err));
+        });
+    };
+    return RequestHandlerHelper;
+}());
+
+
+
+/***/ }),
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1495,11 +1672,73 @@ var MIME_TYPE;
     MIME_TYPE["Json"] = "application/json";
     MIME_TYPE["Html"] = "text/html";
     MIME_TYPE["Form_Url_Encoded"] = "application/x-www-form-urlencoded";
+    MIME_TYPE["Css"] = "text/css";
+    MIME_TYPE["Csv"] = "text/csv";
+    MIME_TYPE["Js"] = "application/javascript";
+    MIME_TYPE["Jpeg"] = "image/jpeg";
+    MIME_TYPE["Png"] = "image/png";
+    MIME_TYPE["Pdf"] = "application/pdf";
+    MIME_TYPE["Rtf"] = "application/rtf";
+    MIME_TYPE["Xml"] = "application/xml";
+    MIME_TYPE["Xls"] = "application/vnd.ms-excel";
+    MIME_TYPE["Xlsx"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    MIME_TYPE["Ttf"] = "font/ttf";
+    MIME_TYPE["Woff"] = "font/woff";
+    MIME_TYPE["Woff2"] = "font/woff2";
+    MIME_TYPE["Svg"] = "image/svg+xml";
+    MIME_TYPE["Swf"] = "application/x-shockwave-flash";
 })(MIME_TYPE || (MIME_TYPE = {}));
 
 
 /***/ }),
-/* 37 */
+/* 38 */
+/***/ (function(module, exports) {
+
+module.exports = require("negotiator");
+
+/***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMimeTypeFromExtension", function() { return getMimeTypeFromExtension; });
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+
+function getMimeTypeFromExtension(ext) {
+    switch (ext) {
+        case ".txt":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text;
+        case ".png":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Png;
+        case ".css":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Css;
+        case ".js":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Js;
+        case ".json":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json;
+    }
+}
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _mime_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(37);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _mime_type__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"]; });
+
+/* harmony import */ var _http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(41);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_METHOD", function() { return _http_method__WEBPACK_IMPORTED_MODULE_1__["HTTP_METHOD"]; });
+
+
+
+
+
+/***/ }),
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1515,94 +1754,13 @@ var HTTP_METHOD;
 
 
 /***/ }),
-/* 38 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 42 */
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandlerHelper", function() { return RequestHandlerHelper; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8);
-
-
-
-
-var RequestHandlerHelper = /** @class */ (function () {
-    function RequestHandlerHelper() {
-    }
-    RequestHandlerHelper.prototype.onBadRequest = function (error) {
-        var _this = this;
-        var _a;
-        if (this.response.headersSent === false) {
-            this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Bad_Request, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onBadRequest(error).then(function (errMessage) {
-                _this.response.end(errMessage);
-            }).catch(function (err) {
-                _this.response.end(JSON.stringify(err));
-            });
-        }
-    };
-    RequestHandlerHelper.prototype.onForbiddenRequest = function () {
-        var _this = this;
-        var _a;
-        if (this.response.headersSent === false) {
-            this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onForbiddenRequest().then(function (errMessage) {
-                _this.response.end(errMessage);
-            }).catch(function (err) {
-                _this.response.end(JSON.stringify(err));
-            });
-        }
-    };
-    RequestHandlerHelper.prototype.onNotFound = function () {
-        var _this = this;
-        var _a;
-        if (this.response.headersSent === false) {
-            this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotFound(this.request.url).then(function (result) {
-                _this.response.end(result);
-            }).catch(function (err) {
-                _this.response.end(JSON.stringify(err));
-            });
-        }
-    };
-    RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
-        var _this = this;
-        var _a;
-        if (this.response.headersSent === false) {
-            this.response.setHeader("Allow", allowedMethods.join(","));
-            this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onMethodNotAllowed().then(function (result) {
-                _this.response.end(result);
-            }).catch(function (err) {
-                _this.response.end(JSON.stringify(err));
-            });
-        }
-    };
-    RequestHandlerHelper.prototype.onErrorOccured = function (error) {
-        var _this = this;
-        var _a;
-        if (this.response.headersSent === false) {
-            this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Internal_Server_Error, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
-                _this.response.end(result);
-            }).catch(function (err) {
-                _this.response.end(JSON.stringify(err));
-            });
-        }
-        else {
-            console.error(error);
-        }
-    };
-    return RequestHandlerHelper;
-}());
-
-
+module.exports = require("jsontoxml");
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1739,19 +1897,19 @@ var MemorySessionProvider = /** @class */ (function (_super) {
 
 
 /***/ }),
-/* 40 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
+/* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(45);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _error_handler__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"]; });
 
 
 
 
 /***/ }),
-/* 41 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1792,6 +1950,12 @@ var ErrorHandler = /** @class */ (function () {
             resolve(errMessage);
         });
     };
+    ErrorHandler.prototype.onNotAcceptableRequest = function () {
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
+            var errMessage = "<h1>Not Acceptable</h1>";
+            resolve(errMessage);
+        });
+    };
     ErrorHandler.prototype.onMethodNotAllowed = function () {
         return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
             var errMessage = "<h1>Not allowed.</h1>";
@@ -1810,38 +1974,30 @@ var ErrorHandler = /** @class */ (function () {
 
 
 /***/ }),
-/* 42 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _mime_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _mime_type__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"]; });
-
-/* harmony import */ var _http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(37);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_METHOD", function() { return _http_method__WEBPACK_IMPORTED_MODULE_1__["HTTP_METHOD"]; });
-
-
-
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _json_result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(44);
+/* harmony import */ var _json_result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return _json_result__WEBPACK_IMPORTED_MODULE_0__["jsonResult"]; });
 
-/* harmony import */ var _text_result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(45);
+/* harmony import */ var _text_result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(48);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return _text_result__WEBPACK_IMPORTED_MODULE_1__["textResult"]; });
 
-/* harmony import */ var _html_result__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(46);
+/* harmony import */ var _html_result__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(49);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return _html_result__WEBPACK_IMPORTED_MODULE_2__["htmlResult"]; });
 
-/* harmony import */ var _render_view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(47);
+/* harmony import */ var _render_view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "renderView", function() { return _render_view__WEBPACK_IMPORTED_MODULE_3__["renderView"]; });
+
+/* harmony import */ var _download_result__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(51);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "downloadResult", function() { return _download_result__WEBPACK_IMPORTED_MODULE_4__["downloadResult"]; });
+
+/* harmony import */ var _file_result__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(52);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return _file_result__WEBPACK_IMPORTED_MODULE_5__["fileResult"]; });
+
+
 
 
 
@@ -1850,33 +2006,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return jsonResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 
 function jsonResult(value) {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json,
-        responseData: JSON.stringify(value),
+        responseData: value,
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
     };
 }
 
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return textResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 
@@ -1890,13 +2046,13 @@ function textResult(text) {
 
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return htmlResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(42);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 
@@ -1910,7 +2066,7 @@ function htmlResult(html) {
 
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1927,7 +2083,49 @@ function renderView(vieWname, model) {
 
 
 /***/ }),
-/* 48 */
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadResult", function() { return downloadResult; });
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
+
+function downloadResult(filePath, type, downloadFileName) {
+    return {
+        contentType: type,
+        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok,
+        file: {
+            filePath: filePath,
+            shouldDownload: true,
+            alias: downloadFileName
+        }
+    };
+}
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return fileResult; });
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
+
+function fileResult(filePath, type) {
+    return {
+        contentType: type,
+        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok,
+        file: {
+            filePath: filePath
+        }
+    };
+}
+
+
+/***/ }),
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

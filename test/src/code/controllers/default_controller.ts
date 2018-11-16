@@ -1,8 +1,8 @@
-import { Controller, shields, declareController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult } from "fortjs";
+import { Controller, shields, declareAsController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { JsonGuard } from "../guards/json_guard";
 
-@declareController()
+@declareAsController()
 @shields([AuthenticationShield])
 export class DefaultController extends Controller {
     default() {

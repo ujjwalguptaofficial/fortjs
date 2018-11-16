@@ -1,8 +1,6 @@
-import { ActionResult } from "./types/action_result";
-export declare class FileHandler {
-    extension: string;
-    relativeFilePath: string;
-    constructor(filePath: string, extension: string);
+import { RequestHandlerHelper } from "./request_handler_helper";
+export declare class FileHandler extends RequestHandlerHelper {
     private getRequiredFolder_;
-    execute(): Promise<ActionResult>;
+    protected handleFileRequest(filePath: string, fileType: string): void;
+    private sendFile_;
 }

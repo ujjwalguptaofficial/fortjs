@@ -15,7 +15,7 @@ export class Global {
     static sessionTimeOut?: number;
     static viewEngine: ViewEngine;
     static foldersAllowed: string[];
-    static walls: typeof GenericWall[];
+    static walls: typeof GenericWall[] = [];
     static errorHandler: typeof ErrorHandler;
     static defaultPath?: string;
 }

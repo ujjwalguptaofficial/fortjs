@@ -2,5 +2,20 @@ export enum MIME_TYPE {
     Text = "text/plain",
     Json = "application/json",
     Html = "text/html",
-    Form_Url_Encoded = "application/x-www-form-urlencoded"
+    Form_Url_Encoded = "application/x-www-form-urlencoded",
+    Css = "text/css",
+    Csv = "text/csv",
+    Js = "application/javascript",
+    Jpeg = "image/jpeg",
+    Png = "image/png",
+    Pdf = "application/pdf",
+    Rtf = "application/rtf",
+    Xml = "application/xml",
+    Xls = "application/vnd.ms-excel",
+    Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    Ttf = "font/ttf",
+    Woff = "font/woff",
+    Woff2 = "font/woff2",
+    Svg = "image/svg+xml",
+    Swf = "application/x-shockwave-flash"
 }
