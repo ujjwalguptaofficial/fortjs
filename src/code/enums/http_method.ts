@@ -1,6 +1,7 @@
 export enum HTTP_METHOD {
     Get = "GET",
-    POST = "POST",
-    PUT = "PUT",
-    PATCH = "PATCH"
-}
+    Post = "POST",
+    Put = "PUT",
+    Patch = "PATCH",
+    Delete = "DELETE"
+};

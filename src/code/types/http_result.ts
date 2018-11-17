@@ -10,6 +10,7 @@ export type HttpResult = {
     file?: FileResultInfo;
     responseFormat?: {
         [type: string]: () => any;
-    }
-}
+    },
+    shouldRedirect?: boolean;
+};
 

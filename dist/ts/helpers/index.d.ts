@@ -4,3 +4,4 @@ export * from './html_result';
 export * from './render_view';
 export * from './download_result';
 export * from './file_result';
+export * from './redirect_result';

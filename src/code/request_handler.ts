@@ -117,63 +117,72 @@ export class RequestHandler extends FileHandler {
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: HttpResult) => {
-            const getData = () => {
-                switch (negotiatedMiMeType) {
-                    case MIME_TYPE.Json:
-                        if (typeof result.responseData === 'object') {
-                            return JSON.stringify(result.responseData);
-                        }
-                        return result.responseData;
-                    case MIME_TYPE.Xml:
-                        if (typeof result.responseData === 'object') {
-                            return jsontoxml(result.responseData);
-                        }
-                        return result.responseData;
-                    default:
-                        return result.responseData;
 
-                }
-            }
             if (this.cookieManager_ != null) {
                 ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
                     this.response.setHeader(Set__Cookie, value);
                 });
             }
-            const contentType = result.contentType || MIME_TYPE.Text;
-            const negotiatedMiMeType = this.getContentTypeFromNegotiation(contentType);
-            if (negotiatedMiMeType != null) {
-                if (result.file == null) {
-                    if (result.responseFormat == null) {
-                        this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                            { [Content__Type]: negotiatedMiMeType });
-                        this.response.end(getData());
+            if (result.shouldRedirect == null || result.shouldRedirect == false) {
+                const getData = () => {
+                    switch (negotiatedMiMeType) {
+                        case MIME_TYPE.Json:
+                            if (typeof result.responseData === 'object') {
+                                return JSON.stringify(result.responseData);
+                            }
+                            return result.responseData;
+                        case MIME_TYPE.Xml:
+                            if (typeof result.responseData === 'object') {
+                                return jsontoxml(result.responseData);
+                            }
+                            return result.responseData;
+                        default:
+                            return result.responseData;
+
                     }
-                    else {
-                        const key = Object.keys(result.responseFormat).find(qry => qry === negotiatedMiMeType);
-                        if (key != null) {
+                }
+                const contentType = result.contentType || MIME_TYPE.Text;
+                const negotiatedMiMeType = this.getContentTypeFromNegotiation(contentType);
+                if (negotiatedMiMeType != null) {
+                    if (result.file == null) {
+                        if (result.responseFormat == null) {
                             this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
                                 { [Content__Type]: negotiatedMiMeType });
-                            this.response.end(result.responseFormat[key]());
+                            this.response.end(getData());
                         }
                         else {
-                            this.onNotAcceptableRequest();
+                            const key = Object.keys(result.responseFormat).find(qry => qry === negotiatedMiMeType);
+                            if (key != null) {
+                                this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
+                                    { [Content__Type]: negotiatedMiMeType });
+                                this.response.end(result.responseFormat[key]());
+                            }
+                            else {
+                                this.onNotAcceptableRequest();
+                            }
                         }
+                    }
+                    else {
+                        if (result.file.shouldDownload === true) {
+                            const parsedPath = path.parse(result.file.filePath);
+                            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                            this.response.setHeader(
+                                "Content-Disposition",
+                                `attachment;filename=${fileName}.${parsedPath.ext}`
+                            )
+                        }
+                        this.handleFileRequest(result.file.filePath, negotiatedMiMeType);
                     }
                 }
                 else {
-                    if (result.file.shouldDownload === true) {
-                        const parsedPath = path.parse(result.file.filePath);
-                        const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                        this.response.setHeader(
-                            "Content-Disposition",
-                            `attachment;filename=${fileName}.${parsedPath.ext}`
-                        )
-                    }
-                    this.handleFileRequest(result.file.filePath, negotiatedMiMeType);
+                    this.onNotAcceptableRequest();
                 }
             }
             else {
-                this.onNotAcceptableRequest();
+                this.response.setHeader('Location', result.responseData);
+                this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
+                    { 'Location': result.responseData });
+                this.response.end();
             }
 
         }).catch(this.onErrorOccured.bind(this))
@@ -182,7 +191,7 @@ export class RequestHandler extends FileHandler {
     private executeShieldsProtection_() {
         const shieldsPromise = [];
         this.routeMatchInfo_.shields.forEach(shield => {
-            var shieldObj = new shield();
+            const shieldObj = new shield();
             shieldObj.body = this.body_;
             shieldObj.cookies = this.cookieManager_;
             shieldObj.query = this.query_;
@@ -218,7 +227,7 @@ export class RequestHandler extends FileHandler {
                 const isRejectedByWall = wallProtectionResult.indexOf(false) >= 0;
                 if (isRejectedByWall === false) {
                     const urlDetail = url.parse(this.request.url, true);
-                    let pathUrl = urlDetail.pathname.toLowerCase();
+                    const pathUrl = urlDetail.pathname.toLowerCase();
                     const extension = path.parse(pathUrl).ext;
                     if (!Util.isNullOrEmpty(extension)) {
                         this.handleFileRequest(pathUrl, extension);
@@ -244,7 +253,7 @@ export class RequestHandler extends FileHandler {
                                     this.session_.sessionId = parsedCookies[App__Session__Identifier];
                                     this.session_.cookies = this.cookieManager_;
                                 }
-                                this.executeShieldsProtection_().then((shieldProtectionResult: Boolean[]) => {
+                                this.executeShieldsProtection_().then((shieldProtectionResult: boolean[]) => {
                                     const isRejectedByShield = shieldProtectionResult.indexOf(false) >= 0;
                                     if (isRejectedByShield === false) {
                                         this.executeGuardsCheck_(actionInfo.guards).then(guardsCheckResult => {
@@ -285,7 +294,7 @@ export class RequestHandler extends FileHandler {
                 this.execute_();
             }).catch((err) => {
                 this.onBadRequest(err);
-            })
+            });
         }
     }
 }

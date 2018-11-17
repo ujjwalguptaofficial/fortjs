@@ -9,4 +9,5 @@ export declare type HttpResult = {
     responseFormat?: {
         [type: string]: () => any;
     };
+    shouldRedirect?: boolean;
 };

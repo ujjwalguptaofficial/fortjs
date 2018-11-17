@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as Fs from "fs";
 import { promise } from "./promise";
 
 export class FileHelper {
@@ -6,7 +6,7 @@ export class FileHelper {
     static isPathExist(path: string): Promise<boolean> {
         return promise((resolve, reject) => {
             try {
-                fs.exists(path, (isExist) => {
+                Fs.exists(path, (isExist) => {
                     resolve(isExist);
                 })
             }
@@ -19,7 +19,7 @@ export class FileHelper {
     static isDirectory(path: string): Promise<boolean> {
         return promise((resolve, reject) => {
             try {
-                fs.lstat(path, (err, status) => {
+                Fs.lstat(path, (err, status) => {
                     if (err) {
                         reject(err);
                     }
@@ -37,7 +37,7 @@ export class FileHelper {
     static readFile(path: string): Promise<string> {
         return promise((resolve, reject) => {
             try {
-                fs.readFile(path, (err, data) => {
+                Fs.readFile(path, (err, data) => {
                     if (err) {
                         reject(err);
                     }

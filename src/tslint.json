@@ -1,4 +1,5 @@
 {
+  "extends": ["tslint-config-security"],
   "rules": {
     "array-type": [
       true,
@@ -40,7 +41,6 @@
       true,
       "ignore-same-line"
     ],
-    // "forin": true,
     "interface-name": [
       true,
       "allow-prefix"
@@ -79,7 +79,6 @@
       "always",
       "ignore-bound-class-methods"
     ],
-    // "switch-default": true,
     "triple-equals": [
       true,
       "allow-null-check"

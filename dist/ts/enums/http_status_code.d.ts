@@ -1,9 +1,13 @@
 export declare enum HTTP_STATUS_CODE {
+    BadRequest = 400,
+    Unauthorized = 401,
+    Forbidden = 403,
     Not_Found = 404,
     Ok = 200,
-    Internal_Server_Error = 500,
-    Bad_Request = 400,
+    Created = 201,
+    NoContent = 204,
+    Redirect = 302,
     MethodNotAllowed = 405,
-    Forbidden = 403,
-    Not_Acceptable = 406
+    NotAcceptable = 406,
+    InternalServerError = 500
 }

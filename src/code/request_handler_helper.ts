@@ -39,11 +39,11 @@ export class RequestHandlerHelper {
     protected onBadRequest(error) {
 
         new Global.errorHandler().onBadRequest(error).then(errMessage => {
-            this.response.writeHead(HTTP_STATUS_CODE.Bad_Request, { [Content__Type]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [Content__Type]: MIME_TYPE.Html });
             this.response.end(errMessage);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
-        })
+        });
     }
 
     protected onForbiddenRequest() {
@@ -52,16 +52,16 @@ export class RequestHandlerHelper {
             this.response.end(errMessage);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
-        })
+        });
     }
 
     protected onNotAcceptableRequest() {
-        this.response.writeHead(HTTP_STATUS_CODE.Not_Acceptable, { [Content__Type]: MIME_TYPE.Html });
+        this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [Content__Type]: MIME_TYPE.Html });
         new Global.errorHandler().onNotAcceptableRequest().then(errMessage => {
             this.response.end(errMessage);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
-        })
+        });
     }
 
     protected onNotFound() {
@@ -81,15 +81,15 @@ export class RequestHandlerHelper {
             this.response.end(result);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
-        })
+        });
     }
 
     protected onErrorOccured(error) {
         new Global.errorHandler().onServerError(error).then(result => {
-            this.response.writeHead(HTTP_STATUS_CODE.Internal_Server_Error, { [Content__Type]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [Content__Type]: MIME_TYPE.Html });
             this.response.end(result);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
-        })
+        });
     }
 }

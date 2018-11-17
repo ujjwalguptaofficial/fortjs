@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.5.0 - 16/11/2018
+ * @license :fortjs - V0.5.0 - 17/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -143,10 +143,12 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["fileResult"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["redirectResult"]; });
+
 /* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _model_index__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"]; });
 
-/* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(53);
+/* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(54);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "destroy", function() { return _destroy__WEBPACK_IMPORTED_MODULE_6__["destroy"]; });
 
 
@@ -280,8 +282,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Set__Cookie", function() { return Set__Cookie; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Current__Directory", function() { return Current__Directory; });
 var Content__Type = "content-type";
-var App__Name = "infinity";
-var App__Session__Identifier = "infinity_session_id";
+var App__Name = "fort";
+var App__Session__Identifier = "fort_session_id";
 var Cookie = "cookie";
 var Set__Cookie = 'set-cookie';
 var Current__Directory = process.cwd();
@@ -673,10 +675,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "guards", function() { return guards; });
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
 
-function guards(guards) {
+function guards(value) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(guards, className, methodName);
+        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(value, className, methodName);
     });
 }
 
@@ -747,7 +749,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var app;
-function create(option) {
+var create = function (option) {
     if (!_util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option)) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.port) ? 4000 : option.port;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = new option.viewEngine();
@@ -781,7 +783,7 @@ function create(option) {
         }
     });
     app.keepAliveTimeout = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].connectonKeepAliveTimeout;
-}
+};
 
 
 /***/ }),
@@ -954,57 +956,64 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.action]().then(function (result) {
             var _a, _b;
-            var getData = function () {
-                switch (negotiatedMiMeType) {
-                    case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Json:
-                        if (typeof result.responseData === 'object') {
-                            return JSON.stringify(result.responseData);
-                        }
-                        return result.responseData;
-                    case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Xml:
-                        if (typeof result.responseData === 'object') {
-                            return jsontoxml__WEBPACK_IMPORTED_MODULE_13__(result.responseData);
-                        }
-                        return result.responseData;
-                    default:
-                        return result.responseData;
-                }
-            };
             if (_this.cookieManager_ != null) {
                 _this.cookieManager_.responseCookie_.forEach(function (value) {
                     _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_1__["Set__Cookie"], value);
                 });
             }
-            var contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Text;
-            var negotiatedMiMeType = _this.getContentTypeFromNegotiation(contentType);
-            if (negotiatedMiMeType != null) {
-                if (result.file == null) {
-                    if (result.responseFormat == null) {
-                        _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType, _a));
-                        _this.response.end(getData());
+            if (result.shouldRedirect == null || result.shouldRedirect == false) {
+                var getData = function () {
+                    switch (negotiatedMiMeType_1) {
+                        case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Json:
+                            if (typeof result.responseData === 'object') {
+                                return JSON.stringify(result.responseData);
+                            }
+                            return result.responseData;
+                        case _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Xml:
+                            if (typeof result.responseData === 'object') {
+                                return jsontoxml__WEBPACK_IMPORTED_MODULE_13__(result.responseData);
+                            }
+                            return result.responseData;
+                        default:
+                            return result.responseData;
                     }
-                    else {
-                        var key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiatedMiMeType; });
-                        if (key != null) {
-                            _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_b = {}, _b[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType, _b));
-                            _this.response.end(result.responseFormat[key]());
+                };
+                var contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_10__["MIME_TYPE"].Text;
+                var negotiatedMiMeType_1 = _this.getContentTypeFromNegotiation(contentType);
+                if (negotiatedMiMeType_1 != null) {
+                    if (result.file == null) {
+                        if (result.responseFormat == null) {
+                            _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType_1, _a));
+                            _this.response.end(getData());
                         }
                         else {
-                            _this.onNotAcceptableRequest();
+                            var key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiatedMiMeType_1; });
+                            if (key != null) {
+                                _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, (_b = {}, _b[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = negotiatedMiMeType_1, _b));
+                                _this.response.end(result.responseFormat[key]());
+                            }
+                            else {
+                                _this.onNotAcceptableRequest();
+                            }
                         }
+                    }
+                    else {
+                        if (result.file.shouldDownload === true) {
+                            var parsedPath = path__WEBPACK_IMPORTED_MODULE_7__["parse"](result.file.filePath);
+                            var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                            _this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+                        }
+                        _this.handleFileRequest(result.file.filePath, negotiatedMiMeType_1);
                     }
                 }
                 else {
-                    if (result.file.shouldDownload === true) {
-                        var parsedPath = path__WEBPACK_IMPORTED_MODULE_7__["parse"](result.file.filePath);
-                        var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                        _this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
-                    }
-                    _this.handleFileRequest(result.file.filePath, negotiatedMiMeType);
+                    _this.onNotAcceptableRequest();
                 }
             }
             else {
-                _this.onNotAcceptableRequest();
+                _this.response.setHeader('Location', result.responseData);
+                _this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_12__["HTTP_STATUS_CODE"].Ok, { 'Location': result.responseData });
+                _this.response.end();
             }
         }).catch(this.onErrorOccured.bind(this));
     };
@@ -1552,13 +1561,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HTTP_STATUS_CODE", function() { return HTTP_STATUS_CODE; });
 var HTTP_STATUS_CODE;
 (function (HTTP_STATUS_CODE) {
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["BadRequest"] = 400] = "BadRequest";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Unauthorized"] = 401] = "Unauthorized";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Forbidden"] = 403] = "Forbidden";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Not_Found"] = 404] = "Not_Found";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Ok"] = 200] = "Ok";
-    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Internal_Server_Error"] = 500] = "Internal_Server_Error";
-    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Bad_Request"] = 400] = "Bad_Request";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Created"] = 201] = "Created";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["NoContent"] = 204] = "NoContent";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Redirect"] = 302] = "Redirect";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["MethodNotAllowed"] = 405] = "MethodNotAllowed";
-    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Forbidden"] = 403] = "Forbidden";
-    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Not_Acceptable"] = 406] = "Not_Acceptable";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["NotAcceptable"] = 406] = "NotAcceptable";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["InternalServerError"] = 500] = "InternalServerError";
 })(HTTP_STATUS_CODE || (HTTP_STATUS_CODE = {}));
 
 
@@ -1611,7 +1624,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         var _this = this;
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onBadRequest(error).then(function (errMessage) {
             var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Bad_Request, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
             _this.response.end(errMessage);
         }).catch(function (err) {
             _this.response.end(JSON.stringify(err));
@@ -1630,7 +1643,7 @@ var RequestHandlerHelper = /** @class */ (function () {
     RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
         var _this = this;
         var _a;
-        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Acceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotAcceptableRequest().then(function (errMessage) {
             _this.response.end(errMessage);
         }).catch(function (err) {
@@ -1662,7 +1675,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         var _this = this;
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
             var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Internal_Server_Error, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
             _this.response.end(result);
         }).catch(function (err) {
             _this.response.end(JSON.stringify(err));
@@ -1761,10 +1774,12 @@ __webpack_require__.r(__webpack_exports__);
 var HTTP_METHOD;
 (function (HTTP_METHOD) {
     HTTP_METHOD["Get"] = "GET";
-    HTTP_METHOD["POST"] = "POST";
-    HTTP_METHOD["PUT"] = "PUT";
-    HTTP_METHOD["PATCH"] = "PATCH";
+    HTTP_METHOD["Post"] = "POST";
+    HTTP_METHOD["Put"] = "PUT";
+    HTTP_METHOD["Patch"] = "PATCH";
+    HTTP_METHOD["Delete"] = "DELETE";
 })(HTTP_METHOD || (HTTP_METHOD = {}));
+;
 
 
 /***/ }),
@@ -2011,6 +2026,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _file_result__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(52);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return _file_result__WEBPACK_IMPORTED_MODULE_5__["fileResult"]; });
 
+/* harmony import */ var _redirect_result__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(53);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return _redirect_result__WEBPACK_IMPORTED_MODULE_6__["redirectResult"]; });
+
+
 
 
 
@@ -2030,11 +2049,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 
-function jsonResult(value) {
+function jsonResult(value, statusCode) {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json,
         responseData: value,
-        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
+        statusCode: statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
     };
 }
 
@@ -2050,11 +2069,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 
-function textResult(text) {
+function textResult(text, statusCode) {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text,
         responseData: text,
-        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
+        statusCode: statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
     };
 }
 
@@ -2070,11 +2089,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 
 
-function htmlResult(html) {
+function htmlResult(html, statusCode) {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html,
         responseData: html,
-        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
+        statusCode: statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
     };
 }
 
@@ -2140,6 +2159,27 @@ function fileResult(filePath, type) {
 
 /***/ }),
 /* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return redirectResult; });
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(40);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
+
+
+function redirectResult(url) {
+    return {
+        contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text,
+        responseData: url,
+        statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Redirect,
+        shouldRedirect: true
+    };
+}
+
+
+/***/ }),
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

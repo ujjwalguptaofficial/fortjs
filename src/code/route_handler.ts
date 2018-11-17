@@ -22,7 +22,7 @@ export class RouteHandler {
                 if (actionInfo.pattern.indexOf(value.alias) < 0) {
                     actionInfo.pattern = `/${value.alias}/${actionInfo.pattern}`;
                 }
-            })
+            });
         }
 
     }

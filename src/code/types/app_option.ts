@@ -38,5 +38,5 @@ export type AppOption = {
      *
      * @type {number}
      */
-    connectonKeepAliveTimeout?: number
-}
+    connectonKeepAliveTimeout?: number;
+};

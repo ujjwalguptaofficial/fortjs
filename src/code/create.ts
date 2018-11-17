@@ -11,7 +11,7 @@ import { LogHelper } from "./helpers/log_helper";
 import { ERROR_TYPE } from "./enums/error_type";
 
 export let app: http.Server;
-export function create(option: AppOption) {
+export const create = (option: AppOption) => {
     if (!Util.isNull(option)) {
         Global.port = Util.isNull(option.port) ? 4000 : option.port;
         Global.viewEngine = new (option.viewEngine as any)();
