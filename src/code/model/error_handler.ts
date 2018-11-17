@@ -18,8 +18,10 @@ export class ErrorHandler {
 
     onBadRequest(ex: IException): Promise<string> {
         return promise<string>((resolve, reject) => {
-            let errMessage = `<h1>Bad Request</h1>
-        <h3>message : ${ex.message}</h3>`;
+            let errMessage = `<h1>Bad Request</h1>`;
+            if (ex.message) {
+                errMessage += ` <h3>message : ${ex.message} </h3>`
+            }
             if (ex.stack) {
                 errMessage += `<p><b>stacktrace:</b> ${ex.stack}</p>`
             }

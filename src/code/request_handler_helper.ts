@@ -5,7 +5,9 @@ import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
 import { Global } from "./global";
 import * as Negotiator from "negotiator";
+import { CookieManager } from "./model/cookie_manager";
 export class RequestHandlerHelper {
+    protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
 
     protected request: http.IncomingMessage;

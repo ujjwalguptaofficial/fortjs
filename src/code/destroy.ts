@@ -1,5 +1,5 @@
-import { app } from "./create";
+import { getApp } from "./create";
 
 export function destroy(callback?: Function) {
-    app.close(callback);
+    getApp().close(callback);
 }

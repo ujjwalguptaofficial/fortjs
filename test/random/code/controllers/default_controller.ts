@@ -1,4 +1,5 @@
 import { Controller, shields, declareAsController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultAction } from "fortjs";
+import { UserService } from "../services/user_service";
 
 
 @declareAsController()
@@ -12,35 +13,39 @@ export class DefaultController extends Controller {
     }
 
     @action([HTTP_METHOD.Post])
-    login() {
+    async login() {
         const userId = this.body.userId;
         const pwd = this.body.password;
         if (userId != null && pwd != null) {
-            this.session.set('userId', userId);
-            return new Promise((resolve, reject) => {
-                resolve(textResult(`Authenticated`));
-            });
+            const userService = new UserService();
+            const user = userService.getUser(userId);
+            if (user != null && user.password === pwd) {
+                this.session.set('userId', userId);
+                return textResult(`Authenticated`);
+            }
+            else {
+                const result = textResult("Invalid credential");
+                return result;
+            }
         }
         else {
             const result = textResult("Invalid credential");
-            return new Promise((resolve, reject) => {
-                resolve(result);
-            });
+            return result;
         }
     }
 
     @action([HTTP_METHOD.Get])
-    @route("text/{userId}") // render url - default/text/{userid}
+    // @route("text/{userId}") // render url - default/text/{userid}
     text() {
         return new Promise((resolve, reject) => {
-            resolve(jsonResult(this.params));
+            resolve(textResult("text"));
         });
     }
 
     @action()
     json() {
         return new Promise((resolve, reject) => {
-            resolve(jsonResult({ key: 'ass', value: 'ass' }));
+            resolve(jsonResult({ key: 'hello', value: 'world' }));
         });
     }
 
@@ -51,10 +56,15 @@ export class DefaultController extends Controller {
         });
     }
 
-    @action()
+    @action([HTTP_METHOD.Post])
     post() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));
         });
+    }
+
+    @action()
+    async getIp() {
+        return this.data.ip;
     }
 }

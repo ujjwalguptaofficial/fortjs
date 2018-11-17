@@ -21,5 +21,5 @@ export declare abstract class Wall implements Controller {
         [key: string]: any;
     };
     abstract onIncoming(): Promise<boolean>;
-    abstract onOutgoing(): Promise<boolean>;
+    onOutgoing(): Promise<any>;
 }

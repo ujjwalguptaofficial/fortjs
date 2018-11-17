@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "install:lib": "npm i ../../fortjs-0.5.0.tgz",
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "mocha --recursive --exit"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +21,11 @@
     "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
-    "@types/validator": "^9.4.3"
+    "@types/validator": "^9.4.3",
+    "axios": "^0.18.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0",
+    "request": "^2.88.0"
   }
 }

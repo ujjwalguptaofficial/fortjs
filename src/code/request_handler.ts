@@ -14,23 +14,17 @@ import { parseAndMatchRoute } from "./helpers/parse_match_route";
 import { IRouteMatch } from "./interfaces/route_match";
 import * as path from 'path';
 import { Util } from "./util";
-import { FileHandler } from "./file_handler";
 import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
-import { HttpResult } from "./types/http_result";
-import { HTTP_STATUS_CODE } from "./enums/http_status_code";
-import * as jsontoxml from "jsontoxml";
-import { Wall } from "./abstracts/wall";
+import { ControllerHandler } from "./controller_handler";
 
-export class RequestHandler extends FileHandler {
+export class RequestHandler extends ControllerHandler {
     private body_: any;
-    private cookieManager_: CookieManager;
+
     private session_: GenericSessionProvider;
     private query_: any;
     private data_ = {};
     private routeMatchInfo_: IRouteMatch;
-
-    private wallInstances_: Wall[];
 
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
         super();
@@ -80,26 +74,18 @@ export class RequestHandler extends FileHandler {
         });
     }
 
-    private runWallOutgoing_() {
-        const wallsPromise = [];
-        this.wallInstances_.forEach(wallObj => {
-            wallsPromise.push(wallObj.onOutgoing());
-        });
-        return Promise.all(wallsPromise);
-    }
-
     private runWallIncoming_() {
-        const wallsPromise = this.wallInstances_ = [];
+        const wallsPromise = this.wallInstances = [];
         Global.walls.forEach(wall => {
             var wallObj = new wall();
             wallObj.body = this.body_;
-            wallObj.cookies = this.cookieManager_;
+            wallObj.cookies = this.cookieManager;
             wallObj.query = this.query_;
             wallObj.session = this.session_;
             wallObj.request = this.request as IHttpRequest;
             wallObj.response = this.response as IHttpResponse;
             wallObj.data = this.data_;
-            this.wallInstances_.push(wallObj);
+            this.wallInstances.push(wallObj);
             wallsPromise.push(wallObj.onIncoming());
         });
         return Promise.all(wallsPromise);
@@ -113,79 +99,12 @@ export class RequestHandler extends FileHandler {
         controllerObj.query = this.query_;
         controllerObj.body = this.body_;
         controllerObj.session = this.session_;
-        controllerObj.cookies = this.cookieManager_;
+        controllerObj.cookies = this.cookieManager;
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
-        controllerObj[this.routeMatchInfo_.actionInfo.action]().then((result: HttpResult) => {
-
-            if (this.cookieManager_ != null) {
-                ((this.cookieManager_ as any).responseCookie_ as string[]).forEach(value => {
-                    this.response.setHeader(Set__Cookie, value);
-                });
-            }
-            if (result.shouldRedirect == null || result.shouldRedirect == false) {
-                const getData = () => {
-                    switch (negotiatedMiMeType) {
-                        case MIME_TYPE.Json:
-                            if (typeof result.responseData === 'object') {
-                                return JSON.stringify(result.responseData);
-                            }
-                            return result.responseData;
-                        case MIME_TYPE.Xml:
-                            if (typeof result.responseData === 'object') {
-                                return jsontoxml(result.responseData);
-                            }
-                            return result.responseData;
-                        default:
-                            return result.responseData;
-
-                    }
-                }
-                const contentType = result.contentType || MIME_TYPE.Text;
-                const negotiatedMiMeType = this.getContentTypeFromNegotiation(contentType);
-                if (negotiatedMiMeType != null) {
-                    if (result.file == null) {
-                        if (result.responseFormat == null) {
-                            this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                                { [Content__Type]: negotiatedMiMeType });
-                            this.response.end(getData());
-                        }
-                        else {
-                            const key = Object.keys(result.responseFormat).find(qry => qry === negotiatedMiMeType);
-                            if (key != null) {
-                                this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                                    { [Content__Type]: negotiatedMiMeType });
-                                this.response.end(result.responseFormat[key]());
-                            }
-                            else {
-                                this.onNotAcceptableRequest();
-                            }
-                        }
-                    }
-                    else {
-                        if (result.file.shouldDownload === true) {
-                            const parsedPath = path.parse(result.file.filePath);
-                            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                            this.response.setHeader(
-                                "Content-Disposition",
-                                `attachment;filename=${fileName}.${parsedPath.ext}`
-                            )
-                        }
-                        this.handleFileRequest(result.file.filePath, negotiatedMiMeType);
-                    }
-                }
-                else {
-                    this.onNotAcceptableRequest();
-                }
-            }
-            else {
-                this.response.setHeader('Location', result.responseData);
-                this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                    { 'Location': result.responseData });
-                this.response.end();
-            }
-
-        }).catch(this.onErrorOccured.bind(this))
+        controllerObj[this.routeMatchInfo_.actionInfo.action]().then(
+            this.onControllerResult.bind(this)
+        ).catch(this.onErrorOccured.bind(this))
     }
 
     private executeShieldsProtection_() {
@@ -193,7 +112,7 @@ export class RequestHandler extends FileHandler {
         this.routeMatchInfo_.shields.forEach(shield => {
             const shieldObj = new shield();
             shieldObj.body = this.body_;
-            shieldObj.cookies = this.cookieManager_;
+            shieldObj.cookies = this.cookieManager;
             shieldObj.query = this.query_;
             shieldObj.session = this.session_;
             shieldObj.request = this.request as IHttpRequest;
@@ -209,7 +128,7 @@ export class RequestHandler extends FileHandler {
         guards.forEach(guard => {
             const guardObj = new guard();
             guardObj.body = this.body_;
-            guardObj.cookies = this.cookieManager_;
+            guardObj.cookies = this.cookieManager;
             guardObj.query = this.query_;
             guardObj.session = this.session_;
             guardObj.request = this.request as IHttpRequest;
@@ -249,9 +168,9 @@ export class RequestHandler extends FileHandler {
                                     const rawCookie = this.request.headers[Cookie] as string;
                                     const parsedCookies = parseCookie(rawCookie);
                                     this.session_ = new Global.sessionProvider();
-                                    this.cookieManager_ = new CookieManager(parsedCookies);
+                                    this.cookieManager = new CookieManager(parsedCookies);
                                     this.session_.sessionId = parsedCookies[App__Session__Identifier];
-                                    this.session_.cookies = this.cookieManager_;
+                                    this.session_.cookies = this.cookieManager;
                                 }
                                 this.executeShieldsProtection_().then((shieldProtectionResult: boolean[]) => {
                                     const isRejectedByShield = shieldProtectionResult.indexOf(false) >= 0;

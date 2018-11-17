@@ -1,34 +1,42 @@
-import { Controller, action, HTTP_METHOD, declareAsController, htmlResult, textResult, renderView, defaultAction, HttpResult, MIME_TYPE, shields, guards, jsonResult, route } from "fortjs";
+import { Controller, action, HTTP_METHOD, declareAsController, htmlResult, textResult, defaultAction, shields, guards, jsonResult, route } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
 import { UserService } from "../services/user_service";
-import { HTTP_STATUS_CODE } from "fortjs/dist/ts/enums/http_status_code";
+import { HTTP_STATUS_CODE } from "fortjs";
 
 @shields([AuthenticationShield])
 @declareAsController()
 export class UserController extends Controller {
     service: UserService;
 
+    constructor() {
+        super();
+        this.service = new UserService();
+    }
+
     @defaultAction()
     default() {
         return new Promise((resolve, reject) => {
-            resolve(htmlResult("default action"));
+            resolve(htmlResult("user default action"));
         });
     }
 
     @action([HTTP_METHOD.Get])
-    @route("user/{id}")
+    @route("{id}")
     async getUser() {
+        console.log("getUser hit");
         try {
             const userId = Number(this.params.id);
             const user = this.service.getUser(userId);
+            console.log("user", user);
             if (user == null) {
                 return textResult("invalid id");
             }
             return jsonResult(user);
         }
         catch (ex) {
+            console.log("exception hit", ex);
             return jsonResult(ex);
         }
     }

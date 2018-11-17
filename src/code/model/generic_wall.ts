@@ -4,8 +4,4 @@ export class GenericWall extends Wall {
     onIncoming() {
         return null;
     }
-
-    onOutgoing(){
-        return null;
-    }
 }

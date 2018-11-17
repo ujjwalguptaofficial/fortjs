@@ -7,7 +7,7 @@ export const initApp = () => {
         foldersAllowed: ["contents"],
         viewEngine: FortViewEngine,
         errorHandler: CustomErrorHandler,
-        defaultPath: "user"
+        defaultPath: "default"
     })
     console.log(`server runing at 8080`);
 }

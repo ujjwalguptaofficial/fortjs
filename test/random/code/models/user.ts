@@ -4,6 +4,9 @@ export class User {
 
     id?: number;
 
+    @Length(5)
+    password?: string;
+
     @Length(1)
     name: string;
 

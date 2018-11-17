@@ -10,7 +10,12 @@ import { AppOption } from "./types/app_option";
 import { LogHelper } from "./helpers/log_helper";
 import { ERROR_TYPE } from "./enums/error_type";
 
-export let app: http.Server;
+let app: http.Server;
+
+export const getApp = () => {
+    return app;
+};
+
 export const create = (option: AppOption) => {
     if (!Util.isNull(option)) {
         Global.port = Util.isNull(option.port) ? 4000 : option.port;
@@ -39,7 +44,7 @@ export const create = (option: AppOption) => {
         new RequestHandler(req, res).handle();
     }).listen(Global.port).once("error", (err) => {
         if ((err as any).code === 'EADDRINUSE') {
-            throw new LogHelper(ERROR_TYPE.PortInUse).get();
+            new LogHelper(ERROR_TYPE.PortInUse).throw();
         }
         else {
             throw err;
