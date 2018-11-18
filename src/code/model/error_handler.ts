@@ -48,7 +48,7 @@ export class ErrorHandler {
 
     onMethodNotAllowed(): Promise<string> {
         return promise<string>((resolve, reject) => {
-            let errMessage = `<h1>Not allowed.</h1>`;
+            let errMessage = `<h1>Method Not allowed.</h1>`;
             resolve(errMessage);
         });
     }

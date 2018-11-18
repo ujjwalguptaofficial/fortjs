@@ -29,7 +29,6 @@ export class UserController extends Controller {
         try {
             const userId = Number(this.params.id);
             const user = this.service.getUser(userId);
-            console.log("user", user);
             if (user == null) {
                 return textResult("invalid id");
             }
@@ -61,6 +60,7 @@ export class UserController extends Controller {
     }
 
     @action([HTTP_METHOD.Delete])
+    @route("/")
     async removeUser() {
         try {
             const userId = Number(this.params.id);
@@ -79,13 +79,14 @@ export class UserController extends Controller {
         }
     }
 
-    @action([HTTP_METHOD.Patch])
+    @action([HTTP_METHOD.Put])
     @guards([ModelUserGuard])
-    @route("user/{id}")
+    @route("{id}")
     async updateUser() {
         try {
+            console.log("params", this.params);
             const user: User = {
-                id: this.body.id,
+                id: Number(this.params.id),
                 name: this.body.name,
                 gender: this.body.gender,
                 address: this.body.address,

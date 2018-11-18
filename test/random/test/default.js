@@ -4,7 +4,9 @@ let {
     browserAccept,
     url,
     httpClient,
-    forbiddenText
+    forbiddenText,
+    methodNotAllowedMsg,
+    badRequestMsg
 } = require('./common');
 
 describe("/default", () => {
@@ -67,7 +69,7 @@ describe("/default", () => {
             expect(res).to.have.status(405);
             expect(res).to.have.header('content-type', 'text/html');
             expect(res).to.have.header('allow', 'GET');
-            expect(res.text).to.be.equal('<h1>Not allowed.</h1>');
+            expect(res.text).to.be.equal(methodNotAllowedMsg);
             done();
         })
     })
@@ -77,7 +79,7 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('content-type', 'text/html');
-            expect(res.text).to.be.equal('<h1>Bad Request</h1>');
+            expect(res.text).to.be.equal(badRequestMsg);
             done();
         })
     })
@@ -101,7 +103,7 @@ describe("/default", () => {
             expect(res).to.have.status(405);
             expect(res).to.have.header('content-type', 'text/html');
             expect(res).to.have.header('allow', 'POST');
-            expect(res.text).to.be.equal('<h1>Not allowed.</h1>');
+            expect(res.text).to.be.equal(methodNotAllowedMsg);
             done();
         })
     })

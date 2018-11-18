@@ -158,10 +158,9 @@ export class RequestHandler extends ControllerHandler {
                             this.onNotFound();
                         }
                         else {
-
                             const actionInfo = this.routeMatchInfo_.actionInfo;
-                            if (actionInfo.methodsAllowed != null && actionInfo.methodsAllowed.indexOf(requestType) < 0) {
-                                this.onMethodNotAllowed(actionInfo.methodsAllowed);
+                            if (actionInfo == null) {
+                                this.onMethodNotAllowed(this.routeMatchInfo_.allows);
                             }
                             else {
                                 this.query_ = urlDetail.query;

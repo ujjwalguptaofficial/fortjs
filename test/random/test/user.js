@@ -33,14 +33,37 @@ describe("/user", () => {
         request.post('/user').send(user).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(201);
-            console.log("body", res.body);
             expect(res.body).to.be.an("object");
             expect(res.body).haveOwnProperty('name');
-            expect(res.body).haveOwnProperty('id');
+            expect(res.body).haveOwnProperty('id').equal(2);
             expect(res.body).haveOwnProperty('address');
             expect(res.body).haveOwnProperty('emailId');
             expect(res.body).haveOwnProperty('gender');
             expect(res.body).haveOwnProperty('password')
+            done();
+        })
+    })
+
+    it("/ + patch", (done) => {
+        request.patch('/user/2').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(405);
+            done();
+        })
+    })
+
+    it("/ + put", (done) => {
+        const user = {
+            name: 'angela yu',
+            address: 'newyork street 5 america',
+            emailId: 'angela@mg.com',
+            gender: 'female',
+            password: 'hiangelayu'
+        }
+        request.put('/user/2').send(user).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.an("string").equal("user updated")
             done();
         })
     })
