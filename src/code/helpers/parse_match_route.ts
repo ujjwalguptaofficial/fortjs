@@ -1,15 +1,8 @@
 import { RouteHandler } from "../route_handler";
 import { IRouteMatch } from "../interfaces/route_match";
-import { FILE_EXTENSION } from "../enums/file_extension";
-import { Util } from "../util";
 import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";
 
-function isRequestFileType(urlParts: string[]) {
-    const splitByDotValues = urlParts[urlParts.length - 1].split(".");
-    const fileExtension = splitByDotValues[splitByDotValues.length - 1];
-    return FILE_EXTENSION[fileExtension] == null ? false : true;
-}
 
 export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
     const urlLength = url.length;
@@ -32,21 +25,23 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
         matchedRoute.controller = route.controller;
         const urlPartLength = urlParts.length;
         if (urlPartLength === 2) { // url does not have action path
-            route.actions.forEach(action => {
+            route.actions.every(action => {
                 if (action.pattern.indexOf("//") >= 0) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
                         matchedRoute.actionInfo = action;
                         matchedRoute.params = {};
                         matchedRoute.shields = route.shields;
+                        return false;
                     }
                     else {
                         matchedRoute.allows = [...matchedRoute.allows, ...action.methodsAllowed];
                     }
                 }
+                return true;
             });
         }
         else {
-            route.actions.forEach(routeActionInfo => {
+            route.actions.every(routeActionInfo => {
                 const patternSplit = routeActionInfo.pattern.split("/");
                 if (urlPartLength === patternSplit.length) {
                     let isMatched = true;
@@ -67,12 +62,14 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
                             matchedRoute.actionInfo = routeActionInfo;
                             matchedRoute.params = params;
                             matchedRoute.shields = route.shields;
+                            return false;
                         }
                         else {
                             matchedRoute.allows = [...matchedRoute.allows, ...routeActionInfo.methodsAllowed];
                         }
                     }
                 }
+                return true;
             });
         }
         if (matchedRoute.controller == null) {

@@ -48,6 +48,9 @@ export class LogHelper implements IError {
             case ERROR_TYPE.InvalidContentType:
                 errMsg = `Content type - '${this.info_}' is not valid. Please create an issue if you think this is valid type.`
                 break;
+            case ERROR_TYPE.PortInUse:
+            errMsg = `Port ${this.info_} is being used by another process.`
+            break;
             default:
                 errMsg = this.message;
                 break;

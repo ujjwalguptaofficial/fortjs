@@ -4,7 +4,6 @@ import { Util } from "./util";
 import { RequestHandler } from "./request_handler";
 import { MemorySessionProvider } from "./memory_session_provider";
 import { GenericSessionProvider } from "./model/generic_session_provider";
-import { GenericWall } from "./model/generic_wall";
 import { ErrorHandler } from "./model";
 import { AppOption } from "./types/app_option";
 import { LogHelper } from "./helpers/log_helper";
@@ -45,7 +44,7 @@ export const create = (option: AppOption) => {
         new RequestHandler(req, res).handle();
     }).listen(Global.port).once("error", (err) => {
         if ((err as any).code === 'EADDRINUSE') {
-            new LogHelper(ERROR_TYPE.PortInUse).throw();
+            new LogHelper(ERROR_TYPE.PortInUse, Global.port).throw();
         }
         else {
             throw err;
