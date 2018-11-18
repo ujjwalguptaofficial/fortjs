@@ -18,5 +18,7 @@ export class Global {
     static walls: typeof GenericWall[] = [];
     static errorHandler: typeof ErrorHandler;
     static defaultPath?: string;
-    static connectonKeepAliveTimeout?: number
+    static connectonKeepAliveTimeout?: number;
+
+    static appName?: string;
 }

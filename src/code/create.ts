@@ -9,6 +9,7 @@ import { ErrorHandler } from "./model";
 import { AppOption } from "./types/app_option";
 import { LogHelper } from "./helpers/log_helper";
 import { ERROR_TYPE } from "./enums/error_type";
+import { App__Name } from "./constant";
 
 let app: http.Server;
 
@@ -28,7 +29,7 @@ export const create = (option: AppOption) => {
         Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.connectonKeepAliveTimeout = option.connectonKeepAliveTimeout == null ? 5000 : option.connectonKeepAliveTimeout;
-
+        Global.appName = Util.isNullOrEmpty(option.appName) === true ? App__Name : option.appName;
     }
     else {
         Global.port = 4000;

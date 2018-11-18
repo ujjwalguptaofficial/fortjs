@@ -19,4 +19,5 @@ export declare class Global {
     static errorHandler: typeof ErrorHandler;
     static defaultPath?: string;
     static connectonKeepAliveTimeout?: number;
+    static appName?: string;
 }

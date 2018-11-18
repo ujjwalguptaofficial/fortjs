@@ -39,4 +39,11 @@ export type AppOption = {
      * @type {number}
      */
     connectonKeepAliveTimeout?: number;
+    
+    /**
+     * name of application - default is fort
+     *
+     * @type {string}
+     */
+    appName?: string;
 };
