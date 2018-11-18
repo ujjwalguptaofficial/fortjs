@@ -7,9 +7,9 @@ export function defaultAction(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
         const className = (target.constructor.name as string);
         const actionInfo: IRouteActionInfo = {
             action: methodName,
-            methodsAllowed: allowedMethods,
+            methodsAllowed: allowedMethods == null ? [HTTP_METHOD.Get] : allowedMethods,
             guards: [],
-            pattern: methodName.toLowerCase()
+            pattern: "/"
         };
         RouteHandler.addAction(actionInfo, className, true);
     }

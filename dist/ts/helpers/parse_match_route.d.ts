@@ -1,2 +1,3 @@
 import { IRouteMatch } from "../interfaces/route_match";
-export declare function parseAndMatchRoute(url: string): IRouteMatch;
+import { HTTP_METHOD } from "../enums";
+export declare function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD): IRouteMatch;

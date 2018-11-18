@@ -148,16 +148,17 @@ export class RequestHandler extends ControllerHandler {
                     const urlDetail = url.parse(this.request.url, true);
                     const pathUrl = urlDetail.pathname.toLowerCase();
                     const extension = path.parse(pathUrl).ext;
+                    const requestType = this.request.method as HTTP_METHOD;
                     if (!Util.isNullOrEmpty(extension)) {
                         this.handleFileRequest(pathUrl, extension);
                     }
                     else {
-                        this.routeMatchInfo_ = parseAndMatchRoute(pathUrl);
+                        this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestType);
                         if (this.routeMatchInfo_ == null) {
                             this.onNotFound();
                         }
                         else {
-                            const requestType = this.request.method as HTTP_METHOD;
+
                             const actionInfo = this.routeMatchInfo_.actionInfo;
                             if (actionInfo.methodsAllowed != null && actionInfo.methodsAllowed.indexOf(requestType) < 0) {
                                 this.onMethodNotAllowed(actionInfo.methodsAllowed);

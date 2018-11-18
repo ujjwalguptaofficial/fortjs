@@ -18,6 +18,7 @@ export class RouteHandler {
         else {
             route.controller = value.controller;
             route.alias = value.alias;
+            // change pattern value since we have controller name now.
             route.actions.forEach(actionInfo => {
                 if (actionInfo.pattern.indexOf(value.alias) < 0) {
                     actionInfo.pattern = `/${value.alias}/${actionInfo.pattern}`;

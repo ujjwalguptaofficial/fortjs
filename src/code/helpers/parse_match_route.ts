@@ -3,6 +3,7 @@ import { IRouteMatch } from "../interfaces/route_match";
 import { FILE_EXTENSION } from "../enums/file_extension";
 import { Util } from "../util";
 import { Global } from "../global";
+import { HTTP_METHOD } from "../enums";
 
 function isRequestFileType(urlParts: string[]) {
     const splitByDotValues = urlParts[urlParts.length - 1].split(".");
@@ -10,7 +11,7 @@ function isRequestFileType(urlParts: string[]) {
     return FILE_EXTENSION[fileExtension] == null ? false : true;
 }
 
-export function parseAndMatchRoute(url: string) {
+export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
     let isMatched: boolean = false;
     const urlLength = url.length;
     // removing / from url;
@@ -27,17 +28,25 @@ export function parseAndMatchRoute(url: string) {
     if (route != null) {
         matchedRoute.controller = route.controller;
         const urlPartLength = urlParts.length;
-        if (urlPartLength === 2) {
-            if (!Util.isNullOrEmpty(route.defaultAction)) {
-                const routeAction = route.actions.find(qry => qry.action === route.defaultAction);
-                matchedRoute.actionInfo = routeAction;
+        if (urlPartLength === 2) { // url does not have action path
+            const action = route.actions.find(qry => qry.pattern.indexOf("//") >= 0 && qry.methodsAllowed != null && qry.methodsAllowed.indexOf(reqMethod) >= 0);
+            if (action != null) {
+                matchedRoute.actionInfo = action;
                 matchedRoute.params = {};
                 matchedRoute.shields = route.shields;
                 return matchedRoute;
             }
-            else {
-                return null;
-            }
+            return null;
+            // if (!Util.isNullOrEmpty(route.defaultAction)) {
+            //     const routeAction = route.actions.find(qry => qry.action === route.defaultAction);
+            //     matchedRoute.actionInfo = routeAction;
+            //     matchedRoute.params = {};
+            //     matchedRoute.shields = route.shields;
+            //     return matchedRoute;
+            // }
+            // else {
+            //     return null;
+            // }
         }
         isMatched = true;
         route.actions.every(routeActionInfo => {

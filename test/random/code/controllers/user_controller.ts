@@ -15,7 +15,8 @@ export class UserController extends Controller {
         this.service = new UserService();
     }
 
-    @defaultAction()
+    @action([HTTP_METHOD.Get])
+    @route("/")
     default() {
         return new Promise((resolve, reject) => {
             resolve(htmlResult("user default action"));
@@ -25,7 +26,6 @@ export class UserController extends Controller {
     @action([HTTP_METHOD.Get])
     @route("{id}")
     async getUser() {
-        console.log("getUser hit");
         try {
             const userId = Number(this.params.id);
             const user = this.service.getUser(userId);
@@ -43,13 +43,15 @@ export class UserController extends Controller {
 
     @action([HTTP_METHOD.Post])
     @guards([ModelUserGuard])
+    @route("/")
     async addUser() {
         try {
             const user: User = {
                 name: this.body.name,
                 gender: this.body.gender,
                 address: this.body.address,
-                emailId: this.body.emailId
+                emailId: this.body.emailId,
+                password: this.body.password
             };
             return jsonResult(this.service.addUser(user), HTTP_STATUS_CODE.Created);
         }
