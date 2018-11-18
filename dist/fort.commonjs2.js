@@ -601,7 +601,7 @@ var RouteHandler = /** @class */ (function () {
             routerCollection[index].shields = shields;
         }
     };
-    RouteHandler.addAction = function (newAction, className, isDefault) {
+    RouteHandler.addAction = function (newAction, className) {
         var router = routerCollection.find(function (x) { return x.controllerName === className; });
         if (router == null) {
             routerCollection.push({
@@ -609,14 +609,10 @@ var RouteHandler = /** @class */ (function () {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                alias: null,
-                defaultAction: isDefault === true ? newAction.action : ""
+                alias: null
             });
         }
         else {
-            if (isDefault === true) {
-                router.defaultAction = newAction.action;
-            }
             var savedAction = router.actions.find(function (val) { return val.action === newAction.action; });
             if (savedAction == null) {
                 newAction.pattern = router.alias == null ? newAction.pattern : "/" + router.alias + "/" + newAction.pattern;
@@ -792,7 +788,7 @@ function defaultAction(allowedMethods) {
             guards: [],
             pattern: "/"
         };
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addAction(actionInfo, className, true);
+        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addAction(actionInfo, className);
     };
 }
 

@@ -44,7 +44,7 @@ export class RouteHandler {
         }
     }
 
-    static addAction(newAction: IRouteActionInfo, className: string, isDefault?: boolean) {
+    static addAction(newAction: IRouteActionInfo, className: string) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({
@@ -52,14 +52,10 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                alias: null,
-                defaultAction: isDefault === true ? newAction.action : ""
+                alias: null
             });
         }
         else {
-            if (isDefault === true) {
-                router.defaultAction = newAction.action
-            }
             const savedAction = router.actions.find(val => val.action === newAction.action);
             if (savedAction == null) {
                 newAction.pattern = router.alias == null ? newAction.pattern : `/${router.alias}/${newAction.pattern}`;

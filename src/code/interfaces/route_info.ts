@@ -9,6 +9,4 @@ export interface IRouteInfo {
     alias: string;
     actions: IRouteActionInfo[];
     shields: typeof GenericShield[];
-    defaultAction?: string;
-
 }

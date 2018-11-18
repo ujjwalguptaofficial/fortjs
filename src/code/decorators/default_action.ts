@@ -11,6 +11,6 @@ export function defaultAction(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
             guards: [],
             pattern: "/"
         };
-        RouteHandler.addAction(actionInfo, className, true);
+        RouteHandler.addAction(actionInfo, className);
     }
 }
