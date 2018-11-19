@@ -20,7 +20,6 @@ import { ControllerHandler } from "./controller_handler";
 
 export class RequestHandler extends ControllerHandler {
     private body_: any;
-
     private session_: GenericSessionProvider;
     private query_: any;
     private data_ = {};

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install:lib": "npm i ../../fortjs-0.5.0.tgz",
+    "install:lib": "npm i ../../fortjs-0.6.0.tgz",
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
     "build": "webpack",
@@ -15,7 +15,7 @@
   "dependencies": {
     "class-validator": "^0.9.1",
     "eshtml": "file:../../eshtml-0.1.0.tgz",
-    "fortjs": "file:../../fortjs-0.5.0.tgz",
+    "fortjs": "file:../../fortjs-0.6.0.tgz",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2"

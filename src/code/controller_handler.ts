@@ -7,16 +7,15 @@ import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { Wall } from "./abstracts/wall";
+import { isEnvDev } from "./helpers/is_env_dev";
 
 export class ControllerHandler extends FileHandler {
 
     protected wallInstances: Wall[];
     private controllerResult_: HttpResult;
-    private negotiateMimeType_: MIME_TYPE;
 
-
-    private getDataBasedOnMimeType_() {
-        switch (this.negotiateMimeType_) {
+    private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {
+        switch (mimeType) {
             case MIME_TYPE.Json:
                 if (typeof this.controllerResult_.responseData === 'object') {
                     return JSON.stringify(this.controllerResult_.responseData);
@@ -26,9 +25,9 @@ export class ControllerHandler extends FileHandler {
                 if (typeof this.controllerResult_.responseData === 'object') {
                     return jsontoxml({
                         document: this.controllerResult_.responseData
-                    },{
-                        xmlHeader:true
-                    });
+                    }, {
+                            xmlHeader: true
+                        });
                 }
                 return this.controllerResult_.responseData;
             default:
@@ -46,6 +45,10 @@ export class ControllerHandler extends FileHandler {
     }
 
     onControllerResult(result: HttpResult) {
+        if (isEnvDev()) {
+            throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
+        }
+
         this.runWallOutgoing_();
         this.controllerResult_ = result;
         if (this.cookieManager != null) {
@@ -54,43 +57,45 @@ export class ControllerHandler extends FileHandler {
             });
         }
         if (result.shouldRedirect == null || result.shouldRedirect == false) {
-
-            const contentType = result.contentType || MIME_TYPE.Text;
-            this.negotiateMimeType_ = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-            if (this.negotiateMimeType_ != null) {
-                if (result.file == null) {
-                    if (result.responseFormat == null) {
+            if (result.responseFormat == null) {
+                const contentType = result.contentType || MIME_TYPE.Text;
+                const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                if (negotiateMimeType != null) {
+                    if (result.file == null) {
                         this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                            { [Content__Type]: this.negotiateMimeType_ });
-                        this.response.end(this.getDataBasedOnMimeType_());
+                            { [Content__Type]: negotiateMimeType });
+                        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
                     }
                     else {
-                        const key = Object.keys(result.responseFormat).find(qry => qry === this.negotiateMimeType_);
-                        if (key != null) {
-                            this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                                { [Content__Type]: this.negotiateMimeType_ });
-                            this.response.end(result.responseFormat[key]());
+                        if (result.file.shouldDownload === true) {
+                            const parsedPath = path.parse(result.file.filePath);
+                            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                            this.response.setHeader(
+                                "Content-Disposition",
+                                `attachment;filename=${fileName}.${parsedPath.ext}`
+                            )
                         }
-                        else {
-                            this.onNotAcceptableRequest();
-                        }
+                        this.handleFileRequest(result.file.filePath, negotiateMimeType);
                     }
                 }
                 else {
-                    if (result.file.shouldDownload === true) {
-                        const parsedPath = path.parse(result.file.filePath);
-                        const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                        this.response.setHeader(
-                            "Content-Disposition",
-                            `attachment;filename=${fileName}.${parsedPath.ext}`
-                        )
-                    }
-                    this.handleFileRequest(result.file.filePath, this.negotiateMimeType_);
+                    this.onNotAcceptableRequest();
                 }
             }
             else {
-                this.onNotAcceptableRequest();
+                const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat) as MIME_TYPE[]);
+                const key = Object.keys(result.responseFormat).find(qry => qry === negotiateMimeType);
+                if (key != null) {
+                    this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
+                        { [Content__Type]: negotiateMimeType });
+                    this.controllerResult_.responseData = result.responseFormat[key]();
+                    this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+                }
+                else {
+                    this.onNotAcceptableRequest();
+                }
             }
+
         }
         else {
             this.response.setHeader('Location', result.responseData);

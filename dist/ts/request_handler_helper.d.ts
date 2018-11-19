@@ -7,7 +7,8 @@ export declare class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
-    protected getContentTypeFromNegotiation(type: MIME_TYPE): string;
+    protected getContentTypeFromNegotiation(type: MIME_TYPE): MIME_TYPE;
+    protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]): MIME_TYPE;
     private getAvailableTypes_;
     protected onBadRequest(error: any): void;
     protected onForbiddenRequest(): void;
