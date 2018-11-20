@@ -44,6 +44,12 @@ export class ControllerHandler extends FileHandler {
         });
     }
 
+    private finishResponse_(negotiateMimeType: MIME_TYPE) {
+        this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
+            { [Content__Type]: negotiateMimeType });
+        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+    }
+
     onControllerResult(result: HttpResult) {
         if (isEnvDev()) {
             throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
@@ -62,9 +68,7 @@ export class ControllerHandler extends FileHandler {
                 const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                 if (negotiateMimeType != null) {
                     if (result.file == null) {
-                        this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                            { [Content__Type]: negotiateMimeType });
-                        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+                        this.finishResponse_(negotiateMimeType);
                     }
                     else {
                         if (result.file.shouldDownload === true) {
@@ -86,10 +90,8 @@ export class ControllerHandler extends FileHandler {
                 const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat) as MIME_TYPE[]);
                 const key = Object.keys(result.responseFormat).find(qry => qry === negotiateMimeType);
                 if (key != null) {
-                    this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                        { [Content__Type]: negotiateMimeType });
                     this.controllerResult_.responseData = result.responseFormat[key]();
-                    this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+                    this.finishResponse_(negotiateMimeType);
                 }
                 else {
                     this.onNotAcceptableRequest();
