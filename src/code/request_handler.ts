@@ -46,7 +46,7 @@ export class RequestHandler extends ControllerHandler {
             }).on('end', () => {
                 const bodyBuffer = Buffer.concat(body);
                 try {
-                    const contentType = this.request.headers[Content__Type];
+                    const contentType = this.request.headers["content-type"];
                     switch (contentType) {
                         case MIME_TYPE.Json:
                             try {

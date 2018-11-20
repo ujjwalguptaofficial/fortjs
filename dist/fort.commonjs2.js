@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.6.0 - 19/11/2018
+ * @license :fortjs - V0.6.0 - 20/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -1080,7 +1080,7 @@ var RequestHandler = /** @class */ (function (_super) {
             }).on('end', function () {
                 var bodyBuffer = Buffer.concat(body);
                 try {
-                    var contentType = _this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]];
+                    var contentType = _this.request.headers["content-type"];
                     switch (contentType) {
                         case _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__["MIME_TYPE"].Json:
                             try {

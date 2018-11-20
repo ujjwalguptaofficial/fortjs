@@ -27,7 +27,9 @@ describe("/random", () => {
         request.get('/random/').accept("application/json").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            const result = { result: "hello world" };
+            const result = {
+                result: "hello world"
+            };
             expect(res.body).to.be.eql(result);
             done();
         })
@@ -37,6 +39,20 @@ describe("/random", () => {
         request.get('/random/').accept("application/xml").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(406);
+            done();
+        })
+    })
+
+    it("/form", (done) => {
+        const data = {
+            hello: 'world'
+        }
+        request.post('/random/form').accept("application/json").type('form').send(data).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            console.log('text', res.text);
+            console.log('body', res.body);
+            expect(res.body).to.be.eql(data);
             done();
         })
     })
