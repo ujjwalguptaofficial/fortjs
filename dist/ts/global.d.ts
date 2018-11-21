@@ -4,6 +4,7 @@ import { GenericSessionProvider } from "./model/generic_session_provider";
 import { GenericWall } from "./model/generic_wall";
 import { ViewEngine } from "./abstracts/view_engine";
 import { ErrorHandler } from "./model/error_handler";
+import { EtagOption } from "./types/etag_option";
 export declare class Global {
     static request: http.IncomingMessage;
     static response: http.ServerResponse;
@@ -20,4 +21,5 @@ export declare class Global {
     static defaultPath?: string;
     static connectonKeepAliveTimeout?: number;
     static appName?: string;
+    static eTag?: EtagOption;
 }

@@ -7,6 +7,7 @@ export declare enum HTTP_STATUS_CODE {
     Created = 201,
     NoContent = 204,
     Redirect = 302,
+    NotModified = 304,
     MethodNotAllowed = 405,
     NotAcceptable = 406,
     InternalServerError = 500

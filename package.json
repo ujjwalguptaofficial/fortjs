@@ -14,6 +14,8 @@
   "author": "Ujjwal Gupta",
   "license": "MIT",
   "devDependencies": {
+    "@types/etag": "^1.8.0",
+    "@types/fresh": "^0.5.0",
     "@types/jsontoxml": "^1.0.0",
     "@types/negotiator": "^0.6.1",
     "fs-extra": "^7.0.1",

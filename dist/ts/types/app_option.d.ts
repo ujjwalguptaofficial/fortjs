@@ -1,6 +1,7 @@
 import { SessionProvider } from "../abstracts/session_provider";
 import { ViewEngine } from "../abstracts/view_engine";
 import { ErrorHandler } from "../model";
+import { EtagOption } from "./etag_option";
 export declare type AppOption = {
     port?: number;
     viewEngine?: typeof ViewEngine;
@@ -24,19 +25,10 @@ export declare type AppOption = {
      */
     defaultPath?: string;
     /**
-     * Timeout in milliseconds. Default: 5000 (5 seconds).
-     * The number of milliseconds of inactivity a server needs to wait for additional incoming data,
-     * after it has finished writing the last response, before a socket will be destroyed.
-     * If the server receives new data before the keep-alive timeout has fired,
-     * it will reset the regular inactivity timeout
-     *
-     * @type {number}
-     */
-    connectonKeepAliveTimeout?: number;
-    /**
      * name of application - default is fort
      *
      * @type {string}
      */
     appName?: string;
+    eTag?: EtagOption;
 };
