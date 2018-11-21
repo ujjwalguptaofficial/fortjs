@@ -1192,7 +1192,7 @@ var RequestHandler = /** @class */ (function (_super) {
                     else {
                         _this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_6__["parseAndMatchRoute"])(pathUrl, requestType);
                         if (_this.routeMatchInfo_ == null) {
-                            _this.onNotFound();
+                            _this.handleFileRequestForFolder(pathUrl);
                         }
                         else {
                             var actionInfo_1 = _this.routeMatchInfo_.actionInfo;
@@ -1642,6 +1642,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(45);
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(46);
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(fresh__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(18);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1701,6 +1702,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
 var FileHandler = /** @class */ (function (_super) {
     __extends(FileHandler, _super);
     function FileHandler() {
@@ -1737,44 +1739,114 @@ var FileHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         folderRequired = this.getRequiredFolder_(filePath);
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0)) return [3 /*break*/, 10];
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0)) return [3 /*break*/, 5];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 8, , 9]);
+                        _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
                     case 2:
                         fileInfo = _a.sent();
-                        if (!(fileInfo != null)) return [3 /*break*/, 6];
-                        if (!fileInfo.isDirectory()) return [3 /*break*/, 4];
-                        absolutePath += '/index.html';
-                        return [4 /*yield*/, this.getFileStats_(absolutePath)];
-                    case 3:
-                        fileInfo = _a.sent();
                         if (fileInfo != null) {
-                            this.sendFile_(absolutePath, fileType, fileInfo);
+                            if (fileInfo.isDirectory() === true) {
+                                this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                            }
+                            else {
+                                this.sendFile_(absolutePath, fileType, fileInfo);
+                            }
                         }
                         else {
                             this.onNotFound();
                         }
-                        return [3 /*break*/, 5];
-                    case 4:
-                        this.sendFile_(absolutePath, fileType, fileInfo);
-                        _a.label = 5;
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
-                        this.onNotFound();
-                        _a.label = 7;
-                    case 7: return [3 /*break*/, 9];
-                    case 8:
+                        return [3 /*break*/, 4];
+                    case 3:
                         ex_1 = _a.sent();
                         this.onErrorOccured(ex_1);
-                        return [3 /*break*/, 9];
-                    case 9: return [3 /*break*/, 11];
-                    case 10:
+                        return [3 /*break*/, 4];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
                         this.onNotFound();
-                        _a.label = 11;
-                    case 11: return [2 /*return*/];
+                        _a.label = 6;
+                    case 6: return [2 /*return*/, null];
+                }
+            });
+        });
+    };
+    /**
+     * process folders handling asuuming path is folder.
+     * Please check whether the file is folder before calling this function
+     *
+     * @private
+     * @param {string} filePath
+     * @param {string} folderRequired
+     * @param {Fs.Stats} fileInfo
+     * @memberof FileHandler
+     */
+    FileHandler.prototype.handleFileRequestForFolder_ = function (filePath, folderRequired, fileInfo) {
+        return __awaiter(this, void 0, void 0, function () {
+            var absolutePath, fileType, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](absolutePath, "index.html");
+                        return [4 /*yield*/, this.getFileStats_(absolutePath)];
+                    case 2:
+                        fileInfo = _a.sent();
+                        console.log("fileInfo null status", fileInfo == null);
+                        if (fileInfo != null) {
+                            console.log("fileInfo inside not null");
+                            fileType = _enums__WEBPACK_IMPORTED_MODULE_11__["MIME_TYPE"].Html;
+                            this.sendFile_(absolutePath, fileType, fileInfo);
+                        }
+                        else {
+                            console.log("fileInfo inside null");
+                            this.onNotFound();
+                        }
+                        return [3 /*break*/, 4];
+                    case 3:
+                        ex_2 = _a.sent();
+                        this.onErrorOccured(ex_2);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/, null];
+                }
+            });
+        });
+    };
+    FileHandler.prototype.handleFileRequestForFolder = function (filePath) {
+        return __awaiter(this, void 0, void 0, function () {
+            var folderRequired, absolutePath, fileInfo, ex_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        folderRequired = this.getRequiredFolder_(filePath);
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0)) return [3 /*break*/, 5];
+                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.getFileStats_(absolutePath)];
+                    case 2:
+                        fileInfo = _a.sent();
+                        if (fileInfo != null && fileInfo.isDirectory() === true) {
+                            this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                        }
+                        else {
+                            this.onNotFound();
+                        }
+                        return [3 /*break*/, 4];
+                    case 3:
+                        ex_3 = _a.sent();
+                        this.onErrorOccured(ex_3);
+                        return [3 /*break*/, 4];
+                    case 4: return [3 /*break*/, 6];
+                    case 5:
+                        this.onNotFound();
+                        _a.label = 6;
+                    case 6: return [2 /*return*/, null];
                 }
             });
         });
@@ -1957,16 +2029,45 @@ __webpack_require__.r(__webpack_exports__);
 
 function getMimeTypeFromExtension(ext) {
     switch (ext) {
-        case ".txt":
-            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text;
-        case ".png":
-            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Png;
+        case ".html":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html;
         case ".css":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Css;
         case ".js":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Js;
+        case ".png":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Png;
+        case ".woff":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Woff;
+        case ".woff2":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Woff2;
         case ".json":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json;
+        case ".txt":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text;
+        case ".jpg":
+        case ".jpeg":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Jpeg;
+        case ".rtf":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Rtf;
+        case ".ttf":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Ttf;
+        case ".swf":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Swf;
+        case ".Svg":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Svg;
+        case ".pdf":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Pdf;
+        case ".xml":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xml;
+        case ".csv":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Csv;
+        case ".xls":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xls;
+        case ".xlsx":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xlsx;
+        default:
+            return "application/octet-stream";
     }
 }
 

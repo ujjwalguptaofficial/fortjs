@@ -153,8 +153,9 @@ export class RequestHandler extends ControllerHandler {
                     }
                     else {
                         this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestType);
-                        if (this.routeMatchInfo_ == null) {
-                            this.onNotFound();
+                        if (this.routeMatchInfo_ == null) { // no route matched
+                            // it may be a folder then
+                            this.handleFileRequestForFolder(pathUrl);
                         }
                         else {
                             const actionInfo = this.routeMatchInfo_.actionInfo;

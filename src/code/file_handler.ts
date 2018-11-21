@@ -9,6 +9,7 @@ import { promise } from "./helpers/promise";
 import * as etag from "etag";
 import { ETag_Type } from "./enums/etag_type";
 import * as fresh from "fresh";
+import { MIME_TYPE } from "./enums";
 export class FileHandler extends RequestHandlerHelper {
 
     private getRequiredFolder_(path: string) {
@@ -46,14 +47,7 @@ export class FileHandler extends RequestHandlerHelper {
                 let fileInfo = await this.getFileStats_(absolutePath);
                 if (fileInfo != null) {
                     if (fileInfo.isDirectory() === true) {
-                        absolutePath += '/index.html';
-                        fileInfo = await this.getFileStats_(absolutePath);
-                        if (fileInfo != null) {
-                            this.sendFile_(absolutePath, fileType, fileInfo);
-                        }
-                        else {
-                            this.onNotFound();
-                        }
+                        this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
                     }
                     else {
                         this.sendFile_(absolutePath, fileType, fileInfo);
@@ -70,6 +64,59 @@ export class FileHandler extends RequestHandlerHelper {
         else {
             this.onNotFound();
         }
+        return null;
+    }
+
+    /**
+     * process folders handling asuuming path is folder.
+     * Please check whether the file is folder before calling this function
+     *
+     * @private
+     * @param {string} filePath
+     * @param {string} folderRequired
+     * @param {Fs.Stats} fileInfo
+     * @memberof FileHandler
+     */
+    private async handleFileRequestForFolder_(filePath: string, folderRequired: string, fileInfo: Fs.Stats) {
+        let absolutePath = path.join(Current__Directory, filePath);
+        try {
+            absolutePath = path.join(absolutePath, "index.html");
+            fileInfo = await this.getFileStats_(absolutePath);
+            if (fileInfo != null) {
+                const fileType = MIME_TYPE.Html;
+                this.sendFile_(absolutePath, fileType, fileInfo);
+            }
+            else {
+                this.onNotFound();
+            }
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
+        }
+        return null;
+    }
+
+    protected async handleFileRequestForFolder(filePath: string) {
+        const folderRequired = this.getRequiredFolder_(filePath);
+        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+            let absolutePath = path.join(Current__Directory, filePath);
+            try {
+                let fileInfo = await this.getFileStats_(absolutePath);
+                if (fileInfo != null && fileInfo.isDirectory() === true) {
+                    this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                }
+                else {
+                    this.onNotFound();
+                }
+            }
+            catch (ex) {
+                this.onErrorOccured(ex);
+            }
+        }
+        else {
+            this.onNotFound();
+        }
+        return null;
     }
 
     private isClientHasFreshFile_(lastModified: string, etag: string) {
