@@ -62,8 +62,9 @@ export class DefaultController extends Controller {
         });
     }
 
+    @action()
     async redirect() {
-        return await redirectResult("/gh");
+        return await redirectResult("html");
     }
 
     @action()

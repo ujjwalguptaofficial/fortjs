@@ -109,6 +109,15 @@ describe("/default", () => {
         })
     })
 
+    it("/redirect test", (done) => {
+        request.get('/default/redirect').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.equal('<h1>hey there i am html</h1>');
+            done();
+        })
+    })
+
     it("/user without login", (done) => {
         request.get('/user/').end((err, res) => {
             expect(err).to.be.null;
