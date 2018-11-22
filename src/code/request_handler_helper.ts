@@ -6,11 +6,22 @@ import { HTTP_METHOD } from "./enums/http_method";
 import { Global } from "./global";
 import * as Negotiator from "negotiator";
 import { CookieManager } from "./model/cookie_manager";
+import { Wall } from "./abstracts/wall";
 export class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
 
     protected request: http.IncomingMessage;
+
+    protected wallInstances: Wall[];
+
+    protected async runWallOutgoing() {
+        this.wallInstances.forEach(async wallObj => {
+            if (wallObj.onOutgoing != null) {
+                await wallObj.onOutgoing();
+            }
+        });
+    }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
         const negotiator = new Negotiator(this.request);

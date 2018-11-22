@@ -1,4 +1,4 @@
-import { Controller, shields, declareAsController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultAction } from "fortjs";
+import { Controller, viewResult, declareAsController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultAction, redirectResult } from "fortjs";
 import { UserService } from "../services/user_service";
 
 
@@ -8,7 +8,7 @@ export class DefaultController extends Controller {
     @defaultAction()
     default() {
         return new Promise((res, rej) => {
-            res(textResult("default page"));
+            res(viewResult("index", { title: "Welcome to fort" }));
         })
     }
 
@@ -35,7 +35,6 @@ export class DefaultController extends Controller {
     }
 
     @action([HTTP_METHOD.Get])
-    // @route("text/{userId}") // render url - default/text/{userid}
     text() {
         return new Promise((resolve, reject) => {
             resolve(textResult("text"));
@@ -61,6 +60,10 @@ export class DefaultController extends Controller {
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));
         });
+    }
+
+    async redirect() {
+        return await redirectResult("/gh");
     }
 
     @action()

@@ -50,8 +50,6 @@ describe("/random", () => {
         request.post('/random/form').accept("application/json").type('form').send(data).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            console.log('text', res.text);
-            console.log('body', res.body);
             expect(res.body).to.be.eql(data);
             done();
         })

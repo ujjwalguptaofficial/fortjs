@@ -6,9 +6,13 @@ export enum MIME_TYPE {
     Css = "text/css",
     Csv = "text/csv",
     Js = "application/javascript",
+    Bmp = "image/bmp",
     Jpeg = "image/jpeg",
+    Gif = "image/gif",
+    Ico = "image/x-icon",
     Png = "image/png",
     Pdf = "application/pdf",
+    Svg = "image/svg+xml",
     Rtf = "application/rtf",
     Xml = "application/xml",
     Xls = "application/vnd.ms-excel",
@@ -16,6 +20,9 @@ export enum MIME_TYPE {
     Ttf = "font/ttf",
     Woff = "font/woff",
     Woff2 = "font/woff2",
-    Svg = "image/svg+xml",
-    Swf = "application/x-shockwave-flash"
+    Eot = "application/vnd.ms-fontobject",
+    Otf = "font/otf",
+    Swf = "application/x-shockwave-flash",
+    Avi = "video/avi",
+
 }

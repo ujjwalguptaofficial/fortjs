@@ -1,8 +1,6 @@
 import { IError } from "../interfaces/error";
 import { ERROR_TYPE } from "../enums/error_type";
 
-
-
 export class LogHelper implements IError {
     type: ERROR_TYPE;
     message: string;
@@ -49,8 +47,11 @@ export class LogHelper implements IError {
                 errMsg = `Content type - '${this.info_}' is not valid. Please create an issue if you think this is valid type.`
                 break;
             case ERROR_TYPE.PortInUse:
-            errMsg = `Port ${this.info_} is being used by another process.`
-            break;
+                errMsg = `Port ${this.info_} is being used by another process.`
+                break;
+            case ERROR_TYPE.UndefinedViewEngine:
+                errMsg = `View engine is not initiated.Initiate the view engine where fort is created.`
+                break;
             default:
                 errMsg = this.message;
                 break;

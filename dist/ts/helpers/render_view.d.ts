@@ -1,1 +1,1 @@
-export declare function renderView(vieWname: string, model: any): Promise<string>;
+export declare function renderView(viewName: string, model?: any): Promise<string>;

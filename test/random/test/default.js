@@ -6,7 +6,8 @@ let {
     httpClient,
     forbiddenText,
     methodNotAllowedMsg,
-    badRequestMsg
+    badRequestMsg,
+    removeSpaceAndNewLine
 } = require('./common');
 
 describe("/default", () => {
@@ -15,7 +16,7 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/plain');
-            expect(res.text).to.be.equal('default page');
+            expect(removeSpaceAndNewLine(res.text)).to.be.equal('<html><head><title>Welcometofort</title></head><body><h1>Index</h1></body></html>');
             done();
         })
     })

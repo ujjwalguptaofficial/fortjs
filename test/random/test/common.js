@@ -4,6 +4,9 @@ chai.use(chaiHttp);
 const url = 'http://localhost:8080'
 
 exports.url = url;
+exports.removeSpaceAndNewLine = function (value) {
+    return value.replace(/(\r\n\t|\n|\r\t)/gm, "").replace(/\s+/g, '')
+}
 exports.httpClient = require('request');
 exports.request = chai.request.agent(url);
 exports.methodNotAllowedMsg = "<h1>Method Not allowed.</h1>";

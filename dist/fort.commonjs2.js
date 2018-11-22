@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.6.0 - 21/11/2018
+ * @license :fortjs - V0.6.0 - 22/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -151,10 +151,12 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["redirectResult"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_4__["viewResult"]; });
+
 /* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(49);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _model_index__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"]; });
 
-/* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(59);
+/* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(60);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "destroy", function() { return _destroy__WEBPACK_IMPORTED_MODULE_6__["destroy"]; });
 
 
@@ -533,6 +535,9 @@ var LogHelper = /** @class */ (function () {
             case _enums_error_type__WEBPACK_IMPORTED_MODULE_0__["ERROR_TYPE"].PortInUse:
                 errMsg = "Port " + this.info_ + " is being used by another process.";
                 break;
+            case _enums_error_type__WEBPACK_IMPORTED_MODULE_0__["ERROR_TYPE"].UndefinedViewEngine:
+                errMsg = "View engine is not initiated.Initiate the view engine where fort is created.";
+                break;
             default:
                 errMsg = this.message;
                 break;
@@ -556,6 +561,7 @@ var ERROR_TYPE;
     ERROR_TYPE["InvalidControllerName"] = "invalid_controller_name";
     ERROR_TYPE["InvalidContentType"] = "invalid_content_type";
     ERROR_TYPE["PortInUse"] = "port_in_use";
+    ERROR_TYPE["UndefinedViewEngine"] = "undefined_view_engine";
 })(ERROR_TYPE || (ERROR_TYPE = {}));
 
 
@@ -764,9 +770,13 @@ var MIME_TYPE;
     MIME_TYPE["Css"] = "text/css";
     MIME_TYPE["Csv"] = "text/csv";
     MIME_TYPE["Js"] = "application/javascript";
+    MIME_TYPE["Bmp"] = "image/bmp";
     MIME_TYPE["Jpeg"] = "image/jpeg";
+    MIME_TYPE["Gif"] = "image/gif";
+    MIME_TYPE["Ico"] = "image/x-icon";
     MIME_TYPE["Png"] = "image/png";
     MIME_TYPE["Pdf"] = "application/pdf";
+    MIME_TYPE["Svg"] = "image/svg+xml";
     MIME_TYPE["Rtf"] = "application/rtf";
     MIME_TYPE["Xml"] = "application/xml";
     MIME_TYPE["Xls"] = "application/vnd.ms-excel";
@@ -774,8 +784,10 @@ var MIME_TYPE;
     MIME_TYPE["Ttf"] = "font/ttf";
     MIME_TYPE["Woff"] = "font/woff";
     MIME_TYPE["Woff2"] = "font/woff2";
-    MIME_TYPE["Svg"] = "image/svg+xml";
+    MIME_TYPE["Eot"] = "application/vnd.ms-fontobject";
+    MIME_TYPE["Otf"] = "font/otf";
     MIME_TYPE["Swf"] = "application/x-shockwave-flash";
+    MIME_TYPE["Avi"] = "video/avi";
 })(MIME_TYPE || (MIME_TYPE = {}));
 
 
@@ -1179,6 +1191,7 @@ var RequestHandler = /** @class */ (function (_super) {
         var _this = this;
         try {
             this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["App__Name"]);
+            this.response.setHeader('Vary', 'Accept-Encoding');
             this.runWallIncoming_().then(function (wallProtectionResult) {
                 var isRejectedByWall = wallProtectionResult.indexOf(false) >= 0;
                 if (isRejectedByWall === false) {
@@ -1191,7 +1204,8 @@ var RequestHandler = /** @class */ (function (_super) {
                     }
                     else {
                         _this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_6__["parseAndMatchRoute"])(pathUrl, requestType);
-                        if (_this.routeMatchInfo_ == null) {
+                        if (_this.routeMatchInfo_ == null) { // no route matched
+                            // it may be a folder then
                             _this.handleFileRequestForFolder(pathUrl);
                         }
                         else {
@@ -1514,6 +1528,41 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 
 
@@ -1546,68 +1595,74 @@ var ControllerHandler = /** @class */ (function (_super) {
                 return this.controllerResult_.responseData;
         }
     };
-    ControllerHandler.prototype.runWallOutgoing_ = function () {
-        this.wallInstances.forEach(function (wallObj) {
-            if (wallObj.onOutgoing != null) {
-                wallObj.onOutgoing();
-            }
-        });
-    };
     ControllerHandler.prototype.finishResponse_ = function (negotiateMimeType) {
         var _a;
         this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["Content__Type"]] = negotiateMimeType, _a));
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     };
     ControllerHandler.prototype.onControllerResult = function (result) {
-        var _this = this;
-        if (Object(_helpers_is_env_dev__WEBPACK_IMPORTED_MODULE_6__["isEnvDev"])()) {
-            throw "no result is returned for the request url -" + this.request.url + " & method - " + this.request.method;
-        }
-        this.runWallOutgoing_();
-        this.controllerResult_ = result;
-        if (this.cookieManager != null) {
-            this.cookieManager.responseCookie_.forEach(function (value) {
-                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["Set__Cookie"], value);
-            });
-        }
-        if (result.shouldRedirect == null || result.shouldRedirect == false) {
-            if (result.responseFormat == null) {
-                var contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
-                var negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
-                if (negotiateMimeType != null) {
-                    if (result.file == null) {
-                        this.finishResponse_(negotiateMimeType);
-                    }
-                    else {
-                        if (result.file.shouldDownload === true) {
-                            var parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
-                            var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+        return __awaiter(this, void 0, void 0, function () {
+            var contentType, negotiateMimeType, parsedPath, fileName, negotiateMimeType_1, key;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (Object(_helpers_is_env_dev__WEBPACK_IMPORTED_MODULE_6__["isEnvDev"])()) {
+                            if (result == null) {
+                                throw "no result is returned for the request url -" + this.request.url + " & method - " + this.request.method;
+                            }
                         }
-                        this.handleFileRequest(result.file.filePath, negotiateMimeType);
-                    }
+                        return [4 /*yield*/, this.runWallOutgoing()];
+                    case 1:
+                        _a.sent();
+                        this.controllerResult_ = result;
+                        if (this.cookieManager != null) {
+                            this.cookieManager.responseCookie_.forEach(function (value) {
+                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["Set__Cookie"], value);
+                            });
+                        }
+                        if (result.shouldRedirect == null || result.shouldRedirect == false) {
+                            if (result.responseFormat == null) {
+                                contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
+                                negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
+                                if (negotiateMimeType != null) {
+                                    if (result.file == null) {
+                                        this.finishResponse_(negotiateMimeType);
+                                    }
+                                    else {
+                                        if (result.file.shouldDownload === true) {
+                                            parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+                                            fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                                            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+                                        }
+                                        this.handleFileRequest(result.file.filePath, negotiateMimeType);
+                                    }
+                                }
+                                else {
+                                    this.onNotAcceptableRequest();
+                                }
+                            }
+                            else {
+                                negotiateMimeType_1 = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat));
+                                key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiateMimeType_1; });
+                                if (key != null) {
+                                    this.controllerResult_.responseData = result.responseFormat[key]();
+                                    this.finishResponse_(negotiateMimeType_1);
+                                }
+                                else {
+                                    this.onNotAcceptableRequest();
+                                }
+                            }
+                        }
+                        else {
+                            this.response.setHeader('Location', result.responseData);
+                            this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': result.responseData });
+                            this.response.end();
+                        }
+                        return [2 /*return*/];
                 }
-                else {
-                    this.onNotAcceptableRequest();
-                }
-            }
-            else {
-                var negotiateMimeType_1 = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat));
-                var key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiateMimeType_1; });
-                if (key != null) {
-                    this.controllerResult_.responseData = result.responseFormat[key]();
-                    this.finishResponse_(negotiateMimeType_1);
-                }
-                else {
-                    this.onNotAcceptableRequest();
-                }
-            }
-        }
-        else {
-            this.response.setHeader('Location', result.responseData);
-            this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': result.responseData });
-            this.response.end();
-        }
+            });
+        });
     };
     return ControllerHandler;
 }(_file_handler__WEBPACK_IMPORTED_MODULE_4__["FileHandler"]));
@@ -1796,14 +1851,11 @@ var FileHandler = /** @class */ (function (_super) {
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
                     case 2:
                         fileInfo = _a.sent();
-                        console.log("fileInfo null status", fileInfo == null);
                         if (fileInfo != null) {
-                            console.log("fileInfo inside not null");
                             fileType = _enums__WEBPACK_IMPORTED_MODULE_11__["MIME_TYPE"].Html;
                             this.sendFile_(absolutePath, fileType, fileInfo);
                         }
                         else {
-                            console.log("fileInfo inside null");
                             this.onNotFound();
                         }
                         return [3 /*break*/, 4];
@@ -1858,33 +1910,48 @@ var FileHandler = /** @class */ (function (_super) {
         });
     };
     FileHandler.prototype.sendFile_ = function (path, fileType, fileInfo) {
-        var _a;
-        var lastModified = fileInfo.mtime.toUTCString();
-        var eTagValue = etag__WEBPACK_IMPORTED_MODULE_8__(fileInfo, {
-            weak: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag.type === _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__["ETag_Type"].Weak
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, mimeType, negotiateMimeType, lastModified, eTagValue, readStream;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.runWallOutgoing()];
+                    case 1:
+                        _b.sent();
+                        if (fileType[0] === '.') { // its extension
+                            mimeType = Object(_helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType);
+                        }
+                        else { // mime type
+                            mimeType = fileType;
+                        }
+                        negotiateMimeType = this.getContentTypeFromNegotiation(mimeType);
+                        if (negotiateMimeType != null) {
+                            lastModified = fileInfo.mtime.toUTCString();
+                            eTagValue = etag__WEBPACK_IMPORTED_MODULE_8__(fileInfo, {
+                                weak: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag.type === _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__["ETag_Type"].Weak
+                            });
+                            if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                                this.response.statusCode = _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotModified;
+                                this.response.end();
+                            }
+                            else {
+                                this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
+                                    _a[_constant__WEBPACK_IMPORTED_MODULE_3__["Content__Type"]] = mimeType,
+                                    _a['Etag'] = eTagValue,
+                                    _a['Last-Modified'] = lastModified,
+                                    _a));
+                                readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](path);
+                                // Handle non-existent file
+                                readStream.on('error', this.onErrorOccured.bind(this));
+                                readStream.pipe(this.response);
+                            }
+                        }
+                        else {
+                            this.onNotAcceptableRequest();
+                        }
+                        return [2 /*return*/];
+                }
+            });
         });
-        if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-            this.response.statusCode = _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotModified;
-            this.response.end();
-        }
-        else {
-            var mimeType = void 0;
-            if (fileType[0] === '.') { // its extension
-                mimeType = Object(_helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType);
-            }
-            else { // mime type
-                mimeType = fileType;
-            }
-            this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
-                _a[_constant__WEBPACK_IMPORTED_MODULE_3__["Content__Type"]] = mimeType,
-                _a['Etag'] = eTagValue,
-                _a['Last-Modified'] = lastModified,
-                _a));
-            var readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](path);
-            // Handle non-existent file
-            readStream.on('error', this.onErrorOccured.bind(this));
-            readStream.pipe(this.response);
-        }
     };
     return FileHandler;
 }(_request_handler_helper__WEBPACK_IMPORTED_MODULE_4__["RequestHandlerHelper"]));
@@ -1904,6 +1971,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(41);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_4__);
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 
 
@@ -1912,6 +2014,27 @@ __webpack_require__.r(__webpack_exports__);
 var RequestHandlerHelper = /** @class */ (function () {
     function RequestHandlerHelper() {
     }
+    RequestHandlerHelper.prototype.runWallOutgoing = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                this.wallInstances.forEach(function (wallObj) { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (!(wallObj.onOutgoing != null)) return [3 /*break*/, 2];
+                                return [4 /*yield*/, wallObj.onOutgoing()];
+                            case 1:
+                                _a.sent();
+                                _a.label = 2;
+                            case 2: return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/];
+            });
+        });
+    };
     RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
         var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_4__(this.request);
         var availableTypes = this.getAvailableTypes_(type);
@@ -2029,6 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function getMimeTypeFromExtension(ext) {
     switch (ext) {
+        case ".htm":
         case ".html":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html;
         case ".css":
@@ -2052,8 +2176,14 @@ function getMimeTypeFromExtension(ext) {
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Rtf;
         case ".ttf":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Ttf;
+        case ".eot":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Eot;
+        case '.otf':
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Otf;
         case ".swf":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Swf;
+        case ".avi":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Avi;
         case ".Svg":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Svg;
         case ".pdf":
@@ -2066,6 +2196,10 @@ function getMimeTypeFromExtension(ext) {
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xls;
         case ".xlsx":
             return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xlsx;
+        case ".bmp":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Bmp;
+        case ".gif":
+            return _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Gif;
         default:
             return "application/octet-stream";
     }
@@ -2354,6 +2488,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _redirect_result__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(58);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return _redirect_result__WEBPACK_IMPORTED_MODULE_6__["redirectResult"]; });
 
+/* harmony import */ var _view_result__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(59);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _view_result__WEBPACK_IMPORTED_MODULE_7__["viewResult"]; });
+
+
 
 
 
@@ -2431,10 +2569,21 @@ function htmlResult(html, statusCode) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderView", function() { return renderView; });
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _is_env_dev__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(47);
+/* harmony import */ var _log_helper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
 
-function renderView(vieWname, model) {
+
+
+
+function renderView(viewName, model) {
+    if (Object(_is_env_dev__WEBPACK_IMPORTED_MODULE_1__["isEnvDev"])()) {
+        if (_global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine == null) {
+            new _log_helper__WEBPACK_IMPORTED_MODULE_2__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_3__["ERROR_TYPE"].UndefinedViewEngine).throw();
+        }
+    }
     return _global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine.render({
-        view: vieWname,
+        view: viewName,
         model: model
     });
 }
@@ -2505,6 +2654,71 @@ function redirectResult(url) {
 
 /***/ }),
 /* 59 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return viewResult; });
+/* harmony import */ var _render_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(55);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+function viewResult(viewName, model) {
+    return __awaiter(this, void 0, void 0, function () {
+        var viewData;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, model)];
+                case 1:
+                    viewData = _a.sent();
+                    return [2 /*return*/, {
+                            contentType: _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Html,
+                            responseData: viewData,
+                            statusCode: _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
+                        }];
+            }
+        });
+    });
+}
+
+
+/***/ }),
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

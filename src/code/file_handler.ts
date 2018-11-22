@@ -126,32 +126,40 @@ export class FileHandler extends RequestHandlerHelper {
         })
     }
 
-    private sendFile_(path: string, fileType: string, fileInfo: Fs.Stats) {
-        const lastModified = fileInfo.mtime.toUTCString();
-        const eTagValue = etag(fileInfo, {
-            weak: Global.eTag.type === ETag_Type.Weak
-        });
-        if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-            this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-            this.response.end();
+    private async sendFile_(path: string, fileType: string, fileInfo: Fs.Stats) {
+        await this.runWallOutgoing();
+        let mimeType;
+        if (fileType[0] === '.') { // its extension
+            mimeType = getMimeTypeFromExtension(fileType);
+        }
+        else { // mime type
+            mimeType = fileType;
+        }
+        const negotiateMimeType = this.getContentTypeFromNegotiation(mimeType) as MIME_TYPE;
+        if (negotiateMimeType != null) {
+            const lastModified = fileInfo.mtime.toUTCString();
+            const eTagValue = etag(fileInfo, {
+                weak: Global.eTag.type === ETag_Type.Weak
+            });
+            if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                this.response.end();
+            }
+            else {
+
+                this.response.writeHead(HTTP_STATUS_CODE.Ok, {
+                    [Content__Type]: mimeType,
+                    'Etag': eTagValue,
+                    'Last-Modified': lastModified
+                })
+                const readStream = Fs.createReadStream(path);
+                // Handle non-existent file
+                readStream.on('error', this.onErrorOccured.bind(this));
+                readStream.pipe(this.response);
+            }
         }
         else {
-            let mimeType;
-            if (fileType[0] === '.') { // its extension
-                mimeType = getMimeTypeFromExtension(fileType);
-            }
-            else { // mime type
-                mimeType = fileType;
-            }
-            this.response.writeHead(HTTP_STATUS_CODE.Ok, {
-                [Content__Type]: mimeType,
-                'Etag': eTagValue,
-                'Last-Modified': lastModified
-            })
-            const readStream = Fs.createReadStream(path);
-            // Handle non-existent file
-            readStream.on('error', this.onErrorOccured.bind(this));
-            readStream.pipe(this.response);
+            this.onNotAcceptableRequest();
         }
 
     }

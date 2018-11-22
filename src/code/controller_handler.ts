@@ -6,12 +6,9 @@ import * as jsontoxml from "jsontoxml";
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
-import { Wall } from "./abstracts/wall";
 import { isEnvDev } from "./helpers/is_env_dev";
 
 export class ControllerHandler extends FileHandler {
-
-    protected wallInstances: Wall[];
     private controllerResult_: HttpResult;
 
     private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {
@@ -36,26 +33,20 @@ export class ControllerHandler extends FileHandler {
         }
     }
 
-    private runWallOutgoing_() {
-        this.wallInstances.forEach(wallObj => {
-            if (wallObj.onOutgoing != null) {
-                wallObj.onOutgoing();
-            }
-        });
-    }
-
     private finishResponse_(negotiateMimeType: MIME_TYPE) {
         this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
             { [Content__Type]: negotiateMimeType });
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     }
 
-    onControllerResult(result: HttpResult) {
+    async onControllerResult(result: HttpResult) {
         if (isEnvDev()) {
-            throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
+            if (result == null) {
+                throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
+            }
         }
 
-        this.runWallOutgoing_();
+        await this.runWallOutgoing();
         this.controllerResult_ = result;
         if (this.cookieManager != null) {
             ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {

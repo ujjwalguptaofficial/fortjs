@@ -141,6 +141,7 @@ export class RequestHandler extends ControllerHandler {
     private execute_() {
         try {
             this.response.setHeader('X-Powered-By', App__Name);
+            this.response.setHeader('Vary', 'Accept-Encoding');
             this.runWallIncoming_().then(wallProtectionResult => {
                 const isRejectedByWall = wallProtectionResult.indexOf(false) >= 0;
                 if (isRejectedByWall === false) {

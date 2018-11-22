@@ -2,6 +2,7 @@ import { MIME_TYPE } from "../enums";
 
 export function getMimeTypeFromExtension(ext: string): MIME_TYPE {
     switch (ext) {
+        case ".htm":
         case ".html":
             return MIME_TYPE.Html;
         case ".css":
@@ -25,8 +26,14 @@ export function getMimeTypeFromExtension(ext: string): MIME_TYPE {
             return MIME_TYPE.Rtf;
         case ".ttf":
             return MIME_TYPE.Ttf;
+        case ".eot":
+            return MIME_TYPE.Eot;
+        case '.otf':
+            return MIME_TYPE.Otf;
         case ".swf":
             return MIME_TYPE.Swf;
+        case ".avi":
+            return MIME_TYPE.Avi;
         case ".Svg":
             return MIME_TYPE.Svg;
         case ".pdf":
@@ -39,6 +46,10 @@ export function getMimeTypeFromExtension(ext: string): MIME_TYPE {
             return MIME_TYPE.Xls;
         case ".xlsx":
             return MIME_TYPE.Xlsx;
+        case ".bmp":
+            return MIME_TYPE.Bmp;
+        case ".gif":
+            return MIME_TYPE.Gif;
         default:
             return "application/octet-stream" as MIME_TYPE;
     }
