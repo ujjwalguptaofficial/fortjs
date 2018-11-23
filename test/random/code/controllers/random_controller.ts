@@ -1,4 +1,4 @@
-import { Controller, declareAsController, defaultAction, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, action, jsonResult } from "fortjs";
+import { Controller, declareAsController, defaultAction, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, action, jsonResult, route } from "fortjs";
 
 @declareAsController('random')
 export class RandomController extends Controller {
@@ -24,5 +24,11 @@ export class RandomController extends Controller {
     @action()
     async form() {
         return jsonResult(this.body);
+    }
+
+    @action()
+    @route("throw")
+    async throwTest() {
+        throw "throw test";
     }
 }

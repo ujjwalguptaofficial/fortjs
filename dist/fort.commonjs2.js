@@ -2192,6 +2192,11 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.onErrorOccured = function (error) {
         var _this = this;
+        if (typeof error === 'string') {
+            error = {
+                message: error
+            };
+        }
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
             var _a;
             _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));

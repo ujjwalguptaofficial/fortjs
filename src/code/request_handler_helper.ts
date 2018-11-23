@@ -7,6 +7,7 @@ import { Global } from "./global";
 import * as Negotiator from "negotiator";
 import { CookieManager } from "./model/cookie_manager";
 import { Wall } from "./abstracts/wall";
+import { IException } from "./interfaces/exception";
 export class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
@@ -102,6 +103,11 @@ export class RequestHandlerHelper {
     }
 
     protected onErrorOccured(error) {
+        if (typeof error === 'string') {
+            error = {
+                message: error
+            } as IException
+        }
         new Global.errorHandler().onServerError(error).then(result => {
             this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [Content__Type]: MIME_TYPE.Html });
             this.response.end(result);
