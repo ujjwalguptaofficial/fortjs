@@ -39,6 +39,15 @@ describe("/file test", () => {
         });
     });
 
+    it('/contents/png', (done) => {
+        request.get('/contents/JsStore_16_16.png').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'image/png');
+            done();
+        });
+    });
+
     it('invalid file', (done) => {
         request.get('/fc.txt').end((err, res) => {
             expect(err).to.be.null;

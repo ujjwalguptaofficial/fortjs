@@ -959,9 +959,12 @@ var getApp = function () {
     return app;
 };
 var create = function (option) {
+    var defaultEtagConfig = {
+        type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__["ETag_Type"].Weak
+    };
     if (!_util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option)) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.port) ? 4000 : option.port;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = new option.viewEngine();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = option.viewEngine == null ? null : new option.viewEngine();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _memory_session_provider__WEBPACK_IMPORTED_MODULE_4__["MemorySessionProvider"] : option.sessionProvider;
@@ -970,9 +973,6 @@ var create = function (option) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"] : option.errorHandler;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_8__["App__Name"] : option.appName;
-        var defaultEtagConfig = {
-            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__["ETag_Type"].Weak
-        };
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
     }
     else {
@@ -984,6 +984,7 @@ var create = function (option) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = [];
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = [];
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _model__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"];
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
     }
     app = http__WEBPACK_IMPORTED_MODULE_0__["createServer"](function (req, res) {
         new _request_handler__WEBPACK_IMPORTED_MODULE_3__["RequestHandler"](req, res).handle();
@@ -1660,9 +1661,25 @@ var ControllerHandler = /** @class */ (function (_super) {
         this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["Content__Type"]] = negotiateMimeType, _a));
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     };
+    ControllerHandler.prototype.handleRedirectResult_ = function () {
+        this.response.setHeader('Location', this.controllerResult_.responseData);
+        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult_.responseData });
+        this.response.end();
+    };
+    ControllerHandler.prototype.handleFormatResult_ = function () {
+        var negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult_.responseFormat));
+        var key = Object.keys(this.controllerResult_.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
+        if (key != null) {
+            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
+            this.finishResponse_(negotiateMimeType);
+        }
+        else {
+            this.onNotAcceptableRequest();
+        }
+    };
     ControllerHandler.prototype.onResultEvaluated = function (result) {
         return __awaiter(this, void 0, void 0, function () {
-            var contentType, negotiateMimeType, parsedPath, fileName, negotiateMimeType_1, key;
+            var contentType, negotiateMimeType, parsedPath, fileName;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -1681,41 +1698,31 @@ var ControllerHandler = /** @class */ (function (_super) {
                         }
                         if (result.shouldRedirect == null || result.shouldRedirect == false) {
                             if (result.responseFormat == null) {
-                                contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
-                                negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
-                                if (negotiateMimeType != null) {
-                                    if (result.file == null) {
+                                if (result.file == null) {
+                                    contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
+                                    negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
+                                    if (negotiateMimeType != null) {
                                         this.finishResponse_(negotiateMimeType);
                                     }
                                     else {
-                                        if (result.file.shouldDownload === true) {
-                                            parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
-                                            fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                                            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
-                                        }
-                                        this.handleFileRequest(result.file.filePath, negotiateMimeType);
+                                        this.onNotAcceptableRequest();
                                     }
                                 }
                                 else {
-                                    this.onNotAcceptableRequest();
+                                    parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+                                    if (result.file.shouldDownload === true) {
+                                        fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                                        this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+                                    }
+                                    this.handleFileRequest(result.file.filePath, parsedPath.ext);
                                 }
                             }
                             else {
-                                negotiateMimeType_1 = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat));
-                                key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiateMimeType_1; });
-                                if (key != null) {
-                                    this.controllerResult_.responseData = result.responseFormat[key]();
-                                    this.finishResponse_(negotiateMimeType_1);
-                                }
-                                else {
-                                    this.onNotAcceptableRequest();
-                                }
+                                this.handleFormatResult_();
                             }
                         }
                         else {
-                            this.response.setHeader('Location', result.responseData);
-                            this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': result.responseData });
-                            this.response.end();
+                            this.handleRedirectResult_();
                         }
                         return [2 /*return*/];
                 }

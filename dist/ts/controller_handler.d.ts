@@ -4,5 +4,7 @@ export declare class ControllerHandler extends FileHandler {
     private controllerResult_;
     private getDataBasedOnMimeType_;
     private finishResponse_;
+    private handleRedirectResult_;
+    private handleFormatResult_;
     onResultEvaluated(result: HttpResult): Promise<void>;
 }

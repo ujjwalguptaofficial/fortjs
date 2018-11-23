@@ -19,9 +19,12 @@ export const getApp = () => {
 };
 
 export const create = (option: AppOption) => {
+    const defaultEtagConfig = {
+        type: ETag_Type.Weak
+    } as EtagOption
     if (!Util.isNull(option)) {
         Global.port = Util.isNull(option.port) ? 4000 : option.port;
-        Global.viewEngine = new (option.viewEngine as any)();
+        Global.viewEngine = option.viewEngine == null ? null : new (option.viewEngine as any)();
         Global.shouldParseCookie = Util.isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
         Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
         Global.sessionProvider = Util.isNull(option.sessionProvider) ? MemorySessionProvider as any : option.sessionProvider as typeof GenericSessionProvider;
@@ -30,9 +33,6 @@ export const create = (option: AppOption) => {
         Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.appName = Util.isNullOrEmpty(option.appName) === true ? App__Name : option.appName;
-        const defaultEtagConfig = {
-            type: ETag_Type.Weak
-        } as EtagOption
         Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
     }
     else {
@@ -44,6 +44,7 @@ export const create = (option: AppOption) => {
         Global.foldersAllowed = [];
         Global.walls = [];
         Global.errorHandler = ErrorHandler;
+        Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
     }
     app = http.createServer((req, res) => {
         new RequestHandler(req, res).handle();

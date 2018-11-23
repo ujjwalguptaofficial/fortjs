@@ -39,6 +39,25 @@ export class ControllerHandler extends FileHandler {
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     }
 
+    private handleRedirectResult_() {
+        this.response.setHeader('Location', this.controllerResult_.responseData);
+        this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
+            { 'Location': this.controllerResult_.responseData });
+        this.response.end();
+    }
+
+    private handleFormatResult_() {
+        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult_.responseFormat) as MIME_TYPE[]);
+        const key = Object.keys(this.controllerResult_.responseFormat).find(qry => qry === negotiateMimeType);
+        if (key != null) {
+            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
+            this.finishResponse_(negotiateMimeType);
+        }
+        else {
+            this.onNotAcceptableRequest();
+        }
+    }
+
     async onResultEvaluated(result: HttpResult) {
         if (result == null) {
             throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
@@ -52,46 +71,34 @@ export class ControllerHandler extends FileHandler {
         }
         if (result.shouldRedirect == null || result.shouldRedirect == false) {
             if (result.responseFormat == null) {
-                const contentType = result.contentType || MIME_TYPE.Text;
-                const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-                if (negotiateMimeType != null) {
-                    if (result.file == null) {
+                if (result.file == null) {
+                    const contentType = result.contentType || MIME_TYPE.Text;
+                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                    if (negotiateMimeType != null) {
                         this.finishResponse_(negotiateMimeType);
                     }
                     else {
-                        if (result.file.shouldDownload === true) {
-                            const parsedPath = path.parse(result.file.filePath);
-                            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                            this.response.setHeader(
-                                "Content-Disposition",
-                                `attachment;filename=${fileName}.${parsedPath.ext}`
-                            )
-                        }
-                        this.handleFileRequest(result.file.filePath, negotiateMimeType);
+                        this.onNotAcceptableRequest();
                     }
                 }
                 else {
-                    this.onNotAcceptableRequest();
+                    const parsedPath = path.parse(result.file.filePath);
+                    if (result.file.shouldDownload === true) {
+                        const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                        this.response.setHeader(
+                            "Content-Disposition",
+                            `attachment;filename=${fileName}.${parsedPath.ext}`
+                        )
+                    }
+                    this.handleFileRequest(result.file.filePath, parsedPath.ext);
                 }
             }
             else {
-                const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat) as MIME_TYPE[]);
-                const key = Object.keys(result.responseFormat).find(qry => qry === negotiateMimeType);
-                if (key != null) {
-                    this.controllerResult_.responseData = result.responseFormat[key]();
-                    this.finishResponse_(negotiateMimeType);
-                }
-                else {
-                    this.onNotAcceptableRequest();
-                }
+                this.handleFormatResult_();
             }
-
         }
         else {
-            this.response.setHeader('Location', result.responseData);
-            this.response.writeHead(result.statusCode || HTTP_STATUS_CODE.Ok,
-                { 'Location': result.responseData });
-            this.response.end();
+            this.handleRedirectResult_();
         }
     }
 }
