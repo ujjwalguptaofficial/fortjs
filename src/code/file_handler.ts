@@ -38,26 +38,15 @@ export class FileHandler extends RequestHandlerHelper {
         })
     }
 
-    protected async handleFileRequestFromAbsolutePath(absolutePath:string,fileType: string){
-        
-    }
-
-    protected async handleFileRequest(filePath: string, fileType: string) {
+    protected async handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
         try {
-            const folderRequired = this.getRequiredFolder_(filePath);
-            if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-                let absolutePath = path.join(__CurrentDirectory, filePath);
-                let fileInfo = await this.getFileStats_(absolutePath);
-                if (fileInfo != null) {
-                    if (fileInfo.isDirectory() === true) {
-                        this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
-                    }
-                    else {
-                        this.sendFile_(absolutePath, fileType, fileInfo);
-                    }
+            let fileInfo = await this.getFileStats_(absolutePath);
+            if (fileInfo != null) {
+                if (fileInfo.isDirectory() === true) {
+                    this.handleFileRequestForFolder_(absolutePath, fileInfo);
                 }
                 else {
-                    this.onNotFound();
+                    this.sendFile_(absolutePath, fileType, fileInfo);
                 }
             }
             else {
@@ -70,18 +59,28 @@ export class FileHandler extends RequestHandlerHelper {
         return null;
     }
 
+    protected handleFileRequest(filePath: string, fileType: string) {
+        const folderRequired = this.getRequiredFolder_(filePath);
+        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+            let absolutePath = path.join(__CurrentDirectory, filePath);
+            this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+        }
+        else {
+            this.onNotFound();
+        }
+    }
+
     /**
-     * process folders handling asuuming path is folder.
+     *process folders handling asuuming path is folder.
      * Please check whether the file is folder before calling this function
      *
      * @private
      * @param {string} filePath
-     * @param {string} folderRequired
      * @param {Fs.Stats} fileInfo
+     * @returns
      * @memberof FileHandler
      */
-    private async handleFileRequestForFolder_(filePath: string, folderRequired: string, fileInfo: Fs.Stats) {
-        let absolutePath = path.join(__CurrentDirectory, filePath);
+    private async handleFileRequestForFolder_(absolutePath: string, fileInfo: Fs.Stats) {
         try {
             absolutePath = path.join(absolutePath, "index.html");
             fileInfo = await this.getFileStats_(absolutePath);
@@ -107,7 +106,7 @@ export class FileHandler extends RequestHandlerHelper {
                 try {
                     let fileInfo = await this.getFileStats_(absolutePath);
                     if (fileInfo != null && fileInfo.isDirectory() === true) {
-                        this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                        this.handleFileRequestForFolder_(absolutePath, fileInfo);
                     }
                     else {
                         this.onNotFound();

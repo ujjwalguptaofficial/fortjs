@@ -1677,9 +1677,18 @@ var ControllerHandler = /** @class */ (function (_super) {
             this.onNotAcceptableRequest();
         }
     };
+    ControllerHandler.prototype.handleFileResult_ = function () {
+        var result = this.controllerResult_;
+        var parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+        if (result.file.shouldDownload === true) {
+            var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + parsedPath.ext);
+        }
+        this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
+    };
     ControllerHandler.prototype.onResultEvaluated = function (result) {
         return __awaiter(this, void 0, void 0, function () {
-            var contentType, negotiateMimeType, parsedPath, fileName;
+            var contentType, negotiateMimeType;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -1705,13 +1714,7 @@ var ControllerHandler = /** @class */ (function (_super) {
                                     }
                                 }
                                 else {
-                                    parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
-                                    console.log("parsedPath", parsedPath);
-                                    if (result.file.shouldDownload === true) {
-                                        fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                                        this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
-                                    }
-                                    this.handleFileRequest(result.file.filePath, parsedPath.ext);
+                                    this.handleFileResult_();
                                 }
                             }
                             else {
@@ -1849,22 +1852,19 @@ var FileHandler = /** @class */ (function (_super) {
             });
         });
     };
-    FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
+    FileHandler.prototype.handleFileRequestFromAbsolutePath = function (absolutePath, fileType) {
         return __awaiter(this, void 0, void 0, function () {
-            var folderRequired_1, absolutePath, fileInfo, ex_1;
+            var fileInfo, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 4, , 5]);
-                        folderRequired_1 = this.getRequiredFolder_(filePath);
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 2];
-                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
                     case 1:
                         fileInfo = _a.sent();
                         if (fileInfo != null) {
                             if (fileInfo.isDirectory() === true) {
-                                this.handleFileRequestForFolder_(filePath, folderRequired_1, fileInfo);
+                                this.handleFileRequestForFolder_(absolutePath, fileInfo);
                             }
                             else {
                                 this.sendFile_(absolutePath, fileType, fileInfo);
@@ -1875,41 +1875,44 @@ var FileHandler = /** @class */ (function (_super) {
                         }
                         return [3 /*break*/, 3];
                     case 2:
-                        this.onNotFound();
-                        _a.label = 3;
-                    case 3: return [3 /*break*/, 5];
-                    case 4:
                         ex_1 = _a.sent();
                         this.onErrorOccured(ex_1);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/, null];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/, null];
                 }
             });
         });
     };
+    FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
+        var folderRequired = this.getRequiredFolder_(filePath);
+        if (_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
+            var absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
+            this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+        }
+        else {
+            this.onNotFound();
+        }
+    };
     /**
-     * process folders handling asuuming path is folder.
+     *process folders handling asuuming path is folder.
      * Please check whether the file is folder before calling this function
      *
      * @private
      * @param {string} filePath
-     * @param {string} folderRequired
      * @param {Fs.Stats} fileInfo
+     * @returns
      * @memberof FileHandler
      */
-    FileHandler.prototype.handleFileRequestForFolder_ = function (filePath, folderRequired, fileInfo) {
+    FileHandler.prototype.handleFileRequestForFolder_ = function (absolutePath, fileInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var absolutePath, fileType, ex_2;
+            var fileType, ex_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _a.trys.push([0, 2, , 3]);
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](absolutePath, "index.html");
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
-                    case 2:
+                    case 1:
                         fileInfo = _a.sent();
                         if (fileInfo != null) {
                             fileType = _enums__WEBPACK_IMPORTED_MODULE_11__["MIME_TYPE"].Html;
@@ -1918,25 +1921,25 @@ var FileHandler = /** @class */ (function (_super) {
                         else {
                             this.onNotFound();
                         }
-                        return [3 /*break*/, 4];
-                    case 3:
+                        return [3 /*break*/, 3];
+                    case 2:
                         ex_2 = _a.sent();
                         this.onErrorOccured(ex_2);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/, null];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/, null];
                 }
             });
         });
     };
     FileHandler.prototype.handleFileRequestForFolder = function (filePath) {
         return __awaiter(this, void 0, void 0, function () {
-            var folderRequired_2, absolutePath, fileInfo, ex_3, ex_4;
+            var folderRequired_1, absolutePath, fileInfo, ex_3, ex_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 7, , 8]);
-                        folderRequired_2 = this.getRequiredFolder_(filePath);
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_2; }) >= 0)) return [3 /*break*/, 5];
+                        folderRequired_1 = this.getRequiredFolder_(filePath);
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 5];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         _a.label = 1;
                     case 1:
@@ -1945,7 +1948,7 @@ var FileHandler = /** @class */ (function (_super) {
                     case 2:
                         fileInfo = _a.sent();
                         if (fileInfo != null && fileInfo.isDirectory() === true) {
-                            this.handleFileRequestForFolder_(filePath, folderRequired_2, fileInfo);
+                            this.handleFileRequestForFolder_(absolutePath, fileInfo);
                         }
                         else {
                             this.onNotFound();

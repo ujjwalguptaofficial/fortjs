@@ -1,4 +1,4 @@
-import { Controller, declareAsController, defaultAction, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, action, jsonResult, route, downloadResult, textResult } from "fortjs";
+import { Controller, declareAsController, defaultAction, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, action, jsonResult, route, downloadResult, textResult, HTTP_METHOD, fileResult } from "fortjs";
 import * as path from "path";
 
 @declareAsController('random')
@@ -34,12 +34,24 @@ export class RandomController extends Controller {
     }
 
 
-    @action()
+    @action([HTTP_METHOD.Get])
+    @route('download')
     async download() {
         const pathLocation = path.join(__dirname, "../contents/index.html");
-        console.log(pathLocation);
         return downloadResult(pathLocation);
-        // console.log(__dirname);
-        //return textResult(__dirname);
+    }
+
+
+    @action([HTTP_METHOD.Post])
+    @route('download')
+    async downloadWithAlias() {
+        const pathLocation = path.join(__dirname, "../contents/index.html");
+        return downloadResult(pathLocation, 'alias');
+    }
+
+    @action()
+    async file() {
+        const pathLocation = path.join(__dirname, "../contents/JsStore_16_16.png");
+        return fileResult(pathLocation);
     }
 }

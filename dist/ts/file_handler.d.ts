@@ -2,15 +2,16 @@ import { RequestHandlerHelper } from "./request_handler_helper";
 export declare class FileHandler extends RequestHandlerHelper {
     private getRequiredFolder_;
     private getFileStats_;
-    protected handleFileRequest(filePath: string, fileType: string): Promise<any>;
+    protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string): Promise<any>;
+    protected handleFileRequest(filePath: string, fileType: string): void;
     /**
-     * process folders handling asuuming path is folder.
+     *process folders handling asuuming path is folder.
      * Please check whether the file is folder before calling this function
      *
      * @private
      * @param {string} filePath
-     * @param {string} folderRequired
      * @param {Fs.Stats} fileInfo
+     * @returns
      * @memberof FileHandler
      */
     private handleFileRequestForFolder_;

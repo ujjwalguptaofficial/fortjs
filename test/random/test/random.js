@@ -64,4 +64,34 @@ describe("/random", () => {
             done();
         })
     })
+
+    it("/download + get", (done) => {
+        request.get('/random/download').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            expect(res).to.have.header('content-disposition', 'attachment;filename=index.html');
+            done();
+        })
+    })
+
+    it("/download + post", (done) => {
+        request.post('/random/download').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            expect(res).to.have.header('content-disposition', 'attachment;filename=alias.html');
+            done();
+        })
+    })
+
+    it("/file", (done) => {
+        request.post('/random/file').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'image/png');
+            expect(res).to.have.header('content-disposition', undefined);
+            done();
+        })
+    })
 })

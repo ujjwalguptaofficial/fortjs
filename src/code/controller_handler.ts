@@ -6,7 +6,6 @@ import * as jsontoxml from "jsontoxml";
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
-import { isEnvDev } from "./helpers/is_env_dev";
 
 export class ControllerHandler extends FileHandler {
     private controllerResult_: HttpResult;
@@ -58,6 +57,19 @@ export class ControllerHandler extends FileHandler {
         }
     }
 
+    private handleFileResult_() {
+        const result = this.controllerResult_;
+        const parsedPath = path.parse(result.file.filePath);
+        if (result.file.shouldDownload === true) {
+            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+            this.response.setHeader(
+                "Content-Disposition",
+                `attachment;filename=${fileName}${parsedPath.ext}`
+            )
+        }
+        this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
+    }
+
     async onResultEvaluated(result: HttpResult) {
         await this.runWallOutgoing();
         this.controllerResult_ = result;
@@ -79,16 +91,7 @@ export class ControllerHandler extends FileHandler {
                     }
                 }
                 else {
-                    const parsedPath = path.parse(result.file.filePath);
-                    console.log("parsedPath", parsedPath);
-                    if (result.file.shouldDownload === true) {
-                        const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                        this.response.setHeader(
-                            "Content-Disposition",
-                            `attachment;filename=${fileName}.${parsedPath.ext}`
-                        )
-                    }
-                    this.handleFileRequest(result.file.filePath, parsedPath.ext);
+                    this.handleFileResult_();
                 }
             }
             else {
