@@ -17,7 +17,7 @@ export class FileHandler extends RequestHandlerHelper {
         if (splittedValue.length > 2) {
             return splittedValue[1];
         }
-        return "/";
+        return splittedValue[1] == "" ? "/" : splittedValue[1];
     }
 
     private getFileStats_(path) {
@@ -37,7 +37,6 @@ export class FileHandler extends RequestHandlerHelper {
             });
         })
     }
-
 
     protected async handleFileRequest(filePath: string, fileType: string) {
         try {

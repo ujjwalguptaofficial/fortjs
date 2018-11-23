@@ -12,8 +12,26 @@ let {
 
 describe("/file test", () => {
     
+    it('/contents/', (done) => {
+        request.get('/contents/').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    });
+
     it('/contents', (done) => {
-        request.get('/contents/index.html').accept(browserAccept).end((err, res) => {
+        request.get('/contents').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    });
+
+    it('/contents/index.html', (done) => {
+        request.get('/contents/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');

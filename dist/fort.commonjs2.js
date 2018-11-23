@@ -1826,7 +1826,7 @@ var FileHandler = /** @class */ (function (_super) {
         if (splittedValue.length > 2) {
             return splittedValue[1];
         }
-        return "/";
+        return splittedValue[1] == "" ? "/" : splittedValue[1];
     };
     FileHandler.prototype.getFileStats_ = function (path) {
         return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_7__["promise"])(function (res, rej) {

@@ -10,7 +10,6 @@ import { Wall } from "./abstracts/wall";
 export class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
-
     protected request: http.IncomingMessage;
 
     protected wallInstances: Wall[] = [];
