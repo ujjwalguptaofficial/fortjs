@@ -1176,6 +1176,7 @@ var RequestHandler = /** @class */ (function (_super) {
                         wallObj.request = this.request;
                         wallObj.response = this.response;
                         wallObj.data = this.data_;
+                        this.wallInstances.push(wallObj);
                         return [4 /*yield*/, wallObj.onIncoming()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -1664,56 +1665,60 @@ var ControllerHandler = /** @class */ (function (_super) {
             var contentType, negotiateMimeType, parsedPath, fileName, negotiateMimeType_1, key;
             var _this = this;
             return __generator(this, function (_a) {
-                //console.log("result evaluated", result);
-                if (result == null) {
-                    throw "no result is returned for the request url -" + this.request.url + " & method - " + this.request.method;
-                }
-                //await this.runWallOutgoing();
-                this.controllerResult_ = result;
-                if (this.cookieManager != null) {
-                    this.cookieManager.responseCookie_.forEach(function (value) {
-                        _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["Set__Cookie"], value);
-                    });
-                }
-                if (result.shouldRedirect == null || result.shouldRedirect == false) {
-                    if (result.responseFormat == null) {
-                        contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
-                        negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
-                        if (negotiateMimeType != null) {
-                            if (result.file == null) {
-                                this.finishResponse_(negotiateMimeType);
+                switch (_a.label) {
+                    case 0:
+                        if (result == null) {
+                            throw "no result is returned for the request url -" + this.request.url + " & method - " + this.request.method;
+                        }
+                        return [4 /*yield*/, this.runWallOutgoing()];
+                    case 1:
+                        _a.sent();
+                        this.controllerResult_ = result;
+                        if (this.cookieManager != null) {
+                            this.cookieManager.responseCookie_.forEach(function (value) {
+                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["Set__Cookie"], value);
+                            });
+                        }
+                        if (result.shouldRedirect == null || result.shouldRedirect == false) {
+                            if (result.responseFormat == null) {
+                                contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
+                                negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
+                                if (negotiateMimeType != null) {
+                                    if (result.file == null) {
+                                        this.finishResponse_(negotiateMimeType);
+                                    }
+                                    else {
+                                        if (result.file.shouldDownload === true) {
+                                            parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+                                            fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+                                            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+                                        }
+                                        this.handleFileRequest(result.file.filePath, negotiateMimeType);
+                                    }
+                                }
+                                else {
+                                    this.onNotAcceptableRequest();
+                                }
                             }
                             else {
-                                if (result.file.shouldDownload === true) {
-                                    parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
-                                    fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-                                    this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
+                                negotiateMimeType_1 = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat));
+                                key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiateMimeType_1; });
+                                if (key != null) {
+                                    this.controllerResult_.responseData = result.responseFormat[key]();
+                                    this.finishResponse_(negotiateMimeType_1);
                                 }
-                                this.handleFileRequest(result.file.filePath, negotiateMimeType);
+                                else {
+                                    this.onNotAcceptableRequest();
+                                }
                             }
                         }
                         else {
-                            this.onNotAcceptableRequest();
+                            this.response.setHeader('Location', result.responseData);
+                            this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': result.responseData });
+                            this.response.end();
                         }
-                    }
-                    else {
-                        negotiateMimeType_1 = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(result.responseFormat));
-                        key = Object.keys(result.responseFormat).find(function (qry) { return qry === negotiateMimeType_1; });
-                        if (key != null) {
-                            this.controllerResult_.responseData = result.responseFormat[key]();
-                            this.finishResponse_(negotiateMimeType_1);
-                        }
-                        else {
-                            this.onNotAcceptableRequest();
-                        }
-                    }
+                        return [2 /*return*/];
                 }
-                else {
-                    this.response.setHeader('Location', result.responseData);
-                    this.response.writeHead(result.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': result.responseData });
-                    this.response.end();
-                }
-                return [2 /*return*/];
             });
         });
     };
@@ -1842,12 +1847,13 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
         return __awaiter(this, void 0, void 0, function () {
-            var folderRequired, absolutePath, fileInfo, ex_1;
+            var folderRequired_1, absolutePath, fileInfo, ex_1, ex_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        folderRequired = this.getRequiredFolder_(filePath);
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0)) return [3 /*break*/, 5];
+                        _a.trys.push([0, 7, , 8]);
+                        folderRequired_1 = this.getRequiredFolder_(filePath);
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 5];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
                         _a.label = 1;
                     case 1:
@@ -1857,7 +1863,7 @@ var FileHandler = /** @class */ (function (_super) {
                         fileInfo = _a.sent();
                         if (fileInfo != null) {
                             if (fileInfo.isDirectory() === true) {
-                                this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                                this.handleFileRequestForFolder_(filePath, folderRequired_1, fileInfo);
                             }
                             else {
                                 this.sendFile_(absolutePath, fileType, fileInfo);
@@ -1875,7 +1881,12 @@ var FileHandler = /** @class */ (function (_super) {
                     case 5:
                         this.onNotFound();
                         _a.label = 6;
-                    case 6: return [2 /*return*/, null];
+                    case 6: return [3 /*break*/, 8];
+                    case 7:
+                        ex_2 = _a.sent();
+                        this.onErrorOccured(ex_2);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/, null];
                 }
             });
         });
@@ -1892,7 +1903,7 @@ var FileHandler = /** @class */ (function (_super) {
      */
     FileHandler.prototype.handleFileRequestForFolder_ = function (filePath, folderRequired, fileInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var absolutePath, fileType, ex_2;
+            var absolutePath, fileType, ex_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1913,8 +1924,8 @@ var FileHandler = /** @class */ (function (_super) {
                         }
                         return [3 /*break*/, 4];
                     case 3:
-                        ex_2 = _a.sent();
-                        this.onErrorOccured(ex_2);
+                        ex_3 = _a.sent();
+                        this.onErrorOccured(ex_3);
                         return [3 /*break*/, 4];
                     case 4: return [2 /*return*/, null];
                 }
@@ -1923,12 +1934,13 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.handleFileRequestForFolder = function (filePath) {
         return __awaiter(this, void 0, void 0, function () {
-            var folderRequired, absolutePath, fileInfo, ex_3;
+            var folderRequired_2, absolutePath, fileInfo, ex_4, ex_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        folderRequired = this.getRequiredFolder_(filePath);
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0)) return [3 /*break*/, 5];
+                        _a.trys.push([0, 7, , 8]);
+                        folderRequired_2 = this.getRequiredFolder_(filePath);
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_2; }) >= 0)) return [3 /*break*/, 5];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
                         _a.label = 1;
                     case 1:
@@ -1937,21 +1949,26 @@ var FileHandler = /** @class */ (function (_super) {
                     case 2:
                         fileInfo = _a.sent();
                         if (fileInfo != null && fileInfo.isDirectory() === true) {
-                            this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                            this.handleFileRequestForFolder_(filePath, folderRequired_2, fileInfo);
                         }
                         else {
                             this.onNotFound();
                         }
                         return [3 /*break*/, 4];
                     case 3:
-                        ex_3 = _a.sent();
-                        this.onErrorOccured(ex_3);
+                        ex_4 = _a.sent();
+                        this.onErrorOccured(ex_4);
                         return [3 /*break*/, 4];
                     case 4: return [3 /*break*/, 6];
                     case 5:
                         this.onNotFound();
                         _a.label = 6;
-                    case 6: return [2 /*return*/, null];
+                    case 6: return [3 /*break*/, 8];
+                    case 7:
+                        ex_5 = _a.sent();
+                        this.onErrorOccured(ex_5);
+                        return [3 /*break*/, 8];
+                    case 8: return [2 /*return*/, null];
                 }
             });
         });
@@ -1964,12 +1981,15 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.sendFile_ = function (path, fileType, fileInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, mimeType, negotiateMimeType, lastModified, eTagValue, readStream;
+            var _a, mimeType, negotiateMimeType, lastModified, eTagValue, readStream, ex_6;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.runWallOutgoing()];
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.runWallOutgoing()];
                     case 1:
                         _b.sent();
+                        mimeType = void 0;
                         if (fileType[0] === '.') { // its extension
                             mimeType = Object(_helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType);
                         }
@@ -2001,7 +2021,12 @@ var FileHandler = /** @class */ (function (_super) {
                         else {
                             this.onNotAcceptableRequest();
                         }
-                        return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_6 = _b.sent();
+                        this.onErrorOccured(ex_6);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/, null];
                 }
             });
         });
@@ -2066,6 +2091,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 var RequestHandlerHelper = /** @class */ (function () {
     function RequestHandlerHelper() {
+        this.wallInstances = [];
     }
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
         return __awaiter(this, void 0, void 0, function () {

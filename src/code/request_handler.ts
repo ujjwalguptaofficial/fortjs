@@ -85,6 +85,7 @@ export class RequestHandler extends ControllerHandler {
             wallObj.request = this.request as IHttpRequest;
             wallObj.response = this.response as IHttpResponse;
             wallObj.data = this.data_;
+            this.wallInstances.push(wallObj);
             return await wallObj.onIncoming();
         }));
     }

@@ -13,7 +13,7 @@ export class RequestHandlerHelper {
 
     protected request: http.IncomingMessage;
 
-    protected wallInstances: Wall[];
+    protected wallInstances: Wall[] = [];
 
     protected async runWallOutgoing() {
         return Promise.all(this.wallInstances.reverse().map(async wallObj => {

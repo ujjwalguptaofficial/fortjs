@@ -40,29 +40,34 @@ export class FileHandler extends RequestHandlerHelper {
 
 
     protected async handleFileRequest(filePath: string, fileType: string) {
-        const folderRequired = this.getRequiredFolder_(filePath);
-        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-            let absolutePath = path.join(Current__Directory, filePath);
-            try {
-                let fileInfo = await this.getFileStats_(absolutePath);
-                if (fileInfo != null) {
-                    if (fileInfo.isDirectory() === true) {
-                        this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+        try {
+            const folderRequired = this.getRequiredFolder_(filePath);
+            if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+                let absolutePath = path.join(Current__Directory, filePath);
+                try {
+                    let fileInfo = await this.getFileStats_(absolutePath);
+                    if (fileInfo != null) {
+                        if (fileInfo.isDirectory() === true) {
+                            this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                        }
+                        else {
+                            this.sendFile_(absolutePath, fileType, fileInfo);
+                        }
                     }
                     else {
-                        this.sendFile_(absolutePath, fileType, fileInfo);
+                        this.onNotFound();
                     }
                 }
-                else {
-                    this.onNotFound();
+                catch (ex) {
+                    this.onErrorOccured(ex);
                 }
             }
-            catch (ex) {
-                this.onErrorOccured(ex);
+            else {
+                this.onNotFound();
             }
         }
-        else {
-            this.onNotFound();
+        catch (ex) {
+            this.onErrorOccured(ex);
         }
         return null;
     }
@@ -97,24 +102,29 @@ export class FileHandler extends RequestHandlerHelper {
     }
 
     protected async handleFileRequestForFolder(filePath: string) {
-        const folderRequired = this.getRequiredFolder_(filePath);
-        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-            let absolutePath = path.join(Current__Directory, filePath);
-            try {
-                let fileInfo = await this.getFileStats_(absolutePath);
-                if (fileInfo != null && fileInfo.isDirectory() === true) {
-                    this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+        try {
+            const folderRequired = this.getRequiredFolder_(filePath);
+            if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+                let absolutePath = path.join(Current__Directory, filePath);
+                try {
+                    let fileInfo = await this.getFileStats_(absolutePath);
+                    if (fileInfo != null && fileInfo.isDirectory() === true) {
+                        this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
+                    }
+                    else {
+                        this.onNotFound();
+                    }
                 }
-                else {
-                    this.onNotFound();
+                catch (ex) {
+                    this.onErrorOccured(ex);
                 }
             }
-            catch (ex) {
-                this.onErrorOccured(ex);
+            else {
+                this.onNotFound();
             }
         }
-        else {
-            this.onNotFound();
+        catch (ex) {
+            this.onErrorOccured(ex);
         }
         return null;
     }
@@ -127,40 +137,45 @@ export class FileHandler extends RequestHandlerHelper {
     }
 
     private async sendFile_(path: string, fileType: string, fileInfo: Fs.Stats) {
-        await this.runWallOutgoing();
-        let mimeType;
-        if (fileType[0] === '.') { // its extension
-            mimeType = getMimeTypeFromExtension(fileType);
-        }
-        else { // mime type
-            mimeType = fileType;
-        }
-        const negotiateMimeType = this.getContentTypeFromNegotiation(mimeType) as MIME_TYPE;
-        if (negotiateMimeType != null) {
-            const lastModified = fileInfo.mtime.toUTCString();
-            const eTagValue = etag(fileInfo, {
-                weak: Global.eTag.type === ETag_Type.Weak
-            });
-            if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                this.response.end();
+        try {
+            await this.runWallOutgoing();
+            let mimeType;
+            if (fileType[0] === '.') { // its extension
+                mimeType = getMimeTypeFromExtension(fileType);
+            }
+            else { // mime type
+                mimeType = fileType;
+            }
+            const negotiateMimeType = this.getContentTypeFromNegotiation(mimeType) as MIME_TYPE;
+            if (negotiateMimeType != null) {
+                const lastModified = fileInfo.mtime.toUTCString();
+                const eTagValue = etag(fileInfo, {
+                    weak: Global.eTag.type === ETag_Type.Weak
+                });
+                if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                    this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                    this.response.end();
+                }
+                else {
+
+                    this.response.writeHead(HTTP_STATUS_CODE.Ok, {
+                        [Content__Type]: mimeType,
+                        'Etag': eTagValue,
+                        'Last-Modified': lastModified
+                    })
+                    const readStream = Fs.createReadStream(path);
+                    // Handle non-existent file
+                    readStream.on('error', this.onErrorOccured.bind(this));
+                    readStream.pipe(this.response);
+                }
             }
             else {
-
-                this.response.writeHead(HTTP_STATUS_CODE.Ok, {
-                    [Content__Type]: mimeType,
-                    'Etag': eTagValue,
-                    'Last-Modified': lastModified
-                })
-                const readStream = Fs.createReadStream(path);
-                // Handle non-existent file
-                readStream.on('error', this.onErrorOccured.bind(this));
-                readStream.pipe(this.response);
+                this.onNotAcceptableRequest();
             }
         }
-        else {
-            this.onNotAcceptableRequest();
+        catch (ex) {
+            this.onErrorOccured(ex);
         }
-
+        return null;
     }
 }
