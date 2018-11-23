@@ -1,6 +1,6 @@
 
 import { HttpResult } from "./types/http_result";
-import { Set__Cookie, Content__Type } from "./constant";
+import { __SetCookie, __ContentType } from "./constant";
 import { MIME_TYPE } from "./enums/mime_type";
 import * as jsontoxml from "jsontoxml";
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
@@ -35,7 +35,7 @@ export class ControllerHandler extends FileHandler {
 
     private finishResponse_(negotiateMimeType: MIME_TYPE) {
         this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
-            { [Content__Type]: negotiateMimeType });
+            { [__ContentType]: negotiateMimeType });
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     }
 
@@ -59,14 +59,11 @@ export class ControllerHandler extends FileHandler {
     }
 
     async onResultEvaluated(result: HttpResult) {
-        if (result == null) {
-            throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
-        }
         await this.runWallOutgoing();
         this.controllerResult_ = result;
         if (this.cookieManager != null) {
             ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
-                this.response.setHeader(Set__Cookie, value);
+                this.response.setHeader(__SetCookie, value);
             });
         }
         if (result.shouldRedirect == null || result.shouldRedirect == false) {
@@ -83,6 +80,7 @@ export class ControllerHandler extends FileHandler {
                 }
                 else {
                     const parsedPath = path.parse(result.file.filePath);
+                    console.log("parsedPath", parsedPath);
                     if (result.file.shouldDownload === true) {
                         const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
                         this.response.setHeader(

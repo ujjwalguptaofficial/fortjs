@@ -255,7 +255,7 @@ var SessionProvider = /** @class */ (function () {
             var now = new Date();
             _this.sessionId = uniqid__WEBPACK_IMPORTED_MODULE_2__();
             _this.cookies.addCookie({
-                name: _constant__WEBPACK_IMPORTED_MODULE_1__["App__Session__Identifier"],
+                name: _constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"],
                 value: _this.sessionId,
                 httpOnly: true,
                 path: "/",
@@ -287,22 +287,22 @@ function promise(callBack) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Content__Type", function() { return Content__Type; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "App__Name", function() { return App__Name; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "App__Session__Identifier", function() { return App__Session__Identifier; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Cookie", function() { return Cookie; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Set__Cookie", function() { return Set__Cookie; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Current__Directory", function() { return Current__Directory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Content__Length", function() { return Content__Length; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__ContentType", function() { return __ContentType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__AppName", function() { return __AppName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__AppSessionIdentifier", function() { return __AppSessionIdentifier; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__Cookie", function() { return __Cookie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__SetCookie", function() { return __SetCookie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__CurrentDirectory", function() { return __CurrentDirectory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__ContentLength", function() { return __ContentLength; });
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
-var Content__Type = "content-type";
-var App__Name = "fort";
-var App__Session__Identifier = _global__WEBPACK_IMPORTED_MODULE_0__["Global"].appName + "_session_id";
-var Cookie = "cookie";
-var Set__Cookie = 'set-cookie';
-var Current__Directory = process.cwd();
-var Content__Length = "content-length";
+var __ContentType = "content-type";
+var __AppName = "fort";
+var __AppSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_0__["Global"].appName + "_session_id";
+var __Cookie = "cookie";
+var __SetCookie = 'set-cookie';
+var __CurrentDirectory = process.cwd();
+var __ContentLength = "content-length";
 
 
 /***/ }),
@@ -972,7 +972,7 @@ var create = function (option) {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model__WEBPACK_IMPORTED_MODULE_5__["ErrorHandler"] : option.errorHandler;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_8__["App__Name"] : option.appName;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_8__["__AppName"] : option.appName;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
     }
     else {
@@ -1240,11 +1240,11 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {
         if (_global__WEBPACK_IMPORTED_MODULE_3__["Global"].shouldParseCookie === true) {
-            var rawCookie = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["Cookie"]];
+            var rawCookie = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]];
             var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_4__["parseCookie"])(rawCookie);
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].sessionProvider();
             this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_5__["CookieManager"](parsedCookies);
-            this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["App__Session__Identifier"]];
+            this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"]];
             this.session_.cookies = this.cookieManager;
         }
     };
@@ -1255,7 +1255,7 @@ var RequestHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 11, , 12]);
-                        this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["App__Name"]);
+                        this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["__AppName"]);
                         this.response.setHeader('Vary', 'Accept-Encoding');
                         return [4 /*yield*/, this.runWallIncoming_()];
                     case 1:
@@ -1658,7 +1658,7 @@ var ControllerHandler = /** @class */ (function (_super) {
     };
     ControllerHandler.prototype.finishResponse_ = function (negotiateMimeType) {
         var _a;
-        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["Content__Type"]] = negotiateMimeType, _a));
+        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["__ContentType"]] = negotiateMimeType, _a));
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     };
     ControllerHandler.prototype.handleRedirectResult_ = function () {
@@ -1689,7 +1689,7 @@ var ControllerHandler = /** @class */ (function (_super) {
                         this.controllerResult_ = result;
                         if (this.cookieManager != null) {
                             this.cookieManager.responseCookie_.forEach(function (value) {
-                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["Set__Cookie"], value);
+                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
                             });
                         }
                         if (result.shouldRedirect == null || result.shouldRedirect == false) {
@@ -1706,6 +1706,7 @@ var ControllerHandler = /** @class */ (function (_super) {
                                 }
                                 else {
                                     parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+                                    console.log("parsedPath", parsedPath);
                                     if (result.file.shouldDownload === true) {
                                         fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
                                         this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + "." + parsedPath.ext);
@@ -1857,7 +1858,7 @@ var FileHandler = /** @class */ (function (_super) {
                         _a.trys.push([0, 4, , 5]);
                         folderRequired_1 = this.getRequiredFolder_(filePath);
                         if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 2];
-                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
+                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
                     case 1:
                         fileInfo = _a.sent();
@@ -1902,7 +1903,7 @@ var FileHandler = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
+                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -1936,7 +1937,7 @@ var FileHandler = /** @class */ (function (_super) {
                         _a.trys.push([0, 7, , 8]);
                         folderRequired_2 = this.getRequiredFolder_(filePath);
                         if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_2; }) >= 0)) return [3 /*break*/, 5];
-                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["Current__Directory"], filePath);
+                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -2003,7 +2004,7 @@ var FileHandler = /** @class */ (function (_super) {
                             }
                             else {
                                 this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
-                                    _a[_constant__WEBPACK_IMPORTED_MODULE_3__["Content__Type"]] = mimeType,
+                                    _a[_constant__WEBPACK_IMPORTED_MODULE_3__["__ContentType"]] = mimeType,
                                     _a['Etag'] = eTagValue,
                                     _a['Last-Modified'] = lastModified,
                                     _a));
@@ -2138,7 +2139,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         var _this = this;
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onBadRequest(error).then(function (errMessage) {
             var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
             _this.response.end(errMessage);
         }).catch(function (err) {
             _this.response.end(JSON.stringify(err));
@@ -2147,7 +2148,7 @@ var RequestHandlerHelper = /** @class */ (function () {
     RequestHandlerHelper.prototype.onForbiddenRequest = function () {
         var _this = this;
         var _a;
-        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onForbiddenRequest().then(function (errMessage) {
             _this.response.end(errMessage);
         }).catch(function (err) {
@@ -2157,7 +2158,7 @@ var RequestHandlerHelper = /** @class */ (function () {
     RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
         var _this = this;
         var _a;
-        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotAcceptableRequest().then(function (errMessage) {
             _this.response.end(errMessage);
         }).catch(function (err) {
@@ -2168,7 +2169,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         var _this = this;
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotFound(this.request.url).then(function (result) {
             var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
             _this.response.end(result);
         }).catch(function (err) {
             _this.response.end(JSON.stringify(err));
@@ -2179,7 +2180,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onMethodNotAllowed().then(function (result) {
             var _a;
             _this.response.setHeader("Allow", allowedMethods.join(","));
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
             _this.response.end(result);
         }).catch(function (err) {
             _this.response.end(JSON.stringify(err));
@@ -2194,7 +2195,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         }
         new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
             var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["Content__Type"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
             _this.response.end(result);
         }).catch(function (err) {
             _this.response.end(JSON.stringify(err));
@@ -2674,9 +2675,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadResult", function() { return downloadResult; });
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 
-function downloadResult(filePath, type, downloadFileName) {
+function downloadResult(filePath, downloadFileName) {
     return {
-        contentType: type,
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok,
         file: {
             filePath: filePath,
@@ -2696,9 +2696,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return fileResult; });
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 
-function fileResult(filePath, type) {
+function fileResult(filePath) {
     return {
-        contentType: type,
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok,
         file: {
             filePath: filePath
@@ -2809,4 +2808,4 @@ function destroy(callback) {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=fort.commonjs2.js.map
+//# sourceMappingURL=fort.js.map

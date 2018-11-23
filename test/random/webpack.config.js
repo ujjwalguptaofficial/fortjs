@@ -19,6 +19,9 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'output/')
     },
+    node: {
+        __dirname: false
+    },
     plugins: [],
     externals: [nodeExternals()]
 };

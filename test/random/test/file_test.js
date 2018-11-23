@@ -39,11 +39,28 @@ describe("/file test", () => {
         });
     });
 
+    it('/content/', (done) => {
+        request.get('/content/').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    });
+
     it('/contents/png', (done) => {
         request.get('/contents/JsStore_16_16.png').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'image/png');
+            done();
+        });
+    });
+
+    it('folders allowed but with content not exist', (done) => {
+        request.get('/contents/hi.png').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
             done();
         });
     });

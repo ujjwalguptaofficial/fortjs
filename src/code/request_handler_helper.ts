@@ -1,6 +1,6 @@
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import * as http from "http";
-import { Content__Type } from "./constant";
+import { __ContentType } from "./constant";
 import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
 import { Global } from "./global";
@@ -57,7 +57,7 @@ export class RequestHandlerHelper {
     protected onBadRequest(error) {
 
         new Global.errorHandler().onBadRequest(error).then(errMessage => {
-            this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [Content__Type]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [__ContentType]: MIME_TYPE.Html });
             this.response.end(errMessage);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
@@ -65,7 +65,7 @@ export class RequestHandlerHelper {
     }
 
     protected onForbiddenRequest() {
-        this.response.writeHead(HTTP_STATUS_CODE.Forbidden, { [Content__Type]: MIME_TYPE.Html });
+        this.response.writeHead(HTTP_STATUS_CODE.Forbidden, { [__ContentType]: MIME_TYPE.Html });
         new Global.errorHandler().onForbiddenRequest().then(errMessage => {
             this.response.end(errMessage);
         }).catch(err => {
@@ -74,7 +74,7 @@ export class RequestHandlerHelper {
     }
 
     protected onNotAcceptableRequest() {
-        this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [Content__Type]: MIME_TYPE.Html });
+        this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [__ContentType]: MIME_TYPE.Html });
         new Global.errorHandler().onNotAcceptableRequest().then(errMessage => {
             this.response.end(errMessage);
         }).catch(err => {
@@ -85,7 +85,7 @@ export class RequestHandlerHelper {
     protected onNotFound() {
 
         new Global.errorHandler().onNotFound(this.request.url).then(result => {
-            this.response.writeHead(HTTP_STATUS_CODE.Not_Found, { [Content__Type]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.Not_Found, { [__ContentType]: MIME_TYPE.Html });
             this.response.end(result);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
@@ -95,7 +95,7 @@ export class RequestHandlerHelper {
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
         new Global.errorHandler().onMethodNotAllowed().then(result => {
             this.response.setHeader("Allow", allowedMethods.join(","));
-            this.response.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [Content__Type]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [__ContentType]: MIME_TYPE.Html });
             this.response.end(result);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
@@ -109,7 +109,7 @@ export class RequestHandlerHelper {
             } as IException
         }
         new Global.errorHandler().onServerError(error).then(result => {
-            this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [Content__Type]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
             this.response.end(result);
         }).catch(err => {
             this.response.end(JSON.stringify(err));

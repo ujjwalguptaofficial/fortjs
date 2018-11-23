@@ -1,30 +1,37 @@
 const path = require('path');
-const baseConfig = require('./webpack.base.config');
-const merge = require('webpack-merge');
+const nodeExternals = require('webpack-node-externals');
+const SmartBannerPlugin = require('smart-banner-webpack-plugin');
+const banner = require('./../license');
 
-const libraryTarget = [{
-    type: "commonjs2",
-    name: 'fort.commonjs2.js'
+module.exports = [{
+    name: "fort",
+    target: "node",
+    entry: "./src/code/index.ts",
+    devtool: 'source-map',
+    output: {
+        path: path.join(__dirname, "./../output"),
+        filename: "fort.js",
+        library: 'FortJs',
+        libraryTarget: "commonjs2"
+    },
+    node: {
+        __dirname: false
+    },
+    module: {
+        rules: [{
+            test: /\.ts$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'ts-loader'
+            }
+        }]
+    },
+    mode: 'none',
+    resolve: {
+        extensions: ['.ts'] // '' is needed to find modules like "jquery"
+    },
+    plugins: [
+        new SmartBannerPlugin(banner)
+    ],
+    externals: [nodeExternals()]
 }];
-
-function getConfigForTaget(target) {
-    return {
-        devtool: 'source-map',
-        output: {
-            path: path.join(__dirname, "./../output"),
-            filename: target.name,
-            library: 'Infinity',
-            libraryTarget: target.type
-        }
-    }
-}
-
-function createConfigsForAllLibraryTarget() {
-    var configs = [];
-    libraryTarget.forEach(function (target) {
-        configs.push(merge(baseConfig[0], getConfigForTaget(target)));
-    })
-    return configs;
-}
-
-module.exports = [...createConfigsForAllLibraryTarget()]

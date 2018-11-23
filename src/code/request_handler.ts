@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller } from "./abstracts/controller";
-import { Content__Type, App__Name, Cookie, App__Session__Identifier, Set__Cookie } from "./constant";
+import { __ContentType, __AppName, __Cookie, __AppSessionIdentifier, __SetCookie } from "./constant";
 import * as qs from 'querystring';
 import { Global } from "./global";
 import { IHttpRequest } from "./interfaces/http_request";
@@ -135,18 +135,18 @@ export class RequestHandler extends ControllerHandler {
 
     private parseCookieFromRequest_() {
         if (Global.shouldParseCookie === true) {
-            const rawCookie = this.request.headers[Cookie] as string;
+            const rawCookie = this.request.headers[__Cookie] as string;
             const parsedCookies = parseCookie(rawCookie);
             this.session_ = new Global.sessionProvider();
             this.cookieManager = new CookieManager(parsedCookies);
-            this.session_.sessionId = parsedCookies[App__Session__Identifier];
+            this.session_.sessionId = parsedCookies[__AppSessionIdentifier];
             this.session_.cookies = this.cookieManager;
         }
     }
 
     private async execute_() {
         try {
-            this.response.setHeader('X-Powered-By', App__Name);
+            this.response.setHeader('X-Powered-By', __AppName);
             this.response.setHeader('Vary', 'Accept-Encoding');
             const wallProtectionResult = await this.runWallIncoming_();
             const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);

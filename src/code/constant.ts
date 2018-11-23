@@ -1,9 +1,9 @@
 import { Global } from "./global";
 
-export const Content__Type = "content-type";
-export const App__Name = "fort";
-export const App__Session__Identifier = `${Global.appName}_session_id`;
-export const Cookie = "cookie";
-export const Set__Cookie = 'set-cookie';
-export const Current__Directory = process.cwd();
-export const Content__Length = "content-length";
+export const __ContentType = "content-type";
+export const __AppName = "fort";
+export const __AppSessionIdentifier = `${Global.appName}_session_id`;
+export const __Cookie = "cookie";
+export const __SetCookie = 'set-cookie';
+export const __CurrentDirectory = process.cwd();
+export const __ContentLength = "content-length";

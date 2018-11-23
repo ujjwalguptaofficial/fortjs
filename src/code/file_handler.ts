@@ -1,7 +1,7 @@
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { Global } from "./global";
 import * as path from "path";
-import { Current__Directory, Content__Type } from "./constant";
+import { __CurrentDirectory, __ContentType } from "./constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
 import { getMimeTypeFromExtension } from "./helpers/get_mime_type_from_extension";
@@ -38,27 +38,26 @@ export class FileHandler extends RequestHandlerHelper {
         })
     }
 
+    protected async handleFileRequestFromAbsolutePath(absolutePath:string,fileType: string){
+        
+    }
+
     protected async handleFileRequest(filePath: string, fileType: string) {
         try {
             const folderRequired = this.getRequiredFolder_(filePath);
             if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-                let absolutePath = path.join(Current__Directory, filePath);
-                try {
-                    let fileInfo = await this.getFileStats_(absolutePath);
-                    if (fileInfo != null) {
-                        if (fileInfo.isDirectory() === true) {
-                            this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
-                        }
-                        else {
-                            this.sendFile_(absolutePath, fileType, fileInfo);
-                        }
+                let absolutePath = path.join(__CurrentDirectory, filePath);
+                let fileInfo = await this.getFileStats_(absolutePath);
+                if (fileInfo != null) {
+                    if (fileInfo.isDirectory() === true) {
+                        this.handleFileRequestForFolder_(filePath, folderRequired, fileInfo);
                     }
                     else {
-                        this.onNotFound();
+                        this.sendFile_(absolutePath, fileType, fileInfo);
                     }
                 }
-                catch (ex) {
-                    this.onErrorOccured(ex);
+                else {
+                    this.onNotFound();
                 }
             }
             else {
@@ -82,7 +81,7 @@ export class FileHandler extends RequestHandlerHelper {
      * @memberof FileHandler
      */
     private async handleFileRequestForFolder_(filePath: string, folderRequired: string, fileInfo: Fs.Stats) {
-        let absolutePath = path.join(Current__Directory, filePath);
+        let absolutePath = path.join(__CurrentDirectory, filePath);
         try {
             absolutePath = path.join(absolutePath, "index.html");
             fileInfo = await this.getFileStats_(absolutePath);
@@ -104,7 +103,7 @@ export class FileHandler extends RequestHandlerHelper {
         try {
             const folderRequired = this.getRequiredFolder_(filePath);
             if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-                let absolutePath = path.join(Current__Directory, filePath);
+                let absolutePath = path.join(__CurrentDirectory, filePath);
                 try {
                     let fileInfo = await this.getFileStats_(absolutePath);
                     if (fileInfo != null && fileInfo.isDirectory() === true) {
@@ -156,9 +155,8 @@ export class FileHandler extends RequestHandlerHelper {
                     this.response.end();
                 }
                 else {
-
                     this.response.writeHead(HTTP_STATUS_CODE.Ok, {
-                        [Content__Type]: mimeType,
+                        [__ContentType]: mimeType,
                         'Etag': eTagValue,
                         'Last-Modified': lastModified
                     })

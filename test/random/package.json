@@ -7,7 +7,7 @@
     "install:lib": "npm i ../../fortjs-0.6.0.tgz",
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
-    "build": "webpack",
+    "build": "webpack --config webpack.config.js",
     "test": "mocha --recursive --exit"
   },
   "author": "",

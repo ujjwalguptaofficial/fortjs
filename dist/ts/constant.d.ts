@@ -1,7 +1,7 @@
-export declare const Content__Type = "content-type";
-export declare const App__Name = "fort";
-export declare const App__Session__Identifier: string;
-export declare const Cookie = "cookie";
-export declare const Set__Cookie = "set-cookie";
-export declare const Current__Directory: string;
-export declare const Content__Length = "content-length";
+export declare const __ContentType = "content-type";
+export declare const __AppName = "fort";
+export declare const __AppSessionIdentifier: string;
+export declare const __Cookie = "cookie";
+export declare const __SetCookie = "set-cookie";
+export declare const __CurrentDirectory: string;
+export declare const __ContentLength = "content-length";
