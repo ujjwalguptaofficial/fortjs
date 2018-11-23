@@ -39,14 +39,13 @@ export class ControllerHandler extends FileHandler {
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     }
 
-    async onControllerResult(result: HttpResult) {
-        if (isEnvDev()) {
-            if (result == null) {
-                throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
-            }
+    async onResultEvaluated(result: HttpResult) {
+        //console.log("result evaluated", result);
+        if (result == null) {
+            throw `no result is returned for the request url -${this.request.url} & method - ${this.request.method}`;
         }
 
-        await this.runWallOutgoing();
+        //await this.runWallOutgoing();
         this.controllerResult_ = result;
         if (this.cookieManager != null) {
             ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {

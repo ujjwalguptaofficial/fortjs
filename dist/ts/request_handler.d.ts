@@ -14,6 +14,7 @@ export declare class RequestHandler extends ControllerHandler {
     private runController_;
     private executeShieldsProtection_;
     private executeGuardsCheck_;
+    private parseCookieFromRequest_;
     private execute_;
     handle(): void;
 }

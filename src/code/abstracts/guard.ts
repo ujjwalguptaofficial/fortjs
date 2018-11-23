@@ -3,6 +3,7 @@ import { IHttpResponse } from "../interfaces/http_response";
 import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
 import { Controller } from "./controller";
+import { HttpResult } from "../types";
 
 export abstract class Guard implements Controller {
     request: IHttpRequest;
@@ -13,5 +14,5 @@ export abstract class Guard implements Controller {
     cookies: CookieManager;
     params: { [key: string]: any };
     data: { [key: string]: any };
-    abstract check(): Promise<boolean>;
+    abstract check(): Promise<HttpResult>;
 }

@@ -3,6 +3,7 @@ import { IHttpRequest } from "../interfaces/http_request";
 import { IHttpResponse } from "../interfaces/http_response";
 import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
+import { HttpResult } from "../types";
 
 export abstract class Shield implements Controller {
     request: IHttpRequest;
@@ -13,6 +14,6 @@ export abstract class Shield implements Controller {
     cookies: CookieManager;
     params: { [key: string]: any };
     data: { [key: string]: any };
-    abstract protect(): Promise<boolean>;
+    abstract protect(): Promise<HttpResult>;
 }
 

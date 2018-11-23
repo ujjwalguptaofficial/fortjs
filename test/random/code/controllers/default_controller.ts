@@ -35,6 +35,13 @@ export class DefaultController extends Controller {
     }
 
     @action([HTTP_METHOD.Get])
+    @route("login")
+    async getloginForm() {
+        const result = textResult("Login form");
+        return result;
+    }
+
+    @action([HTTP_METHOD.Get])
     text() {
         return new Promise((resolve, reject) => {
             resolve(textResult("text"));
@@ -61,6 +68,7 @@ export class DefaultController extends Controller {
             resolve(jsonResult(this.body));
         });
     }
+
 
     @action()
     async redirect() {

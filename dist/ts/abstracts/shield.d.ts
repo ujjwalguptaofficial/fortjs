@@ -3,6 +3,7 @@ import { IHttpRequest } from "../interfaces/http_request";
 import { IHttpResponse } from "../interfaces/http_response";
 import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
+import { HttpResult } from "../types";
 export declare abstract class Shield implements Controller {
     request: IHttpRequest;
     response: IHttpResponse;
@@ -20,5 +21,5 @@ export declare abstract class Shield implements Controller {
     data: {
         [key: string]: any;
     };
-    abstract protect(): Promise<boolean>;
+    abstract protect(): Promise<HttpResult>;
 }

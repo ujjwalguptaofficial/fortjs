@@ -9,7 +9,7 @@ export declare class RequestHandlerHelper {
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
     protected wallInstances: Wall[];
-    protected runWallOutgoing(): Promise<void>;
+    protected runWallOutgoing(): Promise<any[]>;
     protected getContentTypeFromNegotiation(type: MIME_TYPE): MIME_TYPE;
     protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]): MIME_TYPE;
     private getAvailableTypes_;

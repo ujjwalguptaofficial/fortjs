@@ -16,11 +16,11 @@ export class RequestHandlerHelper {
     protected wallInstances: Wall[];
 
     protected async runWallOutgoing() {
-        this.wallInstances.forEach(async wallObj => {
+        return Promise.all(this.wallInstances.reverse().map(async wallObj => {
             if (wallObj.onOutgoing != null) {
-                await wallObj.onOutgoing();
+                return await wallObj.onOutgoing();
             }
-        });
+        }));
     }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {

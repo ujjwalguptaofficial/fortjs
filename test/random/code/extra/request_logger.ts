@@ -18,6 +18,6 @@ export class RequestLogger extends Wall {
         // console.log(log);
         this.data.ip = this.getIP(this.request);
         //console.log(this.data.ip);
-        return true;
+        return null;
     }
 }

@@ -17,6 +17,8 @@ import { Util } from "./util";
 import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
 import { ControllerHandler } from "./controller_handler";
+import { HttpResult } from "./types";
+import { HTTP_STATUS_CODE } from "./enums";
 
 export class RequestHandler extends ControllerHandler {
     private body_: any;
@@ -74,8 +76,7 @@ export class RequestHandler extends ControllerHandler {
     }
 
     private runWallIncoming_() {
-        const wallsPromise = this.wallInstances = [];
-        Global.walls.forEach(wall => {
+        return Promise.all(Global.walls.map(async (wall) => {
             var wallObj = new wall();
             wallObj.body = this.body_;
             wallObj.cookies = this.cookieManager;
@@ -84,14 +85,11 @@ export class RequestHandler extends ControllerHandler {
             wallObj.request = this.request as IHttpRequest;
             wallObj.response = this.response as IHttpResponse;
             wallObj.data = this.data_;
-            this.wallInstances.push(wallObj);
-            wallsPromise.push(wallObj.onIncoming());
-        });
-        return Promise.all(wallsPromise);
+            return await wallObj.onIncoming();
+        }));
     }
 
     private runController_() {
-
         const controllerObj: Controller = new this.routeMatchInfo_.controller();
         controllerObj.request = this.request as IHttpRequest;
         controllerObj.response = this.response;
@@ -102,13 +100,12 @@ export class RequestHandler extends ControllerHandler {
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.action]().then(
-            this.onControllerResult.bind(this)
+            this.onResultEvaluated.bind(this)
         ).catch(this.onErrorOccured.bind(this))
     }
 
     private executeShieldsProtection_() {
-        const shieldsPromise = [];
-        this.routeMatchInfo_.shields.forEach(shield => {
+        return Promise.all(this.routeMatchInfo_.shields.map(async shield => {
             const shieldObj = new shield();
             shieldObj.body = this.body_;
             shieldObj.cookies = this.cookieManager;
@@ -117,14 +114,12 @@ export class RequestHandler extends ControllerHandler {
             shieldObj.request = this.request as IHttpRequest;
             shieldObj.response = this.response as IHttpResponse;
             shieldObj.data = this.data_;
-            shieldsPromise.push(shieldObj.protect());
-        });
-        return Promise.all(shieldsPromise);
+            return await shieldObj.protect();
+        }));
     }
 
     private executeGuardsCheck_(guards: typeof GenericGuard[]) {
-        const guardPromise = [];
-        guards.forEach(guard => {
+        return Promise.all(guards.map(async guard => {
             const guardObj = new guard();
             guardObj.body = this.body_;
             guardObj.cookies = this.cookieManager;
@@ -133,71 +128,71 @@ export class RequestHandler extends ControllerHandler {
             guardObj.request = this.request as IHttpRequest;
             guardObj.response = this.response as IHttpResponse;
             guardObj.data = this.data_;
-            guardPromise.push(guardObj.check());
-        });
-        return Promise.all(guardPromise);
+            return await guardObj.check();
+        }));
     }
 
-    private execute_() {
+    private parseCookieFromRequest_() {
+        if (Global.shouldParseCookie === true) {
+            const rawCookie = this.request.headers[Cookie] as string;
+            const parsedCookies = parseCookie(rawCookie);
+            this.session_ = new Global.sessionProvider();
+            this.cookieManager = new CookieManager(parsedCookies);
+            this.session_.sessionId = parsedCookies[App__Session__Identifier];
+            this.session_.cookies = this.cookieManager;
+        }
+    }
+
+    private async execute_() {
         try {
             this.response.setHeader('X-Powered-By', App__Name);
             this.response.setHeader('Vary', 'Accept-Encoding');
-            this.runWallIncoming_().then(wallProtectionResult => {
-                const isRejectedByWall = wallProtectionResult.indexOf(false) >= 0;
-                if (isRejectedByWall === false) {
-                    const urlDetail = url.parse(this.request.url, true);
-                    const pathUrl = urlDetail.pathname.toLowerCase();
-                    const extension = path.parse(pathUrl).ext;
-                    const requestType = this.request.method as HTTP_METHOD;
-                    if (!Util.isNullOrEmpty(extension)) {
-                        this.handleFileRequest(pathUrl, extension);
-                    }
-                    else {
-                        this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestType);
-                        if (this.routeMatchInfo_ == null) { // no route matched
-                            // it may be a folder then
-                            this.handleFileRequestForFolder(pathUrl);
-                        }
-                        else {
-                            const actionInfo = this.routeMatchInfo_.actionInfo;
-                            if (actionInfo == null) {
-                                this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                            }
-                            else {
-                                this.query_ = urlDetail.query;
-                                if (Global.shouldParseCookie === true) {
-                                    const rawCookie = this.request.headers[Cookie] as string;
-                                    const parsedCookies = parseCookie(rawCookie);
-                                    this.session_ = new Global.sessionProvider();
-                                    this.cookieManager = new CookieManager(parsedCookies);
-                                    this.session_.sessionId = parsedCookies[App__Session__Identifier];
-                                    this.session_.cookies = this.cookieManager;
-                                }
-                                this.executeShieldsProtection_().then((shieldProtectionResult: boolean[]) => {
-                                    const isRejectedByShield = shieldProtectionResult.indexOf(false) >= 0;
-                                    if (isRejectedByShield === false) {
-                                        this.executeGuardsCheck_(actionInfo.guards).then(guardsCheckResult => {
-                                            const isRejectedByGuard = guardsCheckResult.indexOf(false) >= 0;
-                                            if (isRejectedByGuard === false) {
-                                                this.runController_();
-                                            }
-                                            else {
-                                                this.onForbiddenRequest();
-                                            }
-                                        }).catch(this.onErrorOccured.bind(this));
-                                    }
-                                    else {
-                                        this.onForbiddenRequest();
-                                    }
-                                }).catch(this.onErrorOccured.bind(this));
-                            }
-                        }
-                    }
+            const wallProtectionResult = await this.runWallIncoming_();
+            const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
+            if (responseByWall == null) {
+                const urlDetail = url.parse(this.request.url, true);
+                const pathUrl = urlDetail.pathname.toLowerCase();
+                const extension = path.parse(pathUrl).ext;
+                const requestMethod = this.request.method as HTTP_METHOD;
+                if (!Util.isNullOrEmpty(extension)) {
+                    this.handleFileRequest(pathUrl, extension);
                 }
                 else {
-                    this.onForbiddenRequest();
+                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestMethod);
+                    if (this.routeMatchInfo_ == null) { // no route matched
+                        // it may be a folder then
+                        this.handleFileRequestForFolder(pathUrl);
+                    }
+                    else {
+                        const actionInfo = this.routeMatchInfo_.actionInfo;
+                        if (actionInfo == null) {
+                            this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+                        }
+                        else {
+                            this.query_ = urlDetail.query;
+                            this.parseCookieFromRequest_();
+                            const shieldProtectionResult = await this.executeShieldsProtection_();
+                            const responseByShield = shieldProtectionResult.find(qry => qry != null);
+                            if (responseByShield == null) {
+                                const guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
+                                const responseByGuard = guardsCheckResult.find(qry => qry != null);
+                                if (responseByGuard == null) {
+                                    this.runController_();
+                                }
+                                else {
+                                    this.onResultEvaluated(responseByGuard);
+                                }
+                            }
+                            else {
+                                this.onResultEvaluated(responseByShield);
+                            }
+                        }
+                    }
                 }
-            }).catch(this.onErrorOccured.bind(this));
+            }
+            else {
+                this.onResultEvaluated(responseByWall);
+            }
         }
         catch (ex) {
             this.onErrorOccured(ex);

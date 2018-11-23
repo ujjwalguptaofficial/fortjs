@@ -3,7 +3,7 @@ import { IHttpRequest } from "../interfaces/http_request";
 import { IHttpResponse } from "../interfaces/http_response";
 import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
-import { promise } from "../helpers/promise";
+import { HttpResult } from "../types";
 
 export abstract class Wall implements Controller {
     request: IHttpRequest;
@@ -14,7 +14,7 @@ export abstract class Wall implements Controller {
     cookies: CookieManager;
     params: { [key: string]: any };
     data: { [key: string]: any };
-    abstract onIncoming(): Promise<boolean>;
+    abstract onIncoming(): Promise<HttpResult>;
     async onOutgoing() {
         return null;
     }
