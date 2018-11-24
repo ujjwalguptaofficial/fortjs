@@ -15,7 +15,6 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
     if (url === "") {
         url += Global.defaultPath;
     }
-    //url += url === "" ? Global.defaultPath : "";
     const urlParts = url.split("/");
     let matchedRoute: IRouteMatch = {
         allows: []

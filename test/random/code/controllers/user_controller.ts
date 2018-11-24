@@ -60,7 +60,7 @@ export class UserController extends Controller {
     }
 
     @action([HTTP_METHOD.Delete])
-    @route("/")
+    @route("/{id}")
     async removeUser() {
         try {
             const userId = Number(this.params.id);

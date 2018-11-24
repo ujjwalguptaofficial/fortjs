@@ -48,6 +48,10 @@ describe("/user", () => {
         request.patch('/user/2').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(405);
+            const allowsValue = res.header.allow;
+            expect(allowsValue).to.contains("PUT");
+            expect(allowsValue).to.contains("GET");
+            expect(allowsValue).to.contains("DELETE");
             done();
         })
     })
@@ -64,6 +68,15 @@ describe("/user", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.text).to.be.an("string").equal("user updated")
+            done();
+        })
+    })
+
+    it("/ + remove", (done) => {
+        request.del('/user/2').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.an("string").equal("user deleted")
             done();
         })
     })

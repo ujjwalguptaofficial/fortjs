@@ -1486,7 +1486,6 @@ function parseAndMatchRoute(url, reqMethod) {
     if (url === "") {
         url += _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath;
     }
-    //url += url === "" ? Global.defaultPath : "";
     var urlParts = url.split("/");
     var matchedRoute = {
         allows: []
