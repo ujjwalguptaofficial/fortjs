@@ -21,7 +21,7 @@ export class RouteHandler {
             // change pattern value since we have controller name now.
             route.actions.forEach(actionInfo => {
                 if (actionInfo.pattern.indexOf(value.alias) < 0) {
-                    actionInfo.pattern = `/${value.alias}/${actionInfo.pattern}`;
+                    actionInfo.pattern = `/${value.alias}${actionInfo.pattern}`;
                 }
             });
         }
@@ -58,12 +58,12 @@ export class RouteHandler {
         else {
             const savedAction = router.actions.find(val => val.action === newAction.action);
             if (savedAction == null) {
-                newAction.pattern = router.alias == null ? newAction.pattern : `/${router.alias}/${newAction.pattern}`;
+                newAction.pattern = router.alias == null ? newAction.pattern : `/${router.alias}${newAction.pattern}`;
                 router.actions.push(newAction);
             }
             else {
                 savedAction.methodsAllowed = newAction.methodsAllowed;
-                savedAction.pattern = router.alias == null ? savedAction.pattern : `/${router.alias}/${savedAction.pattern}`;;
+                savedAction.pattern = router.alias == null ? savedAction.pattern : `/${router.alias}${savedAction.pattern}`;;
             }
         }
     }
@@ -119,7 +119,7 @@ export class RouteHandler {
         }
         else {
             const savedAction = router.actions.find(val => val.action === actionName);
-            pattern = router.alias == null ? pattern : `/${router.alias}/${pattern}`;
+            pattern = router.alias == null ? pattern : `/${router.alias}${pattern}`;
             if (savedAction == null) {
                 router.actions.push({
                     action: actionName,

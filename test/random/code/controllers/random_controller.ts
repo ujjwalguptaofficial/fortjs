@@ -28,14 +28,14 @@ export class RandomController extends Controller {
     }
 
     @action()
-    @route("throw")
+    @route("/throw")
     async throwTest() {
         throw "throw test";
     }
 
 
     @action([HTTP_METHOD.Get])
-    @route('download')
+    @route('/download')
     async download() {
         const pathLocation = path.join(__dirname, "../contents/index.html");
         return downloadResult(pathLocation);
@@ -43,7 +43,7 @@ export class RandomController extends Controller {
 
 
     @action([HTTP_METHOD.Post])
-    @route('download')
+    @route('/download')
     async downloadWithAlias() {
         const pathLocation = path.join(__dirname, "../contents/index.html");
         return downloadResult(pathLocation, 'alias');

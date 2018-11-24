@@ -35,7 +35,7 @@ export class DefaultController extends Controller {
     }
 
     @action([HTTP_METHOD.Get])
-    @route("login")
+    @route("/login")
     async getloginForm() {
         const result = textResult("Login form");
         return result;

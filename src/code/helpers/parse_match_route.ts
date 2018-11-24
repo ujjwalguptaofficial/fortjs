@@ -5,6 +5,7 @@ import { HTTP_METHOD } from "../enums";
 
 
 export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
+
     const urlLength = url.length;
     // removing / from url;
     if (url[urlLength - 1] === "/") {
@@ -25,8 +26,9 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
         matchedRoute.controller = route.controller;
         const urlPartLength = urlParts.length;
         if (urlPartLength === 2) { // url does not have action path
+            const pattern = `/${route.alias}/`;
             route.actions.every(action => {
-                if (action.pattern.indexOf("//") >= 0) {
+                if (action.pattern === pattern) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
                         matchedRoute.actionInfo = action;
                         matchedRoute.params = {};

@@ -24,7 +24,7 @@ export class UserController extends Controller {
     }
 
     @action([HTTP_METHOD.Get])
-    @route("{id}")
+    @route("/{id}")
     async getUser() {
         try {
             const userId = Number(this.params.id);
@@ -81,7 +81,7 @@ export class UserController extends Controller {
 
     @action([HTTP_METHOD.Put])
     @guards([ModelUserGuard])
-    @route("{id}")
+    @route("/{id}")
     async updateUser() {
         try {
             console.log("params", this.params);

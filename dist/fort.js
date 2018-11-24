@@ -594,7 +594,7 @@ var RouteHandler = /** @class */ (function () {
             // change pattern value since we have controller name now.
             route.actions.forEach(function (actionInfo) {
                 if (actionInfo.pattern.indexOf(value.alias) < 0) {
-                    actionInfo.pattern = "/" + value.alias + "/" + actionInfo.pattern;
+                    actionInfo.pattern = "/" + value.alias + actionInfo.pattern;
                 }
             });
         }
@@ -628,12 +628,12 @@ var RouteHandler = /** @class */ (function () {
         else {
             var savedAction = router.actions.find(function (val) { return val.action === newAction.action; });
             if (savedAction == null) {
-                newAction.pattern = router.alias == null ? newAction.pattern : "/" + router.alias + "/" + newAction.pattern;
+                newAction.pattern = router.alias == null ? newAction.pattern : "/" + router.alias + newAction.pattern;
                 router.actions.push(newAction);
             }
             else {
                 savedAction.methodsAllowed = newAction.methodsAllowed;
-                savedAction.pattern = router.alias == null ? savedAction.pattern : "/" + router.alias + "/" + savedAction.pattern;
+                savedAction.pattern = router.alias == null ? savedAction.pattern : "/" + router.alias + savedAction.pattern;
                 ;
             }
         }
@@ -688,7 +688,7 @@ var RouteHandler = /** @class */ (function () {
         }
         else {
             var savedAction = router.actions.find(function (val) { return val.action === actionName; });
-            pattern = router.alias == null ? pattern : "/" + router.alias + "/" + pattern;
+            pattern = router.alias == null ? pattern : "/" + router.alias + pattern;
             if (savedAction == null) {
                 router.actions.push({
                     action: actionName,
@@ -727,7 +727,7 @@ function action(allowedMethods) {
                 _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Delete, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Post, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Patch, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Put
             ] : allowedMethods,
             guards: [],
-            pattern: methodName.toLowerCase()
+            pattern: "/" + methodName.toLowerCase()
         };
         _route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addAction(actionInfo, className);
     };
@@ -1497,8 +1497,9 @@ function parseAndMatchRoute(url, reqMethod) {
         matchedRoute.controller = route.controller;
         var urlPartLength_1 = urlParts.length;
         if (urlPartLength_1 === 2) { // url does not have action path
+            var pattern_1 = "/" + route.alias + "/";
             route.actions.every(function (action) {
-                if (action.pattern.indexOf("//") >= 0) {
+                if (action.pattern === pattern_1) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
                         matchedRoute.actionInfo = action;
                         matchedRoute.params = {};
