@@ -94,4 +94,14 @@ describe("/random", () => {
             done();
         })
     })
+
+    it("/file + unsupported accept", (done) => {
+        request.post('/random/file').accept("application/json").end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(406);
+            expect(res).to.have.header('content-type', 'text/html');
+            expect(res).to.have.header('content-disposition', undefined);
+            done();
+        })
+    })
 })
