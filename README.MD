@@ -1,3 +1,3 @@
 # fort
 
-Modern, Advanced & structured MVC web framework for nodejs targeting good code structures, modularity based on the principle of fortification.
+Fort based MVC web framework for nodejs targeting good code structures & modularity.
