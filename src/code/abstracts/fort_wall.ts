@@ -5,7 +5,7 @@ import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
 import { HttpResult } from "../types";
 
-export abstract class Wall implements Controller {
+export abstract class FortWall implements Controller {
     request: IHttpRequest;
     response: IHttpResponse;
     query: { [key: string]: any };

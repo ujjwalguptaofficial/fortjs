@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.7.0 - 24/11/2018
+ * @license :fortjs - V0.7.0 - 26/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -107,10 +107,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEngine", function() { return _abstracts_index__WEBPACK_IMPORTED_MODULE_0__["ViewEngine"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Wall", function() { return _abstracts_index__WEBPACK_IMPORTED_MODULE_0__["Wall"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FortWall", function() { return _abstracts_index__WEBPACK_IMPORTED_MODULE_0__["FortWall"]; });
 
 /* harmony import */ var _decorators_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareAsController", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["declareAsController"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "section", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["section"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "action", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["action"]; });
 
@@ -189,8 +189,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _view_engine__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(10);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewEngine", function() { return _view_engine__WEBPACK_IMPORTED_MODULE_4__["ViewEngine"]; });
 
-/* harmony import */ var _wall__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(11);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Wall", function() { return _wall__WEBPACK_IMPORTED_MODULE_5__["Wall"]; });
+/* harmony import */ var _fort_wall__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(11);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FortWall", function() { return _fort_wall__WEBPACK_IMPORTED_MODULE_5__["FortWall"]; });
 
 
 
@@ -363,7 +363,7 @@ var ViewEngine = /** @class */ (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Wall", function() { return Wall; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FortWall", function() { return FortWall; });
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -399,17 +399,17 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var Wall = /** @class */ (function () {
-    function Wall() {
+var FortWall = /** @class */ (function () {
+    function FortWall() {
     }
-    Wall.prototype.onOutgoing = function () {
+    FortWall.prototype.onOutgoing = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, null];
             });
         });
     };
-    return Wall;
+    return FortWall;
 }());
 
 
@@ -420,8 +420,8 @@ var Wall = /** @class */ (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _declare_as_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareAsController", function() { return _declare_as_controller__WEBPACK_IMPORTED_MODULE_0__["declareAsController"]; });
+/* harmony import */ var _section__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "section", function() { return _section__WEBPACK_IMPORTED_MODULE_0__["section"]; });
 
 /* harmony import */ var _action__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "action", function() { return _action__WEBPACK_IMPORTED_MODULE_1__["action"]; });
@@ -456,14 +456,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declareAsController", function() { return declareAsController; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "section", function() { return section; });
 /* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
 /* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
 
 
 
-function declareAsController(path) {
+function section(path) {
     return function (target) {
         var className = target.name;
         var classNameLower = className.toLowerCase();
