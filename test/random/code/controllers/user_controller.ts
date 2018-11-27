@@ -1,4 +1,4 @@
-import { Controller, action, HTTP_METHOD, declareAsController, htmlResult, textResult, defaultAction, shields, guards, jsonResult, route } from "fortjs";
+import { Controller, worker, HTTP_METHOD, section, htmlResult, textResult, defaultWorker, shields, guards, jsonResult, route } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
@@ -6,7 +6,7 @@ import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
 @shields([AuthenticationShield])
-@declareAsController()
+@section()
 export class UserController extends Controller {
     service: UserService;
 
@@ -15,7 +15,7 @@ export class UserController extends Controller {
         this.service = new UserService();
     }
 
-    @action([HTTP_METHOD.Get])
+    @worker([HTTP_METHOD.Get])
     @route("/")
     default() {
         return new Promise((resolve, reject) => {
@@ -23,7 +23,7 @@ export class UserController extends Controller {
         });
     }
 
-    @action([HTTP_METHOD.Get])
+    @worker([HTTP_METHOD.Get])
     @route("/{id}")
     async getUser() {
         try {
@@ -40,7 +40,7 @@ export class UserController extends Controller {
         }
     }
 
-    @action([HTTP_METHOD.Post])
+    @worker([HTTP_METHOD.Post])
     @guards([ModelUserGuard])
     @route("/")
     async addUser() {
@@ -59,7 +59,7 @@ export class UserController extends Controller {
         }
     }
 
-    @action([HTTP_METHOD.Delete])
+    @worker([HTTP_METHOD.Delete])
     @route("/{id}")
     async removeUser() {
         try {
@@ -79,7 +79,7 @@ export class UserController extends Controller {
         }
     }
 
-    @action([HTTP_METHOD.Put])
+    @worker([HTTP_METHOD.Put])
     @guards([ModelUserGuard])
     @route("/{id}")
     async updateUser() {

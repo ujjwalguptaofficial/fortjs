@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.7.0 - 26/11/2018
+ * @license :fortjs - V0.7.0 - 27/11/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -112,7 +112,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _decorators_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "section", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["section"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "action", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["action"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["worker"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["shields"]; });
 
@@ -120,9 +120,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "route", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["route"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultAction", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["defaultAction"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["defaultWorker"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareAsWall", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["declareAsWall"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "wall", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["wall"]; });
 
 /* harmony import */ var _create__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(27);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getApp", function() { return _create__WEBPACK_IMPORTED_MODULE_2__["getApp"]; });
@@ -423,8 +423,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _section__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "section", function() { return _section__WEBPACK_IMPORTED_MODULE_0__["section"]; });
 
-/* harmony import */ var _action__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "action", function() { return _action__WEBPACK_IMPORTED_MODULE_1__["action"]; });
+/* harmony import */ var _worker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return _worker__WEBPACK_IMPORTED_MODULE_1__["worker"]; });
 
 /* harmony import */ var _shields__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return _shields__WEBPACK_IMPORTED_MODULE_2__["shields"]; });
@@ -435,11 +435,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _route__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(24);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "route", function() { return _route__WEBPACK_IMPORTED_MODULE_4__["route"]; });
 
-/* harmony import */ var _default_action__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(25);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultAction", function() { return _default_action__WEBPACK_IMPORTED_MODULE_5__["defaultAction"]; });
+/* harmony import */ var _default_worker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(25);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return _default_worker__WEBPACK_IMPORTED_MODULE_5__["defaultWorker"]; });
 
-/* harmony import */ var _declare_as_wall__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(26);
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "declareAsWall", function() { return _declare_as_wall__WEBPACK_IMPORTED_MODULE_6__["declareAsWall"]; });
+/* harmony import */ var _wall__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(26);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "wall", function() { return _wall__WEBPACK_IMPORTED_MODULE_6__["wall"]; });
 
 
 
@@ -614,7 +614,7 @@ var RouteHandler = /** @class */ (function () {
             routerCollection[index].shields = shields;
         }
     };
-    RouteHandler.addAction = function (newAction, className) {
+    RouteHandler.addWorker = function (newAction, className) {
         var router = routerCollection.find(function (x) { return x.controllerName === className; });
         if (router == null) {
             routerCollection.push({
@@ -626,7 +626,7 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.actions.find(function (val) { return val.action === newAction.action; });
+            var savedAction = router.actions.find(function (val) { return val.workerName === newAction.workerName; });
             if (savedAction == null) {
                 newAction.pattern = router.alias == null ? newAction.pattern : "/" + router.alias + newAction.pattern;
                 router.actions.push(newAction);
@@ -644,7 +644,7 @@ var RouteHandler = /** @class */ (function () {
         if (index < 0) {
             routerCollection.push({
                 actions: [{
-                        action: actionName,
+                        workerName: actionName,
                         guards: guards,
                         methodsAllowed: null,
                         pattern: pattern
@@ -656,10 +656,10 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = routerCollection[index].actions.find(function (val) { return val.action === actionName; });
+            var savedAction = routerCollection[index].actions.find(function (val) { return val.workerName === actionName; });
             if (savedAction == null) {
                 routerCollection[index].actions.push({
-                    action: actionName,
+                    workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
                     pattern: pattern
@@ -675,7 +675,7 @@ var RouteHandler = /** @class */ (function () {
         if (router == null) {
             routerCollection.push({
                 actions: [{
-                        action: actionName,
+                        workerName: actionName,
                         guards: [],
                         methodsAllowed: null,
                         pattern: pattern
@@ -687,11 +687,11 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.actions.find(function (val) { return val.action === actionName; });
+            var savedAction = router.actions.find(function (val) { return val.workerName === actionName; });
             pattern = router.alias == null ? pattern : "/" + router.alias + pattern;
             if (savedAction == null) {
                 router.actions.push({
-                    action: actionName,
+                    workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
                     pattern: pattern
@@ -713,23 +713,23 @@ var RouteHandler = /** @class */ (function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "action", function() { return action; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return worker; });
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
 
 
-function action(allowedMethods) {
+function worker(allowedMethods) {
     return function (target, methodName, descriptor) {
         var className = target.constructor.name;
         var actionInfo = {
-            action: methodName,
+            workerName: methodName,
             methodsAllowed: allowedMethods == null ? [
                 _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Delete, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Post, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Patch, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Put
             ] : allowedMethods,
             guards: [],
             pattern: "/" + methodName.toLowerCase()
         };
-        _route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addAction(actionInfo, className);
+        _route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addWorker(actionInfo, className);
     };
 }
 
@@ -890,21 +890,21 @@ function route(format) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultAction", function() { return defaultAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return defaultWorker; });
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
 /* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 
-function defaultAction(allowedMethods) {
+function defaultWorker(allowedMethods) {
     return function (target, methodName, descriptor) {
         var className = target.constructor.name;
         var actionInfo = {
-            action: methodName,
+            workerName: methodName,
             methodsAllowed: allowedMethods == null ? [_enums_http_method__WEBPACK_IMPORTED_MODULE_1__["HTTP_METHOD"].Get] : allowedMethods,
             guards: [],
             pattern: "/"
         };
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addAction(actionInfo, className);
+        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addWorker(actionInfo, className);
     };
 }
 
@@ -915,10 +915,10 @@ function defaultAction(allowedMethods) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "declareAsWall", function() { return declareAsWall; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wall", function() { return wall; });
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 
-function declareAsWall() {
+function wall() {
     return function (target) {
         _global__WEBPACK_IMPORTED_MODULE_0__["Global"].walls.push(target);
     };
@@ -1194,7 +1194,7 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.cookies = this.cookieManager;
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
-        controllerObj[this.routeMatchInfo_.actionInfo.action]().then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
+        controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;

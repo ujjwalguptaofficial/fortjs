@@ -100,7 +100,7 @@ export class RequestHandler extends ControllerHandler {
         controllerObj.cookies = this.cookieManager;
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
-        controllerObj[this.routeMatchInfo_.actionInfo.action]().then(
+        controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(
             this.onResultEvaluated.bind(this)
         ).catch(this.onErrorOccured.bind(this))
     }

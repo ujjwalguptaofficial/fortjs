@@ -1,18 +1,18 @@
-import { Controller, viewResult, declareAsController, action, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultAction, redirectResult } from "fortjs";
+import { Controller, viewResult, section, worker, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult } from "fortjs";
 import { UserService } from "../services/user_service";
 
 
-@declareAsController()
+@section()
 export class DefaultController extends Controller {
 
-    @defaultAction()
+    @defaultWorker()
     default() {
         return new Promise((res, rej) => {
             res(viewResult("index", { title: "Welcome to fort" }));
         })
     }
 
-    @action([HTTP_METHOD.Post])
+    @worker([HTTP_METHOD.Post])
     async login() {
         const userId = this.body.userId;
         const pwd = this.body.password;
@@ -34,35 +34,35 @@ export class DefaultController extends Controller {
         }
     }
 
-    @action([HTTP_METHOD.Get])
+    @worker([HTTP_METHOD.Get])
     @route("/login")
     async getloginForm() {
         const result = textResult("Login form");
         return result;
     }
 
-    @action([HTTP_METHOD.Get])
+    @worker([HTTP_METHOD.Get])
     text() {
         return new Promise((resolve, reject) => {
             resolve(textResult("text"));
         });
     }
 
-    @action()
+    @worker()
     json() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult({ key: 'hello', value: 'world' }));
         });
     }
 
-    @action()
+    @worker()
     html() {
         return new Promise((resolve, reject) => {
             resolve(htmlResult(`<h1>hey there i am html</h1>`));
         });
     }
 
-    @action([HTTP_METHOD.Post])
+    @worker([HTTP_METHOD.Post])
     post() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));
@@ -70,12 +70,12 @@ export class DefaultController extends Controller {
     }
 
 
-    @action()
+    @worker()
     async redirect() {
         return await redirectResult("html");
     }
 
-    @action()
+    @worker()
     async getIp() {
         return this.data.ip;
     }

@@ -44,7 +44,7 @@ export class RouteHandler {
         }
     }
 
-    static addAction(newAction: IRouteActionInfo, className: string) {
+    static addWorker(newAction: IRouteActionInfo, className: string) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({
@@ -56,7 +56,7 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = router.actions.find(val => val.action === newAction.action);
+            const savedAction = router.actions.find(val => val.workerName === newAction.workerName);
             if (savedAction == null) {
                 newAction.pattern = router.alias == null ? newAction.pattern : `/${router.alias}${newAction.pattern}`;
                 router.actions.push(newAction);
@@ -74,7 +74,7 @@ export class RouteHandler {
         if (index < 0) {
             routerCollection.push({
                 actions: [{
-                    action: actionName,
+                    workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
                     pattern: pattern
@@ -86,10 +86,10 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = routerCollection[index].actions.find(val => val.action === actionName);
+            const savedAction = routerCollection[index].actions.find(val => val.workerName === actionName);
             if (savedAction == null) {
                 routerCollection[index].actions.push({
-                    action: actionName,
+                    workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
                     pattern: pattern
@@ -106,7 +106,7 @@ export class RouteHandler {
         if (router == null) {
             routerCollection.push({
                 actions: [{
-                    action: actionName,
+                    workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
                     pattern: pattern
@@ -118,11 +118,11 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = router.actions.find(val => val.action === actionName);
+            const savedAction = router.actions.find(val => val.workerName === actionName);
             pattern = router.alias == null ? pattern : `/${router.alias}${pattern}`;
             if (savedAction == null) {
                 router.actions.push({
-                    action: actionName,
+                    workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
                     pattern: pattern
