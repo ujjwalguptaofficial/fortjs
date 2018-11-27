@@ -18,12 +18,12 @@ export function section(path?: string): ClassDecorator {
         else {
             path = path.toLowerCase();
         }
-        RouteHandler.addToRouterCollection({
-            controller: target as typeof GenericController,
-            controllerName: className,
-            alias: path,
-            actions: [],
-            shields: []
-        })
+        // RouteHandler.addToRouterCollection({
+        //     controller: target as typeof GenericController,
+        //     controllerName: className,
+        //     alias: path,
+        //     actions: [],
+        //     shields: []
+        // })
     };
 }

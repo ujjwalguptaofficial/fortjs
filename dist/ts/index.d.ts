@@ -7,3 +7,4 @@ export * from './helpers/index';
 export * from './model/index';
 export * from './destroy';
 export * from './types/index';
+export * from './fort';

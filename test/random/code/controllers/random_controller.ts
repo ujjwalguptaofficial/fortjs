@@ -1,7 +1,7 @@
 import { Controller, section, defaultWorker, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, worker, jsonResult, route, downloadResult, textResult, HTTP_METHOD, fileResult } from "fortjs";
 import * as path from "path";
 
-@section('random')
+// @section('random')
 export class RandomController extends Controller {
     @defaultWorker()
     async format() {

@@ -4,7 +4,7 @@ import { GenericController } from "../model/generic_controller";
 export interface IRouteInfo {
     controller: typeof GenericController;
     controllerName: string;
-    alias: string;
+    path: string;
     actions: IRouteActionInfo[];
     shields: typeof GenericShield[];
 }

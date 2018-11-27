@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "create", function() { return _create__WEBPACK_IMPORTED_MODULE_2__["create"]; });
 
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(18);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_METHOD", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["HTTP_METHOD"]; });
@@ -158,6 +158,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _destroy__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(60);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "destroy", function() { return _destroy__WEBPACK_IMPORTED_MODULE_6__["destroy"]; });
+
+/* harmony import */ var _fort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(61);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _fort__WEBPACK_IMPORTED_MODULE_7__["Fort"]; });
+
 
 
 
@@ -423,7 +427,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _section__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "section", function() { return _section__WEBPACK_IMPORTED_MODULE_0__["section"]; });
 
-/* harmony import */ var _worker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
+/* harmony import */ var _worker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return _worker__WEBPACK_IMPORTED_MODULE_1__["worker"]; });
 
 /* harmony import */ var _shields__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
@@ -458,9 +462,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "section", function() { return section; });
 /* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
-/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(15);
-
+/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 
 
 function section(path) {
@@ -472,19 +474,19 @@ function section(path) {
                 path = classNameLower.substr(0, classNameLower.length - 10);
             }
             else {
-                new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_0__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_2__["ERROR_TYPE"].InvalidControllerName, className).throw();
+                new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_0__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_1__["ERROR_TYPE"].InvalidControllerName, className).throw();
             }
         }
         else {
             path = path.toLowerCase();
         }
-        _route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addToRouterCollection({
-            controller: target,
-            controllerName: className,
-            alias: path,
-            actions: [],
-            shields: []
-        });
+        // RouteHandler.addToRouterCollection({
+        //     controller: target as typeof GenericController,
+        //     controllerName: className,
+        //     alias: path,
+        //     actions: [],
+        //     shields: []
+        // })
     };
 }
 
@@ -571,151 +573,9 @@ var ERROR_TYPE;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteHandler", function() { return RouteHandler; });
-var routerCollection = [];
-var RouteHandler = /** @class */ (function () {
-    function RouteHandler() {
-    }
-    Object.defineProperty(RouteHandler, "routerCollection", {
-        get: function () {
-            return routerCollection;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    RouteHandler.addToRouterCollection = function (value) {
-        var route = routerCollection.find(function (x) { return x.controllerName === value.controllerName; });
-        if (route == null) {
-            routerCollection.push(value);
-        }
-        else {
-            route.controller = value.controller;
-            route.alias = value.alias;
-            // change pattern value since we have controller name now.
-            route.actions.forEach(function (actionInfo) {
-                if (actionInfo.pattern.indexOf(value.alias) < 0) {
-                    actionInfo.pattern = "/" + value.alias + actionInfo.pattern;
-                }
-            });
-        }
-    };
-    RouteHandler.addShields = function (shields, className) {
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
-        if (index < 0) {
-            routerCollection.push({
-                actions: [],
-                controller: null,
-                controllerName: className,
-                shields: shields,
-                alias: null
-            });
-        }
-        else {
-            routerCollection[index].shields = shields;
-        }
-    };
-    RouteHandler.addWorker = function (newAction, className) {
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        if (router == null) {
-            routerCollection.push({
-                actions: [newAction],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                alias: null
-            });
-        }
-        else {
-            var savedAction = router.actions.find(function (val) { return val.workerName === newAction.workerName; });
-            if (savedAction == null) {
-                newAction.pattern = router.alias == null ? newAction.pattern : "/" + router.alias + newAction.pattern;
-                router.actions.push(newAction);
-            }
-            else {
-                savedAction.methodsAllowed = newAction.methodsAllowed;
-                savedAction.pattern = router.alias == null ? savedAction.pattern : "/" + router.alias + savedAction.pattern;
-                ;
-            }
-        }
-    };
-    RouteHandler.addGuards = function (guards, className, actionName) {
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
-        var pattern = actionName.toLowerCase();
-        if (index < 0) {
-            routerCollection.push({
-                actions: [{
-                        workerName: actionName,
-                        guards: guards,
-                        methodsAllowed: null,
-                        pattern: pattern
-                    }],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                alias: null
-            });
-        }
-        else {
-            var savedAction = routerCollection[index].actions.find(function (val) { return val.workerName === actionName; });
-            if (savedAction == null) {
-                routerCollection[index].actions.push({
-                    workerName: actionName,
-                    guards: guards,
-                    methodsAllowed: null,
-                    pattern: pattern
-                });
-            }
-            else {
-                savedAction.guards = guards;
-            }
-        }
-    };
-    RouteHandler.addPattern = function (pattern, className, actionName) {
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        if (router == null) {
-            routerCollection.push({
-                actions: [{
-                        workerName: actionName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern
-                    }],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                alias: null
-            });
-        }
-        else {
-            var savedAction = router.actions.find(function (val) { return val.workerName === actionName; });
-            pattern = router.alias == null ? pattern : "/" + router.alias + pattern;
-            if (savedAction == null) {
-                router.actions.push({
-                    workerName: actionName,
-                    guards: [],
-                    methodsAllowed: null,
-                    pattern: pattern
-                });
-            }
-            else {
-                savedAction.pattern = pattern;
-            }
-        }
-    };
-    return RouteHandler;
-}());
-
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return worker; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
 
 
 function worker(allowedMethods) {
@@ -735,18 +595,18 @@ function worker(allowedMethods) {
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _mime_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
+/* harmony import */ var _mime_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _mime_type__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"]; });
 
-/* harmony import */ var _http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+/* harmony import */ var _http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_METHOD", function() { return _http_method__WEBPACK_IMPORTED_MODULE_1__["HTTP_METHOD"]; });
 
-/* harmony import */ var _http_status_code__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
+/* harmony import */ var _http_status_code__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HTTP_STATUS_CODE", function() { return _http_status_code__WEBPACK_IMPORTED_MODULE_2__["HTTP_STATUS_CODE"]; });
 
 
@@ -755,7 +615,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -792,7 +652,7 @@ var MIME_TYPE;
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -810,7 +670,7 @@ var HTTP_METHOD;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -834,13 +694,161 @@ var HTTP_STATUS_CODE;
 
 
 /***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteHandler", function() { return RouteHandler; });
+var routerCollection = [];
+var RouteHandler = /** @class */ (function () {
+    function RouteHandler() {
+    }
+    Object.defineProperty(RouteHandler, "routerCollection", {
+        get: function () {
+            return routerCollection;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouteHandler.addToRouterCollection = function (value) {
+        var route = routerCollection.find(function (x) { return x.controllerName === value.controller.name; });
+        if (route == null) {
+            routerCollection.push({
+                actions: [],
+                controller: value.controller,
+                controllerName: value.controller.name,
+                path: value.path,
+                shields: []
+            });
+        }
+        else {
+            route.controller = value.controller;
+            route.path = value.path;
+            // change pattern value since we have controller name now.
+            route.actions.forEach(function (actionInfo) {
+                if (actionInfo.pattern.indexOf(value.path) < 0) {
+                    actionInfo.pattern = "/" + value.path + actionInfo.pattern;
+                }
+            });
+        }
+    };
+    RouteHandler.addShields = function (shields, className) {
+        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
+        if (index < 0) {
+            routerCollection.push({
+                actions: [],
+                controller: null,
+                controllerName: className,
+                shields: shields,
+                path: null
+            });
+        }
+        else {
+            routerCollection[index].shields = shields;
+        }
+    };
+    RouteHandler.addWorker = function (newAction, className) {
+        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        if (router == null) {
+            routerCollection.push({
+                actions: [newAction],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null
+            });
+        }
+        else {
+            var savedAction = router.actions.find(function (val) { return val.workerName === newAction.workerName; });
+            if (savedAction == null) {
+                newAction.pattern = router.path == null ? newAction.pattern : "/" + router.path + newAction.pattern;
+                router.actions.push(newAction);
+            }
+            else {
+                savedAction.methodsAllowed = newAction.methodsAllowed;
+                savedAction.pattern = router.path == null ? savedAction.pattern : "/" + router.path + savedAction.pattern;
+                ;
+            }
+        }
+    };
+    RouteHandler.addGuards = function (guards, className, actionName) {
+        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
+        var pattern = actionName.toLowerCase();
+        if (index < 0) {
+            routerCollection.push({
+                actions: [{
+                        workerName: actionName,
+                        guards: guards,
+                        methodsAllowed: null,
+                        pattern: pattern
+                    }],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null
+            });
+        }
+        else {
+            var savedAction = routerCollection[index].actions.find(function (val) { return val.workerName === actionName; });
+            if (savedAction == null) {
+                routerCollection[index].actions.push({
+                    workerName: actionName,
+                    guards: guards,
+                    methodsAllowed: null,
+                    pattern: pattern
+                });
+            }
+            else {
+                savedAction.guards = guards;
+            }
+        }
+    };
+    RouteHandler.addPattern = function (pattern, className, actionName) {
+        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        if (router == null) {
+            routerCollection.push({
+                actions: [{
+                        workerName: actionName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern
+                    }],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null
+            });
+        }
+        else {
+            var savedAction = router.actions.find(function (val) { return val.workerName === actionName; });
+            pattern = router.path == null ? pattern : "/" + router.path + pattern;
+            if (savedAction == null) {
+                router.actions.push({
+                    workerName: actionName,
+                    guards: [],
+                    methodsAllowed: null,
+                    pattern: pattern
+                });
+            }
+            else {
+                savedAction.pattern = pattern;
+            }
+        }
+    };
+    return RouteHandler;
+}());
+
+
+
+/***/ }),
 /* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return shields; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 
 function shields(shields) {
     return function (target) {
@@ -857,7 +865,7 @@ function shields(shields) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "guards", function() { return guards; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 
 function guards(value) {
     return (function (target, methodName, descriptor) {
@@ -874,7 +882,7 @@ function guards(value) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "route", function() { return route; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 
 function route(format) {
     return (function (target, methodName, descriptor) {
@@ -891,8 +899,8 @@ function route(format) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return defaultWorker; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
-/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 
 
 function defaultWorker(allowedMethods) {
@@ -1048,8 +1056,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(29);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(19);
-/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(20);
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(18);
+/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(19);
 /* harmony import */ var _controller_handler__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(37);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -1472,7 +1480,7 @@ var CookieManager = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseAndMatchRoute", function() { return parseAndMatchRoute; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 
 
@@ -1491,12 +1499,12 @@ function parseAndMatchRoute(url, reqMethod) {
         allows: []
     };
     var firstPart = urlParts[1];
-    var route = _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.alias === firstPart; });
+    var route = _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
     if (route != null) {
         matchedRoute.controller = route.controller;
         var urlPartLength_1 = urlParts.length;
         if (urlPartLength_1 === 2) { // url does not have action path
-            var pattern_1 = "/" + route.alias + "/";
+            var pattern_1 = "/" + route.path + "/";
             route.actions.every(function (action) {
                 if (action.pattern === pattern_1) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
@@ -1570,10 +1578,10 @@ module.exports = require("path");
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControllerHandler", function() { return ControllerHandler; });
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
 /* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
 /* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
 /* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(39);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
@@ -1747,7 +1755,7 @@ module.exports = require("jsontoxml");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileHandler", function() { return FileHandler; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_2__);
@@ -1762,7 +1770,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(45);
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(46);
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(fresh__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(18);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(17);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2042,9 +2050,9 @@ var FileHandler = /** @class */ (function (_super) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandlerHelper", function() { return RequestHandlerHelper; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(19);
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(18);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(41);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_4__);
@@ -2228,7 +2236,7 @@ module.exports = require("fs");
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMimeTypeFromExtension", function() { return getMimeTypeFromExtension; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 
 function getMimeTypeFromExtension(ext) {
     switch (ext) {
@@ -2576,8 +2584,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "jsonResult", function() { return jsonResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 
 function jsonResult(value, statusCode) {
@@ -2596,8 +2604,8 @@ function jsonResult(value, statusCode) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textResult", function() { return textResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 
 function textResult(text, statusCode) {
@@ -2616,8 +2624,8 @@ function textResult(text, statusCode) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "htmlResult", function() { return htmlResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 
 function htmlResult(html, statusCode) {
@@ -2676,7 +2684,7 @@ function isEnvDev() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadResult", function() { return downloadResult; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
 
 function downloadResult(filePath, downloadFileName) {
     return {
@@ -2697,7 +2705,7 @@ function downloadResult(filePath, downloadFileName) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return fileResult; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
 
 function fileResult(filePath) {
     return {
@@ -2716,8 +2724,8 @@ function fileResult(filePath) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return redirectResult; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 
 function redirectResult(url) {
@@ -2738,7 +2746,7 @@ function redirectResult(url) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return viewResult; });
 /* harmony import */ var _render_view__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(54);
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -2807,6 +2815,36 @@ __webpack_require__.r(__webpack_exports__);
 function destroy(callback) {
     Object(_create__WEBPACK_IMPORTED_MODULE_0__["getApp"])().close(callback);
 }
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return Fort; });
+/* harmony import */ var _create__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(27);
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+
+
+var Fort = /** @class */ (function () {
+    function Fort() {
+        this.routers = [];
+        this.walls = [];
+    }
+    Fort.prototype.create = function (option) {
+        this.routers.forEach(function (route) {
+            if (route.path[0] === "/") {
+                route.path = route.path.substr(1);
+            }
+            _route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addToRouterCollection(route);
+        });
+        Object(_create__WEBPACK_IMPORTED_MODULE_0__["create"])(option);
+    };
+    return Fort;
+}());
+
 
 
 /***/ })

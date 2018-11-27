@@ -2,6 +2,7 @@ import { IRouteInfo } from "./interfaces/route_info";
 import { GenericShield } from "./model/generic_shield";
 import { IRouteActionInfo } from "./interfaces/route_action_info";
 import { GenericGuard } from "./model/generic_guard";
+import { Router } from "./types/router";
 
 const routerCollection: IRouteInfo[] = [];
 export class RouteHandler {
@@ -10,22 +11,27 @@ export class RouteHandler {
         return routerCollection;
     }
 
-    static addToRouterCollection(value: IRouteInfo) {
-        const route = routerCollection.find(x => x.controllerName === value.controllerName);
+    static addToRouterCollection(value: Router) {
+        const route = routerCollection.find(x => x.controllerName === value.controller.name);
         if (route == null) {
-            routerCollection.push(value);
+            routerCollection.push({
+                actions: [],
+                controller: value.controller as any,
+                controllerName: value.controller.name,
+                path: value.path,
+                shields: []
+            });
         }
         else {
-            route.controller = value.controller;
-            route.alias = value.alias;
+            route.controller = value.controller as any;
+            route.path = value.path;
             // change pattern value since we have controller name now.
             route.actions.forEach(actionInfo => {
-                if (actionInfo.pattern.indexOf(value.alias) < 0) {
-                    actionInfo.pattern = `/${value.alias}${actionInfo.pattern}`;
+                if (actionInfo.pattern.indexOf(value.path) < 0) {
+                    actionInfo.pattern = `/${value.path}${actionInfo.pattern}`;
                 }
             });
         }
-
     }
 
     static addShields(shields: typeof GenericShield[], className: string) {
@@ -36,7 +42,7 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: shields,
-                alias: null
+                path: null
             });
         }
         else {
@@ -52,18 +58,18 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                alias: null
+                path: null
             });
         }
         else {
             const savedAction = router.actions.find(val => val.workerName === newAction.workerName);
             if (savedAction == null) {
-                newAction.pattern = router.alias == null ? newAction.pattern : `/${router.alias}${newAction.pattern}`;
+                newAction.pattern = router.path == null ? newAction.pattern : `/${router.path}${newAction.pattern}`;
                 router.actions.push(newAction);
             }
             else {
                 savedAction.methodsAllowed = newAction.methodsAllowed;
-                savedAction.pattern = router.alias == null ? savedAction.pattern : `/${router.alias}${savedAction.pattern}`;;
+                savedAction.pattern = router.path == null ? savedAction.pattern : `/${router.path}${savedAction.pattern}`;;
             }
         }
     }
@@ -82,7 +88,7 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                alias: null
+                path: null
             });
         }
         else {
@@ -114,12 +120,12 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                alias: null
+                path: null
             });
         }
         else {
             const savedAction = router.actions.find(val => val.workerName === actionName);
-            pattern = router.alias == null ? pattern : `/${router.alias}${pattern}`;
+            pattern = router.path == null ? pattern : `/${router.path}${pattern}`;
             if (savedAction == null) {
                 router.actions.push({
                     workerName: actionName,

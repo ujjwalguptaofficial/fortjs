@@ -2,7 +2,7 @@ import { Controller, viewResult, section, worker, HTTP_METHOD, guards, route, js
 import { UserService } from "../services/user_service";
 
 
-@section()
+// @section()
 export class DefaultController extends Controller {
 
     @defaultWorker()

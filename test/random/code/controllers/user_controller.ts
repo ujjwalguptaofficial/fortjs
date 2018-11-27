@@ -6,7 +6,7 @@ import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
 @shields([AuthenticationShield])
-@section()
+// @section()
 export class UserController extends Controller {
     service: UserService;
 

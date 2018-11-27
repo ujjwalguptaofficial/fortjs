@@ -20,12 +20,12 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
         allows: []
     } as IRouteMatch;
     const firstPart = urlParts[1];
-    const route = RouteHandler.routerCollection.find(qry => qry.alias === firstPart);
+    const route = RouteHandler.routerCollection.find(qry => qry.path === firstPart);
     if (route != null) {
         matchedRoute.controller = route.controller;
         const urlPartLength = urlParts.length;
         if (urlPartLength === 2) { // url does not have action path
-            const pattern = `/${route.alias}/`;
+            const pattern = `/${route.path}/`;
             route.actions.every(action => {
                 if (action.pattern === pattern) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
