@@ -1,4 +1,4 @@
-import { Controller, worker, HTTP_METHOD, section, htmlResult, textResult, defaultWorker, shields, guards, jsonResult, route } from "fortjs";
+import { Controller, worker, HTTP_METHOD, htmlResult, textResult, shields, guards, jsonResult, route } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
@@ -6,7 +6,6 @@ import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
 @shields([AuthenticationShield])
-// @section()
 export class UserController extends Controller {
     service: UserService;
 
