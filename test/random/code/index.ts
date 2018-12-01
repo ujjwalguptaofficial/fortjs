@@ -4,9 +4,11 @@ import { Fort } from "fortjs";
 import { DefaultController, RandomController, UserController } from "./controllers";
 import { FortViewEngine } from "eshtml";
 import { CustomErrorHandler } from "./extra/custom_error_handler";
+import { RequestLogger } from './extra';
 class App extends Fort {
     constructor() {
         super();
+        this.walls = [RequestLogger];
         this.routers = [{
             controller: DefaultController,
             path: "/default"

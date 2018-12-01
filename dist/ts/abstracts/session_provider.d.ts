@@ -1,7 +1,7 @@
 import { ISessionValue } from "../interfaces/session_value";
 import { CookieManager } from "../model/cookie_manager";
 export declare abstract class SessionProvider {
-    protected sessionId: string;
+    sessionId: string;
     protected cookies: CookieManager;
     abstract get(key: string): Promise<ISessionValue>;
     abstract isExist(key: string): Promise<boolean>;

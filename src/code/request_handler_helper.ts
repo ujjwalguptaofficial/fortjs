@@ -6,14 +6,14 @@ import { HTTP_METHOD } from "./enums/http_method";
 import { Global } from "./global";
 import * as Negotiator from "negotiator";
 import { CookieManager } from "./model/cookie_manager";
-import { FortWall } from "./abstracts/fort_wall";
+import { Wall } from "./abstracts/wall";
 import { IException } from "./interfaces/exception";
 export class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
 
-    protected wallInstances: FortWall[] = [];
+    protected wallInstances: Wall[] = [];
 
     protected async runWallOutgoing() {
         return Promise.all(this.wallInstances.reverse().map(async wallObj => {

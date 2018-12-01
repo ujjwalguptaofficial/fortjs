@@ -1,5 +1,5 @@
 import { Router } from "./types/router";
-import { FortWall } from "./abstracts";
+import { Wall } from "./abstracts";
 import { AppOption } from "./types";
 import { RouteHandler } from "./route_handler";
 import { Global } from "./global";
@@ -18,7 +18,7 @@ import { promise } from "./helpers/promise";
 
 export class Fort {
     routers: Router[] = [];
-    walls: typeof FortWall[] = [];
+    walls: typeof Wall[] = [];
     httpServer: http.Server;
 
     create(option: AppOption) {

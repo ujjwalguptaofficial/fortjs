@@ -64,30 +64,6 @@ export class MemorySessionProvider extends SessionProvider {
                     value: val
                 })
             }
-            // this.createSession().then(sessionId => {
-            //     if (sessionId == null) { // session already created
-            //         const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
-            //         if (index >= 0) {
-            //             const savedValue = sessionValues[index];
-            //             savedValue.datas.push({
-            //                 key: key,
-            //                 value: val
-            //             })
-            //         }
-            //         resolve(null);
-            //     }
-            //     else { // session created
-
-            //         this.sessionId = sessionId;
-            //         sessionValues.push({
-            //             identifier: this.sessionId,
-            //             datas: [{
-            //                 key: key,
-            //                 value: val
-            //             }]
-            //         })
-            //     }
-            // });
         });
     }
 

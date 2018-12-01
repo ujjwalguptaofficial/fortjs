@@ -3,12 +3,12 @@ import * as http from "http";
 import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
 import { CookieManager } from "./model/cookie_manager";
-import { FortWall } from "./abstracts/fort_wall";
+import { Wall } from "./abstracts/wall";
 export declare class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
-    protected wallInstances: FortWall[];
+    protected wallInstances: Wall[];
     protected runWallOutgoing(): Promise<any[]>;
     protected getContentTypeFromNegotiation(type: MIME_TYPE): MIME_TYPE;
     protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]): MIME_TYPE;

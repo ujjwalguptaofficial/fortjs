@@ -1,4 +1,4 @@
-import { Controller, viewResult, section, worker, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult } from "fortjs";
+import { Controller, viewResult, worker, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult } from "fortjs";
 import { UserService } from "../services/user_service";
 
 export class DefaultController extends Controller {

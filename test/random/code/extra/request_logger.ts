@@ -1,7 +1,5 @@
-import { FortWall, wall } from "fortjs";
-
-@wall()
-export class RequestLogger extends FortWall {
+import { Wall } from "fortjs";
+export class RequestLogger extends Wall {
 
     private getIP(req) {
         var ip = (req.headers['x-forwarded-for'] || '').split(',').pop() ||

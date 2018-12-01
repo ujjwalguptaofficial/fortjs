@@ -1,5 +1,5 @@
-import { FortWall } from "../abstracts/fort_wall";
+import { Wall } from "../abstracts/wall";
 import { HttpResult } from "../types";
-export declare class GenericWall extends FortWall {
+export declare class GenericWall extends Wall {
     onIncoming(): Promise<HttpResult>;
 }

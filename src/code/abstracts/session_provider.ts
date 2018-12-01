@@ -7,7 +7,7 @@ import { Global } from "../global";
 
 export abstract class SessionProvider {
 
-    protected sessionId: string;
+    public sessionId: string;
     protected cookies: CookieManager;
 
     abstract get(key: string): Promise<ISessionValue>;
