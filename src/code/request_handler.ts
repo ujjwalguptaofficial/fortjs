@@ -2,7 +2,6 @@ import * as http from "http";
 import * as url from 'url';
 import { Controller } from "./abstracts/controller";
 import { __ContentType, __AppName, __Cookie, __AppSessionIdentifier, __SetCookie } from "./constant";
-import * as qs from 'querystring';
 import { Global } from "./global";
 import { IHttpRequest } from "./interfaces/http_request";
 import { parseCookie } from "./helpers/parse_cookie";
@@ -14,18 +13,18 @@ import { parseAndMatchRoute } from "./helpers/parse_match_route";
 import { IRouteMatch } from "./interfaces/route_match";
 import * as path from 'path';
 import { Util } from "./util";
-import { MIME_TYPE } from "./enums/mime_type";
 import { HTTP_METHOD } from "./enums/http_method";
-import { ControllerHandler } from "./controller_handler";
 import { HttpResult } from "./types";
-import { HTTP_STATUS_CODE } from "./enums";
 
-export class RequestHandler extends ControllerHandler {
-    private body_: any;
+import { PostHandler } from "./post_handler";
+
+export class RequestHandler extends PostHandler {
+
     private session_: GenericSessionProvider;
     private query_: any;
     private data_ = {};
     private routeMatchInfo_: IRouteMatch;
+
 
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
         super();
@@ -39,46 +38,10 @@ export class RequestHandler extends ControllerHandler {
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
-    private handlePostData_() {
-        const body = [];
-        let postData;
-        return new Promise((resolve, reject) => {
-            this.request.on('data', (chunk) => {
-                body.push(chunk);
-            }).on('end', () => {
-                const bodyBuffer = Buffer.concat(body);
-                try {
-                    const contentType = this.request.headers["content-type"];
-                    switch (contentType) {
-                        case MIME_TYPE.Json:
-                            try {
-                                postData = JSON.parse(bodyBuffer.toString());
-                            }
-                            catch (ex) {
-                                reject("Post data is invalid");
-                                return;
-                            }
-                            break;
-                        case MIME_TYPE.Text:
-                        case MIME_TYPE.Html:
-                            postData = bodyBuffer.toString(); break;
-                        case MIME_TYPE.Form_Url_Encoded:
-                            postData = qs.parse(bodyBuffer.toString()); break;
-
-                    }
-                    resolve(postData);
-                }
-                catch (ex) {
-                    reject(ex);
-                }
-            });
-        });
-    }
-
     private runWallIncoming_() {
         return Promise.all(Global.walls.map(async (wall) => {
             var wallObj = new wall();
-            wallObj.body = this.body_;
+            wallObj.body = this.body;
             wallObj.cookies = this.cookieManager;
             wallObj.query = this.query_;
             wallObj.session = this.session_;
@@ -95,7 +58,7 @@ export class RequestHandler extends ControllerHandler {
         controllerObj.request = this.request as IHttpRequest;
         controllerObj.response = this.response;
         controllerObj.query = this.query_;
-        controllerObj.body = this.body_;
+        controllerObj.body = this.body;
         controllerObj.session = this.session_;
         controllerObj.cookies = this.cookieManager;
         controllerObj.params = this.routeMatchInfo_.params;
@@ -108,7 +71,7 @@ export class RequestHandler extends ControllerHandler {
     private executeShieldsProtection_() {
         return Promise.all(this.routeMatchInfo_.shields.map(async shield => {
             const shieldObj = new shield();
-            shieldObj.body = this.body_;
+            shieldObj.body = this.body;
             shieldObj.cookies = this.cookieManager;
             shieldObj.query = this.query_;
             shieldObj.session = this.session_;
@@ -122,7 +85,7 @@ export class RequestHandler extends ControllerHandler {
     private executeGuardsCheck_(guards: typeof GenericGuard[]) {
         return Promise.all(guards.map(async guard => {
             const guardObj = new guard();
-            guardObj.body = this.body_;
+            guardObj.body = this.body;
             guardObj.cookies = this.cookieManager;
             guardObj.query = this.query_;
             guardObj.session = this.session_;
@@ -200,17 +163,19 @@ export class RequestHandler extends ControllerHandler {
         }
     }
 
-    handle() {
+    async handle() {
         if (this.request.method === HTTP_METHOD.Get) {
             this.execute_();
         }
         else if (Global.shouldParsePost === true) {
-            this.handlePostData_().then(body => {
-                this.body_ = body;
+            try {
+                const body = await this.handlePostData();
+                this.body = body;
                 this.execute_();
-            }).catch((err) => {
-                this.onBadRequest(err);
-            });
+            }
+            catch (ex) {
+                this.onBadRequest(ex);
+            }
         }
     }
 }

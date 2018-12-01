@@ -2,7 +2,7 @@ export enum MIME_TYPE {
     Text = "text/plain",
     Json = "application/json",
     Html = "text/html",
-    Form_Url_Encoded = "application/x-www-form-urlencoded",
+    FormUrlEncoded = "application/x-www-form-urlencoded",
     Css = "text/css",
     Csv = "text/csv",
     Js = "application/javascript",
@@ -24,5 +24,6 @@ export enum MIME_TYPE {
     Otf = "font/otf",
     Swf = "application/x-shockwave-flash",
     Avi = "video/avi",
+    FormMultiPart = "multipart/form-data"
 
 }

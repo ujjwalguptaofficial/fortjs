@@ -54,4 +54,5 @@ export class RandomController extends Controller {
         const pathLocation = path.join(__dirname, "../contents/JsStore_16_16.png");
         return fileResult(pathLocation);
     }
+
 }

@@ -14,6 +14,7 @@ export abstract class Wall implements Controller {
     cookies: CookieManager;
     params: { [key: string]: any };
     data: { [key: string]: any };
+    
     abstract onIncoming(): Promise<HttpResult>;
     async onOutgoing() {
         return null;

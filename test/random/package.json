@@ -15,6 +15,7 @@
   "dependencies": {
     "class-validator": "^0.9.1",
     "eshtml": "^0.2.1",
+    "form-data": "^2.3.3",
     "fortjs": "file:../../fortjs-0.8.0.tgz",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",

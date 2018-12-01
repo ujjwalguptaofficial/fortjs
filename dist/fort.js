@@ -491,7 +491,7 @@ var MIME_TYPE;
     MIME_TYPE["Text"] = "text/plain";
     MIME_TYPE["Json"] = "application/json";
     MIME_TYPE["Html"] = "text/html";
-    MIME_TYPE["Form_Url_Encoded"] = "application/x-www-form-urlencoded";
+    MIME_TYPE["FormUrlEncoded"] = "application/x-www-form-urlencoded";
     MIME_TYPE["Css"] = "text/css";
     MIME_TYPE["Csv"] = "text/csv";
     MIME_TYPE["Js"] = "application/javascript";
@@ -513,6 +513,7 @@ var MIME_TYPE;
     MIME_TYPE["Otf"] = "font/otf";
     MIME_TYPE["Swf"] = "application/x-shockwave-flash";
     MIME_TYPE["Avi"] = "video/avi";
+    MIME_TYPE["FormMultiPart"] = "multipart/form-data";
 })(MIME_TYPE || (MIME_TYPE = {}));
 
 
@@ -1218,7 +1219,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _model_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
 /* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40);
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(57);
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(59);
 /* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(55);
 /* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(29);
@@ -1488,18 +1489,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
 /* harmony import */ var url__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(42);
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7);
-/* harmony import */ var _helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
-/* harmony import */ var _model_cookie_manager__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
-/* harmony import */ var _helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(45);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(46);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(38);
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(15);
-/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(16);
-/* harmony import */ var _controller_handler__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(47);
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var _helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
+/* harmony import */ var _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(43);
+/* harmony import */ var _helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(44);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(45);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(38);
+/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(16);
+/* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(46);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1558,8 +1556,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
-
 var RequestHandler = /** @class */ (function (_super) {
     __extends(RequestHandler, _super);
     function RequestHandler(request, response) {
@@ -1574,52 +1570,15 @@ var RequestHandler = /** @class */ (function (_super) {
         this.request.on('error', this.onBadRequest);
         this.response.on('error', this.onErrorOccured.bind(this));
     };
-    RequestHandler.prototype.handlePostData_ = function () {
-        var _this = this;
-        var body = [];
-        var postData;
-        return new Promise(function (resolve, reject) {
-            _this.request.on('data', function (chunk) {
-                body.push(chunk);
-            }).on('end', function () {
-                var bodyBuffer = Buffer.concat(body);
-                try {
-                    var contentType = _this.request.headers["content-type"];
-                    switch (contentType) {
-                        case _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__["MIME_TYPE"].Json:
-                            try {
-                                postData = JSON.parse(bodyBuffer.toString());
-                            }
-                            catch (ex) {
-                                reject("Post data is invalid");
-                                return;
-                            }
-                            break;
-                        case _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__["MIME_TYPE"].Text:
-                        case _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__["MIME_TYPE"].Html:
-                            postData = bodyBuffer.toString();
-                            break;
-                        case _enums_mime_type__WEBPACK_IMPORTED_MODULE_9__["MIME_TYPE"].Form_Url_Encoded:
-                            postData = querystring__WEBPACK_IMPORTED_MODULE_2__["parse"](bodyBuffer.toString());
-                            break;
-                    }
-                    resolve(postData);
-                }
-                catch (ex) {
-                    reject(ex);
-                }
-            });
-        });
-    };
     RequestHandler.prototype.runWallIncoming_ = function () {
         var _this = this;
-        return Promise.all(_global__WEBPACK_IMPORTED_MODULE_3__["Global"].walls.map(function (wall) { return __awaiter(_this, void 0, void 0, function () {
+        return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) { return __awaiter(_this, void 0, void 0, function () {
             var wallObj;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         wallObj = new wall();
-                        wallObj.body = this.body_;
+                        wallObj.body = this.body;
                         wallObj.cookies = this.cookieManager;
                         wallObj.query = this.query_;
                         wallObj.session = this.session_;
@@ -1638,7 +1597,7 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.request = this.request;
         controllerObj.response = this.response;
         controllerObj.query = this.query_;
-        controllerObj.body = this.body_;
+        controllerObj.body = this.body;
         controllerObj.session = this.session_;
         controllerObj.cookies = this.cookieManager;
         controllerObj.params = this.routeMatchInfo_.params;
@@ -1653,7 +1612,7 @@ var RequestHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         shieldObj = new shield();
-                        shieldObj.body = this.body_;
+                        shieldObj.body = this.body;
                         shieldObj.cookies = this.cookieManager;
                         shieldObj.query = this.query_;
                         shieldObj.session = this.session_;
@@ -1674,7 +1633,7 @@ var RequestHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         guardObj = new guard();
-                        guardObj.body = this.body_;
+                        guardObj.body = this.body;
                         guardObj.cookies = this.cookieManager;
                         guardObj.query = this.query_;
                         guardObj.session = this.session_;
@@ -1688,11 +1647,11 @@ var RequestHandler = /** @class */ (function (_super) {
         }); }));
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {
-        if (_global__WEBPACK_IMPORTED_MODULE_3__["Global"].shouldParseCookie === true) {
+        if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
             var rawCookie = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]];
-            var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_4__["parseCookie"])(rawCookie);
-            this.session_ = new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].sessionProvider();
-            this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_5__["CookieManager"](parsedCookies);
+            var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
+            this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
+            this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
             this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"]];
             this.session_.cookies = this.cookieManager;
         }
@@ -1713,13 +1672,13 @@ var RequestHandler = /** @class */ (function (_super) {
                         if (!(responseByWall == null)) return [3 /*break*/, 9];
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         pathUrl = urlDetail.pathname.toLowerCase();
-                        extension = path__WEBPACK_IMPORTED_MODULE_7__["parse"](pathUrl).ext;
+                        extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
                         requestMethod = this.request.method;
-                        if (!!_util__WEBPACK_IMPORTED_MODULE_8__["Util"].isNullOrEmpty(extension)) return [3 /*break*/, 2];
+                        if (!!_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension)) return [3 /*break*/, 2];
                         this.handleFileRequest(pathUrl, extension);
                         return [3 /*break*/, 8];
                     case 2:
-                        this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_6__["parseAndMatchRoute"])(pathUrl, requestMethod);
+                        this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl, requestMethod);
                         if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 3];
                         // it may be a folder then
                         this.handleFileRequestForFolder(pathUrl);
@@ -1766,21 +1725,36 @@ var RequestHandler = /** @class */ (function (_super) {
         });
     };
     RequestHandler.prototype.handle = function () {
-        var _this = this;
-        if (this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_10__["HTTP_METHOD"].Get) {
-            this.execute_();
-        }
-        else if (_global__WEBPACK_IMPORTED_MODULE_3__["Global"].shouldParsePost === true) {
-            this.handlePostData_().then(function (body) {
-                _this.body_ = body;
-                _this.execute_();
-            }).catch(function (err) {
-                _this.onBadRequest(err);
+        return __awaiter(this, void 0, void 0, function () {
+            var body, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_8__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
+                        this.execute_();
+                        return [3 /*break*/, 5];
+                    case 1:
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 5];
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, this.handlePostData()];
+                    case 3:
+                        body = _a.sent();
+                        this.body = body;
+                        this.execute_();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        ex_2 = _a.sent();
+                        this.onBadRequest(ex_2);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
             });
-        }
+        });
     };
     return RequestHandler;
-}(_controller_handler__WEBPACK_IMPORTED_MODULE_11__["ControllerHandler"]));
+}(_post_handler__WEBPACK_IMPORTED_MODULE_9__["PostHandler"]));
 
 
 
@@ -1792,12 +1766,6 @@ module.exports = require("url");
 
 /***/ }),
 /* 42 */
-/***/ (function(module, exports) {
-
-module.exports = require("querystring");
-
-/***/ }),
-/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1818,7 +1786,7 @@ function parseCookie(cookie) {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1915,7 +1883,7 @@ var CookieManager = /** @class */ (function () {
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2006,10 +1974,145 @@ function parseAndMatchRoute(url, reqMethod) {
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
+
+/***/ }),
+/* 46 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostHandler", function() { return PostHandler; });
+/* harmony import */ var _controller_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(47);
+/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6);
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
+/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(57);
+/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(content_type__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(58);
+/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_5__);
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+var PostHandler = /** @class */ (function (_super) {
+    __extends(PostHandler, _super);
+    function PostHandler() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.files = {};
+        return _this;
+    }
+    PostHandler.prototype.getPostRawData_ = function () {
+        var _this = this;
+        var body = [];
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (res, rej) {
+            _this.request.on('data', function (chunk) {
+                body.push(chunk);
+            }).on('end', function () {
+                var bodyBuffer = Buffer.concat(body);
+                res(bodyBuffer);
+            });
+        });
+    };
+    PostHandler.prototype.handlePostData = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var postData, bodyBuffer, contentType, ex_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        postData = void 0;
+                        return [4 /*yield*/, this.getPostRawData_()];
+                    case 1:
+                        bodyBuffer = _a.sent();
+                        contentType = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_2__["__ContentType"]];
+                        if (contentType != null) {
+                            contentType = content_type__WEBPACK_IMPORTED_MODULE_4__["parse"](contentType).type;
+                        }
+                        switch (contentType) {
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
+                                try {
+                                    postData = JSON.parse(bodyBuffer.toString());
+                                }
+                                catch (ex) {
+                                    throw "Post data is invalid";
+                                }
+                                break;
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
+                                postData = bodyBuffer.toString();
+                                break;
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
+                                postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyBuffer.toString());
+                                break;
+                        }
+                        return [2 /*return*/, postData];
+                    case 2:
+                        ex_1 = _a.sent();
+                        console.log("exception", ex_1);
+                        throw ex_1;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return PostHandler;
+}(_controller_handler__WEBPACK_IMPORTED_MODULE_0__["ControllerHandler"]));
+
+
 
 /***/ }),
 /* 47 */
@@ -2024,7 +2127,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
 /* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(49);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(46);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(45);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -2198,7 +2301,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileHandler", function() { return FileHandler; });
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(46);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(45);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
 /* harmony import */ var _request_handler_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(50);
@@ -2763,6 +2866,18 @@ module.exports = require("fresh");
 
 /***/ }),
 /* 57 */
+/***/ (function(module, exports) {
+
+module.exports = require("content-type");
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports) {
+
+module.exports = require("querystring");
+
+/***/ }),
+/* 59 */
 /***/ (function(module, exports) {
 
 module.exports = require("http");

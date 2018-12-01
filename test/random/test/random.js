@@ -3,6 +3,8 @@ let {
     expect,
     removeSpaceAndNewLine
 } = require('./common');
+var FormData = require('form-data');
+var fs = require('fs');
 
 describe("/random", () => {
 
