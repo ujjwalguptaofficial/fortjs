@@ -107,14 +107,20 @@ export class RequestHandler extends PostHandler {
         }
     }
 
+    private setPreHeader_() {
+        this.response.setHeader('X-Powered-By', __AppName);
+        this.response.setHeader('Vary', 'Accept-Encoding');
+    }
+
     private async execute_() {
         try {
-            this.response.setHeader('X-Powered-By', __AppName);
-            this.response.setHeader('Vary', 'Accept-Encoding');
+            this.setPreHeader_();
+            const urlDetail = url.parse(this.request.url, true);
+            this.query_ = urlDetail.query;
+            this.parseCookieFromRequest_();
             const wallProtectionResult = await this.runWallIncoming_();
             const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
             if (responseByWall == null) {
-                const urlDetail = url.parse(this.request.url, true);
                 const pathUrl = urlDetail.pathname.toLowerCase();
                 const extension = path.parse(pathUrl).ext;
                 const requestMethod = this.request.method as HTTP_METHOD;
@@ -133,8 +139,6 @@ export class RequestHandler extends PostHandler {
                             this.onMethodNotAllowed(this.routeMatchInfo_.allows);
                         }
                         else {
-                            this.query_ = urlDetail.query;
-                            this.parseCookieFromRequest_();
                             const shieldProtectionResult = await this.executeShieldsProtection_();
                             const responseByShield = shieldProtectionResult.find(qry => qry != null);
                             if (responseByShield == null) {
@@ -165,12 +169,14 @@ export class RequestHandler extends PostHandler {
 
     async handle() {
         if (this.request.method === HTTP_METHOD.Get) {
+            this.body = {};
             this.execute_();
         }
         else if (Global.shouldParsePost === true) {
             try {
                 const body = await this.handlePostData();
                 this.body = body;
+                //== null ? {} : body;
                 this.execute_();
             }
             catch (ex) {

@@ -77,12 +77,22 @@ describe("/default", () => {
         })
     })
 
-    it('/post with empty body', (done) => {
+    it('/post with no body', (done) => {
         request.post('/default/post').type("application/json").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('content-type', 'text/html');
             expect(res.text).to.be.equal(badRequestMsg);
+            done();
+        })
+    })
+
+    it('/post with empty body', (done) => {
+        request.post('/default/post').send({}).type("application/json").end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.text).to.be.equal('{}');
             done();
         })
     })

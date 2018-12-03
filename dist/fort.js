@@ -1656,21 +1656,26 @@ var RequestHandler = /** @class */ (function (_super) {
             this.session_.cookies = this.cookieManager;
         }
     };
+    RequestHandler.prototype.setPreHeader_ = function () {
+        this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["__AppName"]);
+        this.response.setHeader('Vary', 'Accept-Encoding');
+    };
     RequestHandler.prototype.execute_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var wallProtectionResult, responseByWall, urlDetail, pathUrl, extension, requestMethod, actionInfo, shieldProtectionResult, responseByShield, guardsCheckResult, responseByGuard, ex_1;
+            var urlDetail, wallProtectionResult, responseByWall, pathUrl, extension, requestMethod, actionInfo, shieldProtectionResult, responseByShield, guardsCheckResult, responseByGuard, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 11, , 12]);
-                        this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["__AppName"]);
-                        this.response.setHeader('Vary', 'Accept-Encoding');
+                        this.setPreHeader_();
+                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
+                        this.query_ = urlDetail.query;
+                        this.parseCookieFromRequest_();
                         return [4 /*yield*/, this.runWallIncoming_()];
                     case 1:
                         wallProtectionResult = _a.sent();
                         responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
                         if (!(responseByWall == null)) return [3 /*break*/, 9];
-                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         pathUrl = urlDetail.pathname.toLowerCase();
                         extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
                         requestMethod = this.request.method;
@@ -1688,10 +1693,7 @@ var RequestHandler = /** @class */ (function (_super) {
                         if (!(actionInfo == null)) return [3 /*break*/, 4];
                         this.onMethodNotAllowed(this.routeMatchInfo_.allows);
                         return [3 /*break*/, 8];
-                    case 4:
-                        this.query_ = urlDetail.query;
-                        this.parseCookieFromRequest_();
-                        return [4 /*yield*/, this.executeShieldsProtection_()];
+                    case 4: return [4 /*yield*/, this.executeShieldsProtection_()];
                     case 5:
                         shieldProtectionResult = _a.sent();
                         responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
@@ -1731,6 +1733,7 @@ var RequestHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_8__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
+                        this.body = {};
                         this.execute_();
                         return [3 /*break*/, 5];
                     case 1:
@@ -1742,6 +1745,7 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 3:
                         body = _a.sent();
                         this.body = body;
+                        //== null ? {} : body;
                         this.execute_();
                         return [3 /*break*/, 5];
                     case 4:
@@ -2098,6 +2102,8 @@ var PostHandler = /** @class */ (function (_super) {
                             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
                                 postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyBuffer.toString());
                                 break;
+                            default:
+                                postData = {};
                         }
                         return [2 /*return*/, postData];
                     case 2:

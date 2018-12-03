@@ -43,6 +43,8 @@ export class PostHandler extends ControllerHandler {
                     postData = bodyBuffer.toString(); break;
                 case MIME_TYPE.FormUrlEncoded:
                     postData = QueryString.parse(bodyBuffer.toString()); break;
+                default:
+                    postData = {};
             }
             return postData;
         }

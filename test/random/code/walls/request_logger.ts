@@ -1,4 +1,4 @@
-import { Wall } from "fortjs";
+import { Wall, textResult } from "fortjs";
 let reqCount = 0;
 export class RequestLogger extends Wall {
 
@@ -17,7 +17,12 @@ export class RequestLogger extends Wall {
         // console.log(log);
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
-        console.log("reqcount", this.data.reqCount);
+        //console.log("reqcount", this.data.reqCount);
+        // console.log("body", this.body);
+        // console.log("query", this.query);
+        if (this.body.blockByWall === true || this.query.blockByWall == 'true') {
+            return textResult("blocked by wall");
+        }
         return null;
     }
 }

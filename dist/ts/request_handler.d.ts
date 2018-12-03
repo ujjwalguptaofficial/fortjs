@@ -13,6 +13,7 @@ export declare class RequestHandler extends PostHandler {
     private executeShieldsProtection_;
     private executeGuardsCheck_;
     private parseCookieFromRequest_;
+    private setPreHeader_;
     private execute_;
     handle(): Promise<void>;
 }
