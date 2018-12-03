@@ -9,7 +9,7 @@ class App extends Fort {
     constructor() {
         super();
         this.walls = [RequestLogger];
-        this.routers = [{
+        this.routes = [{
             controller: DefaultController,
             path: "/default"
         }, {

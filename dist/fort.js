@@ -1274,47 +1274,41 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 var Fort = /** @class */ (function () {
     function Fort() {
-        this.routers = [];
+        this.routes = [];
         this.walls = [];
     }
+    Fort.prototype.saveAppOption_ = function (option) {
+        var defaultEtagConfig = {
+            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
+        };
+        if (option == null) {
+            option = {};
+        }
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.port) ? 4000 : option.port;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = option.viewEngine == null ? null : new option.viewEngine();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
+            option.sessionProvider;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : option.errorHandler;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
+    };
     Fort.prototype.create = function (option) {
         if (option.defaultPath[0] === "/") {
             option.defaultPath = option.defaultPath.substr(1);
         }
-        this.routers.forEach(function (route) {
+        this.routes.forEach(function (route) {
             if (route.path[0] === "/") {
                 route.path = route.path.substr(1);
             }
             _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
         });
-        var defaultEtagConfig = {
-            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
-        };
-        if (option != null) {
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.port) ? 4000 : option.port;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = option.viewEngine == null ? null : new option.viewEngine();
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
-                option.sessionProvider;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : option.errorHandler;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
-        }
-        else {
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = 4000;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = true;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = true;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"];
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = 60;
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = [];
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"];
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
-        }
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
+        this.saveAppOption_(option);
         this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
             new _request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
         }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {

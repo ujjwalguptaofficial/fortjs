@@ -1,6 +1,6 @@
 import { Controller } from "../abstracts";
 
-export type Router = {
+export type Route = {
     path: string;
     controller: typeof Controller
 }

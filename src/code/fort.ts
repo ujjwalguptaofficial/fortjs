@@ -1,4 +1,4 @@
-import { Router } from "./types/router";
+import { Route } from "./types/route";
 import { Wall } from "./abstracts";
 import { AppOption } from "./types";
 import { RouteHandler } from "./route_handler";
@@ -17,48 +17,47 @@ import { GenericSessionProvider } from "./model/generic_session_provider";
 import { promise } from "./helpers/promise";
 
 export class Fort {
-    routers: Router[] = [];
+    routes: Route[] = [];
     walls: typeof Wall[] = [];
     httpServer: http.Server;
+
+    private saveAppOption_(option: AppOption) {
+        const defaultEtagConfig = {
+            type: ETag_Type.Weak
+        } as EtagOption;
+        if (option == null) {
+            option = {
+
+            }
+        }
+        Global.port = Util.isNull(option.port) ? 4000 : option.port;
+        Global.viewEngine = option.viewEngine == null ? null : new (option.viewEngine as any)();
+        Global.shouldParseCookie = Util.isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
+        Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
+        Global.sessionProvider = Util.isNull(option.sessionProvider) ? MemorySessionProvider as any :
+            option.sessionProvider as typeof GenericSessionProvider;
+        Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        Global.foldersAllowed = Util.isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
+        Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
+        Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
+        Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
+        Global.walls = this.walls as any;
+    }
 
     create(option: AppOption) {
         if (option.defaultPath[0] === "/") {
             option.defaultPath = option.defaultPath.substr(1);
         }
-        this.routers.forEach(route => {
+        this.routes.forEach(route => {
             if (route.path[0] === "/") {
                 route.path = route.path.substr(1);
             }
             RouteHandler.addToRouterCollection(route);
         });
-        const defaultEtagConfig = {
-            type: ETag_Type.Weak
-        } as EtagOption
-        if (option != null) {
-            Global.port = Util.isNull(option.port) ? 4000 : option.port;
-            Global.viewEngine = option.viewEngine == null ? null : new (option.viewEngine as any)();
-            Global.shouldParseCookie = Util.isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
-            Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-            Global.sessionProvider = Util.isNull(option.sessionProvider) ? MemorySessionProvider as any :
-                option.sessionProvider as typeof GenericSessionProvider;
-            Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-            Global.foldersAllowed = Util.isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
-            Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
-            Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
-            Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
-            Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
-        }
-        else {
-            Global.port = 4000;
-            Global.shouldParseCookie = true;
-            Global.shouldParsePost = true;
-            Global.sessionProvider = MemorySessionProvider as any;
-            Global.sessionTimeOut = 60;
-            Global.foldersAllowed = [];
-            Global.errorHandler = ErrorHandler;
-            Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
-        }
-        Global.walls = this.walls as any;
+
+        this.saveAppOption_(option);
+
         this.httpServer = http.createServer((req, res) => {
             new RequestHandler(req, res).handle();
         }).listen(Global.port).once("error", (err) => {
