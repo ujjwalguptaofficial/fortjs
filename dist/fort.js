@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.8.0 - 01/12/2018
+ * @license :fortjs - V0.8.0 - 03/12/2018
  * https://github.com/ujjwalguptaofficial/fort
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -1311,10 +1311,10 @@ var Fort = /** @class */ (function () {
             _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"];
             _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = 60;
             _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = [];
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = [];
             _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"];
             _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         }
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
         this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
             new _request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
         }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
@@ -2102,7 +2102,6 @@ var PostHandler = /** @class */ (function (_super) {
                         return [2 /*return*/, postData];
                     case 2:
                         ex_1 = _a.sent();
-                        console.log("exception", ex_1);
                         throw ex_1;
                     case 3: return [2 /*return*/];
                 }

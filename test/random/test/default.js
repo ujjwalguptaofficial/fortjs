@@ -112,10 +112,10 @@ describe("/default", () => {
     })
 
     it("/redirect test", (done) => {
-        request.get('/default/redirect').end((err, res) => {
+        request.get('/default/redirect').redirects(0).end((err, res) => {
             expect(err).to.be.null;
-            expect(res).to.have.status(200);
-            expect(res.text).to.be.equal('<h1>hey there i am html</h1>');
+            expect(res).to.have.status(302);
+            expect(res).to.have.header('location', 'html');
             done();
         })
     })

@@ -55,10 +55,10 @@ export class Fort {
             Global.sessionProvider = MemorySessionProvider as any;
             Global.sessionTimeOut = 60;
             Global.foldersAllowed = [];
-            Global.walls = [];
             Global.errorHandler = ErrorHandler;
             Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         }
+        Global.walls = this.walls as any;
         this.httpServer = http.createServer((req, res) => {
             new RequestHandler(req, res).handle();
         }).listen(Global.port).once("error", (err) => {

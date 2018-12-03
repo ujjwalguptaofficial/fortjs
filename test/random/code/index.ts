@@ -4,7 +4,7 @@ import { Fort } from "fortjs";
 import { DefaultController, RandomController, UserController } from "./controllers";
 import { FortViewEngine } from "eshtml";
 import { CustomErrorHandler } from "./extra/custom_error_handler";
-import { RequestLogger } from './extra';
+import { RequestLogger } from './walls/request_logger';
 class App extends Fort {
     constructor() {
         super();

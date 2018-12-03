@@ -47,7 +47,6 @@ export class PostHandler extends ControllerHandler {
             return postData;
         }
         catch (ex) {
-            console.log("exception", ex);
             throw ex;
         }
     }

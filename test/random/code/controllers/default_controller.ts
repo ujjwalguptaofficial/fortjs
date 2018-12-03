@@ -74,7 +74,7 @@ export class DefaultController extends Controller {
     }
 
     @worker()
-    async getIp() {
-        return this.data.ip;
+    async getData() {
+        return jsonResult(this.data);
     }
 }
