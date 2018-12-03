@@ -2,6 +2,11 @@ import { BaseService } from "./base_service";
 import { User } from "../models/user";
 
 export class UserService extends BaseService {
+
+    getUsers() {
+        return this.users;
+    }
+
     addUser(user: User) {
         const lastUser = this.users[this.users.length - 1];
         user.id = lastUser == null ? 1 : lastUser.id + 1;

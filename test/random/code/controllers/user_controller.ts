@@ -44,13 +44,7 @@ export class UserController extends Controller {
     @route("/")
     async addUser() {
         try {
-            const user: User = {
-                name: this.body.name,
-                gender: this.body.gender,
-                address: this.body.address,
-                emailId: this.body.emailId,
-                password: this.body.password
-            };
+            const user: User = this.data.user;
             return jsonResult(this.service.addUser(user), HTTP_STATUS_CODE.Created);
         }
         catch (ex) {
@@ -65,7 +59,7 @@ export class UserController extends Controller {
             const userId = Number(this.params.id);
             const user = this.service.getUser(userId);
             if (user != null) {
-                this.service.addUser(user);
+                this.service.removeUser(userId);
                 return textResult("user deleted");
             }
             else {
@@ -80,17 +74,10 @@ export class UserController extends Controller {
 
     @worker([HTTP_METHOD.Put])
     @guards([ModelUserGuard])
-    @route("/{id}")
+    @route("/")
     async updateUser() {
         try {
-            console.log("params", this.params);
-            const user: User = {
-                id: Number(this.params.id),
-                name: this.body.name,
-                gender: this.body.gender,
-                address: this.body.address,
-                emailId: this.body.emailId
-            };
+            const user: User = this.data.user;
             const userUpdated = this.service.updateUser(user);
             if (userUpdated === true) {
                 return textResult("user updated");

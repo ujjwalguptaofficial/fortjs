@@ -44,27 +44,44 @@ describe("/user", () => {
         })
     })
 
+    it("/ + post with invalid user", (done) => {
+        const user = {
+            name: '',
+            address: 'newyork street 5 america',
+            emailId: 'angela@mg.com',
+            gender: 'femalde',
+            password: 'ab'
+        }
+        request.post('/user').send(user).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(400);
+            expect(res.text).to.be.equal('password must be longer than or equal to 5 characters');
+            done();
+        })
+    })
+
     it("/ + patch", (done) => {
-        request.patch('/user/2').end((err, res) => {
+        request.patch('/user').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(405);
             const allowsValue = res.header.allow;
             expect(allowsValue).to.contains("PUT");
             expect(allowsValue).to.contains("GET");
-            expect(allowsValue).to.contains("DELETE");
+            expect(allowsValue).to.contains("POST");
             done();
         })
     })
 
     it("/ + put", (done) => {
         const user = {
+            id: 2,
             name: 'angela yu',
             address: 'newyork street 5 america',
             emailId: 'angela@mg.com',
             gender: 'female',
             password: 'hiangelayu'
         }
-        request.put('/user/2').send(user).end((err, res) => {
+        request.put('/user').send(user).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.text).to.be.an("string").equal("user updated")
