@@ -45,7 +45,7 @@ export class Fort {
         Global.walls = this.walls as any;
     }
 
-    create(option: AppOption) {
+    async create(option: AppOption): Promise<any> {
         if (option.defaultPath[0] === "/") {
             option.defaultPath = option.defaultPath.substr(1);
         }
@@ -70,7 +70,7 @@ export class Fort {
         });
     }
 
-    async destroy() {
+    destroy(): Promise<any> {
         return promise((res, rej) => {
             this.httpServer.close(res);
         });
