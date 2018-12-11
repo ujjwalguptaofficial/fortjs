@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "10"
+before_install: 
+   
+before_script:
+    - npm install
+script:
+  - npm run buildpack
+  - cd test/random
+  - npm install
+  - npm run build:test
+
+after_failure:
+  - ls

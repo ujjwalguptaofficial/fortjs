@@ -8,7 +8,8 @@
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
     "build": "webpack --config webpack.config.js",
-    "test": "mocha --recursive --exit"
+    "test": "mocha --recursive --exit",
+    "build:test": "npm run build && npm run test"
   },
   "author": "",
   "license": "ISC",

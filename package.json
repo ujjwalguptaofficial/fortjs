@@ -4,6 +4,11 @@
   "description": "Fort based MVC web framework for nodejs targeting good code structures & modularity.",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
+  "homepage":  "homepage": "https://github.com/ujjwalguptaofficial/fortjs#readme",
+  "bugs": {
+    "url": "https://github.com/ujjwalguptaofficial/fortjs/issues"
+  },
+  "displayName": "FortJs",
   "keywords": [
     "web",
     "node",
@@ -17,7 +22,7 @@
     "webpack": "webpack --config src/webpack/webpack.dev.config.js",
     "move:deploy_file": "node src/deploy_helper.js",
     "buildpack": "npm run build && npm run move:deploy_file && npm pack",
-    "build": "npm run webpack "
+    "build": "npm run webpack"
   },
   "author": "Ujjwal Gupta",
   "license": "MIT",
