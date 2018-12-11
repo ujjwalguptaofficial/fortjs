@@ -34,7 +34,7 @@ export class RouteHandler {
         }
     }
 
-    static addShields(shields: typeof GenericShield[], className: string) {
+    static addShields(shields: Array<typeof GenericShield>, className: string) {
         const index = routerCollection.findIndex(x => x.controllerName === className);
         if (index < 0) {
             routerCollection.push({
@@ -69,12 +69,12 @@ export class RouteHandler {
             }
             else {
                 savedAction.methodsAllowed = newAction.methodsAllowed;
-                savedAction.pattern = router.path == null ? savedAction.pattern : `/${router.path}${savedAction.pattern}`;;
+                savedAction.pattern = router.path == null ? savedAction.pattern : `/${router.path}${savedAction.pattern}`;
             }
         }
     }
 
-    static addGuards(guards: typeof GenericGuard[], className: string, actionName: string) {
+    static addGuards(guards: Array<typeof GenericGuard>, className: string, actionName: string) {
         const index = routerCollection.findIndex(x => x.controllerName === className);
         const pattern = actionName.toLowerCase();
         if (index < 0) {

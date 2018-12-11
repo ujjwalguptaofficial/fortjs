@@ -1,6 +1,6 @@
 import { MIME_TYPE } from "../enums";
 
-export function getMimeTypeFromExtension(ext: string): MIME_TYPE {
+export const getMimeTypeFromExtension = (ext: string): MIME_TYPE => {
     switch (ext) {
         case ".htm":
         case ".html":
@@ -53,4 +53,4 @@ export function getMimeTypeFromExtension(ext: string): MIME_TYPE {
         default:
             return "application/octet-stream" as MIME_TYPE;
     }
-}
+};

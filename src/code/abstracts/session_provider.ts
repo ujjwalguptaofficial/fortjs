@@ -7,14 +7,14 @@ import { Global } from "../global";
 
 export abstract class SessionProvider {
 
-    public sessionId: string;
+     sessionId: string;
     protected cookies: CookieManager;
 
     abstract get(key: string): Promise<ISessionValue>;
     abstract isExist(key: string): Promise<boolean>;
     abstract getAll(): Promise<ISessionValue[]>;
     abstract set(key: string, val: any): Promise<null>;
-    abstract setMany(values: ISessionValue[]): Promise<null>;
+    abstract setMany(values: ISessionValue[]): Promise<null[]>;
     abstract remove(key: string): Promise<null>;
 
     protected createSession(): Promise<null> {

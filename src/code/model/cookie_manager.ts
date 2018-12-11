@@ -72,21 +72,21 @@ export class CookieManager {
     }
 
     private getCookieStringFromCookie_(cookie: HttpCookie) {
-        let cookieString = `${cookie.name}=${cookie.value};`
+        let cookieString = `${cookie.name}=${cookie.value};`;
         if (cookie.expires) {
-            cookieString += ` Expires =${cookie.expires.toUTCString()};`
+            cookieString += ` Expires =${cookie.expires.toUTCString()};`;
         }
         if (cookie.httpOnly === true) {
-            cookieString += " HttpOnly;"
+            cookieString += " HttpOnly;";
         }
         if (cookie.maxAge != null) {
             cookieString += ` Max-Age=${cookie.maxAge}`;
         }
         if (cookie.path) {
-            cookieString += ` Path=${cookie.path};`
+            cookieString += ` Path=${cookie.path};`;
         }
         if (cookie.domain) {
-            cookieString += ` Domain=${cookie.path};`
+            cookieString += ` Domain=${cookie.path};`;
         }
         return cookieString;
     }

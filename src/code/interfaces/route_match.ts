@@ -9,7 +9,7 @@ export interface IRouteMatch {
   controller: typeof GenericController;
   actionInfo: IRouteActionInfo;
   params: any;
-  shields: typeof GenericShield[]
+  shields: Array<typeof GenericShield>;
 
   allows: HTTP_METHOD[];
 }

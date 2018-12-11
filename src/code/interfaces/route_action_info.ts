@@ -3,7 +3,7 @@ import { GenericGuard } from "../model/generic_guard";
 
 export interface IRouteActionInfo {
     workerName: string;
-    methodsAllowed: HTTP_METHOD[]
-    guards: typeof GenericGuard[];
+    methodsAllowed: HTTP_METHOD[];
+    guards: Array<typeof GenericGuard>;
     pattern: string;
 }

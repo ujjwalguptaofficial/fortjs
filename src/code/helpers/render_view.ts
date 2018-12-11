@@ -3,7 +3,7 @@ import { isEnvDev } from "./is_env_dev";
 import { LogHelper } from "./log_helper";
 import { ERROR_TYPE } from "../enums/error_type";
 
-export function renderView(viewName: string, model?: any) {
+export const renderView = (viewName: string, model?: any) => {
     if (isEnvDev()) {
         if (Global.viewEngine == null) {
             new LogHelper(ERROR_TYPE.UndefinedViewEngine).throw();
@@ -13,4 +13,4 @@ export function renderView(viewName: string, model?: any) {
         view: viewName,
         model: model
     });
-}
+};

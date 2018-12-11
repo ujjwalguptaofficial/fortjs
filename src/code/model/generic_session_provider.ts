@@ -3,9 +3,9 @@ import { ISessionValue } from "../interfaces/session_value";
 import { CookieManager } from "./cookie_manager";
 
 export class GenericSessionProvider extends SessionProvider {
-    public sessionId: string;
+    sessionId: string;
 
-    public cookies: CookieManager;
+    cookies: CookieManager;
     get() {
         return null;
     }

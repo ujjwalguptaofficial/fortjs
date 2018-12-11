@@ -1,3 +1,3 @@
-export function promise<T>(callBack: (resolve, reject) => void) {
+export const promise = <T>(callBack: (resolve, reject) => void) => {
     return new Promise<T>(callBack);
-}
+};

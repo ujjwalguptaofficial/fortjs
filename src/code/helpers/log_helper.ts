@@ -41,16 +41,16 @@ export class LogHelper implements IError {
         let errMsg: string;
         switch (this.type) {
             case ERROR_TYPE.InvalidControllerName:
-                errMsg = `Invalid controller name - '${this.info_}'. Controller name must contain 'controller'.`
+                errMsg = `Invalid controller name - '${this.info_}'. Controller name must contain 'controller'.`;
                 break;
             case ERROR_TYPE.InvalidContentType:
-                errMsg = `Content type - '${this.info_}' is not valid. Please create an issue if you think this is valid type.`
+                errMsg = `Content type - '${this.info_}' is not valid. Please create an issue if you think this is valid type.`;
                 break;
             case ERROR_TYPE.PortInUse:
-                errMsg = `Port ${this.info_} is being used by another process.`
+                errMsg = `Port ${this.info_} is being used by another process.`;
                 break;
             case ERROR_TYPE.UndefinedViewEngine:
-                errMsg = `View engine is not initiated.Initiate the view engine where fort is created.`
+                errMsg = `View engine is not initiated.Initiate the view engine where fort is created.`;
                 break;
             default:
                 errMsg = this.message;

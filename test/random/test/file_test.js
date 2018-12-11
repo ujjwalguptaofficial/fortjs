@@ -12,7 +12,7 @@ let {
 
 describe("/file test", () => {
     
-    it('/contents/', (done) => {
+    it('/contents/ => with slace ', (done) => {
         request.get('/contents/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
@@ -21,7 +21,7 @@ describe("/file test", () => {
         });
     });
 
-    it('/contents', (done) => {
+    it('/contents => without slace', (done) => {
         request.get('/contents').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);

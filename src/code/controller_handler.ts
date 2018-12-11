@@ -65,7 +65,7 @@ export class ControllerHandler extends FileHandler {
             this.response.setHeader(
                 "Content-Disposition",
                 `attachment;filename=${fileName}${parsedPath.ext}`
-            )
+            );
         }
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     }
@@ -78,7 +78,7 @@ export class ControllerHandler extends FileHandler {
                 this.response.setHeader(__SetCookie, value);
             });
         }
-        if (result.shouldRedirect == null || result.shouldRedirect == false) {
+        if (result.shouldRedirect == null || result.shouldRedirect === false) {
             if (result.responseFormat == null) {
                 if (result.file == null) {
                     const contentType = result.contentType || MIME_TYPE.Text;

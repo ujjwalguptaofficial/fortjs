@@ -18,7 +18,7 @@ export class PostHandler extends ControllerHandler {
                 const bodyBuffer = Buffer.concat(body);
                 res(bodyBuffer);
             });
-        })
+        });
     }
 
     protected async handlePostData() {
@@ -35,7 +35,7 @@ export class PostHandler extends ControllerHandler {
                         postData = JSON.parse(bodyBuffer.toString());
                     }
                     catch (ex) {
-                        throw "Post data is invalid";
+                        throw Error("Post data is invalid");
                     }
                     break;
                 case MIME_TYPE.Text:

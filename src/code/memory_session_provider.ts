@@ -4,7 +4,7 @@ import { promise } from "./helpers/promise";
 
 interface ISessionValueFormat {
     identifier: string;
-    datas: ISessionValue[]
+    datas: ISessionValue[];
 }
 
 const sessionValues: ISessionValueFormat[] = [];
@@ -55,28 +55,24 @@ export class MemorySessionProvider extends SessionProvider {
                             key: key,
                             value: val
                         }]
-                    })
+                    });
                 });
             }
             else {
                 savedValue.datas.push({
                     key: key,
                     value: val
-                })
+                });
             }
         });
     }
 
     setMany(values: ISessionValue[]) {
-        return promise<null>((resolve, reject) => {
-            const promises: Promise<null>[] = [];
-            values.forEach(value => {
-                promises.push(this.set(value.key, value.value));
+        return Promise.all(
+            values.map(async (value) => {
+                return await this.set(value.key, value.value);
             })
-            Promise.all(promises).then(results => {
-                resolve();
-            }).catch(reject);
-        });
+        );
     }
 
     remove(key: string): Promise<null> {

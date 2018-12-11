@@ -12,17 +12,17 @@ import * as fresh from "fresh";
 import { MIME_TYPE } from "./enums";
 export class FileHandler extends RequestHandlerHelper {
 
-    private getRequiredFolder_(path: string) {
-        const splittedValue = path.split("/");
+    private getRequiredFolder_(filePath: string) {
+        const splittedValue = filePath.split("/");
         if (splittedValue.length > 2) {
             return splittedValue[1];
         }
-        return splittedValue[1] == "" ? "/" : splittedValue[1];
+        return splittedValue[1] === "" ? "/" : splittedValue[1];
     }
 
-    private getFileStats_(path) {
+    private getFileStats_(filePath) {
         return promise<Fs.Stats>((res, rej) => {
-            Fs.lstat(path, (err, status) => {
+            Fs.lstat(filePath, (err, status) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
                         res(null);
@@ -35,12 +35,12 @@ export class FileHandler extends RequestHandlerHelper {
                     res(status);
                 }
             });
-        })
+        });
     }
 
     protected async handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
         try {
-            let fileInfo = await this.getFileStats_(absolutePath);
+            const fileInfo = await this.getFileStats_(absolutePath);
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
                     this.handleFileRequestForFolder_(absolutePath, fileInfo);
@@ -62,7 +62,7 @@ export class FileHandler extends RequestHandlerHelper {
     protected handleFileRequest(filePath: string, fileType: string) {
         const folderRequired = this.getRequiredFolder_(filePath);
         if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-            let absolutePath = path.join(__CurrentDirectory, filePath);
+            const absolutePath = path.join(__CurrentDirectory, filePath);
             this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
         }
         else {
@@ -71,7 +71,7 @@ export class FileHandler extends RequestHandlerHelper {
     }
 
     /**
-     *process folders handling asuuming path is folder.
+     * process folders handling asuuming path is folder.
      * Please check whether the file is folder before calling this function
      *
      * @private
@@ -102,9 +102,9 @@ export class FileHandler extends RequestHandlerHelper {
         try {
             const folderRequired = this.getRequiredFolder_(filePath);
             if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-                let absolutePath = path.join(__CurrentDirectory, filePath);
+                const absolutePath = path.join(__CurrentDirectory, filePath);
                 try {
-                    let fileInfo = await this.getFileStats_(absolutePath);
+                    const fileInfo = await this.getFileStats_(absolutePath);
                     if (fileInfo != null && fileInfo.isDirectory() === true) {
                         this.handleFileRequestForFolder_(absolutePath, fileInfo);
                     }
@@ -126,14 +126,14 @@ export class FileHandler extends RequestHandlerHelper {
         return null;
     }
 
-    private isClientHasFreshFile_(lastModified: string, etag: string) {
+    private isClientHasFreshFile_(lastModified: string, etagValue: string) {
         return fresh(this.request.headers, {
-            'etag': etag,
+            'etag': etagValue,
             'last-modified': lastModified
-        })
+        });
     }
 
-    private async sendFile_(path: string, fileType: string, fileInfo: Fs.Stats) {
+    private async sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
         try {
             await this.runWallOutgoing();
             let mimeType;
@@ -158,8 +158,8 @@ export class FileHandler extends RequestHandlerHelper {
                         [__ContentType]: mimeType,
                         'Etag': eTagValue,
                         'Last-Modified': lastModified
-                    })
-                    const readStream = Fs.createReadStream(path);
+                    });
+                    const readStream = Fs.createReadStream(filePath);
                     // Handle non-existent file
                     readStream.on('error', this.onErrorOccured.bind(this));
                     readStream.pipe(this.response);

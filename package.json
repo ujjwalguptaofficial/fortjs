@@ -23,7 +23,7 @@
     "webpack": "webpack --config src/webpack.config.js",
     "move:deploy_file": "node src/deploy_helper.js",
     "buildpackold": "npm run build && npm run move:deploy_file && npm pack",
-    "buildpack": "npm run build && npm pack",
+    "buildpack": "npm run lint && npm run build && npm pack",
     "build": "npm run webpack"
   },
   "author": "Ujjwal Gupta",

@@ -2,8 +2,8 @@ import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../route_handler";
 import { IRouteActionInfo } from "../interfaces/route_action_info";
 
-export function worker(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
-    return function (target: any, methodName: string, descriptor: PropertyDescriptor) {
+export const worker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator => {
+    return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const className = (target.constructor.name as string);
         const actionInfo: IRouteActionInfo = {
             workerName: methodName,
@@ -14,5 +14,5 @@ export function worker(allowedMethods?: HTTP_METHOD[]): MethodDecorator {
             pattern: `/${methodName.toLowerCase()}`
         };
         RouteHandler.addWorker(actionInfo, className);
-    }
-}
+    };
+};

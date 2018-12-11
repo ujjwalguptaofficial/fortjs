@@ -40,7 +40,7 @@ export class RequestHandler extends PostHandler {
 
     private runWallIncoming_() {
         return Promise.all(Global.walls.map(async (wall) => {
-            var wallObj = new wall();
+            const wallObj = new wall();
             wallObj.body = this.body;
             wallObj.cookies = this.cookieManager;
             wallObj.query = this.query_;
@@ -65,7 +65,7 @@ export class RequestHandler extends PostHandler {
         controllerObj.data = this.data_;
         controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(
             this.onResultEvaluated.bind(this)
-        ).catch(this.onErrorOccured.bind(this))
+        ).catch(this.onErrorOccured.bind(this));
     }
 
     private executeShieldsProtection_() {
@@ -82,7 +82,7 @@ export class RequestHandler extends PostHandler {
         }));
     }
 
-    private executeGuardsCheck_(guards: typeof GenericGuard[]) {
+    private executeGuardsCheck_(guards: Array<typeof GenericGuard>) {
         return Promise.all(guards.map(async guard => {
             const guardObj = new guard();
             guardObj.body = this.body;

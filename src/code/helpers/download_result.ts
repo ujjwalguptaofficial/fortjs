@@ -3,7 +3,7 @@ import { MIME_TYPE } from "../enums";
 import { HTTP_STATUS_CODE } from "../enums/http_status_code";
 import { HttpResult } from "../types/http_result";
 
-export function downloadResult(filePath: string, downloadFileName?: string) {
+export const downloadResult = (filePath: string, downloadFileName?: string) => {
     return {
         statusCode: HTTP_STATUS_CODE.Ok,
         file: {
@@ -12,4 +12,4 @@ export function downloadResult(filePath: string, downloadFileName?: string) {
             alias: downloadFileName
         }
     } as HttpResult;
-}
+};

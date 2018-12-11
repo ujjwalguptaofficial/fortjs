@@ -89,7 +89,7 @@ export class RequestHandlerHelper {
             this.response.end(result);
         }).catch(err => {
             this.response.end(JSON.stringify(err));
-        })
+        });
     }
 
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
@@ -106,7 +106,7 @@ export class RequestHandlerHelper {
         if (typeof error === 'string') {
             error = {
                 message: error
-            } as IException
+            } as IException;
         }
         new Global.errorHandler().onServerError(error).then(result => {
             this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });

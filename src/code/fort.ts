@@ -18,7 +18,7 @@ import { promise } from "./helpers/promise";
 
 export class Fort {
     routes: Route[] = [];
-    walls: typeof Wall[] = [];
+    walls: Array<typeof Wall> = [];
     httpServer: http.Server;
 
     private saveAppOption_(option: AppOption) {
@@ -28,7 +28,7 @@ export class Fort {
         if (option == null) {
             option = {
 
-            }
+            };
         }
         Global.port = Util.isNull(option.port) ? 4000 : option.port;
         Global.viewEngine = option.viewEngine == null ? null : new (option.viewEngine as any)();

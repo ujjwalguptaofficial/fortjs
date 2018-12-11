@@ -8,12 +8,12 @@ export class FileHelper {
             try {
                 Fs.exists(path, (isExist) => {
                     resolve(isExist);
-                })
+                });
             }
             catch (ex) {
                 reject(ex);
             }
-        })
+        });
     }
 
     static isDirectory(path: string): Promise<boolean> {
@@ -26,12 +26,12 @@ export class FileHelper {
                     else {
                         resolve(status.isDirectory());
                     }
-                })
+                });
             }
             catch (ex) {
                 reject(ex);
             }
-        })
+        });
     }
 
     static readFile(path: string): Promise<string> {
@@ -44,11 +44,11 @@ export class FileHelper {
                     else {
                         resolve(data);
                     }
-                })
+                });
             }
             catch (ex) {
                 reject(ex);
             }
-        })
+        });
     }
 }

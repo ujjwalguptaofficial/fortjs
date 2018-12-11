@@ -4,7 +4,7 @@ import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";
 
 
-export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
+export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
 
     const urlLength = url.length;
     // removing / from url;
@@ -16,7 +16,7 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
         url += Global.defaultPath;
     }
     const urlParts = url.split("/");
-    let matchedRoute: IRouteMatch = {
+    const matchedRoute: IRouteMatch = {
         allows: []
     } as IRouteMatch;
     const firstPart = urlParts[1];
@@ -82,4 +82,4 @@ export function parseAndMatchRoute(url: string, reqMethod: HTTP_METHOD) {
         return matchedRoute;
     }
     return null;
-}
+};
