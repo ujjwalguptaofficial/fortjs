@@ -7,10 +7,9 @@ before_script:
     - npm install
 script:
   - npm run buildpack
+  - npm cache clean -f
   - cd test/random
   - ls
-  - npm cache clean -f
-  - npm update
   - npm install
   - npm run build:test
 
