@@ -19,9 +19,10 @@
   ],
   "scripts": {
     "lint": "tslint src/code/**/*.ts",
-    "webpack": "webpack --config src/webpack/webpack.dev.config.js",
+    "webpack": "webpack --config src/webpack.config.js",
     "move:deploy_file": "node src/deploy_helper.js",
-    "buildpack": "npm run build && npm run move:deploy_file && npm pack",
+    "buildpackold": "npm run build && npm run move:deploy_file && npm pack",
+    "buildpack": "npm run build && npm pack",
     "build": "npm run webpack"
   },
   "author": "Ujjwal Gupta",

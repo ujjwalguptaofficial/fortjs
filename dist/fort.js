@@ -1,6 +1,6 @@
 /*!
- * @license :fortjs - V0.9.0 - 03/12/2018
- * https://github.com/ujjwalguptaofficial/fort
+ * @license :fortjs - V0.9.0 - 11/12/2018
+ * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
 module.exports =
@@ -1299,35 +1299,36 @@ var Fort = /** @class */ (function () {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
     };
     Fort.prototype.create = function (option) {
-        if (option.defaultPath[0] === "/") {
-            option.defaultPath = option.defaultPath.substr(1);
-        }
-        this.routes.forEach(function (route) {
-            if (route.path[0] === "/") {
-                route.path = route.path.substr(1);
-            }
-            _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
-        });
-        this.saveAppOption_(option);
-        this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
-            new _request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
-        }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
-            if (err.code === 'EADDRINUSE') {
-                new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_10__["ERROR_TYPE"].PortInUse, _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).throw();
-            }
-            else {
-                throw err;
-            }
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (option.defaultPath[0] === "/") {
+                    option.defaultPath = option.defaultPath.substr(1);
+                }
+                this.routes.forEach(function (route) {
+                    if (route.path[0] === "/") {
+                        route.path = route.path.substr(1);
+                    }
+                    _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
+                });
+                this.saveAppOption_(option);
+                this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
+                    new _request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
+                }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
+                    if (err.code === 'EADDRINUSE') {
+                        new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_10__["ERROR_TYPE"].PortInUse, _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).throw();
+                    }
+                    else {
+                        throw err;
+                    }
+                });
+                return [2 /*return*/];
+            });
         });
     };
     Fort.prototype.destroy = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
-                        _this.httpServer.close(res);
-                    })];
-            });
+        var _this = this;
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
+            _this.httpServer.close(res);
         });
     };
     return Fort;

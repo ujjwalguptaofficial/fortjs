@@ -1,7 +1,7 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const SmartBannerPlugin = require('smart-banner-webpack-plugin');
-const banner = require('./../license');
+const banner = require('./license');
 
 module.exports = [{
     name: "fort",
@@ -9,7 +9,7 @@ module.exports = [{
     entry: "./src/code/index.ts",
     devtool: 'source-map',
     output: {
-        path: path.join(__dirname, "./../output"),
+        path: path.join(__dirname, "./../dist"),
         filename: "fort.js",
         library: 'FortJs',
         libraryTarget: "commonjs2"
