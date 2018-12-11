@@ -176,7 +176,6 @@ export class RequestHandler extends PostHandler {
             try {
                 const body = await this.handlePostData();
                 this.body = body;
-                //== null ? {} : body;
                 this.execute_();
             }
             catch (ex) {

@@ -35,7 +35,8 @@ export class PostHandler extends ControllerHandler {
                         postData = JSON.parse(bodyBuffer.toString());
                     }
                     catch (ex) {
-                        throw Error("Post data is invalid");
+                        /* tslint:disable-next-line */
+                        throw "Post data is invalid";
                     }
                     break;
                 case MIME_TYPE.Text:

@@ -1772,7 +1772,6 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 3:
                         body = _a.sent();
                         this.body = body;
-                        //== null ? {} : body;
                         this.execute_();
                         return [3 /*break*/, 5];
                     case 4:
@@ -2119,7 +2118,8 @@ var PostHandler = /** @class */ (function (_super) {
                                     postData = JSON.parse(bodyBuffer.toString());
                                 }
                                 catch (ex) {
-                                    throw Error("Post data is invalid");
+                                    /* tslint:disable-next-line */
+                                    throw "Post data is invalid";
                                 }
                                 break;
                             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
