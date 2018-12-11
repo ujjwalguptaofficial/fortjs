@@ -10,6 +10,7 @@ script:
   - cd test/random
   - ls
   - npm cache clean -f
+  - npm update
   - npm install
   - npm run build:test
 
