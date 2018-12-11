@@ -9,6 +9,7 @@ script:
   - npm run buildpack
   - cd test/random
   - ls
+  - npm cache clean -f
   - npm install
   - npm run build:test
 
