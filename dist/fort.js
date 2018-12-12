@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V0.9.0 - 11/12/2018
+ * @license :fortjs - V0.9.0 - 12/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -2525,6 +2525,7 @@ var FileHandler = /** @class */ (function (_super) {
                         folderRequired_1 = this.getRequiredFolder_(filePath);
                         if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 5];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
+                        console.log("abspath", absolutePath);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
