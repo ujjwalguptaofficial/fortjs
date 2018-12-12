@@ -1703,14 +1703,14 @@ var RequestHandler = /** @class */ (function (_super) {
                         wallProtectionResult = _a.sent();
                         responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
                         if (!(responseByWall == null)) return [3 /*break*/, 9];
-                        pathUrl = urlDetail.pathname.toLowerCase();
+                        pathUrl = urlDetail.pathname;
                         extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
                         requestMethod = this.request.method;
                         if (!!_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension)) return [3 /*break*/, 2];
                         this.handleFileRequest(pathUrl, extension);
                         return [3 /*break*/, 8];
                     case 2:
-                        this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl, requestMethod);
+                        this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
                         if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 3];
                         // it may be a folder then
                         this.handleFileRequestForFolder(pathUrl);
@@ -2525,7 +2525,6 @@ var FileHandler = /** @class */ (function (_super) {
                         folderRequired_1 = this.getRequiredFolder_(filePath);
                         if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 5];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
-                        console.log("abspath", absolutePath);
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);

@@ -63,11 +63,9 @@ export class FileHandler extends RequestHandlerHelper {
         const folderRequired = this.getRequiredFolder_(filePath);
         if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
             const absolutePath = path.join(__CurrentDirectory, filePath);
-            console.log("abspath",absolutePath);
             this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
         }
         else {
-            console.log("not found");
             this.onNotFound();
         }
     }

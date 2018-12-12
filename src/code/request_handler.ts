@@ -121,14 +121,14 @@ export class RequestHandler extends PostHandler {
             const wallProtectionResult = await this.runWallIncoming_();
             const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
             if (responseByWall == null) {
-                const pathUrl = urlDetail.pathname.toLowerCase();
+                const pathUrl = urlDetail.pathname;
                 const extension = path.parse(pathUrl).ext;
                 const requestMethod = this.request.method as HTTP_METHOD;
                 if (!Util.isNullOrEmpty(extension)) {
                     this.handleFileRequest(pathUrl, extension);
                 }
                 else {
-                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestMethod);
+                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
                     if (this.routeMatchInfo_ == null) { // no route matched
                         // it may be a folder then
                         this.handleFileRequestForFolder(pathUrl);
