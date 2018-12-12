@@ -1,5 +1,5 @@
 <p align="center">
-<img style="width:400px;" src="logos/fort_js_logo_1500_1025.png">
+<img  src="logos/width_400.png">
 </p>
 
 [![Build Status](https://travis-ci.org/ujjwalguptaofficial/fortjs.svg?branch=master)](https://travis-ci.org/ujjwalguptaofficial/fortjs)
