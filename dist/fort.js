@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.0.0 - 13/12/2018
+ * @license :fortjs - V1.0.1 - 13/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
