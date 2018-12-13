@@ -6,6 +6,7 @@ import * as jsontoxml from "jsontoxml";
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
+import { HttpFormatResult } from "./types";
 
 export class ControllerHandler extends FileHandler {
     private controllerResult_: HttpResult;
@@ -46,10 +47,10 @@ export class ControllerHandler extends FileHandler {
     }
 
     private handleFormatResult_() {
-        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult_.responseFormat) as MIME_TYPE[]);
-        const key = Object.keys(this.controllerResult_.responseFormat).find(qry => qry === negotiateMimeType);
+        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat) as MIME_TYPE[]);
+        const key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
         if (key != null) {
-            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
+            this.controllerResult_.responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
             this.finishResponse_(negotiateMimeType);
         }
         else {
@@ -70,18 +71,18 @@ export class ControllerHandler extends FileHandler {
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     }
 
-    async onResultEvaluated(result: HttpResult) {
+    async onResultEvaluated(result: HttpResult | HttpFormatResult) {
         await this.runWallOutgoing();
-        this.controllerResult_ = result;
+        this.controllerResult_ = result as HttpResult;
         if (this.cookieManager != null) {
             ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
                 this.response.setHeader(__SetCookie, value);
             });
         }
-        if (result.shouldRedirect == null || result.shouldRedirect === false) {
-            if (result.responseFormat == null) {
-                if (result.file == null) {
-                    const contentType = result.contentType || MIME_TYPE.Text;
+        if ((result as HttpResult).shouldRedirect == null || (result as HttpResult).shouldRedirect === false) {
+            if ((result as HttpFormatResult).responseFormat == null) {
+                if ((result as HttpResult).file == null) {
+                    const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                     if (negotiateMimeType != null) {
                         this.finishResponse_(negotiateMimeType);
