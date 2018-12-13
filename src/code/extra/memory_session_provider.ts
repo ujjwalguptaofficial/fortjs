@@ -1,5 +1,6 @@
-import { SessionProvider } from "./abstracts";
-import { ISessionValue } from "./interfaces/session_value";
+import { ISessionValue } from "../interfaces/session_value";
+import { SessionProvider } from "../abstracts/session_provider";
+
 
 interface ISessionValueFormat {
     identifier: string;
@@ -10,7 +11,7 @@ const sessionValues: ISessionValueFormat[] = [];
 
 export class MemorySessionProvider extends SessionProvider {
 
-    async get(key: string): Promise<ISessionValue> {
+    async get(key: string) {
         const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
         if (savedValue != null) {
             const value = savedValue.datas.find(qry => qry.key === key);

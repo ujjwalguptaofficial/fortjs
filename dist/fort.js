@@ -1248,7 +1248,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
-/* harmony import */ var _memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
+/* harmony import */ var _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(39);
 /* harmony import */ var _model_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
 /* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40);
@@ -1321,7 +1321,7 @@ var Fort = /** @class */ (function () {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = option.viewEngine == null ? null : new option.viewEngine();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
             option.sessionProvider;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
@@ -1400,7 +1400,7 @@ var Util = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MemorySessionProvider", function() { return MemorySessionProvider; });
-/* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _abstracts_session_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1554,7 +1554,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
         });
     };
     return MemorySessionProvider;
-}(_abstracts__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"]));
+}(_abstracts_session_provider__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"]));
 
 
 

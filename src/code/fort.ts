@@ -4,7 +4,7 @@ import { AppOption } from "./types";
 import { RouteHandler } from "./route_handler";
 import { Global } from "./global";
 import { Util } from "./util";
-import { MemorySessionProvider } from "./memory_session_provider";
+import { MemorySessionProvider } from "./extra/memory_session_provider";
 import { ErrorHandler } from "./model/error_handler";
 import { __AppName } from "./constant";
 import { RequestHandler } from "./request_handler";
