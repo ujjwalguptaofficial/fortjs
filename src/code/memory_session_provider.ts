@@ -1,6 +1,5 @@
 import { SessionProvider } from "./abstracts";
 import { ISessionValue } from "./interfaces/session_value";
-import { promise } from "./helpers/promise";
 
 interface ISessionValueFormat {
     identifier: string;
@@ -11,60 +10,49 @@ const sessionValues: ISessionValueFormat[] = [];
 
 export class MemorySessionProvider extends SessionProvider {
 
-    get(key: string): Promise<ISessionValue> {
-        return promise<null>((resolve, reject) => {
-            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-            if (savedValue == null) {
-                resolve(false);
-            }
-            else {
-                const value = savedValue.datas.find(qry => qry.key === key);
-                resolve(value);
-            }
-        });
+    async get(key: string): Promise<ISessionValue> {
+        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        if (savedValue != null) {
+            const value = savedValue.datas.find(qry => qry.key === key);
+            return value;
+        }
+        return null;
     }
 
-    isExist(key: string): Promise<boolean> {
-        return promise<null>((resolve, reject) => {
-            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-            if (savedValue == null) {
-                resolve(false);
-            }
-            else {
-                const index = savedValue.datas.findIndex(qry => qry.key === key);
-                resolve(index >= 0);
-            }
-        });
+    async isExist(key: string) {
+        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        if (savedValue == null) {
+            return false;
+        }
+        else {
+            const index = savedValue.datas.findIndex(qry => qry.key === key);
+            return index >= 0;
+        }
     }
 
-    getAll(): Promise<ISessionValue[]> {
-        return promise<null>((resolve, reject) => {
-            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-            resolve(savedValue == null ? [] : savedValue.datas);
-        });
+    async getAll() {
+        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        return savedValue == null ? [] : savedValue.datas;
     }
 
-    set(key: string, val: any): Promise<null> {
-        return promise<null>((resolve, reject) => {
-            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-            if (savedValue == null) {
-                this.createSession().then(() => {
-                    sessionValues.push({
-                        identifier: this.sessionId,
-                        datas: [{
-                            key: key,
-                            value: val
-                        }]
-                    });
-                });
-            }
-            else {
-                savedValue.datas.push({
+    async set(key: string, val: any) {
+        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        if (savedValue == null) {
+            await this.createSession();
+            sessionValues.push({
+                identifier: this.sessionId,
+                datas: [{
                     key: key,
                     value: val
-                });
-            }
-        });
+                }]
+            });
+        }
+        else {
+            savedValue.datas.push({
+                key: key,
+                value: val
+            });
+        }
     }
 
     setMany(values: ISessionValue[]) {
@@ -75,14 +63,11 @@ export class MemorySessionProvider extends SessionProvider {
         );
     }
 
-    remove(key: string): Promise<null> {
-        return promise<null>((resolve, reject) => {
-            const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-            if (savedValue != null) {
-                const index = savedValue.datas.findIndex(q => q.key === key);
-                savedValue.datas.splice(index, 1);
-            }
-            resolve(null);
-        });
+    async remove(key: string) {
+        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        if (savedValue != null) {
+            const index = savedValue.datas.findIndex(q => q.key === key);
+            savedValue.datas.splice(index, 1);
+        }
     }
 }

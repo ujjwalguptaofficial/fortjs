@@ -103,17 +103,12 @@ export class FileHandler extends RequestHandlerHelper {
             const folderRequired = this.getRequiredFolder_(filePath);
             if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
                 const absolutePath = path.join(__CurrentDirectory, filePath);
-                try {
-                    const fileInfo = await this.getFileStats_(absolutePath);
-                    if (fileInfo != null && fileInfo.isDirectory() === true) {
-                        this.handleFileRequestForFolder_(absolutePath, fileInfo);
-                    }
-                    else {
-                        this.onNotFound();
-                    }
+                const fileInfo = await this.getFileStats_(absolutePath);
+                if (fileInfo != null && fileInfo.isDirectory() === true) {
+                    this.handleFileRequestForFolder_(absolutePath, fileInfo);
                 }
-                catch (ex) {
-                    this.onErrorOccured(ex);
+                else {
+                    this.onNotFound();
                 }
             }
             else {
