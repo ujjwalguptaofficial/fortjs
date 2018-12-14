@@ -1,1 +1,1 @@
-export declare function isEnvDev(): boolean;
+export declare const isEnvDev: () => boolean;

@@ -6,8 +6,5 @@ export declare type HttpResult = {
     responseData: any;
     contentType: MIME_TYPE;
     file?: FileResultInfo;
-    responseFormat?: {
-        [type: string]: () => any;
-    };
     shouldRedirect?: boolean;
 };

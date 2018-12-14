@@ -21,6 +21,10 @@ export class Fort {
     walls: Array<typeof Wall> = [];
     httpServer: http.Server;
 
+    private isArray_(value) {
+        return Util.isArray(value);
+    }
+
     private saveAppOption_(option: AppOption) {
         const defaultEtagConfig = {
             type: ETag_Type.Weak
@@ -37,6 +41,9 @@ export class Fort {
         Global.sessionProvider = Util.isNull(option.sessionProvider) ? MemorySessionProvider as any :
             option.sessionProvider as typeof GenericSessionProvider;
         Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        if (this.isArray_(option.foldersAllowed) === false) {
+            throw new Error(`Option foldersAllowed should be an array`);
+        }
         Global.foldersAllowed = Util.isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
         Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();

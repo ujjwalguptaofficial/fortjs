@@ -10,4 +10,8 @@ export class Util {
     static isUnDefined(value) {
         return typeof value === "undefined";
     }
+
+    static isArray(value) {
+        return Array.isArray(value);
+    }
 }

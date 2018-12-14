@@ -6,5 +6,5 @@ export interface IRouteInfo {
     controllerName: string;
     path: string;
     actions: IRouteActionInfo[];
-    shields: typeof GenericShield[];
+    shields: Array<typeof GenericShield>;
 }

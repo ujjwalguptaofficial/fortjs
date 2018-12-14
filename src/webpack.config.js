@@ -6,7 +6,7 @@ const banner = require('./license');
 module.exports = [{
     name: "fort",
     target: "node",
-    entry: "./src/code/index.ts",
+    entry: "./src/index.ts",
     devtool: 'source-map',
     output: {
         path: path.join(__dirname, "./../dist"),
@@ -26,7 +26,7 @@ module.exports = [{
             }
         }]
     },
-    mode: 'none',
+    mode: 'development',
     resolve: {
         extensions: ['.ts'] // '' is needed to find modules like "jquery"
     },

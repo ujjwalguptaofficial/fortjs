@@ -1,2 +1,2 @@
 import { Shield } from "../abstracts";
-export declare function shields(shields: typeof Shield[]): ClassDecorator;
+export declare const shields: (shieldsValue: (typeof Shield)[]) => ClassDecorator;

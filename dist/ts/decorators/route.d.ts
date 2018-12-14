@@ -1,1 +1,1 @@
-export declare function route(format: string): MethodDecorator;
+export declare const route: (format: string) => MethodDecorator;
