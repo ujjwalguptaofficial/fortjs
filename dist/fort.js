@@ -1198,31 +1198,46 @@ var FileHandler = /** @class */ (function (_super) {
             });
         });
     };
+    FileHandler.prototype.checkForFolderAllowAndReplaceWithMappedPathIfExist_ = function (filePath) {
+        var folderRequired = this.getRequiredFolder_(filePath);
+        if (_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
+            return filePath;
+        }
+        else {
+            var mappedPath = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths.find(function (qry) { return qry.newPath === folderRequired; });
+            if (mappedPath != null) {
+                filePath = filePath.replace(folderRequired, folderRequired === "/" ? mappedPath.existingPath + "/" : mappedPath.existingPath);
+                return filePath;
+            }
+        }
+        return null;
+    };
     FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
         var _this = this;
-        var folderRequired = this.getRequiredFolder_(filePath);
+        filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
         var onRouteFound = function () {
             var absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
             _this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
         };
-        console.log("folderpath", folderRequired);
-        if (_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
+        // console.log("folderpath", folderRequired);
+        if (filePath != null) {
             // const absolutePath = path.join(__CurrentDirectory, filePath);
             // this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
             onRouteFound();
         }
         else {
-            var mappedPath = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths.find(function (qry) { return qry.newPath === folderRequired; });
-            console.log("filePath", filePath);
-            console.log("mappedpath", mappedPath);
-            if (mappedPath != null) {
-                filePath = filePath.replace(folderRequired, folderRequired === "/" ? mappedPath.existingPath + "/" : mappedPath.existingPath);
-                console.log("filePath", filePath);
-                onRouteFound();
-            }
-            else {
-                this.onNotFound();
-            }
+            // const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
+            // console.log("filePath", filePath);
+            // console.log("mappedpath", mappedPath);
+            // if (mappedPath != null) {
+            //     filePath = filePath.replace(folderRequired,
+            //         folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
+            //     console.log("filePath", filePath);
+            //     onRouteFound();
+            // }
+            // else {
+            this.onNotFound();
+            // }
         }
     };
     /**
@@ -1265,15 +1280,14 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.handleFileRequestForFolder = function (filePath) {
         return __awaiter(this, void 0, void 0, function () {
-            var folderRequired_1, absolutePath, fileInfo, ex_3;
+            var absolutePath, fileInfo, ex_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
-                        folderRequired_1 = this.getRequiredFolder_(filePath);
+                        filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
                         console.log("filepath", filePath);
-                        console.log("folderpath", folderRequired_1);
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 2];
+                        if (!(filePath != null)) return [3 /*break*/, 2];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
                     case 1:

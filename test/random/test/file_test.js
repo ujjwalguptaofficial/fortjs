@@ -92,4 +92,22 @@ describe("/file test", () => {
         });
     })
 
+    it("map file test - `/dist`", (done) => {
+        request.get('/dist').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    })
+
+    it("map file test - `/dist/`", (done) => {
+        request.get('/dist/').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    })
+
 });

@@ -64,33 +64,51 @@ export class FileHandler extends RequestHandlerHelper {
         return null;
     }
 
-    protected handleFileRequest(filePath: string, fileType: string) {
+    private checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath: string) {
         const folderRequired = this.getRequiredFolder_(filePath);
+        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+            return filePath;
+        }
+        else {
+            const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
+            if (mappedPath != null) {
+                filePath = filePath.replace(folderRequired,
+                    folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
+                return filePath;
+            }
+        }
+        return null;
+
+    }
+
+    protected handleFileRequest(filePath: string, fileType: string) {
+        filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
         const onRouteFound = () => {
             const absolutePath = path.join(__CurrentDirectory, filePath);
             this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
         }
-        console.log("folderpath", folderRequired);
-        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+        // console.log("folderpath", folderRequired);
+
+        if (filePath != null) {
             // const absolutePath = path.join(__CurrentDirectory, filePath);
             // this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
             onRouteFound();
         }
         else {
-            const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
-            console.log("filePath", filePath);
-            console.log("mappedpath", mappedPath);
+            // const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
+            // console.log("filePath", filePath);
+            // console.log("mappedpath", mappedPath);
 
-            if (mappedPath != null) {
+            // if (mappedPath != null) {
 
-                filePath = filePath.replace(folderRequired,
-                    folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
-                console.log("filePath", filePath);
-                onRouteFound();
-            }
-            else {
-                this.onNotFound();
-            }
+            //     filePath = filePath.replace(folderRequired,
+            //         folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
+            //     console.log("filePath", filePath);
+            //     onRouteFound();
+            // }
+            // else {
+            this.onNotFound();
+            // }
         }
     }
 
@@ -124,10 +142,10 @@ export class FileHandler extends RequestHandlerHelper {
 
     protected async handleFileRequestForFolder(filePath: string) {
         try {
-            const folderRequired = this.getRequiredFolder_(filePath);
+            filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
             console.log("filepath", filePath);
-            console.log("folderpath", folderRequired);
-            if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+            // console.log("folderpath", folderRequired);
+            if (filePath != null) {
                 const absolutePath = path.join(__CurrentDirectory, filePath);
                 const fileInfo = await this.getFileStats_(absolutePath);
                 if (fileInfo != null && fileInfo.isDirectory() === true) {
