@@ -1213,31 +1213,13 @@ var FileHandler = /** @class */ (function (_super) {
         return null;
     };
     FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
-        var _this = this;
         filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
-        var onRouteFound = function () {
-            var absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
-            _this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
-        };
-        // console.log("folderpath", folderRequired);
         if (filePath != null) {
-            // const absolutePath = path.join(__CurrentDirectory, filePath);
-            // this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
-            onRouteFound();
+            var absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
+            this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
         }
         else {
-            // const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
-            // console.log("filePath", filePath);
-            // console.log("mappedpath", mappedPath);
-            // if (mappedPath != null) {
-            //     filePath = filePath.replace(folderRequired,
-            //         folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
-            //     console.log("filePath", filePath);
-            //     onRouteFound();
-            // }
-            // else {
             this.onNotFound();
-            // }
         }
     };
     /**
@@ -1286,7 +1268,6 @@ var FileHandler = /** @class */ (function (_super) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
                         filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
-                        console.log("filepath", filePath);
                         if (!(filePath != null)) return [3 /*break*/, 2];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
