@@ -8,12 +8,17 @@ import * as Negotiator from "negotiator";
 import { CookieManager } from "./model/cookie_manager";
 import { Wall } from "./abstracts/wall";
 import { IException } from "./interfaces/exception";
+import { Util } from "./util";
 export class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
 
     protected wallInstances: Wall[] = [];
+
+    protected isNullOrEmpty(value) {
+        return Util.isNullOrEmpty(value);
+    }
 
     protected async runWallOutgoing() {
         return Promise.all(this.wallInstances.reverse().map(async wallObj => {

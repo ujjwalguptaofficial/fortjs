@@ -1140,10 +1140,15 @@ var FileHandler = /** @class */ (function (_super) {
     }
     FileHandler.prototype.getRequiredFolder_ = function (filePath) {
         var splittedValue = filePath.split("/");
-        if (splittedValue.length > 2) {
+        if (splittedValue.length > 2 || this.isNullOrEmpty(path__WEBPACK_IMPORTED_MODULE_2__["parse"](filePath).ext)) {
             return splittedValue[1];
         }
-        return splittedValue[1] === "" ? "/" : splittedValue[1];
+        // else if (path.parse(filePath).ext == null) { // check for file extension
+        //     // e.g - /contents
+        //     return `/${splittedValue[1]}`;
+        // }
+        // return splittedValue[0] === "" ? "/" : splittedValue[1];
+        return "/";
     };
     FileHandler.prototype.getFileStats_ = function (filePath) {
         return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_7__["promise"])(function (res, rej) {
@@ -1194,13 +1199,30 @@ var FileHandler = /** @class */ (function (_super) {
         });
     };
     FileHandler.prototype.handleFileRequest = function (filePath, fileType) {
+        var _this = this;
         var folderRequired = this.getRequiredFolder_(filePath);
-        if (_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
+        var onRouteFound = function () {
             var absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
-            this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+            _this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+        };
+        console.log("folderpath", folderRequired);
+        if (_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired; }) >= 0) {
+            // const absolutePath = path.join(__CurrentDirectory, filePath);
+            // this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+            onRouteFound();
         }
         else {
-            this.onNotFound();
+            var mappedPath = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths.find(function (qry) { return qry.newPath === folderRequired; });
+            console.log("filePath", filePath);
+            console.log("mappedpath", mappedPath);
+            if (mappedPath != null) {
+                filePath = filePath.replace(folderRequired, folderRequired === "/" ? mappedPath.existingPath + "/" : mappedPath.existingPath);
+                console.log("filePath", filePath);
+                onRouteFound();
+            }
+            else {
+                this.onNotFound();
+            }
         }
     };
     /**
@@ -1249,6 +1271,8 @@ var FileHandler = /** @class */ (function (_super) {
                     case 0:
                         _a.trys.push([0, 4, , 5]);
                         folderRequired_1 = this.getRequiredFolder_(filePath);
+                        console.log("filepath", filePath);
+                        console.log("folderpath", folderRequired_1);
                         if (!(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed.findIndex(function (qry) { return qry === folderRequired_1; }) >= 0)) return [3 /*break*/, 2];
                         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](_constant__WEBPACK_IMPORTED_MODULE_3__["__CurrentDirectory"], filePath);
                         return [4 /*yield*/, this.getFileStats_(absolutePath)];
@@ -1424,22 +1448,36 @@ var Fort = /** @class */ (function () {
         if (option == null) {
             option = {};
         }
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.port) ? 4000 : option.port;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = option.viewEngine == null ? null : new option.viewEngine();
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = option.port == null ? 4000 : option.port;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionProvider) ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
-            option.sessionProvider;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        if (this.isArray_(option.foldersAllowed) === false) {
+        if (option.foldersAllowed == null) {
+            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = [];
+        }
+        else if (this.isArray_(option.foldersAllowed) === false) {
             throw new Error("Option foldersAllowed should be an array");
         }
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.errorHandler) ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : option.errorHandler;
+        else {
+            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = option.foldersAllowed;
+        }
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
+            this.sessionProvider;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
+        if (option.mappedPaths == null) {
+            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths = [];
+        }
+        else if (this.isArray_(option.mappedPaths) === false) {
+            throw new Error("option mappedPaths should be array");
+        }
+        else {
+            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths = option.mappedPaths;
+        }
     };
     Fort.prototype.create = function (option) {
         return __awaiter(this, void 0, void 0, function () {
@@ -1473,6 +1511,10 @@ var Fort = /** @class */ (function () {
         return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
             _this.httpServer.close(res);
         });
+    };
+    Fort.prototype.mapPath = function (oldPath, newPath) {
+    };
+    Fort.prototype.mapVirtualPath = function (actualPath, mappedPath) {
     };
     return Fort;
 }());
@@ -2679,7 +2721,7 @@ var RequestHandler = /** @class */ (function (_super) {
         }
     };
     RequestHandler.prototype.setPreHeader_ = function () {
-        this.response.setHeader('X-Powered-By', _constant__WEBPACK_IMPORTED_MODULE_1__["__AppName"]);
+        this.response.setHeader('X-Powered-By', _global__WEBPACK_IMPORTED_MODULE_2__["Global"].appName);
         this.response.setHeader('Vary', 'Accept-Encoding');
     };
     RequestHandler.prototype.execute_ = function () {
@@ -2801,6 +2843,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./global */ "./src/global.ts");
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! negotiator */ "negotiator");
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./src/util.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -2841,10 +2884,14 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
 var RequestHandlerHelper = /** @class */ (function () {
     function RequestHandlerHelper() {
         this.wallInstances = [];
     }
+    RequestHandlerHelper.prototype.isNullOrEmpty = function (value) {
+        return _util__WEBPACK_IMPORTED_MODULE_5__["Util"].isNullOrEmpty(value);
+    };
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;

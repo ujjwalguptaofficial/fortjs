@@ -6,6 +6,9 @@ import { FortViewEngine } from "eshtml";
 import { CustomErrorHandler } from "./extra/custom_error_handler";
 import { RequestLogger } from './walls/request_logger';
 class App extends Fort {
+    viewEngine = FortViewEngine;
+    errorHandler = CustomErrorHandler;
+
     constructor() {
         super();
         this.walls = [RequestLogger];
@@ -25,7 +28,12 @@ class App extends Fort {
 new App().create({
     port: 8080,
     foldersAllowed: ["contents"],
-    viewEngine: FortViewEngine,
-    errorHandler: CustomErrorHandler,
+    mappedPaths: [{
+        existingPath: "contents",
+        newPath: "/"
+    }, {
+        existingPath: "contents",
+        newPath: "dist"
+    }],
     defaultPath: "/default"
 })

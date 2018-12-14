@@ -14,10 +14,15 @@ export class FileHandler extends RequestHandlerHelper {
 
     private getRequiredFolder_(filePath: string) {
         const splittedValue = filePath.split("/");
-        if (splittedValue.length > 2) {
+        if (splittedValue.length > 2 || this.isNullOrEmpty(path.parse(filePath).ext)) {
             return splittedValue[1];
         }
-        return splittedValue[1] === "" ? "/" : splittedValue[1];
+        // else if (path.parse(filePath).ext == null) { // check for file extension
+        //     // e.g - /contents
+        //     return `/${splittedValue[1]}`;
+        // }
+        // return splittedValue[0] === "" ? "/" : splittedValue[1];
+        return "/";
     }
 
     private getFileStats_(filePath) {
@@ -61,12 +66,31 @@ export class FileHandler extends RequestHandlerHelper {
 
     protected handleFileRequest(filePath: string, fileType: string) {
         const folderRequired = this.getRequiredFolder_(filePath);
-        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+        const onRouteFound = () => {
             const absolutePath = path.join(__CurrentDirectory, filePath);
             this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
         }
+        console.log("folderpath", folderRequired);
+        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
+            // const absolutePath = path.join(__CurrentDirectory, filePath);
+            // this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+            onRouteFound();
+        }
         else {
-            this.onNotFound();
+            const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
+            console.log("filePath", filePath);
+            console.log("mappedpath", mappedPath);
+
+            if (mappedPath != null) {
+
+                filePath = filePath.replace(folderRequired,
+                    folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
+                console.log("filePath", filePath);
+                onRouteFound();
+            }
+            else {
+                this.onNotFound();
+            }
         }
     }
 
@@ -101,6 +125,8 @@ export class FileHandler extends RequestHandlerHelper {
     protected async handleFileRequestForFolder(filePath: string) {
         try {
             const folderRequired = this.getRequiredFolder_(filePath);
+            console.log("filepath", filePath);
+            console.log("folderpath", folderRequired);
             if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
                 const absolutePath = path.join(__CurrentDirectory, filePath);
                 const fileInfo = await this.getFileStats_(absolutePath);

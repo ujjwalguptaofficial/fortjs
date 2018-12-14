@@ -11,7 +11,7 @@ let {
 } = require('./common');
 
 describe("/file test", () => {
-    
+
     it('/contents/ => with slace ', (done) => {
         request.get('/contents/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
@@ -73,5 +73,23 @@ describe("/file test", () => {
             done();
         });
     });
+
+    it("map file test - `/index.html`", (done) => {
+        request.get('/index.html').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    })
+
+    it("map file test - `/dist/index.html`", (done) => {
+        request.get('/dist/index.html').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            done();
+        });
+    })
 
 });

@@ -1,7 +1,5 @@
-import { SessionProvider } from "../abstracts/session_provider";
-import { ViewEngine } from "../abstracts/view_engine";
-import { ErrorHandler } from "../model";
 import { EtagOption } from "./etag_option";
+import { PathMap } from "./path_map";
 
 export type AppOption = {
     /**
@@ -10,13 +8,6 @@ export type AppOption = {
      * @type {number}
      */
     port?: number;
-
-    /**
-     * view engine use to render the view
-     *
-     * @type {typeof ViewEngine}
-     */
-    viewEngine?: typeof ViewEngine;
 
     /**
      * Whether to parse cookie or not, default - true
@@ -34,13 +25,6 @@ export type AppOption = {
     shouldParsePost?: boolean;
 
     /**
-     * sessionProvider class, default - MemorySessionProvider
-     *
-     * @type {typeof SessionProvider}
-     */
-    sessionProvider?: typeof SessionProvider;
-
-    /**
      * session timeout in minute - default is 60 minute
      *
      * @type {number}
@@ -54,13 +38,6 @@ export type AppOption = {
      * @type {string[]}
      */
     foldersAllowed?: string[];
-
-    /**
-     * Custom error handler class
-     *
-     * @type {typeof ErrorHandler}
-     */
-    errorHandler?: typeof ErrorHandler;
 
     /**
      * path to be used when url is root.
@@ -83,5 +60,19 @@ export type AppOption = {
      *
      * @type {EtagOption}
      */
-    eTag?: EtagOption
+    eTag?: EtagOption;
+
+    /**
+     * map a non existing path
+     *
+     * @type {PathMap[]}
+     */
+    virtualPaths?: PathMap[];
+
+    /**
+     * map an existing paths
+     *
+     * @type {PathMap[]}
+     */
+    mappedPaths?: PathMap[];
 };

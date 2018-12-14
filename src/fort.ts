@@ -1,5 +1,5 @@
 import { Route } from "./types/route";
-import { Wall } from "./abstracts";
+import { Wall, ViewEngine, SessionProvider } from "./abstracts";
 import { AppOption } from "./types";
 import { RouteHandler } from "./route_handler";
 import { Global } from "./global";
@@ -21,6 +21,27 @@ export class Fort {
     walls: Array<typeof Wall> = [];
     httpServer: http.Server;
 
+    /**
+    * view engine use to render the view
+    *
+    * @type {typeof ViewEngine}
+    */
+    viewEngine?: typeof ViewEngine;
+
+    /**
+     * sessionProvider class, default - MemorySessionProvider
+     *
+     * @type {typeof SessionProvider}
+     */
+    sessionProvider?: typeof SessionProvider;
+
+    /**
+     * Custom error handler class
+     *
+     * @type {typeof ErrorHandler}
+     */
+    errorHandler?: typeof ErrorHandler;
+
     private isArray_(value) {
         return Util.isArray(value);
     }
@@ -34,22 +55,38 @@ export class Fort {
 
             };
         }
-        Global.port = Util.isNull(option.port) ? 4000 : option.port;
-        Global.viewEngine = option.viewEngine == null ? null : new (option.viewEngine as any)();
-        Global.shouldParseCookie = Util.isNull(option.shouldParseCookie) ? true : option.shouldParseCookie;
+        Global.port = option.port == null ? 4000 : option.port;
+        Global.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
         Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        Global.sessionProvider = Util.isNull(option.sessionProvider) ? MemorySessionProvider as any :
-            option.sessionProvider as typeof GenericSessionProvider;
         Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        if (this.isArray_(option.foldersAllowed) === false) {
+        if (option.foldersAllowed == null) {
+            Global.foldersAllowed = [];
+        }
+        else if (this.isArray_(option.foldersAllowed) === false) {
             throw new Error(`Option foldersAllowed should be an array`);
         }
-        Global.foldersAllowed = Util.isNull(option.foldersAllowed) ? [] : option.foldersAllowed;
-        Global.errorHandler = Util.isNull(option.errorHandler) ? ErrorHandler : option.errorHandler;
+        else {
+            Global.foldersAllowed = option.foldersAllowed;
+        }
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
         Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         Global.walls = this.walls as any;
+        Global.viewEngine = this.viewEngine == null ? null : new (this.viewEngine as any)();
+        Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
+            this.sessionProvider as typeof GenericSessionProvider;
+        Global.errorHandler = this.errorHandler ? ErrorHandler : this.errorHandler;
+        if (option.mappedPaths == null) {
+            Global.mappedPaths = [];
+        }
+        else if (this.isArray_(option.mappedPaths)===false) {
+            throw new Error(`option mappedPaths should be array`);
+        }
+        else {
+            Global.mappedPaths = option.mappedPaths;
+        }
+
+
     }
 
     async create(option: AppOption): Promise<any> {
@@ -81,5 +118,13 @@ export class Fort {
         return promise((res, rej) => {
             this.httpServer.close(res);
         });
+    }
+
+    mapPath(oldPath: string, newPath: string) {
+
+    }
+
+    mapVirtualPath(actualPath: string, mappedPath: string) {
+
     }
 }
