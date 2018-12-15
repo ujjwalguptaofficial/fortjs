@@ -1,10 +1,10 @@
 {
   "name": "simple",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install:lib": "npm i ../../fortjs-1.0.1.tgz --no-save",
+    "install:lib": "npm i ../../fortjs-1.1.0.tgz --no-save",
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
     "build": "webpack --config webpack.config.js",

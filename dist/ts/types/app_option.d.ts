@@ -54,12 +54,6 @@ export declare type AppOption = {
      */
     eTag?: EtagOption;
     /**
-     * map a non existing path
-     *
-     * @type {PathMap[]}
-     */
-    virtualPaths?: PathMap[];
-    /**
      * map an existing paths
      *
      * @type {PathMap[]}
