@@ -25,7 +25,7 @@ export class PostHandler extends ControllerHandler {
         try {
             let postData;
             const bodyBuffer = await this.getPostRawData_();
-            let contentType = this.request.headers[__ContentType];
+            let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
             if (contentType != null) {
                 contentType = ContentType.parse(contentType).type;
             }

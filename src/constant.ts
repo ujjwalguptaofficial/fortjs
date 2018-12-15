@@ -1,6 +1,6 @@
 import { Global } from "./global";
 /* tslint:disable */
-export const __ContentType = "content-type";
+export const __ContentType = "Content-Type";
 export const __AppName = "fort";
 export const __AppSessionIdentifier = `${Global.appName}_session_id`;
 export const __Cookie = "cookie";
