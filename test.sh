@@ -9,7 +9,7 @@ ls
 npm run install:build:test
 
 #run file test
-cd..
+cd ..
 cd filetest
 ls
 npm run install:build:test
