@@ -27,7 +27,7 @@ export class PostHandler extends ControllerHandler {
             const bodyBuffer = await this.getPostRawData_();
             let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
             if (contentType != null) {
-                contentType = ContentType.parse(contentType).type;
+                contentType = ContentType.parse(contentType as string).type;
             }
             switch (contentType) {
                 case MIME_TYPE.Json:
