@@ -124,7 +124,7 @@ export class RequestHandler extends PostHandler {
                 const pathUrl = urlDetail.pathname;
                 const extension = path.parse(pathUrl).ext;
                 const requestMethod = this.request.method as HTTP_METHOD;
-                if (!Util.isNullOrEmpty(extension)) {
+                if (Util.isNullOrEmpty(extension) === false) {
                     this.handleFileRequest(pathUrl, extension);
                 }
                 else {

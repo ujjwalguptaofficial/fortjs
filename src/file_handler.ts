@@ -17,11 +17,6 @@ export class FileHandler extends RequestHandlerHelper {
         if (splittedValue.length > 2 || this.isNullOrEmpty(path.parse(filePath).ext)) {
             return splittedValue[1];
         }
-        // else if (path.parse(filePath).ext == null) { // check for file extension
-        //     // e.g - /contents
-        //     return `/${splittedValue[1]}`;
-        // }
-        // return splittedValue[0] === "" ? "/" : splittedValue[1];
         return "/";
     }
 

@@ -50,11 +50,7 @@ export class Fort {
         const defaultEtagConfig = {
             type: ETag_Type.Weak
         } as EtagOption;
-        if (option == null) {
-            option = {
 
-            };
-        }
         Global.port = option.port == null ? 4000 : option.port;
         Global.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
         Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
@@ -66,7 +62,14 @@ export class Fort {
             throw new Error(`Option foldersAllowed should be an array`);
         }
         else {
-            Global.foldersAllowed = option.foldersAllowed;
+            // remove slace from string
+            Global.foldersAllowed = option.foldersAllowed.map((val) => {
+                if (val[0] === "/") {
+                    return val.substr(1);
+                }
+                return val;
+            });
+            //  = option.foldersAllowed;
         }
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
@@ -75,23 +78,41 @@ export class Fort {
         Global.viewEngine = this.viewEngine == null ? null : new (this.viewEngine as any)();
         Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
-        Global.errorHandler = this.errorHandler ? ErrorHandler : this.errorHandler;
+        Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
         if (option.mappedPaths == null) {
             Global.mappedPaths = [];
         }
-        else if (this.isArray_(option.mappedPaths)===false) {
+        else if (this.isArray_(option.mappedPaths) === false) {
             throw new Error(`option mappedPaths should be array`);
         }
         else {
-            Global.mappedPaths = option.mappedPaths;
+            Global.mappedPaths = option.mappedPaths.map(val => {
+                if (val.existingPath[0] === "/" && val.existingPath !== "/") {
+                    val.existingPath = val.existingPath.substr(1)
+                }
+                if (val.newPath[0] === "/" && val.newPath !== "/") {
+                    val.newPath = val.newPath.substr(1)
+                }
+                return val;
+            })
         }
 
 
     }
 
     async create(option: AppOption): Promise<any> {
-        if (option.defaultPath[0] === "/") {
+        if (option == null) {
+            option = {
+
+            };
+        };
+
+        if (option.defaultPath != null && option.defaultPath[0] === "/") {
             option.defaultPath = option.defaultPath.substr(1);
+        }
+
+        if (this.routes == null) {
+            this.routes = [];
         }
         this.routes.forEach(route => {
             if (route.path[0] === "/") {

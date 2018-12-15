@@ -1143,11 +1143,6 @@ var FileHandler = /** @class */ (function (_super) {
         if (splittedValue.length > 2 || this.isNullOrEmpty(path__WEBPACK_IMPORTED_MODULE_2__["parse"](filePath).ext)) {
             return splittedValue[1];
         }
-        // else if (path.parse(filePath).ext == null) { // check for file extension
-        //     // e.g - /contents
-        //     return `/${splittedValue[1]}`;
-        // }
-        // return splittedValue[0] === "" ? "/" : splittedValue[1];
         return "/";
     };
     FileHandler.prototype.getFileStats_ = function (filePath) {
@@ -1440,9 +1435,6 @@ var Fort = /** @class */ (function () {
         var defaultEtagConfig = {
             type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
         };
-        if (option == null) {
-            option = {};
-        }
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = option.port == null ? 4000 : option.port;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
@@ -1454,7 +1446,14 @@ var Fort = /** @class */ (function () {
             throw new Error("Option foldersAllowed should be an array");
         }
         else {
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = option.foldersAllowed;
+            // remove slace from string
+            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].foldersAllowed = option.foldersAllowed.map(function (val) {
+                if (val[0] === "/") {
+                    return val.substr(1);
+                }
+                return val;
+            });
+            //  = option.foldersAllowed;
         }
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
@@ -1463,7 +1462,7 @@ var Fort = /** @class */ (function () {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
             this.sessionProvider;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
         if (option.mappedPaths == null) {
             _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths = [];
         }
@@ -1471,14 +1470,29 @@ var Fort = /** @class */ (function () {
             throw new Error("option mappedPaths should be array");
         }
         else {
-            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths = option.mappedPaths;
+            _global__WEBPACK_IMPORTED_MODULE_1__["Global"].mappedPaths = option.mappedPaths.map(function (val) {
+                if (val.existingPath[0] === "/" && val.existingPath !== "/") {
+                    val.existingPath = val.existingPath.substr(1);
+                }
+                if (val.newPath[0] === "/" && val.newPath !== "/") {
+                    val.newPath = val.newPath.substr(1);
+                }
+                return val;
+            });
         }
     };
     Fort.prototype.create = function (option) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (option.defaultPath[0] === "/") {
+                if (option == null) {
+                    option = {};
+                }
+                ;
+                if (option.defaultPath != null && option.defaultPath[0] === "/") {
                     option.defaultPath = option.defaultPath.substr(1);
+                }
+                if (this.routes == null) {
+                    this.routes = [];
                 }
                 this.routes.forEach(function (route) {
                     if (route.path[0] === "/") {
@@ -2738,7 +2752,7 @@ var RequestHandler = /** @class */ (function (_super) {
                         pathUrl = urlDetail.pathname;
                         extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
                         requestMethod = this.request.method;
-                        if (!!_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension)) return [3 /*break*/, 2];
+                        if (!(_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension) === false)) return [3 /*break*/, 2];
                         this.handleFileRequest(pathUrl, extension);
                         return [3 /*break*/, 8];
                     case 2:
