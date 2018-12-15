@@ -28,21 +28,13 @@ class App extends Fort {
 
 new App().create({
     port: 8080,
-    // foldersAllowed: ["contents"],
-    // mappedPaths: [{
-    //     existingPath: "contents",
-    //     newPath: "/"
-    // }, {
-    //     existingPath: "contents",
-    //     newPath: "dist"
-    // }],
     folders: [{
         alias: "contents",
         path: path.join(__CurrentPath, "contents")
     }, {
         alias: "dist",
         path: path.join(__CurrentPath, "contents")
-    },{
+    }, {
         alias: "/",
         path: path.join(__CurrentPath, "contents")
     }],

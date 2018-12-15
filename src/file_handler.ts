@@ -71,8 +71,6 @@ export class FileHandler extends RequestHandlerHelper {
 
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
         const fileInfo = this.getFileInfoFromUrl_(urlPath);
-        console.log("fileInfo", fileInfo);
-
         const getAbsPath = () => {
             const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
@@ -80,14 +78,6 @@ export class FileHandler extends RequestHandlerHelper {
             }
             return null;
         }
-        // const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
-        // if (folder != null) {
-        //     return path.join(folder.path, fileInfo.file);
-        // }
-        // else {
-        //     return
-        // }
-        // return null;
         let absPath = getAbsPath();
         if (absPath == null) {
             fileInfo.folder = "/";
@@ -100,7 +90,6 @@ export class FileHandler extends RequestHandlerHelper {
 
     protected handleFileRequest(urlPath: string, fileType: string) {
         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
-        console.log("filePath", absFilePath);
         if (absFilePath != null) {
             this.handleFileRequestFromAbsolutePath(absFilePath, fileType);
         }

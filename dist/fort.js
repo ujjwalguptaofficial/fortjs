@@ -1200,7 +1200,6 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.checkForFolderAllowAndReturnPath_ = function (urlPath) {
         var fileInfo = this.getFileInfoFromUrl_(urlPath);
-        console.log("fileInfo", fileInfo);
         var getAbsPath = function () {
             var folder = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders.find(function (qry) { return qry.alias === fileInfo.folder; });
             if (folder != null) {
@@ -1208,14 +1207,6 @@ var FileHandler = /** @class */ (function (_super) {
             }
             return null;
         };
-        // const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
-        // if (folder != null) {
-        //     return path.join(folder.path, fileInfo.file);
-        // }
-        // else {
-        //     return
-        // }
-        // return null;
         var absPath = getAbsPath();
         if (absPath == null) {
             fileInfo.folder = "/";
@@ -1226,7 +1217,6 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.handleFileRequest = function (urlPath, fileType) {
         var absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
-        console.log("filePath", absFilePath);
         if (absFilePath != null) {
             this.handleFileRequestFromAbsolutePath(absFilePath, fileType);
         }
