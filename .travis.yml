@@ -15,6 +15,7 @@ script:
   - npm run install:build:test
   - cd..
   - cd filetest
+  - npm install
   - npm run install:build:test
 
 
