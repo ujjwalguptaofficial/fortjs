@@ -55,21 +55,11 @@ export class Fort {
         Global.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
         Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
         Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        if (option.foldersAllowed == null) {
-            Global.foldersAllowed = [];
-        }
-        else if (this.isArray_(option.foldersAllowed) === false) {
-            throw new Error(`Option foldersAllowed should be an array`);
+        if (this.isArray_(option.folders) === false) {
+            throw new Error(`Option folders should be an array`);
         }
         else {
-            // remove slace from string
-            Global.foldersAllowed = option.foldersAllowed.map((val) => {
-                if (val[0] === "/") {
-                    return val.substr(1);
-                }
-                return val;
-            });
-            //  = option.foldersAllowed;
+            Global.folders = option.folders == null ? [] : option.folders;
         }
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
@@ -79,23 +69,7 @@ export class Fort {
         Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
-        if (option.mappedPaths == null) {
-            Global.mappedPaths = [];
-        }
-        else if (this.isArray_(option.mappedPaths) === false) {
-            throw new Error(`option mappedPaths should be array`);
-        }
-        else {
-            Global.mappedPaths = option.mappedPaths.map(val => {
-                if (val.existingPath[0] === "/" && val.existingPath !== "/") {
-                    val.existingPath = val.existingPath.substr(1)
-                }
-                if (val.newPath[0] === "/" && val.newPath !== "/") {
-                    val.newPath = val.newPath.substr(1)
-                }
-                return val;
-            })
-        }
+
 
 
     }

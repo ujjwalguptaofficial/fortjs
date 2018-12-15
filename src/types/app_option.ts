@@ -1,5 +1,5 @@
 import { EtagOption } from "./etag_option";
-import { PathMap } from "./path_map";
+import { FolderMap } from "./folder_map";
 
 export type AppOption = {
     /**
@@ -33,13 +33,6 @@ export type AppOption = {
     sessionTimeOut?: number;
 
     /**
-     * folders which should be visible to requests. By default nothing is allowed.
-     *
-     * @type {string[]}
-     */
-    foldersAllowed?: string[];
-
-    /**
      * path to be used when url is root.
      *
      * @type {string}
@@ -62,10 +55,11 @@ export type AppOption = {
      */
     eTag?: EtagOption;
 
+
     /**
-     * map an existing paths
+     * folders which should be visible to requests. By default nothing is allowed.
      *
-     * @type {PathMap[]}
+     * @type {FolderMap[]}
      */
-    mappedPaths?: PathMap[];
+    folders?: FolderMap[];
 };

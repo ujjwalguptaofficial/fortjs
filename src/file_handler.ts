@@ -1,7 +1,7 @@
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { Global } from "./global";
 import * as path from "path";
-import { __CurrentDirectory, __ContentType } from "./constant";
+import { __CurrentPath, __ContentType } from "./constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
 import { getMimeTypeFromExtension } from "./helpers/get_mime_type_from_extension";
@@ -10,14 +10,24 @@ import * as etag from "etag";
 import { ETag_Type } from "./enums/etag_type";
 import * as fresh from "fresh";
 import { MIME_TYPE } from "./enums";
+
+type FileInfo = {
+    folder: string,
+    file: string;
+}
 export class FileHandler extends RequestHandlerHelper {
 
-    private getRequiredFolder_(filePath: string) {
-        const splittedValue = filePath.split("/");
-        if (splittedValue.length > 2 || this.isNullOrEmpty(path.parse(filePath).ext)) {
-            return splittedValue[1];
+    private getFileInfoFromUrl_(urlPath: string) {
+        const splittedValue = urlPath.split("/");
+        const fileInfo = {
+            folder: "/",
+            file: ""
+        } as FileInfo;
+        if (splittedValue.length > 2 || !this.isNullOrEmpty(path.parse(urlPath).ext)) {
+            fileInfo.folder = splittedValue[1];
+            fileInfo.file = splittedValue.splice(2).join("/");
         }
-        return "/";
+        return fileInfo;
     }
 
     private getFileStats_(filePath) {
@@ -59,28 +69,40 @@ export class FileHandler extends RequestHandlerHelper {
         return null;
     }
 
-    private checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath: string) {
-        const folderRequired = this.getRequiredFolder_(filePath);
-        if (Global.foldersAllowed.findIndex(qry => qry === folderRequired) >= 0) {
-            return filePath;
-        }
-        else {
-            const mappedPath = Global.mappedPaths.find(qry => qry.newPath === folderRequired);
-            if (mappedPath != null) {
-                filePath = filePath.replace(folderRequired,
-                    folderRequired === "/" ? `${mappedPath.existingPath}/` : mappedPath.existingPath);
-                return filePath;
+    private checkForFolderAllowAndReturnPath_(urlPath: string) {
+        const fileInfo = this.getFileInfoFromUrl_(urlPath);
+        console.log("fileInfo", fileInfo);
+
+        const getAbsPath = () => {
+            const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
+            if (folder != null) {
+                return path.join(folder.path, fileInfo.file);
             }
+            return null;
         }
-        return null;
+        // const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
+        // if (folder != null) {
+        //     return path.join(folder.path, fileInfo.file);
+        // }
+        // else {
+        //     return
+        // }
+        // return null;
+        let absPath = getAbsPath();
+        if (absPath == null) {
+            fileInfo.folder = "/";
+            fileInfo.file = urlPath;
+            absPath = getAbsPath();
+        }
+        return absPath;
 
     }
 
-    protected handleFileRequest(filePath: string, fileType: string) {
-        filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
-        if (filePath != null) {
-            const absolutePath = path.join(__CurrentDirectory, filePath);
-            this.handleFileRequestFromAbsolutePath(absolutePath, fileType);
+    protected handleFileRequest(urlPath: string, fileType: string) {
+        const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
+        console.log("filePath", absFilePath);
+        if (absFilePath != null) {
+            this.handleFileRequestFromAbsolutePath(absFilePath, fileType);
         }
         else {
             this.onNotFound();
@@ -115,14 +137,13 @@ export class FileHandler extends RequestHandlerHelper {
         return null;
     }
 
-    protected async handleFileRequestForFolder(filePath: string) {
+    protected async handleFileRequestForFolder(urlPath: string) {
         try {
-            filePath = this.checkForFolderAllowAndReplaceWithMappedPathIfExist_(filePath);
-            if (filePath != null) {
-                const absolutePath = path.join(__CurrentDirectory, filePath);
-                const fileInfo = await this.getFileStats_(absolutePath);
+            const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
+            if (absFilePath != null) {
+                const fileInfo = await this.getFileStats_(absFilePath);
                 if (fileInfo != null && fileInfo.isDirectory() === true) {
-                    this.handleFileRequestForFolder_(absolutePath, fileInfo);
+                    this.handleFileRequestForFolder_(absFilePath, fileInfo);
                 }
                 else {
                     this.onNotFound();

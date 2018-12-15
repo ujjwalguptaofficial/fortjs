@@ -4,7 +4,7 @@ import { GenericWall } from "./model/generic_wall";
 import { ViewEngine } from "./abstracts/view_engine";
 import { ErrorHandler } from "./model/error_handler";
 import { EtagOption } from "./types/etag_option";
-import { PathMap } from "./types/path_map";
+import { FolderMap } from "./types/folder_map";
 
 export class Global {
     static request: http.IncomingMessage;
@@ -16,7 +16,6 @@ export class Global {
     static sessionProvider: typeof GenericSessionProvider;
     static sessionTimeOut?: number;
     static viewEngine: ViewEngine;
-    static foldersAllowed: string[];
     static walls: Array<typeof GenericWall> = [];
     static errorHandler: typeof ErrorHandler;
     static defaultPath?: string;
@@ -26,5 +25,7 @@ export class Global {
 
     static eTag?: EtagOption;
 
-    static mappedPaths?: PathMap[];
+    static folders?: FolderMap[];
+
+    static defaultFolder: string;
 }

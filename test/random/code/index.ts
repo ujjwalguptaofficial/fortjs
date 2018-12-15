@@ -1,10 +1,11 @@
 export * from './views/index';
 
-import { Fort } from "fortjs";
+import { Fort, __CurrentPath } from "fortjs";
 import { DefaultController, RandomController, UserController } from "./controllers";
 import { FortViewEngine } from "eshtml";
 import { CustomErrorHandler } from "./extra/custom_error_handler";
 import { RequestLogger } from './walls/request_logger';
+import * as path from "path";
 class App extends Fort {
     viewEngine = FortViewEngine;
     errorHandler = CustomErrorHandler;
@@ -27,13 +28,24 @@ class App extends Fort {
 
 new App().create({
     port: 8080,
-    foldersAllowed: ["contents"],
-    mappedPaths: [{
-        existingPath: "contents",
-        newPath: "/"
+    // foldersAllowed: ["contents"],
+    // mappedPaths: [{
+    //     existingPath: "contents",
+    //     newPath: "/"
+    // }, {
+    //     existingPath: "contents",
+    //     newPath: "dist"
+    // }],
+    folders: [{
+        alias: "contents",
+        path: path.join(__CurrentPath, "contents")
     }, {
-        existingPath: "contents",
-        newPath: "dist"
+        alias: "dist",
+        path: path.join(__CurrentPath, "contents")
+    },{
+        alias: "/",
+        path: path.join(__CurrentPath, "contents")
     }],
+
     defaultPath: "/default"
 })
