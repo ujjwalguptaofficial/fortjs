@@ -13,10 +13,10 @@ script:
   # - npm install -g npm@latest
   - npm install
   - npm run install:build:test
-  - cd..
-  - cd filetest
-  - npm install
-  - npm run install:build:test
+  # - cd..
+  # - cd filetest
+  # - npm install
+  # - npm run install:build:test
 
 
 after_failure:
