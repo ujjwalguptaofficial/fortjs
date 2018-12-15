@@ -6,13 +6,14 @@ before_install:
 before_script:
     - npm install
 script:
-  - npm run buildpack
+  - bash ./test.sh
+  # - npm run buildpack
   # - npm cache clean -f
-  - cd tests/random
-  - ls
+  # - cd tests/random
+  # - ls
   # - npm install -g npm@latest
-  - npm install
-  - npm run install:build:test
+  # - npm install
+  # - npm run install:build:test
   # - cd..
   # - cd filetest
   # - npm install
