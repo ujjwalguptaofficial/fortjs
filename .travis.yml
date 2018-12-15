@@ -12,8 +12,11 @@ script:
   - ls
   # - npm install -g npm@latest
   - npm install
-  - npm run install:lib
-  - npm run build:test
+  - npm run install:build:test
+  - cd..
+  - cd filetest
+  - npm run install:build:test
+
 
 after_failure:
   - ls
