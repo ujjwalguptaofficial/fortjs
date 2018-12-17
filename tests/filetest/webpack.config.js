@@ -9,6 +9,14 @@ module.exports = {
     devtool: 'source-map',
     target: "node",
     mode: 'development',
+    node: {
+        console: false,
+        global: false,
+        process: false,
+        Buffer: false,
+        __filename: false,
+        __dirname: false,
+    },
     module: {
         rules: [{
             test: /\.js|.jsx?$/,

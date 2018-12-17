@@ -20,14 +20,16 @@ export class App extends Fort {
     }
 }
 
+const staticPath = path.join(__dirname, "../static");
+
 new App().create({
     //defaultPath: "default",
     folders: [{
         alias: "static",
-        path: path.join(__CurrentPath, "static")
+        path: staticPath
     }, {
         alias: "/",
-        path: path.join(__CurrentPath, "static")
+        path: staticPath
     }],
     appName: "MyFort"
 });
