@@ -15,7 +15,12 @@ module.exports = [{
         libraryTarget: "commonjs2"
     },
     node: {
-        __dirname: false
+        console: false,
+        global: false,
+        process: false,
+        Buffer: false,
+        __filename: false,
+        __dirname: false,
     },
     module: {
         rules: [{

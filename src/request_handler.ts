@@ -98,7 +98,7 @@ export class RequestHandler extends PostHandler {
 
     private parseCookieFromRequest_() {
         if (Global.shouldParseCookie === true) {
-            const rawCookie = this.request.headers[__Cookie] as string;
+            const rawCookie = (this.request.headers[__Cookie] || this.request.headers["cookie"]) as string;
             const parsedCookies = parseCookie(rawCookie);
             this.session_ = new Global.sessionProvider();
             this.cookieManager = new CookieManager(parsedCookies);

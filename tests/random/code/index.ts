@@ -1,6 +1,6 @@
 export * from './views/index';
 
-import { Fort, __CurrentPath } from "fortjs";
+import { Fort } from "fortjs";
 import { DefaultController, RandomController, UserController } from "./controllers";
 import { FortViewEngine } from "eshtml";
 import { CustomErrorHandler } from "./extra/custom_error_handler";
@@ -26,18 +26,19 @@ class App extends Fort {
     }
 }
 
+const contentsPath = path.join(__dirname, "../contents");
+
 new App().create({
+    defaultPath: "/default",
     port: 8080,
     folders: [{
         alias: "contents",
-        path: path.join(__CurrentPath, "contents")
+        path: contentsPath
     }, {
         alias: "dist",
-        path: path.join(__CurrentPath, "contents")
+        path: contentsPath
     }, {
         alias: "/",
-        path: path.join(__CurrentPath, "contents")
-    }],
-
-    defaultPath: "/default"
+        path: contentsPath
+    }]
 })

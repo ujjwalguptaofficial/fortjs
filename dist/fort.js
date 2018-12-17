@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.2.0 - 15/12/2018
+ * @license :fortjs - V1.2.0 - 17/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -372,10 +372,10 @@ __webpack_require__.r(__webpack_exports__);
 var __ContentType = "Content-Type";
 var __AppName = "fort";
 var __AppSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_0__["Global"].appName + "_session_id";
-var __Cookie = "cookie";
-var __SetCookie = 'set-cookie';
+var __Cookie = "Cookie";
+var __SetCookie = 'Set-Cookie';
 var __CurrentPath = process.cwd();
-var __ContentLength = "content-length";
+var __ContentLength = "Content-Length";
 
 
 /***/ }),
@@ -2125,7 +2125,7 @@ var viewResult = function (viewName, model) { return __awaiter(_this, void 0, vo
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Fort, __ContentType, __AppName, __AppSessionIdentifier, __Cookie, __SetCookie, __CurrentPath, __ContentLength, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler */
+/*! exports provided: Fort, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2184,28 +2184,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fort */ "./src/fort.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _fort__WEBPACK_IMPORTED_MODULE_5__["Fort"]; });
 
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__ContentType", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__ContentType"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__AppName", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__AppName"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__AppSessionIdentifier", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__AppSessionIdentifier"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__Cookie", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__Cookie"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__SetCookie", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__SetCookie"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__CurrentPath", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__CurrentPath"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "__ContentLength", function() { return _constant__WEBPACK_IMPORTED_MODULE_6__["__ContentLength"]; });
 
 
 
 
 
 
-
-
+// export * from './constant';
 
 
 /***/ }),
@@ -2716,7 +2701,7 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {
         if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
-            var rawCookie = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]];
+            var rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
             var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
             this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);

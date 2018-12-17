@@ -1,7 +1,7 @@
 import { HTTP_STATUS_CODE } from "./enums/http_status_code";
 import { Global } from "./global";
 import * as path from "path";
-import { __CurrentPath, __ContentType } from "./constant";
+import { __ContentType } from "./constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
 import { getMimeTypeFromExtension } from "./helpers/get_mime_type_from_extension";
