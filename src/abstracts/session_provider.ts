@@ -1,6 +1,5 @@
 import { ISessionValue } from "../interfaces/session_value";
 import { CookieManager } from "../model/cookie_manager";
-import { promise } from "../helpers/promise";
 import { __AppSessionIdentifier } from "../constant";
 import * as getUniqId from "uniqid";
 import { Global } from "../global";

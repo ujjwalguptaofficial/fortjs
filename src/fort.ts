@@ -55,11 +55,9 @@ export class Fort {
         Global.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
         Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
         Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        if (this.isArray_(option.folders) === false) {
+        Global.folders = option.folders == null ? [] : option.folders;
+        if (this.isArray_(Global.folders) === false) {
             throw new Error(`Option folders should be an array`);
-        }
-        else {
-            Global.folders = option.folders == null ? [] : option.folders;
         }
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
@@ -69,9 +67,6 @@ export class Fort {
         Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
-
-
-
     }
 
     async create(option: AppOption): Promise<any> {

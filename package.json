@@ -19,7 +19,7 @@
     "rest"
   ],
   "scripts": {
-    "lint": "tslint src/code/**/*.ts",
+    "lint": "tslint src/**/*.ts",
     "webpack": "webpack --config src/webpack.config.js",
     "move:deploy_file": "node src/deploy_helper.js",
     "buildpackold": "npm run build && npm run move:deploy_file && npm pack",

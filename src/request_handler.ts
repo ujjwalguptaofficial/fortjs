@@ -3,10 +3,8 @@ import * as url from 'url';
 import { Controller } from "./abstracts/controller";
 import { __ContentType, __AppName, __Cookie, __AppSessionIdentifier, __SetCookie } from "./constant";
 import { Global } from "./global";
-import { IHttpRequest } from "./interfaces/http_request";
 import { parseCookie } from "./helpers/parse_cookie";
 import { CookieManager } from "./model/cookie_manager";
-import { IHttpResponse } from "./interfaces/http_response";
 import { GenericSessionProvider } from "./model/generic_session_provider";
 import { GenericGuard } from "./model/generic_guard";
 import { parseAndMatchRoute } from "./helpers/parse_match_route";
@@ -17,6 +15,8 @@ import { HTTP_METHOD } from "./enums/http_method";
 import { HttpResult } from "./types";
 
 import { PostHandler } from "./post_handler";
+import { HttpRequest } from "./types/http_request";
+import { HttpResponse } from "./types/http_response";
 
 export class RequestHandler extends PostHandler {
 
@@ -45,8 +45,8 @@ export class RequestHandler extends PostHandler {
             wallObj.cookies = this.cookieManager;
             wallObj.query = this.query_;
             wallObj.session = this.session_;
-            wallObj.request = this.request as IHttpRequest;
-            wallObj.response = this.response as IHttpResponse;
+            wallObj.request = this.request as HttpRequest;
+            wallObj.response = this.response as HttpResponse;
             wallObj.data = this.data_;
             this.wallInstances.push(wallObj);
             return await wallObj.onIncoming();
@@ -55,7 +55,7 @@ export class RequestHandler extends PostHandler {
 
     private runController_() {
         const controllerObj: Controller = new this.routeMatchInfo_.controller();
-        controllerObj.request = this.request as IHttpRequest;
+        controllerObj.request = this.request as HttpRequest;
         controllerObj.response = this.response;
         controllerObj.query = this.query_;
         controllerObj.body = this.body;
@@ -75,8 +75,8 @@ export class RequestHandler extends PostHandler {
             shieldObj.cookies = this.cookieManager;
             shieldObj.query = this.query_;
             shieldObj.session = this.session_;
-            shieldObj.request = this.request as IHttpRequest;
-            shieldObj.response = this.response as IHttpResponse;
+            shieldObj.request = this.request as HttpRequest;
+            shieldObj.response = this.response as HttpResponse;
             shieldObj.data = this.data_;
             return await shieldObj.protect();
         }));
@@ -89,8 +89,8 @@ export class RequestHandler extends PostHandler {
             guardObj.cookies = this.cookieManager;
             guardObj.query = this.query_;
             guardObj.session = this.session_;
-            guardObj.request = this.request as IHttpRequest;
-            guardObj.response = this.response as IHttpResponse;
+            guardObj.request = this.request as HttpRequest;
+            guardObj.response = this.response as HttpResponse;
             guardObj.data = this.data_;
             return await guardObj.check();
         }));

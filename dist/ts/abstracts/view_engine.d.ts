@@ -1,4 +1,4 @@
-import { IViewValue } from "../interfaces/view_option";
+import { ViewEngineData } from "../types/view_engine_data";
 export declare abstract class ViewEngine {
-    abstract render(value: IViewValue): Promise<string>;
+    abstract render(value: ViewEngineData): Promise<string>;
 }
