@@ -7,4 +7,4 @@ export type HttpResponse = {
     getHeaderNames(): string[];
     hasHeader(name: string): boolean;
     removeHeader(name: string): void;
-}
+};

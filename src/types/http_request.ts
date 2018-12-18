@@ -7,4 +7,4 @@ export type HttpRequest = {
     method: HTTP_METHOD;
     headers: IncomingHttpHeaders;
     connection: net.Socket;
-}
+};

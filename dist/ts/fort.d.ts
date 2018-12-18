@@ -9,10 +9,11 @@ export declare class Fort {
     walls: Array<typeof Wall>;
     httpServer: http.Server;
     /**
-    * view engine use to render the view
-    *
-    * @type {typeof ViewEngine}
-    */
+     * view engine use to render the view
+     *
+     * @type {typeof ViewEngine}
+     * @memberof Fort
+     */
     viewEngine?: typeof ViewEngine;
     /**
      * sessionProvider class, default - MemorySessionProvider

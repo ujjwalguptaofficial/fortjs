@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.2.1 - 17/12/2018
+ * @license :fortjs - V1.2.2 - 18/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -1464,7 +1464,6 @@ var Fort = /** @class */ (function () {
                 if (option == null) {
                     option = {};
                 }
-                ;
                 if (option.defaultPath != null && option.defaultPath[0] === "/") {
                     option.defaultPath = option.defaultPath.substr(1);
                 }

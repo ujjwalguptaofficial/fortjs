@@ -8,7 +8,7 @@
     "webpack:watch": "webpack --config webpack.config.js --watch",
     "build": "npm run webpack",
     "start": "npm run webpack:watch && opn http://localhost:4000",
-    "install:lib": "npm i ../../fortjs-1.2.1.tgz --no-save",
+    "install:lib": "npm i ../../fortjs-1.2.2.tgz --no-save",
     "install:build": "npm run install:lib && npm run build",
     "test": "mocha --recursive --exit",
     "build:test": "npm run build && npm run test",

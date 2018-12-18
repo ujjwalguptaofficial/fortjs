@@ -21,12 +21,13 @@ export class Fort {
     walls: Array<typeof Wall> = [];
     httpServer: http.Server;
 
-    /**
+   /**
     * view engine use to render the view
     *
     * @type {typeof ViewEngine}
+    * @memberof Fort
     */
-    viewEngine?: typeof ViewEngine;
+   viewEngine?: typeof ViewEngine;
 
     /**
      * sessionProvider class, default - MemorySessionProvider
@@ -74,7 +75,7 @@ export class Fort {
             option = {
 
             };
-        };
+        }
 
         if (option.defaultPath != null && option.defaultPath[0] === "/") {
             option.defaultPath = option.defaultPath.substr(1);

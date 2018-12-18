@@ -14,7 +14,7 @@ import { MIME_TYPE } from "./enums";
 type FileInfo = {
     folder: string,
     file: string;
-}
+};
 export class FileHandler extends RequestHandlerHelper {
 
     private getFileInfoFromUrl_(urlPath: string) {
@@ -77,7 +77,7 @@ export class FileHandler extends RequestHandlerHelper {
                 return path.join(folder.path, fileInfo.file);
             }
             return null;
-        }
+        };
         let absPath = getAbsPath();
         if (absPath == null) {
             fileInfo.folder = "/";
