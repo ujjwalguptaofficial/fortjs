@@ -56,6 +56,9 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
                             isMatched = false;
                             return false;
                         }
+                        // else {
+                        //     return /\w\.\w/.test(urlPart);
+                        // }
                         return true;
                     });
                     if (isMatched === true) {

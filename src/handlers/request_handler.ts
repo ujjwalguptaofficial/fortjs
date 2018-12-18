@@ -109,6 +109,7 @@ export class RequestHandler extends PostHandler {
     private setPreHeader_() {
         this.response.setHeader('X-Powered-By', Global.appName);
         this.response.setHeader('Vary', 'Accept-Encoding');
+        this.response.sendDate = true;
     }
 
     private async execute_() {

@@ -1854,6 +1854,7 @@ var RequestHandler = /** @class */ (function (_super) {
     RequestHandler.prototype.setPreHeader_ = function () {
         this.response.setHeader('X-Powered-By', _global__WEBPACK_IMPORTED_MODULE_2__["Global"].appName);
         this.response.setHeader('Vary', 'Accept-Encoding');
+        this.response.sendDate = true;
     };
     RequestHandler.prototype.execute_ = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -2756,6 +2757,9 @@ var parseAndMatchRoute = function (url, reqMethod) {
                             isMatched_1 = false;
                             return false;
                         }
+                        // else {
+                        //     return /\w\.\w/.test(urlPart);
+                        // }
                         return true;
                     });
                     if (isMatched_1 === true) {
