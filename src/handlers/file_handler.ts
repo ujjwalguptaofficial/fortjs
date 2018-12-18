@@ -1,15 +1,15 @@
-import { HTTP_STATUS_CODE } from "./enums/http_status_code";
-import { Global } from "./global";
+import { HTTP_STATUS_CODE } from "../enums/http_status_code";
+import { Global } from "../global";
 import * as path from "path";
-import { __ContentType } from "./constant";
+import { __ContentType } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension } from "./helpers/get_mime_type_from_extension";
-import { promise } from "./helpers/promise";
+import { getMimeTypeFromExtension } from "../helpers/get_mime_type_from_extension";
+import { promise } from "../helpers/promise";
 import * as etag from "etag";
-import { ETag_Type } from "./enums/etag_type";
+import { ETag_Type } from "../enums/etag_type";
 import * as fresh from "fresh";
-import { MIME_TYPE } from "./enums";
+import { MIME_TYPE } from "../enums";
 
 type FileInfo = {
     folder: string,

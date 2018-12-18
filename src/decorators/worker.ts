@@ -1,5 +1,5 @@
 import { HTTP_METHOD } from "../enums";
-import { RouteHandler } from "../route_handler";
+import { RouteHandler } from "../handlers/route_handler";
 import { IRouteActionInfo } from "../interfaces/route_action_info";
 
 export const worker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator => {

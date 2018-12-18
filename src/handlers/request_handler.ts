@@ -1,22 +1,21 @@
 import * as http from "http";
 import * as url from 'url';
-import { Controller } from "./abstracts/controller";
-import { __ContentType, __AppName, __Cookie, __AppSessionIdentifier, __SetCookie } from "./constant";
-import { Global } from "./global";
-import { parseCookie } from "./helpers/parse_cookie";
-import { CookieManager } from "./model/cookie_manager";
-import { GenericSessionProvider } from "./model/generic_session_provider";
-import { GenericGuard } from "./model/generic_guard";
-import { parseAndMatchRoute } from "./helpers/parse_match_route";
-import { IRouteMatch } from "./interfaces/route_match";
+import { Controller } from "../abstracts/controller";
+import { __ContentType, __AppName, __Cookie, __AppSessionIdentifier, __SetCookie } from "../constant";
+import { Global } from "../global";
+import { parseCookie } from "../helpers/parse_cookie";
+import { CookieManager } from "../model/cookie_manager";
+import { GenericSessionProvider } from "../model/generic_session_provider";
+import { GenericGuard } from "../model/generic_guard";
+import { parseAndMatchRoute } from "../helpers/parse_match_route";
+import { IRouteMatch } from "../interfaces/route_match";
 import * as path from 'path';
-import { Util } from "./util";
-import { HTTP_METHOD } from "./enums/http_method";
-import { HttpResult } from "./types";
-
+import { Util } from "../util";
+import { HTTP_METHOD } from "../enums/http_method";
+import { HttpResult } from "../types";
 import { PostHandler } from "./post_handler";
-import { HttpRequest } from "./types/http_request";
-import { HttpResponse } from "./types/http_response";
+import { HttpRequest } from "../types/http_request";
+import { HttpResponse } from "../types/http_response";
 
 export class RequestHandler extends PostHandler {
 

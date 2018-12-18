@@ -1,4 +1,4 @@
-import { RouteHandler } from "../route_handler";
+import { RouteHandler } from "../handlers/route_handler";
 import { IRouteMatch } from "../interfaces/route_match";
 import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";

@@ -1,8 +1,8 @@
-import { IRouteInfo } from "./interfaces/route_info";
-import { GenericShield } from "./model/generic_shield";
-import { IRouteActionInfo } from "./interfaces/route_action_info";
-import { GenericGuard } from "./model/generic_guard";
-import { Route } from "./types/route";
+import { IRouteInfo } from "../interfaces/route_info";
+import { GenericShield } from "../model/generic_shield";
+import { IRouteActionInfo } from "../interfaces/route_action_info";
+import { GenericGuard } from "../model/generic_guard";
+import { Route } from "../types/route";
 
 const routerCollection: IRouteInfo[] = [];
 export class RouteHandler {

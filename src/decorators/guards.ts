@@ -1,4 +1,4 @@
-import { RouteHandler } from "../route_handler";
+import { RouteHandler } from "../handlers/route_handler";
 import { GenericGuard } from "../model/generic_guard";
 import { Guard } from "../abstracts/guard";
 

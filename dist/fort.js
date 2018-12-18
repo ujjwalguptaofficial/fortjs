@@ -380,183 +380,6 @@ var __ContentLength = "Content-Length";
 
 /***/ }),
 
-/***/ "./src/controller_handler.ts":
-/*!***********************************!*\
-  !*** ./src/controller_handler.ts ***!
-  \***********************************/
-/*! exports provided: ControllerHandler */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControllerHandler", function() { return ControllerHandler; });
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enums/mime_type */ "./src/enums/mime_type.ts");
-/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsontoxml */ "jsontoxml");
-/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./enums/http_status_code */ "./src/enums/http_status_code.ts");
-/* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./file_handler */ "./src/file_handler.ts");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-var ControllerHandler = /** @class */ (function (_super) {
-    __extends(ControllerHandler, _super);
-    function ControllerHandler() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ControllerHandler.prototype.getDataBasedOnMimeType_ = function (mimeType) {
-        switch (mimeType) {
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Json:
-                if (typeof this.controllerResult_.responseData === 'object') {
-                    return JSON.stringify(this.controllerResult_.responseData);
-                }
-                return this.controllerResult_.responseData;
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Xml:
-                if (typeof this.controllerResult_.responseData === 'object') {
-                    return jsontoxml__WEBPACK_IMPORTED_MODULE_2__({
-                        document: this.controllerResult_.responseData
-                    }, {
-                        xmlHeader: true
-                    });
-                }
-                return this.controllerResult_.responseData;
-            default:
-                return this.controllerResult_.responseData;
-        }
-    };
-    ControllerHandler.prototype.finishResponse_ = function (negotiateMimeType) {
-        var _a;
-        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["__ContentType"]] = negotiateMimeType, _a));
-        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
-    };
-    ControllerHandler.prototype.handleRedirectResult_ = function () {
-        this.response.setHeader('Location', this.controllerResult_.responseData);
-        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult_.responseData });
-        this.response.end();
-    };
-    ControllerHandler.prototype.handleFormatResult_ = function () {
-        var negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult_.responseFormat));
-        var key = Object.keys(this.controllerResult_.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
-        if (key != null) {
-            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
-            this.finishResponse_(negotiateMimeType);
-        }
-        else {
-            this.onNotAcceptableRequest();
-        }
-    };
-    ControllerHandler.prototype.handleFileResult_ = function () {
-        var result = this.controllerResult_;
-        var parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
-        if (result.file.shouldDownload === true) {
-            var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + parsedPath.ext);
-        }
-        this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
-    };
-    ControllerHandler.prototype.onResultEvaluated = function (result) {
-        return __awaiter(this, void 0, void 0, function () {
-            var contentType, negotiateMimeType;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.runWallOutgoing()];
-                    case 1:
-                        _a.sent();
-                        this.controllerResult_ = result;
-                        if (this.cookieManager != null) {
-                            this.cookieManager.responseCookie_.forEach(function (value) {
-                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
-                            });
-                        }
-                        if (result.shouldRedirect == null || result.shouldRedirect === false) {
-                            if (result.responseFormat == null) {
-                                if (result.file == null) {
-                                    contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
-                                    negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
-                                    if (negotiateMimeType != null) {
-                                        this.finishResponse_(negotiateMimeType);
-                                    }
-                                    else {
-                                        this.onNotAcceptableRequest();
-                                    }
-                                }
-                                else {
-                                    this.handleFileResult_();
-                                }
-                            }
-                            else {
-                                this.handleFormatResult_();
-                            }
-                        }
-                        else {
-                            this.handleRedirectResult_();
-                        }
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return ControllerHandler;
-}(_file_handler__WEBPACK_IMPORTED_MODULE_4__["FileHandler"]));
-
-
-
-/***/ }),
-
 /***/ "./src/decorators/default_worker.ts":
 /*!******************************************!*\
   !*** ./src/decorators/default_worker.ts ***!
@@ -567,7 +390,7 @@ var ControllerHandler = /** @class */ (function (_super) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return defaultWorker; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../route_handler */ "./src/route_handler.ts");
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 /* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/http_method */ "./src/enums/http_method.ts");
 
 
@@ -580,7 +403,7 @@ var defaultWorker = function (allowedMethods) {
             guards: [],
             pattern: "/"
         };
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addWorker(actionInfo, className);
+        _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addWorker(actionInfo, className);
     };
 };
 
@@ -597,12 +420,12 @@ var defaultWorker = function (allowedMethods) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "guards", function() { return guards; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../route_handler */ "./src/route_handler.ts");
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
 var guards = function (value) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(value, className, methodName);
+        _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(value, className, methodName);
     });
 };
 
@@ -652,12 +475,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "route", function() { return route; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../route_handler */ "./src/route_handler.ts");
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
 var route = function (format) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addPattern(format, className, methodName);
+        _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addPattern(format, className, methodName);
     });
 };
 
@@ -674,12 +497,12 @@ var route = function (format) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return shields; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../route_handler */ "./src/route_handler.ts");
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
 var shields = function (shieldsValue) {
     return function (target) {
         var className = target.name;
-        _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addShields(shieldsValue, className);
+        _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addShields(shieldsValue, className);
     };
 };
 
@@ -697,7 +520,7 @@ var shields = function (shieldsValue) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return worker; });
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../route_handler */ "./src/route_handler.ts");
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
 
 var worker = function (allowedMethods) {
@@ -711,7 +534,7 @@ var worker = function (allowedMethods) {
             guards: [],
             pattern: "/" + methodName.toLowerCase()
         };
-        _route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addWorker(actionInfo, className);
+        _handlers_route_handler__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addWorker(actionInfo, className);
     };
 };
 
@@ -1047,32 +870,379 @@ var MemorySessionProvider = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./src/file_handler.ts":
-/*!*****************************!*\
-  !*** ./src/file_handler.ts ***!
-  \*****************************/
+/***/ "./src/fort.ts":
+/*!*********************!*\
+  !*** ./src/fort.ts ***!
+  \*********************/
+/*! exports provided: Fort */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return Fort; });
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./handlers/route_handler */ "./src/handlers/route_handler.ts");
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./global */ "./src/global.ts");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.ts");
+/* harmony import */ var _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extra/memory_session_provider */ "./src/extra/memory_session_provider.ts");
+/* harmony import */ var _model_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model/error_handler */ "./src/model/error_handler.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
+/* harmony import */ var _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./handlers/request_handler */ "./src/handlers/request_handler.ts");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! http */ "http");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./enums/etag_type */ "./src/enums/etag_type.ts");
+/* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/log_helper */ "./src/helpers/log_helper.ts");
+/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./enums/error_type */ "./src/enums/error_type.ts");
+/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./helpers/promise */ "./src/helpers/promise.ts");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+var Fort = /** @class */ (function () {
+    function Fort() {
+        this.routes = [];
+        this.walls = [];
+    }
+    Fort.prototype.isArray_ = function (value) {
+        return _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isArray(value);
+    };
+    Fort.prototype.saveAppOption_ = function (option) {
+        var defaultEtagConfig = {
+            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
+        };
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = option.port == null ? 4000 : option.port;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders = option.folders == null ? [] : option.folders;
+        if (this.isArray_(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders) === false) {
+            throw new Error("Option folders should be an array");
+        }
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
+            this.sessionProvider;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
+    };
+    Fort.prototype.create = function (option) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (option == null) {
+                    option = {};
+                }
+                if (option.defaultPath != null && option.defaultPath[0] === "/") {
+                    option.defaultPath = option.defaultPath.substr(1);
+                }
+                if (this.routes == null) {
+                    this.routes = [];
+                }
+                this.routes.forEach(function (route) {
+                    if (route.path[0] === "/") {
+                        route.path = route.path.substr(1);
+                    }
+                    _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
+                });
+                this.saveAppOption_(option);
+                this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
+                    new _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
+                }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
+                    if (err.code === 'EADDRINUSE') {
+                        new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_10__["ERROR_TYPE"].PortInUse, _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).throw();
+                    }
+                    else {
+                        throw err;
+                    }
+                });
+                return [2 /*return*/];
+            });
+        });
+    };
+    Fort.prototype.destroy = function () {
+        var _this = this;
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
+            _this.httpServer.close(res);
+        });
+    };
+    Fort.prototype.mapPath = function (oldPath, newPath) {
+    };
+    Fort.prototype.mapVirtualPath = function (actualPath, mappedPath) {
+    };
+    return Fort;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/global.ts":
+/*!***********************!*\
+  !*** ./src/global.ts ***!
+  \***********************/
+/*! exports provided: Global */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Global", function() { return Global; });
+var Global = /** @class */ (function () {
+    function Global() {
+    }
+    Global.walls = [];
+    return Global;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/handlers/controller_handler.ts":
+/*!********************************************!*\
+  !*** ./src/handlers/controller_handler.ts ***!
+  \********************************************/
+/*! exports provided: ControllerHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControllerHandler", function() { return ControllerHandler; });
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/mime_type */ "./src/enums/mime_type.ts");
+/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsontoxml */ "jsontoxml");
+/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
+/* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./file_handler */ "./src/handlers/file_handler.ts");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+var ControllerHandler = /** @class */ (function (_super) {
+    __extends(ControllerHandler, _super);
+    function ControllerHandler() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ControllerHandler.prototype.getDataBasedOnMimeType_ = function (mimeType) {
+        switch (mimeType) {
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Json:
+                if (typeof this.controllerResult_.responseData === 'object') {
+                    return JSON.stringify(this.controllerResult_.responseData);
+                }
+                return this.controllerResult_.responseData;
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Xml:
+                if (typeof this.controllerResult_.responseData === 'object') {
+                    return jsontoxml__WEBPACK_IMPORTED_MODULE_2__({
+                        document: this.controllerResult_.responseData
+                    }, {
+                        xmlHeader: true
+                    });
+                }
+                return this.controllerResult_.responseData;
+            default:
+                return this.controllerResult_.responseData;
+        }
+    };
+    ControllerHandler.prototype.finishResponse_ = function (negotiateMimeType) {
+        var _a;
+        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["__ContentType"]] = negotiateMimeType, _a));
+        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+    };
+    ControllerHandler.prototype.handleRedirectResult_ = function () {
+        this.response.setHeader('Location', this.controllerResult_.responseData);
+        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult_.responseData });
+        this.response.end();
+    };
+    ControllerHandler.prototype.handleFormatResult_ = function () {
+        var negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult_.responseFormat));
+        var key = Object.keys(this.controllerResult_.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
+        if (key != null) {
+            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
+            this.finishResponse_(negotiateMimeType);
+        }
+        else {
+            this.onNotAcceptableRequest();
+        }
+    };
+    ControllerHandler.prototype.handleFileResult_ = function () {
+        var result = this.controllerResult_;
+        var parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+        if (result.file.shouldDownload === true) {
+            var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + parsedPath.ext);
+        }
+        this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
+    };
+    ControllerHandler.prototype.onResultEvaluated = function (result) {
+        return __awaiter(this, void 0, void 0, function () {
+            var contentType, negotiateMimeType;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.runWallOutgoing()];
+                    case 1:
+                        _a.sent();
+                        this.controllerResult_ = result;
+                        if (this.cookieManager != null) {
+                            this.cookieManager.responseCookie_.forEach(function (value) {
+                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
+                            });
+                        }
+                        if (result.shouldRedirect == null || result.shouldRedirect === false) {
+                            if (result.responseFormat == null) {
+                                if (result.file == null) {
+                                    contentType = result.contentType || _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
+                                    negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
+                                    if (negotiateMimeType != null) {
+                                        this.finishResponse_(negotiateMimeType);
+                                    }
+                                    else {
+                                        this.onNotAcceptableRequest();
+                                    }
+                                }
+                                else {
+                                    this.handleFileResult_();
+                                }
+                            }
+                            else {
+                                this.handleFormatResult_();
+                            }
+                        }
+                        else {
+                            this.handleRedirectResult_();
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return ControllerHandler;
+}(_file_handler__WEBPACK_IMPORTED_MODULE_4__["FileHandler"]));
+
+
+
+/***/ }),
+
+/***/ "./src/handlers/file_handler.ts":
+/*!**************************************!*\
+  !*** ./src/handlers/file_handler.ts ***!
+  \**************************************/
 /*! exports provided: FileHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileHandler", function() { return FileHandler; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enums/http_status_code */ "./src/enums/http_status_code.ts");
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./global */ "./src/global.ts");
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../global */ "./src/global.ts");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! path */ "path");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _request_handler_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./request_handler_helper */ "./src/request_handler_helper.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+/* harmony import */ var _request_handler_helper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./request_handler_helper */ "./src/handlers/request_handler_helper.ts");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! fs */ "fs");
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./helpers/get_mime_type_from_extension */ "./src/helpers/get_mime_type_from_extension.ts");
-/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./helpers/promise */ "./src/helpers/promise.ts");
+/* harmony import */ var _helpers_get_mime_type_from_extension__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../helpers/get_mime_type_from_extension */ "./src/helpers/get_mime_type_from_extension.ts");
+/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../helpers/promise */ "./src/helpers/promise.ts");
 /* harmony import */ var etag__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! etag */ "etag");
 /* harmony import */ var etag__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(etag__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./enums/etag_type */ "./src/enums/etag_type.ts");
+/* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../enums/etag_type */ "./src/enums/etag_type.ts");
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! fresh */ "fresh");
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(fresh__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./enums */ "./src/enums/index.ts");
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1359,29 +1529,183 @@ var FileHandler = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./src/fort.ts":
-/*!*********************!*\
-  !*** ./src/fort.ts ***!
-  \*********************/
-/*! exports provided: Fort */
+/***/ "./src/handlers/post_handler.ts":
+/*!**************************************!*\
+  !*** ./src/handlers/post_handler.ts ***!
+  \**************************************/
+/*! exports provided: PostHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return Fort; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./route_handler */ "./src/route_handler.ts");
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./global */ "./src/global.ts");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.ts");
-/* harmony import */ var _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extra/memory_session_provider */ "./src/extra/memory_session_provider.ts");
-/* harmony import */ var _model_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model/error_handler */ "./src/model/error_handler.ts");
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./request_handler */ "./src/request_handler.ts");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! http */ "http");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./enums/etag_type */ "./src/enums/etag_type.ts");
-/* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/log_helper */ "./src/helpers/log_helper.ts");
-/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./enums/error_type */ "./src/enums/error_type.ts");
-/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./helpers/promise */ "./src/helpers/promise.ts");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostHandler", function() { return PostHandler; });
+/* harmony import */ var _controller_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./controller_handler */ "./src/handlers/controller_handler.ts");
+/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers/promise */ "./src/helpers/promise.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../enums/mime_type */ "./src/enums/mime_type.ts");
+/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! content-type */ "content-type");
+/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(content_type__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! querystring */ "querystring");
+/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_5__);
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+var PostHandler = /** @class */ (function (_super) {
+    __extends(PostHandler, _super);
+    function PostHandler() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.files = {};
+        return _this;
+    }
+    PostHandler.prototype.getPostRawData_ = function () {
+        var _this = this;
+        var body = [];
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (res, rej) {
+            _this.request.on('data', function (chunk) {
+                body.push(chunk);
+            }).on('end', function () {
+                var bodyBuffer = Buffer.concat(body);
+                res(bodyBuffer);
+            });
+        });
+    };
+    PostHandler.prototype.handlePostData = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var postData, bodyBuffer, contentType, ex_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        postData = void 0;
+                        return [4 /*yield*/, this.getPostRawData_()];
+                    case 1:
+                        bodyBuffer = _a.sent();
+                        contentType = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_2__["__ContentType"]] || this.request.headers["content-type"];
+                        if (contentType != null) {
+                            contentType = content_type__WEBPACK_IMPORTED_MODULE_4__["parse"](contentType).type;
+                        }
+                        switch (contentType) {
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
+                                try {
+                                    postData = JSON.parse(bodyBuffer.toString());
+                                }
+                                catch (ex) {
+                                    /* tslint:disable-next-line */
+                                    throw "Post data is invalid";
+                                }
+                                break;
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
+                                postData = bodyBuffer.toString();
+                                break;
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
+                                postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyBuffer.toString());
+                                break;
+                            default:
+                                postData = {};
+                        }
+                        return [2 /*return*/, postData];
+                    case 2:
+                        ex_1 = _a.sent();
+                        throw ex_1;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return PostHandler;
+}(_controller_handler__WEBPACK_IMPORTED_MODULE_0__["ControllerHandler"]));
+
+
+
+/***/ }),
+
+/***/ "./src/handlers/request_handler.ts":
+/*!*****************************************!*\
+  !*** ./src/handlers/request_handler.ts ***!
+  \*****************************************/
+/*! exports provided: RequestHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandler", function() { return RequestHandler; });
+/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url */ "url");
+/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../global */ "./src/global.ts");
+/* harmony import */ var _helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/parse_cookie */ "./src/helpers/parse_cookie.ts");
+/* harmony import */ var _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../model/cookie_manager */ "./src/model/cookie_manager.ts");
+/* harmony import */ var _helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers/parse_match_route */ "./src/helpers/parse_match_route.ts");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util */ "./src/util.ts");
+/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../enums/http_method */ "./src/enums/http_method.ts");
+/* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -1427,102 +1751,617 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
-
-var Fort = /** @class */ (function () {
-    function Fort() {
-        this.routes = [];
-        this.walls = [];
+var RequestHandler = /** @class */ (function (_super) {
+    __extends(RequestHandler, _super);
+    function RequestHandler(request, response) {
+        var _this = _super.call(this) || this;
+        _this.data_ = {};
+        _this.request = request;
+        _this.response = response;
+        _this.registerEvents();
+        return _this;
     }
-    Fort.prototype.isArray_ = function (value) {
-        return _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isArray(value);
+    RequestHandler.prototype.registerEvents = function () {
+        this.request.on('error', this.onBadRequest);
+        this.response.on('error', this.onErrorOccured.bind(this));
     };
-    Fort.prototype.saveAppOption_ = function (option) {
-        var defaultEtagConfig = {
-            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
-        };
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = option.port == null ? 4000 : option.port;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders = option.folders == null ? [] : option.folders;
-        if (this.isArray_(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders) === false) {
-            throw new Error("Option folders should be an array");
-        }
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
-            this.sessionProvider;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
-    };
-    Fort.prototype.create = function (option) {
-        return __awaiter(this, void 0, void 0, function () {
+    RequestHandler.prototype.runWallIncoming_ = function () {
+        var _this = this;
+        return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) { return __awaiter(_this, void 0, void 0, function () {
+            var wallObj;
             return __generator(this, function (_a) {
-                if (option == null) {
-                    option = {};
+                switch (_a.label) {
+                    case 0:
+                        wallObj = new wall();
+                        wallObj.body = this.body;
+                        wallObj.cookies = this.cookieManager;
+                        wallObj.query = this.query_;
+                        wallObj.session = this.session_;
+                        wallObj.request = this.request;
+                        wallObj.response = this.response;
+                        wallObj.data = this.data_;
+                        this.wallInstances.push(wallObj);
+                        return [4 /*yield*/, wallObj.onIncoming()];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
-                if (option.defaultPath != null && option.defaultPath[0] === "/") {
-                    option.defaultPath = option.defaultPath.substr(1);
+            });
+        }); }));
+    };
+    RequestHandler.prototype.runController_ = function () {
+        var controllerObj = new this.routeMatchInfo_.controller();
+        controllerObj.request = this.request;
+        controllerObj.response = this.response;
+        controllerObj.query = this.query_;
+        controllerObj.body = this.body;
+        controllerObj.session = this.session_;
+        controllerObj.cookies = this.cookieManager;
+        controllerObj.params = this.routeMatchInfo_.params;
+        controllerObj.data = this.data_;
+        controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
+    };
+    RequestHandler.prototype.executeShieldsProtection_ = function () {
+        var _this = this;
+        return Promise.all(this.routeMatchInfo_.shields.map(function (shield) { return __awaiter(_this, void 0, void 0, function () {
+            var shieldObj;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        shieldObj = new shield();
+                        shieldObj.body = this.body;
+                        shieldObj.cookies = this.cookieManager;
+                        shieldObj.query = this.query_;
+                        shieldObj.session = this.session_;
+                        shieldObj.request = this.request;
+                        shieldObj.response = this.response;
+                        shieldObj.data = this.data_;
+                        return [4 /*yield*/, shieldObj.protect()];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
-                if (this.routes == null) {
-                    this.routes = [];
+            });
+        }); }));
+    };
+    RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
+        var _this = this;
+        return Promise.all(guards.map(function (guard) { return __awaiter(_this, void 0, void 0, function () {
+            var guardObj;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        guardObj = new guard();
+                        guardObj.body = this.body;
+                        guardObj.cookies = this.cookieManager;
+                        guardObj.query = this.query_;
+                        guardObj.session = this.session_;
+                        guardObj.request = this.request;
+                        guardObj.response = this.response;
+                        guardObj.data = this.data_;
+                        return [4 /*yield*/, guardObj.check()];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
-                this.routes.forEach(function (route) {
-                    if (route.path[0] === "/") {
-                        route.path = route.path.substr(1);
-                    }
-                    _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
-                });
-                this.saveAppOption_(option);
-                this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
-                    new _request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
-                }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
-                    if (err.code === 'EADDRINUSE') {
-                        new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_10__["ERROR_TYPE"].PortInUse, _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).throw();
-                    }
-                    else {
-                        throw err;
-                    }
-                });
-                return [2 /*return*/];
+            });
+        }); }));
+    };
+    RequestHandler.prototype.parseCookieFromRequest_ = function () {
+        if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
+            var rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
+            var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
+            this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
+            this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
+            this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"]];
+            this.session_.cookies = this.cookieManager;
+        }
+    };
+    RequestHandler.prototype.setPreHeader_ = function () {
+        this.response.setHeader('X-Powered-By', _global__WEBPACK_IMPORTED_MODULE_2__["Global"].appName);
+        this.response.setHeader('Vary', 'Accept-Encoding');
+    };
+    RequestHandler.prototype.execute_ = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var urlDetail, wallProtectionResult, responseByWall, pathUrl, extension, requestMethod, actionInfo, shieldProtectionResult, responseByShield, guardsCheckResult, responseByGuard, ex_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 11, , 12]);
+                        this.setPreHeader_();
+                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
+                        this.query_ = urlDetail.query;
+                        this.parseCookieFromRequest_();
+                        return [4 /*yield*/, this.runWallIncoming_()];
+                    case 1:
+                        wallProtectionResult = _a.sent();
+                        responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
+                        if (!(responseByWall == null)) return [3 /*break*/, 9];
+                        pathUrl = urlDetail.pathname;
+                        extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
+                        requestMethod = this.request.method;
+                        if (!(_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension) === false)) return [3 /*break*/, 2];
+                        this.handleFileRequest(pathUrl, extension);
+                        return [3 /*break*/, 8];
+                    case 2:
+                        this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
+                        if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 3];
+                        // it may be a folder then
+                        this.handleFileRequestForFolder(pathUrl);
+                        return [3 /*break*/, 8];
+                    case 3:
+                        actionInfo = this.routeMatchInfo_.actionInfo;
+                        if (!(actionInfo == null)) return [3 /*break*/, 4];
+                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+                        return [3 /*break*/, 8];
+                    case 4: return [4 /*yield*/, this.executeShieldsProtection_()];
+                    case 5:
+                        shieldProtectionResult = _a.sent();
+                        responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
+                        if (!(responseByShield == null)) return [3 /*break*/, 7];
+                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
+                    case 6:
+                        guardsCheckResult = _a.sent();
+                        responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
+                        if (responseByGuard == null) {
+                            this.runController_();
+                        }
+                        else {
+                            this.onResultEvaluated(responseByGuard);
+                        }
+                        return [3 /*break*/, 8];
+                    case 7:
+                        this.onResultEvaluated(responseByShield);
+                        _a.label = 8;
+                    case 8: return [3 /*break*/, 10];
+                    case 9:
+                        this.onResultEvaluated(responseByWall);
+                        _a.label = 10;
+                    case 10: return [3 /*break*/, 12];
+                    case 11:
+                        ex_1 = _a.sent();
+                        this.onErrorOccured(ex_1);
+                        return [3 /*break*/, 12];
+                    case 12: return [2 /*return*/];
+                }
             });
         });
     };
-    Fort.prototype.destroy = function () {
-        var _this = this;
-        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
-            _this.httpServer.close(res);
+    RequestHandler.prototype.handle = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var body, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_8__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
+                        this.body = {};
+                        this.execute_();
+                        return [3 /*break*/, 5];
+                    case 1:
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 5];
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, this.handlePostData()];
+                    case 3:
+                        body = _a.sent();
+                        this.body = body;
+                        this.execute_();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        ex_2 = _a.sent();
+                        this.onBadRequest(ex_2);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
         });
     };
-    Fort.prototype.mapPath = function (oldPath, newPath) {
+    return RequestHandler;
+}(_post_handler__WEBPACK_IMPORTED_MODULE_9__["PostHandler"]));
+
+
+
+/***/ }),
+
+/***/ "./src/handlers/request_handler_helper.ts":
+/*!************************************************!*\
+  !*** ./src/handlers/request_handler_helper.ts ***!
+  \************************************************/
+/*! exports provided: RequestHandlerHelper */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandlerHelper", function() { return RequestHandlerHelper; });
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../enums/mime_type */ "./src/enums/mime_type.ts");
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../global */ "./src/global.ts");
+/* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! negotiator */ "negotiator");
+/* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util */ "./src/util.ts");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+var RequestHandlerHelper = /** @class */ (function () {
+    function RequestHandlerHelper() {
+        this.wallInstances = [];
+    }
+    RequestHandlerHelper.prototype.isNullOrEmpty = function (value) {
+        return _util__WEBPACK_IMPORTED_MODULE_5__["Util"].isNullOrEmpty(value);
     };
-    Fort.prototype.mapVirtualPath = function (actualPath, mappedPath) {
+    RequestHandlerHelper.prototype.runWallOutgoing = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, Promise.all(this.wallInstances.reverse().map(function (wallObj) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!(wallObj.onOutgoing != null)) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, wallObj.onOutgoing()];
+                                case 1: return [2 /*return*/, _a.sent()];
+                                case 2: return [2 /*return*/];
+                            }
+                        });
+                    }); }))];
+            });
+        });
     };
-    return Fort;
+    RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
+        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_4__(this.request);
+        var availableTypes = this.getAvailableTypes_(type);
+        if (availableTypes == null) {
+            availableTypes = [type];
+        }
+        return negotiator.mediaType(availableTypes);
+    };
+    RequestHandlerHelper.prototype.getContentTypeFromNegotiationHavingMultipleTypes = function (types) {
+        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_4__(this.request);
+        return negotiator.mediaType(types);
+    };
+    RequestHandlerHelper.prototype.getAvailableTypes_ = function (type) {
+        switch (type) {
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Json:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Xml:
+                return [_enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Json, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Xml];
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Css:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Csv:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Js:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Rtf:
+            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Text:
+                return [_enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Text, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Js,
+                    _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Css, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Rtf, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Csv];
+        }
+        return null;
+    };
+    RequestHandlerHelper.prototype.onBadRequest = function (error) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, errMessage, ex_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onBadRequest(error)];
+                    case 1:
+                        errMessage = _b.sent();
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_1 = _b.sent();
+                        this.response.end(JSON.stringify(ex_1));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RequestHandlerHelper.prototype.onForbiddenRequest = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, errMessage, err_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onForbiddenRequest()];
+                    case 1:
+                        errMessage = _b.sent();
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_1 = _b.sent();
+                        this.response.end(JSON.stringify(err_1));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, errMessage, err_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotAcceptableRequest()];
+                    case 1:
+                        errMessage = _b.sent();
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_2 = _b.sent();
+                        this.response.end(JSON.stringify(err_2));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RequestHandlerHelper.prototype.onNotFound = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, errMessage, err_3;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotFound(this.request.url)];
+                    case 1:
+                        errMessage = _b.sent();
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_3 = _b.sent();
+                        this.response.end(JSON.stringify(err_3));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, errMessage, err_4;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onMethodNotAllowed()];
+                    case 1:
+                        errMessage = _b.sent();
+                        this.response.setHeader("Allow", allowedMethods.join(","));
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        err_4 = _b.sent();
+                        this.response.end(JSON.stringify(err_4));
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    RequestHandlerHelper.prototype.onErrorOccured = function (error) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, result, err_5;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (typeof error === 'string') {
+                            error = {
+                                message: error
+                            };
+                        }
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error)];
+                    case 2:
+                        result = _b.sent();
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.end(result);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_5 = _b.sent();
+                        this.response.end(JSON.stringify(err_5));
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return RequestHandlerHelper;
 }());
 
 
 
 /***/ }),
 
-/***/ "./src/global.ts":
-/*!***********************!*\
-  !*** ./src/global.ts ***!
-  \***********************/
-/*! exports provided: Global */
+/***/ "./src/handlers/route_handler.ts":
+/*!***************************************!*\
+  !*** ./src/handlers/route_handler.ts ***!
+  \***************************************/
+/*! exports provided: RouteHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Global", function() { return Global; });
-var Global = /** @class */ (function () {
-    function Global() {
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteHandler", function() { return RouteHandler; });
+var routerCollection = [];
+var RouteHandler = /** @class */ (function () {
+    function RouteHandler() {
     }
-    Global.walls = [];
-    return Global;
+    Object.defineProperty(RouteHandler, "routerCollection", {
+        get: function () {
+            return routerCollection;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouteHandler.addToRouterCollection = function (value) {
+        var route = routerCollection.find(function (x) { return x.controllerName === value.controller.name; });
+        if (route == null) {
+            routerCollection.push({
+                actions: [],
+                controller: value.controller,
+                controllerName: value.controller.name,
+                path: value.path,
+                shields: []
+            });
+        }
+        else {
+            route.controller = value.controller;
+            route.path = value.path;
+            // change pattern value since we have controller name now.
+            route.actions.forEach(function (actionInfo) {
+                if (actionInfo.pattern.indexOf(value.path) < 0) {
+                    actionInfo.pattern = "/" + value.path + actionInfo.pattern;
+                }
+            });
+        }
+    };
+    RouteHandler.addShields = function (shields, className) {
+        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
+        if (index < 0) {
+            routerCollection.push({
+                actions: [],
+                controller: null,
+                controllerName: className,
+                shields: shields,
+                path: null
+            });
+        }
+        else {
+            routerCollection[index].shields = shields;
+        }
+    };
+    RouteHandler.addWorker = function (newAction, className) {
+        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        if (router == null) {
+            routerCollection.push({
+                actions: [newAction],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null
+            });
+        }
+        else {
+            var savedAction = router.actions.find(function (val) { return val.workerName === newAction.workerName; });
+            if (savedAction == null) {
+                newAction.pattern = router.path == null ? newAction.pattern : "/" + router.path + newAction.pattern;
+                router.actions.push(newAction);
+            }
+            else {
+                savedAction.methodsAllowed = newAction.methodsAllowed;
+                savedAction.pattern = router.path == null ? savedAction.pattern : "/" + router.path + savedAction.pattern;
+            }
+        }
+    };
+    RouteHandler.addGuards = function (guards, className, actionName) {
+        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
+        var pattern = actionName.toLowerCase();
+        if (index < 0) {
+            routerCollection.push({
+                actions: [{
+                        workerName: actionName,
+                        guards: guards,
+                        methodsAllowed: null,
+                        pattern: pattern
+                    }],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null
+            });
+        }
+        else {
+            var savedAction = routerCollection[index].actions.find(function (val) { return val.workerName === actionName; });
+            if (savedAction == null) {
+                routerCollection[index].actions.push({
+                    workerName: actionName,
+                    guards: guards,
+                    methodsAllowed: null,
+                    pattern: pattern
+                });
+            }
+            else {
+                savedAction.guards = guards;
+            }
+        }
+    };
+    RouteHandler.addPattern = function (pattern, className, actionName) {
+        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        if (router == null) {
+            routerCollection.push({
+                actions: [{
+                        workerName: actionName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern
+                    }],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null
+            });
+        }
+        else {
+            var savedAction = router.actions.find(function (val) { return val.workerName === actionName; });
+            pattern = router.path == null ? pattern : "/" + router.path + pattern;
+            if (savedAction == null) {
+                router.actions.push({
+                    workerName: actionName,
+                    guards: [],
+                    methodsAllowed: null,
+                    pattern: pattern
+                });
+            }
+            else {
+                savedAction.pattern = pattern;
+            }
+        }
+    };
+    return RouteHandler;
 }());
 
 
@@ -1862,7 +2701,7 @@ var parseCookie = function (cookie) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseAndMatchRoute", function() { return parseAndMatchRoute; });
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../route_handler */ "./src/route_handler.ts");
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../global */ "./src/global.ts");
 
 
@@ -1881,7 +2720,7 @@ var parseAndMatchRoute = function (url, reqMethod) {
         allows: []
     };
     var firstPart = urlParts[1];
-    var route = _route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
+    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
     if (route != null) {
         matchedRoute.controller = route.controller;
         var urlPartLength_1 = urlParts.length;
@@ -2380,771 +3219,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error_handler */ "./src/model/error_handler.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _error_handler__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"]; });
 
-
-
-
-/***/ }),
-
-/***/ "./src/post_handler.ts":
-/*!*****************************!*\
-  !*** ./src/post_handler.ts ***!
-  \*****************************/
-/*! exports provided: PostHandler */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PostHandler", function() { return PostHandler; });
-/* harmony import */ var _controller_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./controller_handler */ "./src/controller_handler.ts");
-/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers/promise */ "./src/helpers/promise.ts");
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./enums/mime_type */ "./src/enums/mime_type.ts");
-/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! content-type */ "content-type");
-/* harmony import */ var content_type__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(content_type__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! querystring */ "querystring");
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_5__);
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-var PostHandler = /** @class */ (function (_super) {
-    __extends(PostHandler, _super);
-    function PostHandler() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.files = {};
-        return _this;
-    }
-    PostHandler.prototype.getPostRawData_ = function () {
-        var _this = this;
-        var body = [];
-        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (res, rej) {
-            _this.request.on('data', function (chunk) {
-                body.push(chunk);
-            }).on('end', function () {
-                var bodyBuffer = Buffer.concat(body);
-                res(bodyBuffer);
-            });
-        });
-    };
-    PostHandler.prototype.handlePostData = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var postData, bodyBuffer, contentType, ex_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        postData = void 0;
-                        return [4 /*yield*/, this.getPostRawData_()];
-                    case 1:
-                        bodyBuffer = _a.sent();
-                        contentType = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_2__["__ContentType"]] || this.request.headers["content-type"];
-                        if (contentType != null) {
-                            contentType = content_type__WEBPACK_IMPORTED_MODULE_4__["parse"](contentType).type;
-                        }
-                        switch (contentType) {
-                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
-                                try {
-                                    postData = JSON.parse(bodyBuffer.toString());
-                                }
-                                catch (ex) {
-                                    /* tslint:disable-next-line */
-                                    throw "Post data is invalid";
-                                }
-                                break;
-                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
-                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
-                                postData = bodyBuffer.toString();
-                                break;
-                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
-                                postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyBuffer.toString());
-                                break;
-                            default:
-                                postData = {};
-                        }
-                        return [2 /*return*/, postData];
-                    case 2:
-                        ex_1 = _a.sent();
-                        throw ex_1;
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return PostHandler;
-}(_controller_handler__WEBPACK_IMPORTED_MODULE_0__["ControllerHandler"]));
-
-
-
-/***/ }),
-
-/***/ "./src/request_handler.ts":
-/*!********************************!*\
-  !*** ./src/request_handler.ts ***!
-  \********************************/
-/*! exports provided: RequestHandler */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandler", function() { return RequestHandler; });
-/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! url */ "url");
-/* harmony import */ var url__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(url__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./global */ "./src/global.ts");
-/* harmony import */ var _helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/parse_cookie */ "./src/helpers/parse_cookie.ts");
-/* harmony import */ var _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model/cookie_manager */ "./src/model/cookie_manager.ts");
-/* harmony import */ var _helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./helpers/parse_match_route */ "./src/helpers/parse_match_route.ts");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./util */ "./src/util.ts");
-/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./enums/http_method */ "./src/enums/http_method.ts");
-/* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./post_handler */ "./src/post_handler.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-
-
-
-
-var RequestHandler = /** @class */ (function (_super) {
-    __extends(RequestHandler, _super);
-    function RequestHandler(request, response) {
-        var _this = _super.call(this) || this;
-        _this.data_ = {};
-        _this.request = request;
-        _this.response = response;
-        _this.registerEvents();
-        return _this;
-    }
-    RequestHandler.prototype.registerEvents = function () {
-        this.request.on('error', this.onBadRequest);
-        this.response.on('error', this.onErrorOccured.bind(this));
-    };
-    RequestHandler.prototype.runWallIncoming_ = function () {
-        var _this = this;
-        return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) { return __awaiter(_this, void 0, void 0, function () {
-            var wallObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        wallObj = new wall();
-                        wallObj.body = this.body;
-                        wallObj.cookies = this.cookieManager;
-                        wallObj.query = this.query_;
-                        wallObj.session = this.session_;
-                        wallObj.request = this.request;
-                        wallObj.response = this.response;
-                        wallObj.data = this.data_;
-                        this.wallInstances.push(wallObj);
-                        return [4 /*yield*/, wallObj.onIncoming()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
-    };
-    RequestHandler.prototype.runController_ = function () {
-        var controllerObj = new this.routeMatchInfo_.controller();
-        controllerObj.request = this.request;
-        controllerObj.response = this.response;
-        controllerObj.query = this.query_;
-        controllerObj.body = this.body;
-        controllerObj.session = this.session_;
-        controllerObj.cookies = this.cookieManager;
-        controllerObj.params = this.routeMatchInfo_.params;
-        controllerObj.data = this.data_;
-        controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
-    };
-    RequestHandler.prototype.executeShieldsProtection_ = function () {
-        var _this = this;
-        return Promise.all(this.routeMatchInfo_.shields.map(function (shield) { return __awaiter(_this, void 0, void 0, function () {
-            var shieldObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        shieldObj = new shield();
-                        shieldObj.body = this.body;
-                        shieldObj.cookies = this.cookieManager;
-                        shieldObj.query = this.query_;
-                        shieldObj.session = this.session_;
-                        shieldObj.request = this.request;
-                        shieldObj.response = this.response;
-                        shieldObj.data = this.data_;
-                        return [4 /*yield*/, shieldObj.protect()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
-    };
-    RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
-        var _this = this;
-        return Promise.all(guards.map(function (guard) { return __awaiter(_this, void 0, void 0, function () {
-            var guardObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        guardObj = new guard();
-                        guardObj.body = this.body;
-                        guardObj.cookies = this.cookieManager;
-                        guardObj.query = this.query_;
-                        guardObj.session = this.session_;
-                        guardObj.request = this.request;
-                        guardObj.response = this.response;
-                        guardObj.data = this.data_;
-                        return [4 /*yield*/, guardObj.check()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
-    };
-    RequestHandler.prototype.parseCookieFromRequest_ = function () {
-        if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
-            var rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
-            var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
-            this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
-            this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
-            this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"]];
-            this.session_.cookies = this.cookieManager;
-        }
-    };
-    RequestHandler.prototype.setPreHeader_ = function () {
-        this.response.setHeader('X-Powered-By', _global__WEBPACK_IMPORTED_MODULE_2__["Global"].appName);
-        this.response.setHeader('Vary', 'Accept-Encoding');
-    };
-    RequestHandler.prototype.execute_ = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, wallProtectionResult, responseByWall, pathUrl, extension, requestMethod, actionInfo, shieldProtectionResult, responseByShield, guardsCheckResult, responseByGuard, ex_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 11, , 12]);
-                        this.setPreHeader_();
-                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
-                        this.query_ = urlDetail.query;
-                        this.parseCookieFromRequest_();
-                        return [4 /*yield*/, this.runWallIncoming_()];
-                    case 1:
-                        wallProtectionResult = _a.sent();
-                        responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByWall == null)) return [3 /*break*/, 9];
-                        pathUrl = urlDetail.pathname;
-                        extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
-                        requestMethod = this.request.method;
-                        if (!(_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension) === false)) return [3 /*break*/, 2];
-                        this.handleFileRequest(pathUrl, extension);
-                        return [3 /*break*/, 8];
-                    case 2:
-                        this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
-                        if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 3];
-                        // it may be a folder then
-                        this.handleFileRequestForFolder(pathUrl);
-                        return [3 /*break*/, 8];
-                    case 3:
-                        actionInfo = this.routeMatchInfo_.actionInfo;
-                        if (!(actionInfo == null)) return [3 /*break*/, 4];
-                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                        return [3 /*break*/, 8];
-                    case 4: return [4 /*yield*/, this.executeShieldsProtection_()];
-                    case 5:
-                        shieldProtectionResult = _a.sent();
-                        responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByShield == null)) return [3 /*break*/, 7];
-                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 6:
-                        guardsCheckResult = _a.sent();
-                        responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
-                        if (responseByGuard == null) {
-                            this.runController_();
-                        }
-                        else {
-                            this.onResultEvaluated(responseByGuard);
-                        }
-                        return [3 /*break*/, 8];
-                    case 7:
-                        this.onResultEvaluated(responseByShield);
-                        _a.label = 8;
-                    case 8: return [3 /*break*/, 10];
-                    case 9:
-                        this.onResultEvaluated(responseByWall);
-                        _a.label = 10;
-                    case 10: return [3 /*break*/, 12];
-                    case 11:
-                        ex_1 = _a.sent();
-                        this.onErrorOccured(ex_1);
-                        return [3 /*break*/, 12];
-                    case 12: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    RequestHandler.prototype.handle = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var body, ex_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_8__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
-                        this.body = {};
-                        this.execute_();
-                        return [3 /*break*/, 5];
-                    case 1:
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 5];
-                        _a.label = 2;
-                    case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, this.handlePostData()];
-                    case 3:
-                        body = _a.sent();
-                        this.body = body;
-                        this.execute_();
-                        return [3 /*break*/, 5];
-                    case 4:
-                        ex_2 = _a.sent();
-                        this.onBadRequest(ex_2);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return RequestHandler;
-}(_post_handler__WEBPACK_IMPORTED_MODULE_9__["PostHandler"]));
-
-
-
-/***/ }),
-
-/***/ "./src/request_handler_helper.ts":
-/*!***************************************!*\
-  !*** ./src/request_handler_helper.ts ***!
-  \***************************************/
-/*! exports provided: RequestHandlerHelper */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestHandlerHelper", function() { return RequestHandlerHelper; });
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./enums/http_status_code */ "./src/enums/http_status_code.ts");
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enums/mime_type */ "./src/enums/mime_type.ts");
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./global */ "./src/global.ts");
-/* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! negotiator */ "negotiator");
-/* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util */ "./src/util.ts");
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-var RequestHandlerHelper = /** @class */ (function () {
-    function RequestHandlerHelper() {
-        this.wallInstances = [];
-    }
-    RequestHandlerHelper.prototype.isNullOrEmpty = function (value) {
-        return _util__WEBPACK_IMPORTED_MODULE_5__["Util"].isNullOrEmpty(value);
-    };
-    RequestHandlerHelper.prototype.runWallOutgoing = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Promise.all(this.wallInstances.reverse().map(function (wallObj) { return __awaiter(_this, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!(wallObj.onOutgoing != null)) return [3 /*break*/, 2];
-                                    return [4 /*yield*/, wallObj.onOutgoing()];
-                                case 1: return [2 /*return*/, _a.sent()];
-                                case 2: return [2 /*return*/];
-                            }
-                        });
-                    }); }))];
-            });
-        });
-    };
-    RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
-        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_4__(this.request);
-        var availableTypes = this.getAvailableTypes_(type);
-        if (availableTypes == null) {
-            availableTypes = [type];
-        }
-        return negotiator.mediaType(availableTypes);
-    };
-    RequestHandlerHelper.prototype.getContentTypeFromNegotiationHavingMultipleTypes = function (types) {
-        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_4__(this.request);
-        return negotiator.mediaType(types);
-    };
-    RequestHandlerHelper.prototype.getAvailableTypes_ = function (type) {
-        switch (type) {
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Json:
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Xml:
-                return [_enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Json, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Xml];
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html:
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Css:
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Csv:
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Js:
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Rtf:
-            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Text:
-                return [_enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Text, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Js,
-                    _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Css, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Rtf, _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Csv];
-        }
-        return null;
-    };
-    RequestHandlerHelper.prototype.onBadRequest = function (error) {
-        var _this = this;
-        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onBadRequest(error).then(function (errMessage) {
-            var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            _this.response.end(errMessage);
-        }).catch(function (err) {
-            _this.response.end(JSON.stringify(err));
-        });
-    };
-    RequestHandlerHelper.prototype.onForbiddenRequest = function () {
-        var _this = this;
-        var _a;
-        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onForbiddenRequest().then(function (errMessage) {
-            _this.response.end(errMessage);
-        }).catch(function (err) {
-            _this.response.end(JSON.stringify(err));
-        });
-    };
-    RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
-        var _this = this;
-        var _a;
-        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotAcceptableRequest().then(function (errMessage) {
-            _this.response.end(errMessage);
-        }).catch(function (err) {
-            _this.response.end(JSON.stringify(err));
-        });
-    };
-    RequestHandlerHelper.prototype.onNotFound = function () {
-        var _this = this;
-        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotFound(this.request.url).then(function (result) {
-            var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            _this.response.end(result);
-        }).catch(function (err) {
-            _this.response.end(JSON.stringify(err));
-        });
-    };
-    RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
-        var _this = this;
-        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onMethodNotAllowed().then(function (result) {
-            var _a;
-            _this.response.setHeader("Allow", allowedMethods.join(","));
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            _this.response.end(result);
-        }).catch(function (err) {
-            _this.response.end(JSON.stringify(err));
-        });
-    };
-    RequestHandlerHelper.prototype.onErrorOccured = function (error) {
-        var _this = this;
-        if (typeof error === 'string') {
-            error = {
-                message: error
-            };
-        }
-        new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onServerError(error).then(function (result) {
-            var _a;
-            _this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
-            _this.response.end(result);
-        }).catch(function (err) {
-            _this.response.end(JSON.stringify(err));
-        });
-    };
-    return RequestHandlerHelper;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/route_handler.ts":
-/*!******************************!*\
-  !*** ./src/route_handler.ts ***!
-  \******************************/
-/*! exports provided: RouteHandler */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteHandler", function() { return RouteHandler; });
-var routerCollection = [];
-var RouteHandler = /** @class */ (function () {
-    function RouteHandler() {
-    }
-    Object.defineProperty(RouteHandler, "routerCollection", {
-        get: function () {
-            return routerCollection;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    RouteHandler.addToRouterCollection = function (value) {
-        var route = routerCollection.find(function (x) { return x.controllerName === value.controller.name; });
-        if (route == null) {
-            routerCollection.push({
-                actions: [],
-                controller: value.controller,
-                controllerName: value.controller.name,
-                path: value.path,
-                shields: []
-            });
-        }
-        else {
-            route.controller = value.controller;
-            route.path = value.path;
-            // change pattern value since we have controller name now.
-            route.actions.forEach(function (actionInfo) {
-                if (actionInfo.pattern.indexOf(value.path) < 0) {
-                    actionInfo.pattern = "/" + value.path + actionInfo.pattern;
-                }
-            });
-        }
-    };
-    RouteHandler.addShields = function (shields, className) {
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
-        if (index < 0) {
-            routerCollection.push({
-                actions: [],
-                controller: null,
-                controllerName: className,
-                shields: shields,
-                path: null
-            });
-        }
-        else {
-            routerCollection[index].shields = shields;
-        }
-    };
-    RouteHandler.addWorker = function (newAction, className) {
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        if (router == null) {
-            routerCollection.push({
-                actions: [newAction],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null
-            });
-        }
-        else {
-            var savedAction = router.actions.find(function (val) { return val.workerName === newAction.workerName; });
-            if (savedAction == null) {
-                newAction.pattern = router.path == null ? newAction.pattern : "/" + router.path + newAction.pattern;
-                router.actions.push(newAction);
-            }
-            else {
-                savedAction.methodsAllowed = newAction.methodsAllowed;
-                savedAction.pattern = router.path == null ? savedAction.pattern : "/" + router.path + savedAction.pattern;
-            }
-        }
-    };
-    RouteHandler.addGuards = function (guards, className, actionName) {
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
-        var pattern = actionName.toLowerCase();
-        if (index < 0) {
-            routerCollection.push({
-                actions: [{
-                        workerName: actionName,
-                        guards: guards,
-                        methodsAllowed: null,
-                        pattern: pattern
-                    }],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null
-            });
-        }
-        else {
-            var savedAction = routerCollection[index].actions.find(function (val) { return val.workerName === actionName; });
-            if (savedAction == null) {
-                routerCollection[index].actions.push({
-                    workerName: actionName,
-                    guards: guards,
-                    methodsAllowed: null,
-                    pattern: pattern
-                });
-            }
-            else {
-                savedAction.guards = guards;
-            }
-        }
-    };
-    RouteHandler.addPattern = function (pattern, className, actionName) {
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        if (router == null) {
-            routerCollection.push({
-                actions: [{
-                        workerName: actionName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern
-                    }],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null
-            });
-        }
-        else {
-            var savedAction = router.actions.find(function (val) { return val.workerName === actionName; });
-            pattern = router.path == null ? pattern : "/" + router.path + pattern;
-            if (savedAction == null) {
-                router.actions.push({
-                    workerName: actionName,
-                    guards: [],
-                    methodsAllowed: null,
-                    pattern: pattern
-                });
-            }
-            else {
-                savedAction.pattern = pattern;
-            }
-        }
-    };
-    return RouteHandler;
-}());
 
 
 

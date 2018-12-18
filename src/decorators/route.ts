@@ -1,4 +1,4 @@
-import { RouteHandler } from "../route_handler";
+import { RouteHandler } from "../handlers/route_handler";
 
 export const route = (format: string): MethodDecorator => {
     return ((target: any, methodName: string, descriptor: PropertyDescriptor) => {

@@ -1,3 +1,5 @@
+import { Global } from "./global";
+
 export class Util {
     static isNull(value) {
         return value == null;

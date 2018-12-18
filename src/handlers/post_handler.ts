@@ -1,7 +1,7 @@
 import { ControllerHandler } from "./controller_handler";
-import { promise } from "./helpers/promise";
-import { __ContentType } from "./constant";
-import { MIME_TYPE } from "./enums/mime_type";
+import { promise } from "../helpers/promise";
+import { __ContentType } from "../constant";
+import { MIME_TYPE } from "../enums/mime_type";
 import * as ContentType from "content-type";
 import * as QueryString from 'querystring';
 
