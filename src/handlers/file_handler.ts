@@ -88,10 +88,11 @@ export class FileHandler extends RequestHandlerHelper {
 
     }
 
-    protected handleFileRequest(urlPath: string, fileType: string) {
+    protected handleFileRequest(urlPath: string) {
+        const extension = path.parse(urlPath).ext;
         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
         if (absFilePath != null) {
-            this.handleFileRequestFromAbsolutePath(absFilePath, fileType);
+            this.handleFileRequestFromAbsolutePath(absFilePath, extension);
         }
         else {
             this.onNotFound();

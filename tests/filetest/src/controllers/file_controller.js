@@ -3,10 +3,15 @@ import {
     defaultWorker,
     htmlResult,
     textResult,
-    renderView
+    renderView,
+    route,
+    fileResult,
+    worker
 } from "fortjs";
 
-export class DefaultController extends Controller {
+import * as Path from "path";
+
+export class FileController extends Controller {
     @defaultWorker()
     async default () {
         try {
@@ -19,5 +24,12 @@ export class DefaultController extends Controller {
             const result = await textResult(`Our server is busy right now. Please try later.`);
             return result;
         }
+    }
+
+    @route("/scripts/{file}.js")
+    @worker()
+    async getScripts() {
+        const filePath = Path.join(__dirname, "../static/scripts/", `${this.params.file}.js`);
+        return fileResult(filePath);
     }
 }

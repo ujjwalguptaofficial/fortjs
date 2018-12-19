@@ -4,7 +4,7 @@ export declare class FileHandler extends RequestHandlerHelper {
     private getFileStats_;
     protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string): Promise<any>;
     private checkForFolderAllowAndReturnPath_;
-    protected handleFileRequest(urlPath: string, fileType: string): void;
+    protected handleFileRequest(urlPath: string): void;
     /**
      * process folders handling asuuming path is folder.
      * Please check whether the file is folder before calling this function

@@ -1,8 +1,8 @@
 import {
-    DefaultController
-} from "./controllers/default_controller";
+    FileController
+} from "./controllers/file_controller";
 
 export const routes = [{
-    path: "/default",
-    controller: DefaultController
+    path: "/file",
+    controller: FileController
 }]

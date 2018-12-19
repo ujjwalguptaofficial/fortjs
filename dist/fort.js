@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.2.2 - 18/12/2018
+ * @license :fortjs - V1.2.2 - 19/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -1385,10 +1385,11 @@ var FileHandler = /** @class */ (function (_super) {
         }
         return absPath;
     };
-    FileHandler.prototype.handleFileRequest = function (urlPath, fileType) {
+    FileHandler.prototype.handleFileRequest = function (urlPath) {
+        var extension = path__WEBPACK_IMPORTED_MODULE_2__["parse"](urlPath).ext;
         var absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
         if (absFilePath != null) {
-            this.handleFileRequestFromAbsolutePath(absFilePath, fileType);
+            this.handleFileRequestFromAbsolutePath(absFilePath, extension);
         }
         else {
             this.onNotFound();
@@ -1688,11 +1689,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/parse_cookie */ "./src/helpers/parse_cookie.ts");
 /* harmony import */ var _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../model/cookie_manager */ "./src/model/cookie_manager.ts");
 /* harmony import */ var _helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers/parse_match_route */ "./src/helpers/parse_match_route.ts");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util */ "./src/util.ts");
-/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../enums/http_method */ "./src/enums/http_method.ts");
-/* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
+/* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../enums/http_method */ "./src/enums/http_method.ts");
+/* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1749,8 +1747,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-
-
 var RequestHandler = /** @class */ (function (_super) {
     __extends(RequestHandler, _super);
     function RequestHandler(request, response) {
@@ -1758,10 +1754,10 @@ var RequestHandler = /** @class */ (function (_super) {
         _this.data_ = {};
         _this.request = request;
         _this.response = response;
-        _this.registerEvents();
+        _this.registerEvents_();
         return _this;
     }
-    RequestHandler.prototype.registerEvents = function () {
+    RequestHandler.prototype.registerEvents_ = function () {
         this.request.on('error', this.onBadRequest);
         this.response.on('error', this.onErrorOccured.bind(this));
     };
@@ -1858,11 +1854,11 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.execute_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, wallProtectionResult, responseByWall, pathUrl, extension, requestMethod, actionInfo, shieldProtectionResult, responseByShield, guardsCheckResult, responseByGuard, ex_1;
+            var urlDetail, wallProtectionResult, responseByWall, pathUrl, requestMethod, actionInfo, shieldProtectionResult, responseByShield, guardsCheckResult, responseByGuard, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 11, , 12]);
+                        _a.trys.push([0, 10, , 11]);
                         this.setPreHeader_();
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         this.query_ = urlDetail.query;
@@ -1871,31 +1867,26 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 1:
                         wallProtectionResult = _a.sent();
                         responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByWall == null)) return [3 /*break*/, 9];
+                        if (!(responseByWall == null)) return [3 /*break*/, 8];
                         pathUrl = urlDetail.pathname;
-                        extension = path__WEBPACK_IMPORTED_MODULE_6__["parse"](pathUrl).ext;
                         requestMethod = this.request.method;
-                        if (!(_util__WEBPACK_IMPORTED_MODULE_7__["Util"].isNullOrEmpty(extension) === false)) return [3 /*break*/, 2];
-                        this.handleFileRequest(pathUrl, extension);
-                        return [3 /*break*/, 8];
-                    case 2:
                         this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
-                        if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 3];
-                        // it may be a folder then
-                        this.handleFileRequestForFolder(pathUrl);
-                        return [3 /*break*/, 8];
-                    case 3:
+                        if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 2];
+                        // it may be a file or folder then
+                        this.handleFileRequest(pathUrl);
+                        return [3 /*break*/, 7];
+                    case 2:
                         actionInfo = this.routeMatchInfo_.actionInfo;
-                        if (!(actionInfo == null)) return [3 /*break*/, 4];
+                        if (!(actionInfo == null)) return [3 /*break*/, 3];
                         this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                        return [3 /*break*/, 8];
-                    case 4: return [4 /*yield*/, this.executeShieldsProtection_()];
-                    case 5:
+                        return [3 /*break*/, 7];
+                    case 3: return [4 /*yield*/, this.executeShieldsProtection_()];
+                    case 4:
                         shieldProtectionResult = _a.sent();
                         responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByShield == null)) return [3 /*break*/, 7];
+                        if (!(responseByShield == null)) return [3 /*break*/, 6];
                         return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 6:
+                    case 5:
                         guardsCheckResult = _a.sent();
                         responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
                         if (responseByGuard == null) {
@@ -1904,20 +1895,20 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onResultEvaluated(responseByGuard);
                         }
-                        return [3 /*break*/, 8];
-                    case 7:
+                        return [3 /*break*/, 7];
+                    case 6:
                         this.onResultEvaluated(responseByShield);
-                        _a.label = 8;
-                    case 8: return [3 /*break*/, 10];
-                    case 9:
+                        _a.label = 7;
+                    case 7: return [3 /*break*/, 9];
+                    case 8:
                         this.onResultEvaluated(responseByWall);
-                        _a.label = 10;
-                    case 10: return [3 /*break*/, 12];
-                    case 11:
+                        _a.label = 9;
+                    case 9: return [3 /*break*/, 11];
+                    case 10:
                         ex_1 = _a.sent();
                         this.onErrorOccured(ex_1);
-                        return [3 /*break*/, 12];
-                    case 12: return [2 /*return*/];
+                        return [3 /*break*/, 11];
+                    case 11: return [2 /*return*/];
                 }
             });
         });
@@ -1928,7 +1919,7 @@ var RequestHandler = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_8__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
+                        if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_6__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
                         this.body = {};
                         this.execute_();
                         return [3 /*break*/, 5];
@@ -1953,7 +1944,7 @@ var RequestHandler = /** @class */ (function (_super) {
         });
     };
     return RequestHandler;
-}(_post_handler__WEBPACK_IMPORTED_MODULE_9__["PostHandler"]));
+}(_post_handler__WEBPACK_IMPORTED_MODULE_7__["PostHandler"]));
 
 
 
@@ -2254,9 +2245,10 @@ var RouteHandler = /** @class */ (function () {
             route.path = value.path;
             // change pattern value since we have controller name now.
             route.actions.forEach(function (actionInfo) {
-                if (actionInfo.pattern.indexOf(value.path) < 0) {
-                    actionInfo.pattern = "/" + value.path + actionInfo.pattern;
-                }
+                // check if we are not adding again
+                // if (actionInfo.pattern.indexOf(value.path) < 0) {
+                actionInfo.pattern = "/" + value.path + actionInfo.pattern;
+                //}
             });
         }
     };
@@ -2743,23 +2735,36 @@ var parseAndMatchRoute = function (url, reqMethod) {
             });
         }
         else {
+            // const regex = /{(.*)}/;
+            // const regex = /{(.*)}(?!\.)/;
+            var regex1_1 = /{(.*)}(?!.)/;
+            var regex2_1 = /{(.*)}\.(\w+)(?!.)/;
             route.actions.every(function (routeActionInfo) {
                 var patternSplit = routeActionInfo.pattern.split("/");
                 if (urlPartLength_1 === patternSplit.length) {
                     var isMatched_1 = true;
                     var params_1 = {};
                     urlParts.every(function (urlPart, i) {
-                        var regMatch = patternSplit[i].match(/{(.*)}/);
-                        if (regMatch != null) {
-                            params_1[regMatch[1]] = urlPart;
+                        var regMatch1 = patternSplit[i].match(regex1_1);
+                        var regMatch2 = patternSplit[i].match(regex2_1);
+                        if (regMatch1 != null) {
+                            params_1[regMatch1[1]] = urlPart;
+                        }
+                        else if (regMatch2 != null) {
+                            var splitByDot = urlPart.split(".");
+                            console.log("splitByDot", splitByDot, "regMatch2", regMatch2);
+                            if (splitByDot[1] === regMatch2[2]) {
+                                params_1[regMatch2[1]] = splitByDot[0];
+                            }
+                            else {
+                                isMatched_1 = false;
+                                return false;
+                            }
                         }
                         else if (urlPart !== patternSplit[i]) {
                             isMatched_1 = false;
                             return false;
                         }
-                        // else {
-                        //     return /\w\.\w/.test(urlPart);
-                        // }
                         return true;
                     });
                     if (isMatched_1 === true) {

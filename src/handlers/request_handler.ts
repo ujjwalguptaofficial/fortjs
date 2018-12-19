@@ -29,10 +29,10 @@ export class RequestHandler extends PostHandler {
         super();
         this.request = request;
         this.response = response;
-        this.registerEvents();
+        this.registerEvents_();
     }
 
-    private registerEvents() {
+    private registerEvents_() {
         this.request.on('error', this.onBadRequest);
         this.response.on('error', this.onErrorOccured.bind(this));
     }
@@ -122,38 +122,32 @@ export class RequestHandler extends PostHandler {
             const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
             if (responseByWall == null) {
                 const pathUrl = urlDetail.pathname;
-                const extension = path.parse(pathUrl).ext;
                 const requestMethod = this.request.method as HTTP_METHOD;
-                if (Util.isNullOrEmpty(extension) === false) {
-                    this.handleFileRequest(pathUrl, extension);
+                this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
+                if (this.routeMatchInfo_ == null) { // no route matched
+                    // it may be a file or folder then
+                    this.handleFileRequest(pathUrl);
                 }
                 else {
-                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-                    if (this.routeMatchInfo_ == null) { // no route matched
-                        // it may be a folder then
-                        this.handleFileRequestForFolder(pathUrl);
+                    const actionInfo = this.routeMatchInfo_.actionInfo;
+                    if (actionInfo == null) {
+                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
                     }
                     else {
-                        const actionInfo = this.routeMatchInfo_.actionInfo;
-                        if (actionInfo == null) {
-                            this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                        }
-                        else {
-                            const shieldProtectionResult = await this.executeShieldsProtection_();
-                            const responseByShield = shieldProtectionResult.find(qry => qry != null);
-                            if (responseByShield == null) {
-                                const guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
-                                const responseByGuard = guardsCheckResult.find(qry => qry != null);
-                                if (responseByGuard == null) {
-                                    this.runController_();
-                                }
-                                else {
-                                    this.onResultEvaluated(responseByGuard);
-                                }
+                        const shieldProtectionResult = await this.executeShieldsProtection_();
+                        const responseByShield = shieldProtectionResult.find(qry => qry != null);
+                        if (responseByShield == null) {
+                            const guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
+                            const responseByGuard = guardsCheckResult.find(qry => qry != null);
+                            if (responseByGuard == null) {
+                                this.runController_();
                             }
                             else {
-                                this.onResultEvaluated(responseByShield);
+                                this.onResultEvaluated(responseByGuard);
                             }
+                        }
+                        else {
+                            this.onResultEvaluated(responseByShield);
                         }
                     }
                 }

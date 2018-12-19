@@ -7,7 +7,7 @@ export declare class RequestHandler extends PostHandler {
     private data_;
     private routeMatchInfo_;
     constructor(request: http.IncomingMessage, response: http.ServerResponse);
-    private registerEvents;
+    private registerEvents_;
     private runWallIncoming_;
     private runController_;
     private executeShieldsProtection_;

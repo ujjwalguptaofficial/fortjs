@@ -42,23 +42,35 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
             });
         }
         else {
+            // const regex = /{(.*)}/;
+            // const regex = /{(.*)}(?!\.)/;
+            const regex1 = /{(.*)}(?!.)/;
+            const regex2 = /{(.*)}\.(\w+)(?!.)/;
             route.actions.every(routeActionInfo => {
                 const patternSplit = routeActionInfo.pattern.split("/");
                 if (urlPartLength === patternSplit.length) {
                     let isMatched = true;
                     const params = {};
                     urlParts.every((urlPart, i) => {
-                        const regMatch = patternSplit[i].match(/{(.*)}/);
-                        if (regMatch != null) {
-                            params[regMatch[1]] = urlPart;
+                        const regMatch1 = patternSplit[i].match(regex1);
+                        const regMatch2 = patternSplit[i].match(regex2);
+                        if (regMatch1 != null) {
+                            params[regMatch1[1]] = urlPart;
+                        }
+                        else if (regMatch2 != null) {
+                            const splitByDot = urlPart.split(".");
+                            if (splitByDot[1] === regMatch2[2]) {
+                                params[regMatch2[1]] = splitByDot[0];
+                            }
+                            else {
+                                isMatched = false;
+                                return false;
+                            }
                         }
                         else if (urlPart !== patternSplit[i]) {
                             isMatched = false;
                             return false;
                         }
-                        // else {
-                        //     return /\w\.\w/.test(urlPart);
-                        // }
                         return true;
                     });
                     if (isMatched === true) {

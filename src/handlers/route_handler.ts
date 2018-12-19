@@ -27,9 +27,10 @@ export class RouteHandler {
             route.path = value.path;
             // change pattern value since we have controller name now.
             route.actions.forEach(actionInfo => {
-                if (actionInfo.pattern.indexOf(value.path) < 0) {
-                    actionInfo.pattern = `/${value.path}${actionInfo.pattern}`;
-                }
+                // check if we are not adding again
+                // if (actionInfo.pattern.indexOf(value.path) < 0) {
+                actionInfo.pattern = `/${value.path}${actionInfo.pattern}`;
+                //}
             });
         }
     }
