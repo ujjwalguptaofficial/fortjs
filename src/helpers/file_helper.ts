@@ -51,4 +51,34 @@ export class FileHelper {
             }
         });
     }
+
+    static copyFile(oldPath, newPath) {
+        return new Promise((res, rej) => {
+            Fs.rename(oldPath, newPath, (err) => {
+                if (err) {
+                    if (err.code === 'EXDEV') {
+                        copy();
+                    } else {
+                        rej(err);
+                    }
+                }
+                res();
+            });
+
+            const copy = () => {
+                const readStream = Fs.createReadStream(oldPath);
+                const writeStream = Fs.createWriteStream(newPath);
+
+                readStream.on('error', rej);
+                writeStream.on('error', rej);
+
+                readStream.on('close', () => {
+                    Fs.unlink(oldPath, res);
+                });
+
+                readStream.pipe(writeStream);
+            };
+        });
+
+    }
 }

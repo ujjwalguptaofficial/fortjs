@@ -6,3 +6,5 @@ node_modules
 build
 deploy_key
 dist
+
+upload.png

@@ -2,6 +2,7 @@ import { SessionProvider } from "./session_provider";
 import { CookieManager } from "../model/cookie_manager";
 import { HttpResponse } from "../types/http_response";
 import { HttpRequest } from "../types/http_request";
+import { FileManager } from "../model/file_manager";
 export declare abstract class Controller {
     request: HttpRequest;
     response: HttpResponse;
@@ -12,11 +13,12 @@ export declare abstract class Controller {
         [key: string]: any;
     };
     session: SessionProvider;
-    cookies: CookieManager;
+    cookie: CookieManager;
     params: {
         [key: string]: any;
     };
     data: {
         [key: string]: any;
     };
+    file: FileManager;
 }

@@ -6,7 +6,9 @@ import {
     renderView,
     route,
     fileResult,
-    worker
+    worker,
+    HTTP_METHOD,
+    jsonResult
 } from "fortjs";
 
 import * as Path from "path";
@@ -31,5 +33,32 @@ export class FileController extends Controller {
     async getScripts() {
         const filePath = Path.join(__dirname, "../static/scripts/", `${this.params.file}.js`);
         return fileResult(filePath);
+    }
+
+    @worker([HTTP_METHOD.Post])
+    @route("/upload")
+    async uploadFile() {
+        const pathToSave = Path.join(__dirname, "../upload.png");
+        let result;
+        if (this.file.isExist('jsstore') === true) {
+            await this.file.saveTo('jsstore', pathToSave);
+            result = "file saved";
+        } else {
+            result = "file not saved";
+        }
+
+        return textResult(result);
+    }
+
+    @worker([HTTP_METHOD.Get])
+    @route("/upload")
+    async getUploadForm() {
+        return htmlResult(`<html><head></head><body>\
+        <form method="POST" enctype="multipart/form-data">\
+         <input type="text" name="textfield"><br />\
+         <input type="file" name="filefield"><br />\
+         <input type="submit">\
+       </form>\
+     </body></html>`);
     }
 }

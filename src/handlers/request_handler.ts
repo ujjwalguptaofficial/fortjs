@@ -9,8 +9,6 @@ import { GenericSessionProvider } from "../model/generic_session_provider";
 import { GenericGuard } from "../model/generic_guard";
 import { parseAndMatchRoute } from "../helpers/parse_match_route";
 import { IRouteMatch } from "../interfaces/route_match";
-import * as path from 'path';
-import { Util } from "../util";
 import { HTTP_METHOD } from "../enums/http_method";
 import { HttpResult } from "../types";
 import { PostHandler } from "./post_handler";
@@ -41,12 +39,13 @@ export class RequestHandler extends PostHandler {
         return Promise.all(Global.walls.map(async (wall) => {
             const wallObj = new wall();
             wallObj.body = this.body;
-            wallObj.cookies = this.cookieManager;
+            wallObj.cookie = this.cookieManager;
             wallObj.query = this.query_;
             wallObj.session = this.session_;
             wallObj.request = this.request as HttpRequest;
             wallObj.response = this.response as HttpResponse;
             wallObj.data = this.data_;
+            wallObj.file = this.file;
             this.wallInstances.push(wallObj);
             return await wallObj.onIncoming();
         }));
@@ -59,9 +58,10 @@ export class RequestHandler extends PostHandler {
         controllerObj.query = this.query_;
         controllerObj.body = this.body;
         controllerObj.session = this.session_;
-        controllerObj.cookies = this.cookieManager;
+        controllerObj.cookie = this.cookieManager;
         controllerObj.params = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
+        controllerObj.file = this.file;
         controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(
             this.onResultEvaluated.bind(this)
         ).catch(this.onErrorOccured.bind(this));
@@ -71,12 +71,13 @@ export class RequestHandler extends PostHandler {
         return Promise.all(this.routeMatchInfo_.shields.map(async shield => {
             const shieldObj = new shield();
             shieldObj.body = this.body;
-            shieldObj.cookies = this.cookieManager;
+            shieldObj.cookie = this.cookieManager;
             shieldObj.query = this.query_;
             shieldObj.session = this.session_;
             shieldObj.request = this.request as HttpRequest;
             shieldObj.response = this.response as HttpResponse;
             shieldObj.data = this.data_;
+            shieldObj.file = this.file;
             return await shieldObj.protect();
         }));
     }
@@ -85,12 +86,13 @@ export class RequestHandler extends PostHandler {
         return Promise.all(guards.map(async guard => {
             const guardObj = new guard();
             guardObj.body = this.body;
-            guardObj.cookies = this.cookieManager;
+            guardObj.cookie = this.cookieManager;
             guardObj.query = this.query_;
             guardObj.session = this.session_;
             guardObj.request = this.request as HttpRequest;
             guardObj.response = this.response as HttpResponse;
             guardObj.data = this.data_;
+            guardObj.file = this.file;
             return await guardObj.check();
         }));
     }
