@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.2.2 - 19/12/2018
+ * @license :fortjs - V1.3.0 - 20/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -2752,7 +2752,6 @@ var parseAndMatchRoute = function (url, reqMethod) {
                         }
                         else if (regMatch2 != null) {
                             var splitByDot = urlPart.split(".");
-                            console.log("splitByDot", splitByDot, "regMatch2", regMatch2);
                             if (splitByDot[1] === regMatch2[2]) {
                                 params_1[regMatch2[1]] = splitByDot[0];
                             }
