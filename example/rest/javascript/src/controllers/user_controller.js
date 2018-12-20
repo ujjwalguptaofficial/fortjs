@@ -11,13 +11,11 @@ import {
 } from 'fortjs';
 import {
   UserService
-} from '../service/user_service';
+} from '../services/user_service';
 import {
   ModelUserGuard
 } from '../guards/model_user_guard';
-import {
-  User
-} from '../models/user';
+
 
 export class UserController extends Controller {
 

@@ -1,11 +1,10 @@
-import { Controller, defaultWorker, htmlResult, textResult, renderView } from "fortjs";
+import { Controller, defaultWorker, htmlResult, textResult, renderView, viewResult } from "fortjs";
 
 export class DefaultController extends Controller {
     @defaultWorker()
     async default() {
         try {
-            const viewData = await renderView('controller:default,action:default');
-            const result = await htmlResult(viewData);
+            const result = await viewResult('controller:default,action:default');
             return result;
         } catch (ex) {
             console.log(ex);
