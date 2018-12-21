@@ -2,7 +2,7 @@ import { HttpFile } from "./http_file";
 import { FileHelper } from "../helpers/file_helper";
 
 export class FileManager {
-    files: { [key: string]: HttpFile };
+    files: { [key: string]: HttpFile } = {};
 
     isExist(fileName: string) {
         return this.files[fileName] != null;
@@ -11,7 +11,7 @@ export class FileManager {
     getFile(fileName: string) {
         return this.files[fileName];
     }
-    
+
     /**
      * saves file to supplied path
      *

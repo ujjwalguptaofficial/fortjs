@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.3.0 - 20/12/2018
+ * @license :fortjs - V1.3.0 - 21/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -3365,6 +3365,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var FileManager = /** @class */ (function () {
     function FileManager() {
+        this.files = {};
     }
     FileManager.prototype.isExist = function (fileName) {
         return this.files[fileName] != null;
