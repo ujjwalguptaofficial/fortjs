@@ -5,5 +5,5 @@ export declare class PostHandler extends ControllerHandler {
     protected file: FileManager;
     protected getPostRawData_(): Promise<{}>;
     private parseMultiPartData_;
-    protected handlePostData(): Promise<any>;
+    protected parsePostData(): Promise<any>;
 }

@@ -11,14 +11,11 @@ export abstract class Wall implements Controller {
     request: HttpRequest;
     response: HttpResponse;
     query: { [key: string]: any };
-    body: { [key: string]: any };
     session: SessionProvider;
     cookie: CookieManager;
-    params: { [key: string]: any };
+   
     data: { [key: string]: any };
 
-    file: FileManager;
-    
     abstract onIncoming(): Promise<HttpResult>;
     async onOutgoing() {
         return null;

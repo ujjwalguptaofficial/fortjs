@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.0 - 21/12/2018
+ * @license :fortjs - V1.4.0 - 22/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -863,6 +863,19 @@ var MemorySessionProvider = /** @class */ (function (_super) {
             });
         });
     };
+    MemorySessionProvider.prototype.clear = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var index;
+            var _this = this;
+            return __generator(this, function (_a) {
+                index = sessionValues.findIndex(function (q) { return q.identifier === _this.sessionId; });
+                if (index >= 0) {
+                    sessionValues.splice(index, 1);
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
     return MemorySessionProvider;
 }(_abstracts_session_provider__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"]));
 
@@ -1649,7 +1662,7 @@ var PostHandler = /** @class */ (function (_super) {
             });
         });
     };
-    PostHandler.prototype.handlePostData = function () {
+    PostHandler.prototype.parsePostData = function () {
         return __awaiter(this, void 0, void 0, function () {
             var postData, contentType, result, bodyBuffer, ex_1;
             return __generator(this, function (_a) {
@@ -1805,14 +1818,12 @@ var RequestHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         wallObj = new wall();
-                        wallObj.body = this.body;
                         wallObj.cookie = this.cookieManager;
-                        wallObj.query = this.query_;
                         wallObj.session = this.session_;
                         wallObj.request = this.request;
                         wallObj.response = this.response;
                         wallObj.data = this.data_;
-                        wallObj.file = this.file;
+                        wallObj.query = this.query_;
                         this.wallInstances.push(wallObj);
                         return [4 /*yield*/, wallObj.onIncoming()];
                     case 1: return [2 /*return*/, _a.sent()];
@@ -1841,14 +1852,12 @@ var RequestHandler = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         shieldObj = new shield();
-                        shieldObj.body = this.body;
                         shieldObj.cookie = this.cookieManager;
                         shieldObj.query = this.query_;
                         shieldObj.session = this.session_;
                         shieldObj.request = this.request;
                         shieldObj.response = this.response;
                         shieldObj.data = this.data_;
-                        shieldObj.file = this.file;
                         return [4 /*yield*/, shieldObj.protect()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
@@ -1898,8 +1907,7 @@ var RequestHandler = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 10, , 11]);
-                        this.setPreHeader_();
+                        _a.trys.push([0, 11, , 12]);
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         this.query_ = urlDetail.query;
                         this.parseCookieFromRequest_();
@@ -1907,26 +1915,29 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 1:
                         wallProtectionResult = _a.sent();
                         responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByWall == null)) return [3 /*break*/, 8];
+                        if (!(responseByWall == null)) return [3 /*break*/, 9];
                         pathUrl = urlDetail.pathname;
                         requestMethod = this.request.method;
                         this.routeMatchInfo_ = Object(_helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
                         if (!(this.routeMatchInfo_ == null)) return [3 /*break*/, 2];
                         // it may be a file or folder then
                         this.handleFileRequest(pathUrl);
-                        return [3 /*break*/, 7];
+                        return [3 /*break*/, 8];
                     case 2:
                         actionInfo = this.routeMatchInfo_.actionInfo;
                         if (!(actionInfo == null)) return [3 /*break*/, 3];
                         this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                        return [3 /*break*/, 7];
+                        return [3 /*break*/, 8];
                     case 3: return [4 /*yield*/, this.executeShieldsProtection_()];
                     case 4:
                         shieldProtectionResult = _a.sent();
                         responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByShield == null)) return [3 /*break*/, 6];
-                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
+                        if (!(responseByShield == null)) return [3 /*break*/, 7];
+                        return [4 /*yield*/, this.handlePostData()];
                     case 5:
+                        _a.sent();
+                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
+                    case 6:
                         guardsCheckResult = _a.sent();
                         responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
                         if (responseByGuard == null) {
@@ -1935,25 +1946,25 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onResultEvaluated(responseByGuard);
                         }
-                        return [3 /*break*/, 7];
-                    case 6:
+                        return [3 /*break*/, 8];
+                    case 7:
                         this.onResultEvaluated(responseByShield);
-                        _a.label = 7;
-                    case 7: return [3 /*break*/, 9];
-                    case 8:
+                        _a.label = 8;
+                    case 8: return [3 /*break*/, 10];
+                    case 9:
                         this.onResultEvaluated(responseByWall);
-                        _a.label = 9;
-                    case 9: return [3 /*break*/, 11];
-                    case 10:
+                        _a.label = 10;
+                    case 10: return [3 /*break*/, 12];
+                    case 11:
                         ex_1 = _a.sent();
                         this.onErrorOccured(ex_1);
-                        return [3 /*break*/, 11];
-                    case 11: return [2 /*return*/];
+                        return [3 /*break*/, 12];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
     };
-    RequestHandler.prototype.handle = function () {
+    RequestHandler.prototype.handlePostData = function () {
         return __awaiter(this, void 0, void 0, function () {
             var body, ex_2;
             return __generator(this, function (_a) {
@@ -1961,18 +1972,16 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 0:
                         if (!(this.request.method === _enums_http_method__WEBPACK_IMPORTED_MODULE_6__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
                         this.body = {};
-                        this.execute_();
                         return [3 /*break*/, 5];
                     case 1:
                         if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 5];
                         _a.label = 2;
                     case 2:
                         _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, this.handlePostData()];
+                        return [4 /*yield*/, this.parsePostData()];
                     case 3:
                         body = _a.sent();
                         this.body = body;
-                        this.execute_();
                         return [3 /*break*/, 5];
                     case 4:
                         ex_2 = _a.sent();
@@ -1980,6 +1989,15 @@ var RequestHandler = /** @class */ (function (_super) {
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];
                 }
+            });
+        });
+    };
+    RequestHandler.prototype.handle = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.setPreHeader_();
+                this.execute_();
+                return [2 /*return*/];
             });
         });
     };
@@ -3105,7 +3123,7 @@ var viewResult = function (viewName, model) { return __awaiter(_this, void 0, vo
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Fort, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler */
+/*! exports provided: Fort, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3160,6 +3178,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model/index */ "./src/model/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _model_index__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _model_index__WEBPACK_IMPORTED_MODULE_4__["HttpCookie"]; });
 
 /* harmony import */ var _fort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fort */ "./src/fort.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _fort__WEBPACK_IMPORTED_MODULE_5__["Fort"]; });
@@ -3391,17 +3411,42 @@ var FileManager = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/model/http_cookie.ts":
+/*!**********************************!*\
+  !*** ./src/model/http_cookie.ts ***!
+  \**********************************/
+/*! exports provided: HttpCookie */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return HttpCookie; });
+var HttpCookie = /** @class */ (function () {
+    function HttpCookie(name) {
+        this.name = name;
+    }
+    return HttpCookie;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/model/index.ts":
 /*!****************************!*\
   !*** ./src/model/index.ts ***!
   \****************************/
-/*! exports provided: ErrorHandler */
+/*! exports provided: ErrorHandler, HttpCookie */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error_handler */ "./src/model/error_handler.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _error_handler__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"]; });
+
+/* harmony import */ var _http_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http_cookie */ "./src/model/http_cookie.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _http_cookie__WEBPACK_IMPORTED_MODULE_1__["HttpCookie"]; });
+
 
 
 

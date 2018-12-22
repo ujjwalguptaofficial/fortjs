@@ -5,13 +5,13 @@ import { HttpRequest } from "../types/http_request";
 import { FileManager } from "../model/file_manager";
 export abstract class Controller {
     request: HttpRequest;
-    response:HttpResponse;
+    response: HttpResponse;
     query: { [key: string]: any };
-    body: { [key: string]: any };
+    body?: { [key: string]: any };
     session: SessionProvider;
     cookie: CookieManager;
-    params: { [key: string]: any };
+    params?: { [key: string]: any };
     data: { [key: string]: any };
 
-    file: FileManager;
+    file?: FileManager;
 }

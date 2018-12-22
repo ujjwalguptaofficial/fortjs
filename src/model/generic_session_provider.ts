@@ -1,5 +1,5 @@
 import { SessionProvider } from "../abstracts";
-import { ISessionValue } from "../interfaces/session_value";
+import { SessionValue } from "../types/session_value";
 import { CookieManager } from "./cookie_manager";
 
 export class GenericSessionProvider extends SessionProvider {
@@ -26,7 +26,11 @@ export class GenericSessionProvider extends SessionProvider {
         return null;
     }
 
-    setMany(values: ISessionValue[]): Promise<null> {
+    setMany(values: SessionValue[]): Promise<null> {
         return null;
+    }
+
+    async clear() {
+        
     }
 }

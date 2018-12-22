@@ -1,7 +1,7 @@
 import { Util } from "../util";
 
 
-export const parseCookie = (cookie: string): object => {
+export const parseCookie = (cookie: string): { [key: string]: string } => {
     const value = {};
     if (!Util.isNullOrEmpty(cookie)) {
         cookie.split(';').forEach((val) => {

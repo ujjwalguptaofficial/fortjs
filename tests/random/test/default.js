@@ -131,10 +131,10 @@ describe("/default", () => {
     })
 
     it("/user without login", (done) => {
-        request.get('/user/').end((err, res) => {
+        request.get('/user/').redirects(0).end((err, res) => {
             expect(err).to.be.null;
-            expect(res).to.have.status(200);
-            expect(res.text).to.be.equal('Login form');
+            expect(res).to.have.status(302);
+            expect(res).to.have.header('location', '/default/login');
             done();
         })
     })

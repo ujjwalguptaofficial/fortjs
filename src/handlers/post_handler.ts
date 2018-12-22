@@ -47,7 +47,7 @@ export class PostHandler extends ControllerHandler {
         });
     }
 
-    protected async handlePostData() {
+    protected async parsePostData() {
         try {
             let postData;
 

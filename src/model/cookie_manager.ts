@@ -3,9 +3,9 @@ import { IHttpCookie } from "../interfaces/http_cookie";
 
 export class CookieManager {
     private responseCookie_: string[] = [];
-    private cookieCollection_: object;
+    private cookieCollection_: { [key: string]: string };
 
-    constructor(parsedValue: object) {
+    constructor(parsedValue) {
         this.cookieCollection_ = parsedValue;
     }
 

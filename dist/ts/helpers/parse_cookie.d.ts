@@ -1,1 +1,3 @@
-export declare const parseCookie: (cookie: string) => object;
+export declare const parseCookie: (cookie: string) => {
+    [key: string]: string;
+};

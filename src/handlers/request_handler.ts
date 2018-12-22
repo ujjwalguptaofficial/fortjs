@@ -38,14 +38,12 @@ export class RequestHandler extends PostHandler {
     private runWallIncoming_() {
         return Promise.all(Global.walls.map(async (wall) => {
             const wallObj = new wall();
-            wallObj.body = this.body;
             wallObj.cookie = this.cookieManager;
-            wallObj.query = this.query_;
             wallObj.session = this.session_;
             wallObj.request = this.request as HttpRequest;
             wallObj.response = this.response as HttpResponse;
             wallObj.data = this.data_;
-            wallObj.file = this.file;
+            wallObj.query = this.query_;
             this.wallInstances.push(wallObj);
             return await wallObj.onIncoming();
         }));
@@ -70,14 +68,12 @@ export class RequestHandler extends PostHandler {
     private executeShieldsProtection_() {
         return Promise.all(this.routeMatchInfo_.shields.map(async shield => {
             const shieldObj = new shield();
-            shieldObj.body = this.body;
             shieldObj.cookie = this.cookieManager;
             shieldObj.query = this.query_;
             shieldObj.session = this.session_;
             shieldObj.request = this.request as HttpRequest;
             shieldObj.response = this.response as HttpResponse;
             shieldObj.data = this.data_;
-            shieldObj.file = this.file;
             return await shieldObj.protect();
         }));
     }
@@ -116,7 +112,6 @@ export class RequestHandler extends PostHandler {
 
     private async execute_() {
         try {
-            this.setPreHeader_();
             const urlDetail = url.parse(this.request.url, true);
             this.query_ = urlDetail.query;
             this.parseCookieFromRequest_();
@@ -139,6 +134,7 @@ export class RequestHandler extends PostHandler {
                         const shieldProtectionResult = await this.executeShieldsProtection_();
                         const responseByShield = shieldProtectionResult.find(qry => qry != null);
                         if (responseByShield == null) {
+                            await this.handlePostData();
                             const guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
                             const responseByGuard = guardsCheckResult.find(qry => qry != null);
                             if (responseByGuard == null) {
@@ -163,20 +159,23 @@ export class RequestHandler extends PostHandler {
         }
     }
 
-    async handle() {
+    async handlePostData() {
         if (this.request.method === HTTP_METHOD.Get) {
             this.body = {};
-            this.execute_();
         }
         else if (Global.shouldParsePost === true) {
             try {
-                const body = await this.handlePostData();
+                const body = await this.parsePostData();
                 this.body = body;
-                this.execute_();
             }
             catch (ex) {
                 this.onBadRequest(ex);
             }
         }
+    }
+
+    async handle() {
+        this.setPreHeader_();
+        this.execute_();
     }
 }

@@ -16,11 +16,11 @@ describe("wall test", () => {
         })
     })
 
-    it("/blocked by wall using post", (done) => {
+    it("/blocked by wall using header", (done) => {
         const body = {
-            blockByWall: true
+            blockByWall: 'true'
         }
-        request.post('/default/getdata').send(body).end((err, res) => {
+        request.post('/default/getdata').set(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.text).to.be.equal('blocked by wall');

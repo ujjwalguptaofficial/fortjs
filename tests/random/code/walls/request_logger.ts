@@ -10,17 +10,14 @@ export class RequestLogger extends Wall {
         return ip;
     }
     async onIncoming() {
-        // const log = {
-        //     url: this.request.url,
-        //     body: this.body
-        // }
-        // console.log(log);
+       
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
-        //console.log("reqcount", this.data.reqCount);
+        console.log("reqcount", this.data.reqCount);
         // console.log("body", this.body);
         // console.log("query", this.query);
-        if (this.body.blockByWall === true || this.query.blockByWall == 'true') {
+       // console.log("headers", this.request.headers);
+        if (this.request.headers['blockbywall'] != null || this.query.blockByWall == 'true') {
             return textResult("blocked by wall");
         }
         return null;

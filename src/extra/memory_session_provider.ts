@@ -1,10 +1,11 @@
-import { ISessionValue } from "../interfaces/session_value";
+
 import { SessionProvider } from "../abstracts/session_provider";
+import { SessionValue } from "../types/session_value";
 
 
 interface ISessionValueFormat {
     identifier: string;
-    datas: ISessionValue[];
+    datas: SessionValue[];
 }
 
 const sessionValues: ISessionValueFormat[] = [];
@@ -56,7 +57,7 @@ export class MemorySessionProvider extends SessionProvider {
         }
     }
 
-    setMany(values: ISessionValue[]) {
+    setMany(values: SessionValue[]) {
         return Promise.all(
             values.map(async (value) => {
                 return await this.set(value.key, value.value);
@@ -69,6 +70,13 @@ export class MemorySessionProvider extends SessionProvider {
         if (savedValue != null) {
             const index = savedValue.datas.findIndex(q => q.key === key);
             savedValue.datas.splice(index, 1);
+        }
+    }
+
+    async clear() {
+        const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
+        if (index >= 0) {
+            sessionValues.splice(index, 1);
         }
     }
 }

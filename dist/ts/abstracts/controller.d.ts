@@ -9,16 +9,16 @@ export declare abstract class Controller {
     query: {
         [key: string]: any;
     };
-    body: {
+    body?: {
         [key: string]: any;
     };
     session: SessionProvider;
     cookie: CookieManager;
-    params: {
+    params?: {
         [key: string]: any;
     };
     data: {
         [key: string]: any;
     };
-    file: FileManager;
+    file?: FileManager;
 }

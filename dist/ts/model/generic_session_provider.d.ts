@@ -1,5 +1,5 @@
 import { SessionProvider } from "../abstracts";
-import { ISessionValue } from "../interfaces/session_value";
+import { SessionValue } from "../types/session_value";
 import { CookieManager } from "./cookie_manager";
 export declare class GenericSessionProvider extends SessionProvider {
     sessionId: string;
@@ -9,5 +9,6 @@ export declare class GenericSessionProvider extends SessionProvider {
     set(key: any, value: any): any;
     isExist(key: any): any;
     remove(key: any): any;
-    setMany(values: ISessionValue[]): Promise<null>;
+    setMany(values: SessionValue[]): Promise<null>;
+    clear(): Promise<void>;
 }

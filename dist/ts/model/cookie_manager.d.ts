@@ -2,7 +2,7 @@ import { HttpCookie } from "./http_cookie";
 export declare class CookieManager {
     private responseCookie_;
     private cookieCollection_;
-    constructor(parsedValue: object);
+    constructor(parsedValue: any);
     /**
      * return cookie by name
      *
@@ -31,7 +31,9 @@ export declare class CookieManager {
      * @readonly
      * @memberof CookieManager
      */
-    readonly cookieCollection: object;
+    readonly cookieCollection: {
+        [key: string]: string;
+    };
     /**
      * determine whether value exist or not
      *
