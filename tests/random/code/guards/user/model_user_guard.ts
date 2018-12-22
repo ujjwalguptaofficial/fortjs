@@ -5,6 +5,7 @@ import { validate } from "class-validator";
 export class ModelUserGuard extends Guard {
 
     async check() {
+        //console.log("data", this.data);
         const user: User = new User(this.body);
         const errors = await validate('User', user);
         if (errors.length === 0) {

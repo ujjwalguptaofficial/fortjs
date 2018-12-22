@@ -91,4 +91,10 @@ export class UserController extends Controller {
             return jsonResult(ex);
         }
     }
+
+    @worker()
+    @route('/counter/shield')
+    async getCounter() {
+        return jsonResult(this.data);
+    }
 }

@@ -13,7 +13,7 @@ export class RequestLogger extends Wall {
        
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
-        console.log("reqcount", this.data.reqCount);
+        // console.log("reqcount", this.data.reqCount);
         // console.log("body", this.body);
         // console.log("query", this.query);
        // console.log("headers", this.request.headers);
