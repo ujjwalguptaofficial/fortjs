@@ -89,6 +89,7 @@ export class RequestHandler extends PostHandler {
             guardObj.response = this.response as HttpResponse;
             guardObj.data = this.data_;
             guardObj.file = this.file;
+            guardObj.params = this.routeMatchInfo_.params;
             return await guardObj.check();
         }));
     }

@@ -1880,6 +1880,7 @@ var RequestHandler = /** @class */ (function (_super) {
                         guardObj.response = this.response;
                         guardObj.data = this.data_;
                         guardObj.file = this.file;
+                        guardObj.params = this.routeMatchInfo_.params;
                         return [4 /*yield*/, guardObj.check()];
                     case 1: return [2 /*return*/, _a.sent()];
                 }

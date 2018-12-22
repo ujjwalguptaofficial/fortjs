@@ -14,7 +14,7 @@ export abstract class Shield implements Controller {
    
     session: SessionProvider;
     cookie: CookieManager;
-    params: { [key: string]: any };
+    
     data: { [key: string]: any };
 
     abstract protect(): Promise<HttpResult>;

@@ -1,5 +1,3 @@
-export * from './views/index';
-
 import { Fort } from "fortjs";
 import { DefaultController, RandomController, UserController } from "./controllers";
 import { FortViewEngine } from "eshtml";

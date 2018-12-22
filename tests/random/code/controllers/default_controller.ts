@@ -1,10 +1,14 @@
-import { Controller, viewResult, worker, HTTP_METHOD, guards, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult } from "fortjs";
+import { Controller, viewResult, worker, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult } from "fortjs";
 import { UserService } from "../services/user_service";
 
 export class DefaultController extends Controller {
 
     @defaultWorker()
     default() {
+        // just for making sure these fields has been initiated
+        const params = this.params;
+        const query = this.query;
+        const data = this.data;
         return new Promise((res, rej) => {
             res(viewResult("index", { title: "Welcome to fort" }));
         })

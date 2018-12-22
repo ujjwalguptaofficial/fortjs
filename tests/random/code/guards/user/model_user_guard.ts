@@ -6,6 +6,9 @@ export class ModelUserGuard extends Guard {
 
     async check() {
         //console.log("data", this.data);
+        const params = this.params;
+        const query = this.query;
+        const data = this.data;
         const user: User = new User(this.body);
         const errors = await validate('User', user);
         if (errors.length === 0) {
