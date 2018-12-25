@@ -21,10 +21,10 @@ export declare class CookieManager {
     /**
      * remove cookie
      *
-     * @param {string} name
+     * @param {HttpCookie} cookie
      * @memberof CookieManager
      */
-    removeCookie(name: string): void;
+    removeCookie(cookie: HttpCookie): void;
     /**
      * collection of http cookie
      *

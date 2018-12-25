@@ -182,71 +182,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var uniqid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uniqid */ "uniqid");
 /* harmony import */ var uniqid__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(uniqid__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../global */ "./src/global.ts");
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 var SessionProvider = /** @class */ (function () {
     function SessionProvider() {
     }
     SessionProvider.prototype.createSession = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var now;
-            return __generator(this, function (_a) {
-                now = new Date();
-                this.sessionId = uniqid__WEBPACK_IMPORTED_MODULE_0__();
-                this.cookie.addCookie({
-                    name: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier,
-                    value: this.sessionId,
-                    httpOnly: true,
-                    path: "/",
-                    expires: new Date(now.setMinutes(now.getMinutes() + _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut)),
-                    maxAge: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut * 60
-                });
-                return [2 /*return*/];
-            });
+        var now = new Date();
+        this.sessionId = uniqid__WEBPACK_IMPORTED_MODULE_0__();
+        this.cookie.addCookie({
+            name: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier,
+            value: this.sessionId,
+            httpOnly: true,
+            path: "/",
+            expires: new Date(now.setMinutes(now.getMinutes() + _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut)),
+            maxAge: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut * 60
         });
     };
     SessionProvider.prototype.destroySession = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.cookie.removeCookie(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier);
-                return [2 /*return*/];
-            });
-        });
+        var cookie = this.cookie.getCookie(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier);
+        cookie.httpOnly = true;
+        cookie.path = "/";
+        cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
+        cookie.maxAge = -1;
+        this.cookie.removeCookie(cookie);
     };
     return SessionProvider;
 }());
@@ -815,29 +774,24 @@ var MemorySessionProvider = /** @class */ (function (_super) {
             var savedValue;
             var _this = this;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        savedValue = sessionValues.find(function (q) { return q.identifier === _this.sessionId; });
-                        if (!(savedValue == null)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.createSession()];
-                    case 1:
-                        _a.sent();
-                        sessionValues.push({
-                            identifier: this.sessionId,
-                            datas: [{
-                                    key: key,
-                                    value: val
-                                }]
-                        });
-                        return [3 /*break*/, 3];
-                    case 2:
-                        savedValue.datas.push({
-                            key: key,
-                            value: val
-                        });
-                        _a.label = 3;
-                    case 3: return [2 /*return*/];
+                savedValue = sessionValues.find(function (q) { return q.identifier === _this.sessionId; });
+                if (savedValue == null) {
+                    this.createSession();
+                    sessionValues.push({
+                        identifier: this.sessionId,
+                        datas: [{
+                                key: key,
+                                value: val
+                            }]
+                    });
                 }
+                else {
+                    savedValue.datas.push({
+                        key: key,
+                        value: val
+                    });
+                }
+                return [2 /*return*/];
             });
         });
     };
@@ -3242,17 +3196,11 @@ var CookieManager = /** @class */ (function () {
     /**
      * remove cookie
      *
-     * @param {string} name
+     * @param {HttpCookie} cookie
      * @memberof CookieManager
      */
-    CookieManager.prototype.removeCookie = function (name) {
-        this.cookieCollection_[name] = null;
-        this.responseCookie_.push(this.getCookieStringFromCookie_({
-            name: name,
-            value: null,
-            expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
-            maxAge: -1
-        }));
+    CookieManager.prototype.removeCookie = function (cookie) {
+        this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
     };
     Object.defineProperty(CookieManager.prototype, "cookieCollection", {
         /**
@@ -3278,23 +3226,24 @@ var CookieManager = /** @class */ (function () {
         return this.cookieCollection_[name] != null;
     };
     CookieManager.prototype.getCookieStringFromCookie_ = function (cookie) {
-        var cookieString = cookie.name + "=" + cookie.value + ";";
+        var cookies = [];
+        cookies.push(cookie.name + "=" + cookie.value);
         if (cookie.expires) {
-            cookieString += " Expires =" + cookie.expires.toUTCString() + ";";
+            cookies.push("Expires=" + cookie.expires.toUTCString());
         }
         if (cookie.httpOnly === true) {
-            cookieString += " HttpOnly;";
+            cookies.push("HttpOnly");
         }
         if (cookie.maxAge != null) {
-            cookieString += " Max-Age=" + cookie.maxAge + ";";
+            cookies.push("Max-Age=" + cookie.maxAge);
         }
         if (cookie.path) {
-            cookieString += " Path=" + cookie.path + ";";
+            cookies.push("Path=" + cookie.path);
         }
         if (cookie.domain) {
-            cookieString += " Domain=" + cookie.path + ";";
+            cookies.push("Domain=" + cookie.path);
         }
-        return cookieString;
+        return cookies.join('; ');
     };
     return CookieManager;
 }());

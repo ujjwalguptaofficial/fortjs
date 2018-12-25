@@ -40,7 +40,7 @@ export class MemorySessionProvider extends SessionProvider {
     async set(key: string, val: any) {
         const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
         if (savedValue == null) {
-            await this.createSession();
+            this.createSession();
             sessionValues.push({
                 identifier: this.sessionId,
                 datas: [{

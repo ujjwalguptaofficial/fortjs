@@ -17,7 +17,7 @@ export abstract class SessionProvider {
 
     abstract clear(): Promise<void>;
 
-    protected async createSession() {
+    protected createSession() {
         const now = new Date();
         this.sessionId = getUniqId();
         this.cookie.addCookie({
@@ -30,8 +30,13 @@ export abstract class SessionProvider {
         });
     }
 
-    protected async destroySession() {
-        this.cookie.removeCookie(Global.appSessionIdentifier);
+    protected destroySession() {
+        const cookie = this.cookie.getCookie(Global.appSessionIdentifier);
+        cookie.httpOnly = true;
+        cookie.path = "/";
+        cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
+        cookie.maxAge = -1;
+        this.cookie.removeCookie(cookie);
     }
 }
 

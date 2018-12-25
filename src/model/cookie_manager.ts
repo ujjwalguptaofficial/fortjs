@@ -37,17 +37,11 @@ export class CookieManager {
     /**
      * remove cookie
      *
-     * @param {string} name
+     * @param {HttpCookie} cookie
      * @memberof CookieManager
      */
-    removeCookie(name: string) {
-        this.cookieCollection_[name] = null;
-        this.responseCookie_.push(this.getCookieStringFromCookie_({
-            name: name,
-            value: null,
-            expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
-            maxAge: -1
-        }));
+    removeCookie(cookie: HttpCookie) {
+        this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
     }
 
     /**
@@ -73,23 +67,22 @@ export class CookieManager {
 
     private getCookieStringFromCookie_(cookie: HttpCookie) {
         const cookies = [];
-        
-        let cookieString = `${cookie.name}=${cookie.value};`;
+        cookies.push(`${cookie.name}=${cookie.value}`);
         if (cookie.expires) {
-            cookieString += ` Expires =${cookie.expires.toUTCString()};`;
+            cookies.push(`Expires=${cookie.expires.toUTCString()}`);
         }
         if (cookie.httpOnly === true) {
-            cookieString += " HttpOnly;";
+            cookies.push("HttpOnly");
         }
         if (cookie.maxAge != null) {
-            cookieString += ` Max-Age=${cookie.maxAge};`;
+            cookies.push(`Max-Age=${cookie.maxAge}`);
         }
         if (cookie.path) {
-            cookieString += ` Path=${cookie.path};`;
+            cookies.push(`Path=${cookie.path}`);
         }
         if (cookie.domain) {
-            cookieString += ` Domain=${cookie.path};`;
+            cookies.push(`Domain=${cookie.path}`);
         }
-        return cookieString;
+        return cookies.join('; ');
     }
 }

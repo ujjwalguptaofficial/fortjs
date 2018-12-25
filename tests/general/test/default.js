@@ -152,7 +152,10 @@ describe("/default", () => {
             expect(res.text).to.be.equal("Authenticated");
             //console.log('headers', res.header);
             const parsedCookie = cookie.parse(res.header[`set-cookie`][0]);
+            console.log('cookie', parsedCookie);
             expect(parsedCookie).haveOwnProperty(`fort_session_id`);
+            expect(parsedCookie).haveOwnProperty(`Path`).equal('/');
+            expect(parsedCookie).haveOwnProperty(`Max-Age`).equal('3600');
             done();
         })
     })

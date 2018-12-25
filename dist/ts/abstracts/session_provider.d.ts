@@ -10,6 +10,6 @@ export declare abstract class SessionProvider {
     abstract setMany(values: SessionValue[]): Promise<void[]>;
     abstract remove(key: string): Promise<void>;
     abstract clear(): Promise<void>;
-    protected createSession(): Promise<void>;
-    protected destroySession(): Promise<void>;
+    protected createSession(): void;
+    protected destroySession(): void;
 }

@@ -82,4 +82,10 @@ export class DefaultController extends Controller {
     async getData() {
         return jsonResult(this.data);
     }
+
+    @worker()
+    async logOut() {
+       await this.session.clear();
+       return textResult("Logged out");
+    }
 }
