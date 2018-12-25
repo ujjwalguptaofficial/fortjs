@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.2 - 22/12/2018
+ * @license :fortjs - V1.4.2 - 24/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -230,13 +230,22 @@ var SessionProvider = /** @class */ (function () {
             return __generator(this, function (_a) {
                 now = new Date();
                 this.sessionId = uniqid__WEBPACK_IMPORTED_MODULE_1__();
-                this.cookies.addCookie({
+                this.cookie.addCookie({
                     name: _constant__WEBPACK_IMPORTED_MODULE_0__["__AppSessionIdentifier"],
                     value: this.sessionId,
                     httpOnly: true,
                     path: "/",
-                    expires: new Date(now.setMinutes(now.getMinutes() + _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionTimeOut))
+                    expires: new Date(now.setMinutes(now.getMinutes() + _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionTimeOut)),
+                    maxAge: _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionTimeOut * 60
                 });
+                return [2 /*return*/];
+            });
+        });
+    };
+    SessionProvider.prototype.destroySession = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.cookie.removeCookie(_constant__WEBPACK_IMPORTED_MODULE_0__["__AppSessionIdentifier"]);
                 return [2 /*return*/];
             });
         });
@@ -618,7 +627,7 @@ var HTTP_STATUS_CODE;
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["BadRequest"] = 400] = "BadRequest";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Unauthorized"] = 401] = "Unauthorized";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Forbidden"] = 403] = "Forbidden";
-    HTTP_STATUS_CODE[HTTP_STATUS_CODE["Not_Found"] = 404] = "Not_Found";
+    HTTP_STATUS_CODE[HTTP_STATUS_CODE["NotFound"] = 404] = "NotFound";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Ok"] = 200] = "Ok";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["Created"] = 201] = "Created";
     HTTP_STATUS_CODE[HTTP_STATUS_CODE["NoContent"] = 204] = "NoContent";
@@ -872,6 +881,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
                 if (index >= 0) {
                     sessionValues.splice(index, 1);
                 }
+                this.destroySession();
                 return [2 /*return*/];
             });
         });
@@ -1894,7 +1904,7 @@ var RequestHandler = /** @class */ (function (_super) {
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
             this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
             this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"]];
-            this.session_.cookies = this.cookieManager;
+            this.session_.cookie = this.cookieManager;
         }
     };
     RequestHandler.prototype.setPreHeader_ = function () {
@@ -2196,7 +2206,7 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_3__["Global"].errorHandler().onNotFound(this.request.url)];
                     case 1:
                         errMessage = _b.sent();
-                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Not_Found, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
+                        this.response.writeHead(_enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotFound, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums_mime_type__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"].Html, _a));
                         this.response.end(errMessage);
                         return [3 /*break*/, 3];
                     case 2:
@@ -3243,11 +3253,11 @@ var CookieManager = /** @class */ (function () {
      */
     CookieManager.prototype.removeCookie = function (name) {
         this.cookieCollection_[name] = null;
-        var now = new Date();
         this.responseCookie_.push(this.getCookieStringFromCookie_({
             name: name,
             value: null,
-            expires: new Date(now.setMinutes(now.getMinutes() - 100))
+            expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
+            maxAge: -1
         }));
     };
     Object.defineProperty(CookieManager.prototype, "cookieCollection", {
@@ -3423,8 +3433,9 @@ var FileManager = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return HttpCookie; });
 var HttpCookie = /** @class */ (function () {
-    function HttpCookie(name) {
+    function HttpCookie(name, value) {
         this.name = name;
+        this.value = value;
     }
     return HttpCookie;
 }());

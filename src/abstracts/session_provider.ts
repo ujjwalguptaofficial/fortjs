@@ -7,7 +7,7 @@ import { SessionValue } from "../types/session_value";
 export abstract class SessionProvider {
 
     sessionId: string;
-    protected cookies: CookieManager;
+    protected cookie: CookieManager;
 
     abstract get(key: string): Promise<SessionValue>;
     abstract isExist(key: string): Promise<boolean>;
@@ -21,13 +21,18 @@ export abstract class SessionProvider {
     protected async createSession() {
         const now = new Date();
         this.sessionId = getUniqId();
-        this.cookies.addCookie({
+        this.cookie.addCookie({
             name: __AppSessionIdentifier,
             value: this.sessionId,
             httpOnly: true,
             path: "/",
-            expires: new Date(now.setMinutes(now.getMinutes() + Global.sessionTimeOut))
+            expires: new Date(now.setMinutes(now.getMinutes() + Global.sessionTimeOut)),
+            maxAge: Global.sessionTimeOut * 60
         });
+    }
+
+    protected async destroySession() {
+        this.cookie.removeCookie(__AppSessionIdentifier);
     }
 }
 

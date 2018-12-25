@@ -78,5 +78,6 @@ export class MemorySessionProvider extends SessionProvider {
         if (index >= 0) {
             sessionValues.splice(index, 1);
         }
+        this.destroySession();
     }
 }

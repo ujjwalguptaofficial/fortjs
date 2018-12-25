@@ -42,11 +42,11 @@ export class CookieManager {
      */
     removeCookie(name: string) {
         this.cookieCollection_[name] = null;
-        const now = new Date();
         this.responseCookie_.push(this.getCookieStringFromCookie_({
             name: name,
             value: null,
-            expires: new Date(now.setMinutes(now.getMinutes() - 100))
+            expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
+            maxAge: -1
         }));
     }
 

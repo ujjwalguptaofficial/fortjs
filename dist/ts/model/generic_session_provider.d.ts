@@ -3,7 +3,7 @@ import { SessionValue } from "../types/session_value";
 import { CookieManager } from "./cookie_manager";
 export declare class GenericSessionProvider extends SessionProvider {
     sessionId: string;
-    cookies: CookieManager;
+    cookie: CookieManager;
     get(): any;
     getAll(): any;
     set(key: any, value: any): any;

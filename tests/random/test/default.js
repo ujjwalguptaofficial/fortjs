@@ -141,7 +141,7 @@ describe("/default", () => {
 
     it("/default/login", (done) => {
         const user = {
-            userId: 1,
+            emailId: `ujjwal@mg.com`,
             password: "admin"
         }
         request.post('/default/login').send(user).end((err, res) => {

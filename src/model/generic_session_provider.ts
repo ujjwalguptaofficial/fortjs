@@ -5,7 +5,7 @@ import { CookieManager } from "./cookie_manager";
 export class GenericSessionProvider extends SessionProvider {
     sessionId: string;
 
-    cookies: CookieManager;
+    cookie: CookieManager;
     get() {
         return null;
     }

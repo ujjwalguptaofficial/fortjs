@@ -16,13 +16,13 @@ export class DefaultController extends Controller {
 
     @worker([HTTP_METHOD.Post])
     async login() {
-        const userId = this.body.userId;
+        const emailId = this.body.emailId;
         const pwd = this.body.password;
-        if (userId != null && pwd != null) {
+        if (emailId != null && pwd != null) {
             const userService = new UserService();
-            const user = userService.getUser(userId);
+            const user = userService.getUserByEmail(emailId);
             if (user != null && user.password === pwd) {
-                this.session.set('userId', userId);
+                this.session.set('userId', emailId);
                 return textResult(`Authenticated`);
             }
             else {
@@ -39,7 +39,7 @@ export class DefaultController extends Controller {
     @worker([HTTP_METHOD.Get])
     @route("/login")
     async getloginForm() {
-        const result = textResult("Login form");
+        const result = viewResult("login_form");
         return result;
     }
 

@@ -8,5 +8,5 @@ export declare class HttpCookie implements IHttpCookie {
     httpOnly?: boolean;
     secure?: boolean;
     path?: string;
-    constructor(name?: string);
+    constructor(name: string, value: string);
 }

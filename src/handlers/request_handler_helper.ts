@@ -95,7 +95,7 @@ export class RequestHandlerHelper {
     protected async onNotFound() {
         try {
             const errMessage = await new Global.errorHandler().onNotFound(this.request.url);
-            this.response.writeHead(HTTP_STATUS_CODE.Not_Found, { [__ContentType]: MIME_TYPE.Html });
+            this.response.writeHead(HTTP_STATUS_CODE.NotFound, { [__ContentType]: MIME_TYPE.Html });
             this.response.end(errMessage);
         }
         catch (err) {

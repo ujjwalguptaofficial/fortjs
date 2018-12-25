@@ -101,7 +101,7 @@ export class RequestHandler extends PostHandler {
             this.session_ = new Global.sessionProvider();
             this.cookieManager = new CookieManager(parsedCookies);
             this.session_.sessionId = parsedCookies[__AppSessionIdentifier];
-            this.session_.cookies = this.cookieManager;
+            this.session_.cookie = this.cookieManager;
         }
     }
 

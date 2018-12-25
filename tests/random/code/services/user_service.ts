@@ -30,6 +30,10 @@ export class UserService extends BaseService {
         return this.users.find(user => user.id === id);
     }
 
+    getUserByEmail(emailId: string) {
+        return this.users.find(user => user.emailId === emailId);
+    }
+
     removeUser(id: number) {
         const index = this.users.findIndex(user => user.id === id);
         this.users.splice(index, 1);

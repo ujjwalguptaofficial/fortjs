@@ -4,6 +4,7 @@ import { FortViewEngine } from "eshtml";
 import { CustomErrorHandler } from "./extra/custom_error_handler";
 import { RequestLogger } from './walls/request_logger';
 import * as path from "path";
+import { CookieController } from "./controllers/cookie_controller";
 class App extends Fort {
     viewEngine = FortViewEngine;
     errorHandler = CustomErrorHandler;
@@ -20,6 +21,9 @@ class App extends Fort {
         }, {
             controller: UserController,
             path: "/user"
+        }, {
+            controller: CookieController,
+            path: "/cookie"
         }]
     }
 }
