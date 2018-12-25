@@ -1,7 +1,7 @@
 import { Fort } from 'fortjs';
 import { routes } from './routes';
 import { FortViewEngine } from 'eshtml';
-import * as path from "path";
+import * as Path from "path";
 import { RequestLogger } from './walls/request_logger';
 import { CustomErrorHandler } from './extra/custom_error_handler';
 
@@ -15,7 +15,7 @@ export class App extends Fort {
     }
 }
 
-const contentsPath = path.join(__dirname, "../contents");
+const contentsPath = Path.join(__dirname, "../contents");
 
 new App().create({
     defaultPath: "/default",

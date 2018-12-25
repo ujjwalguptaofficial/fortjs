@@ -23,4 +23,5 @@ export declare class Global {
     static appName?: string;
     static eTag?: EtagOption;
     static folders?: FolderMap[];
+    static appSessionIdentifier: any;
 }

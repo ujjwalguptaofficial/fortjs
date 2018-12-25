@@ -42,8 +42,6 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
             });
         }
         else {
-            // const regex = /{(.*)}/;
-            // const regex = /{(.*)}(?!\.)/;
             const regex1 = /{(.*)}(?!.)/;
             const regex2 = /{(.*)}\.(\w+)(?!.)/;
             route.actions.every(routeActionInfo => {

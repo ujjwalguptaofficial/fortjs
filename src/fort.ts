@@ -62,6 +62,7 @@ export class Fort {
         }
         Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
+        Global.appSessionIdentifier = `${Global.appName}_session_id`;
         Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         Global.walls = this.walls as any;
         Global.viewEngine = this.viewEngine == null ? null : new (this.viewEngine as any)();

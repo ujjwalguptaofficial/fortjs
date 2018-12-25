@@ -1,5 +1,4 @@
 import { CookieManager } from "../model/cookie_manager";
-import { __AppSessionIdentifier } from "../constant";
 import * as getUniqId from "uniqid";
 import { Global } from "../global";
 import { SessionValue } from "../types/session_value";
@@ -22,7 +21,7 @@ export abstract class SessionProvider {
         const now = new Date();
         this.sessionId = getUniqId();
         this.cookie.addCookie({
-            name: __AppSessionIdentifier,
+            name: Global.appSessionIdentifier,
             value: this.sessionId,
             httpOnly: true,
             path: "/",
@@ -32,7 +31,7 @@ export abstract class SessionProvider {
     }
 
     protected async destroySession() {
-        this.cookie.removeCookie(__AppSessionIdentifier);
+        this.cookie.removeCookie(Global.appSessionIdentifier);
     }
 }
 

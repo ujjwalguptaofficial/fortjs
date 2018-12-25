@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.2 - 24/12/2018
+ * @license :fortjs - V1.4.2 - 25/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -179,10 +179,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SessionProvider", function() { return SessionProvider; });
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
-/* harmony import */ var uniqid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! uniqid */ "uniqid");
-/* harmony import */ var uniqid__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(uniqid__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../global */ "./src/global.ts");
+/* harmony import */ var uniqid__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uniqid */ "uniqid");
+/* harmony import */ var uniqid__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(uniqid__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../global */ "./src/global.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -220,7 +219,6 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 };
 
 
-
 var SessionProvider = /** @class */ (function () {
     function SessionProvider() {
     }
@@ -229,14 +227,14 @@ var SessionProvider = /** @class */ (function () {
             var now;
             return __generator(this, function (_a) {
                 now = new Date();
-                this.sessionId = uniqid__WEBPACK_IMPORTED_MODULE_1__();
+                this.sessionId = uniqid__WEBPACK_IMPORTED_MODULE_0__();
                 this.cookie.addCookie({
-                    name: _constant__WEBPACK_IMPORTED_MODULE_0__["__AppSessionIdentifier"],
+                    name: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier,
                     value: this.sessionId,
                     httpOnly: true,
                     path: "/",
-                    expires: new Date(now.setMinutes(now.getMinutes() + _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionTimeOut)),
-                    maxAge: _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionTimeOut * 60
+                    expires: new Date(now.setMinutes(now.getMinutes() + _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut)),
+                    maxAge: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut * 60
                 });
                 return [2 /*return*/];
             });
@@ -245,7 +243,7 @@ var SessionProvider = /** @class */ (function () {
     SessionProvider.prototype.destroySession = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.cookie.removeCookie(_constant__WEBPACK_IMPORTED_MODULE_0__["__AppSessionIdentifier"]);
+                this.cookie.removeCookie(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier);
                 return [2 /*return*/];
             });
         });
@@ -363,24 +361,20 @@ var Wall = /** @class */ (function () {
 /*!*************************!*\
   !*** ./src/constant.ts ***!
   \*************************/
-/*! exports provided: __ContentType, __AppName, __AppSessionIdentifier, __Cookie, __SetCookie, __CurrentPath, __ContentLength */
+/*! exports provided: __ContentType, __AppName, __Cookie, __SetCookie, __CurrentPath, __ContentLength */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__ContentType", function() { return __ContentType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__AppName", function() { return __AppName; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__AppSessionIdentifier", function() { return __AppSessionIdentifier; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__Cookie", function() { return __Cookie; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__SetCookie", function() { return __SetCookie; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__CurrentPath", function() { return __CurrentPath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__ContentLength", function() { return __ContentLength; });
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./global */ "./src/global.ts");
-
 /* tslint:disable */
 var __ContentType = "Content-Type";
 var __AppName = "fort";
-var __AppSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_0__["Global"].appName + "_session_id";
 var __Cookie = "Cookie";
 var __SetCookie = 'Set-Cookie';
 var __CurrentPath = process.cwd();
@@ -985,6 +979,7 @@ var Fort = /** @class */ (function () {
         }
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName + "_session_id";
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
@@ -1334,13 +1329,14 @@ var FileHandler = /** @class */ (function (_super) {
     FileHandler.prototype.getFileInfoFromUrl_ = function (urlPath) {
         var splittedValue = urlPath.split("/");
         var fileInfo = {
-            folder: "/",
             file: ""
         };
         if (splittedValue.length > 2 || !this.isNullOrEmpty(path__WEBPACK_IMPORTED_MODULE_2__["parse"](urlPath).ext)) {
             fileInfo.folder = splittedValue[1];
             fileInfo.file = splittedValue.splice(2).join("/");
+            return fileInfo;
         }
+        fileInfo.folder = splittedValue[1];
         return fileInfo;
     };
     FileHandler.prototype.getFileStats_ = function (filePath) {
@@ -1903,7 +1899,7 @@ var RequestHandler = /** @class */ (function (_super) {
             var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
             this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
-            this.session_.sessionId = parsedCookies[_constant__WEBPACK_IMPORTED_MODULE_1__["__AppSessionIdentifier"]];
+            this.session_.sessionId = parsedCookies[_global__WEBPACK_IMPORTED_MODULE_2__["Global"].appSessionIdentifier];
             this.session_.cookie = this.cookieManager;
         }
     };
@@ -2900,8 +2896,6 @@ var parseAndMatchRoute = function (url, reqMethod) {
             });
         }
         else {
-            // const regex = /{(.*)}/;
-            // const regex = /{(.*)}(?!\.)/;
             var regex1_1 = /{(.*)}(?!.)/;
             var regex2_1 = /{(.*)}\.(\w+)(?!.)/;
             route.actions.every(function (routeActionInfo) {
@@ -3292,7 +3286,7 @@ var CookieManager = /** @class */ (function () {
             cookieString += " HttpOnly;";
         }
         if (cookie.maxAge != null) {
-            cookieString += " Max-Age=" + cookie.maxAge;
+            cookieString += " Max-Age=" + cookie.maxAge + ";";
         }
         if (cookie.path) {
             cookieString += " Path=" + cookie.path + ";";

@@ -11,7 +11,7 @@ export class LoginForm implements View {
             <title>Login</title>
           </head>
           <body>
-          <form>
+          <form method="post">
             <input type="text" name="emailId" placeholder="emailId"/>
             <input type="text" name="password" placeholder="password"/>
             <button type="submit">Login</button>

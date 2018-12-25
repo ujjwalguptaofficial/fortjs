@@ -10,6 +10,8 @@ let {
     removeSpaceAndNewLine
 } = require('./common');
 
+const cookie = require('cookie');
+
 describe("/default", () => {
 
     it('default path', (done) => {
@@ -148,19 +150,11 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.text).to.be.equal("Authenticated");
+            //console.log('headers', res.header);
+            const parsedCookie = cookie.parse(res.header[`set-cookie`][0]);
+            expect(parsedCookie).haveOwnProperty(`fort_session_id`);
             done();
         })
     })
-
-    // it('/getip', (done) => {
-    //     request.get('/default/getip').end((err, res) => {
-    //         expect(err).to.be.null;
-    //         expect(res).to.have.status(405);
-    //         expect(res).to.have.header('content-type', 'text/html');
-    //         expect(res).to.have.header('allow', 'POST');
-    //         expect(res.text).to.be.equal('<h1>Not allowed.</h1>');
-    //         done();
-    //     })
-    // })
 
 });

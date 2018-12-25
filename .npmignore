@@ -2,7 +2,7 @@ example
 logos
 node_modules
 src
-test
+tests
 
 #build tools
 .travis.yml

@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller } from "../abstracts/controller";
-import { __ContentType, __AppName, __Cookie, __AppSessionIdentifier, __SetCookie } from "../constant";
+import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
 import { Global } from "../global";
 import { parseCookie } from "../helpers/parse_cookie";
 import { CookieManager } from "../model/cookie_manager";
@@ -100,7 +100,7 @@ export class RequestHandler extends PostHandler {
             const parsedCookies = parseCookie(rawCookie);
             this.session_ = new Global.sessionProvider();
             this.cookieManager = new CookieManager(parsedCookies);
-            this.session_.sessionId = parsedCookies[__AppSessionIdentifier];
+            this.session_.sessionId = parsedCookies[Global.appSessionIdentifier];
             this.session_.cookie = this.cookieManager;
         }
     }

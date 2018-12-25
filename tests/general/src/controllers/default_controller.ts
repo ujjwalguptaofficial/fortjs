@@ -22,7 +22,8 @@ export class DefaultController extends Controller {
             const userService = new UserService();
             const user = userService.getUserByEmail(emailId);
             if (user != null && user.password === pwd) {
-                this.session.set('userId', emailId);
+                this.session.set('userId', user.id);
+                this.session.set('emailId', emailId);
                 return textResult(`Authenticated`);
             }
             else {

@@ -72,6 +72,8 @@ export class CookieManager {
     }
 
     private getCookieStringFromCookie_(cookie: HttpCookie) {
+        const cookies = [];
+        
         let cookieString = `${cookie.name}=${cookie.value};`;
         if (cookie.expires) {
             cookieString += ` Expires =${cookie.expires.toUTCString()};`;
@@ -80,7 +82,7 @@ export class CookieManager {
             cookieString += " HttpOnly;";
         }
         if (cookie.maxAge != null) {
-            cookieString += ` Max-Age=${cookie.maxAge}`;
+            cookieString += ` Max-Age=${cookie.maxAge};`;
         }
         if (cookie.path) {
             cookieString += ` Path=${cookie.path};`;

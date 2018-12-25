@@ -27,8 +27,7 @@ describe("/default", () => {
     it("/default", done => {
         request.get('/default').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
-            expect(res).to.have.status(200);
-            expect(res).to.have.header('content-type', 'text/html');
+            expect(res).to.have.status(404);
             expect(res.header['x-powered-by']).to.equal('MyFort');
             done();
         });

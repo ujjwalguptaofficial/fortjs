@@ -26,4 +26,5 @@ export class Global {
     static eTag?: EtagOption;
 
     static folders?: FolderMap[];
+    static appSessionIdentifier ;
 }

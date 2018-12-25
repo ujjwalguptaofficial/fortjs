@@ -20,14 +20,16 @@ export class FileHandler extends RequestHandlerHelper {
     private getFileInfoFromUrl_(urlPath: string) {
         const splittedValue = urlPath.split("/");
         const fileInfo = {
-            folder: "/",
             file: ""
         } as FileInfo;
         if (splittedValue.length > 2 || !this.isNullOrEmpty(path.parse(urlPath).ext)) {
             fileInfo.folder = splittedValue[1];
             fileInfo.file = splittedValue.splice(2).join("/");
+            return fileInfo;
         }
+        fileInfo.folder = splittedValue[1];
         return fileInfo;
+
     }
 
     private getFileStats_(filePath) {

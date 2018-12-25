@@ -27,15 +27,19 @@ describe("/cookie", () => {
         const cookies = {
             cookieValue: 'ujjwal'
         }
-        request.post('/cookie/user_name').send(cookies).end((err, res) => {
+        const stringUrlPart = `user_name`;
+        request.post(`/cookie/${stringUrlPart}`).send(cookies).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('name').equal(`user_name`);
+            expect(res.body).haveOwnProperty('name').equal(stringUrlPart);
             expect(res.body).haveOwnProperty('value').equal(cookies.cookieValue);
-            console.log('headers', res.header[`set-cookie`]);
-            const parsedCookie = cookie.parse(res.header[`set-cookie`]);
-            console.log('cookie', parsedCookie);
+            //console.log('headers', res.header);
+            const parsedCookie = cookie.parse(res.header[`set-cookie`][0]);
+            //console.log('cookie', parsedCookie);
+            expect(parsedCookie).haveOwnProperty(stringUrlPart).equal(cookies.cookieValue);
+            expect(parsedCookie).haveOwnProperty(`Max-Age`).equal(`5000`);
+
             done();
         })
     })
