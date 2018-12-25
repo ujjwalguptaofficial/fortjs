@@ -156,6 +156,7 @@ describe("/default", () => {
             expect(parsedCookie).haveOwnProperty(`fort_session_id`);
             expect(parsedCookie).haveOwnProperty(`Path`).equal('/');
             expect(parsedCookie).haveOwnProperty(`Max-Age`).equal('3600');
+            expect(res.header[`set-cookie`][0]).contains('HttpOnly');
             done();
         })
     })

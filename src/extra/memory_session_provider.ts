@@ -74,10 +74,12 @@ export class MemorySessionProvider extends SessionProvider {
     }
 
     async clear() {
+        // remove session values
         const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
         if (index >= 0) {
             sessionValues.splice(index, 1);
         }
+        // expire cookie in browser
         this.destroySession();
     }
 }

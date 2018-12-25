@@ -3,6 +3,8 @@ let {
     expect
 } = require('./common');
 
+const cookie = require('cookie');
+
 describe("/user", () => {
 
     it("/{userId}", (done) => {
@@ -104,6 +106,29 @@ describe("/user", () => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
             expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(7);
+            done();
+        })
+    })
+
+    it("/logout", (done) => {
+        request.get('/default/logout').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const parsedCookie = cookie.parse(res.header[`set-cookie`][0]);
+            expect(parsedCookie).haveOwnProperty(`fort_session_id`);
+            expect(parsedCookie).haveOwnProperty(`Path`).equal('/');
+            expect(parsedCookie).haveOwnProperty(`Max-Age`).equal('-1');
+            expect(parsedCookie).haveOwnProperty(`Expires`).equal('Thu, 01 Jan 1970 00:00:00 GMT');
+            expect(res.header[`set-cookie`][0]).contains('HttpOnly');
+            done();
+        })
+    })
+
+    it("/user after logout", (done) => {
+        request.get('/user/').redirects(0).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(302);
+            expect(res).to.have.header('location', '/default/login');
             done();
         })
     })

@@ -829,6 +829,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
                 if (index >= 0) {
                     sessionValues.splice(index, 1);
                 }
+                // expire cookie in browser
                 this.destroySession();
                 return [2 /*return*/];
             });
