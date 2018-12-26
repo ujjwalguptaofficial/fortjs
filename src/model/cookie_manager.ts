@@ -84,7 +84,7 @@ export class CookieManager {
             cookies.push(`Path=${cookie.path}`);
         }
         if (cookie.domain) {
-            cookies.push(`Domain=${cookie.path}`);
+            cookies.push(`Domain=${cookie.domain}`);
         }
         return cookies.join('; ');
     }
