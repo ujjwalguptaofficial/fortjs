@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.2 - 25/12/2018
+ * @license :fortjs - V1.4.2 - 26/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -203,8 +203,6 @@ var SessionProvider = /** @class */ (function () {
         var cookie = this.cookie.getCookie(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier);
         cookie.httpOnly = true;
         cookie.path = "/";
-        cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
-        cookie.maxAge = -1;
         this.cookie.removeCookie(cookie);
     };
     return SessionProvider;
@@ -3201,6 +3199,9 @@ var CookieManager = /** @class */ (function () {
      * @memberof CookieManager
      */
     CookieManager.prototype.removeCookie = function (cookie) {
+        this.cookieCollection_[cookie.name] = null;
+        cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
+        cookie.maxAge = -1;
         this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
     };
     Object.defineProperty(CookieManager.prototype, "cookieCollection", {

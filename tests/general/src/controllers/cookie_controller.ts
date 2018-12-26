@@ -32,7 +32,8 @@ export class CookieController extends Controller {
     async updateCookie() {
         const cookieName = this.params.cookieName;
         const cookieValue = this.body.cookieValue;
-        this.cookie.removeCookie(cookieName);
+        // const savedCookie = this.cookie.getCookie(cookieName);
+        // this.cookie.removeCookie(savedCookie);
         const cookie = new HttpCookie(cookieName, cookieValue);
         this.cookie.addCookie(cookie);
         return jsonResult(cookie);
@@ -42,6 +43,8 @@ export class CookieController extends Controller {
     @route('/{cookieName}')
     async removeCookie() {
         const cookieName = this.params.cookieName;
-        this.cookie.removeCookie(cookieName);
+        const cookie = this.cookie.getCookie(cookieName);
+        this.cookie.removeCookie(cookie);
+        return textResult('deleted');
     }
 }

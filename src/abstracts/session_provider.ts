@@ -34,8 +34,6 @@ export abstract class SessionProvider {
         const cookie = this.cookie.getCookie(Global.appSessionIdentifier);
         cookie.httpOnly = true;
         cookie.path = "/";
-        cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
-        cookie.maxAge = -1;
         this.cookie.removeCookie(cookie);
     }
 }

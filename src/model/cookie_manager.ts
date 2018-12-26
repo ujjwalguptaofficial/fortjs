@@ -41,6 +41,9 @@ export class CookieManager {
      * @memberof CookieManager
      */
     removeCookie(cookie: HttpCookie) {
+        this.cookieCollection_[cookie.name] = null;
+        cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
+        cookie.maxAge = -1;
         this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
     }
 

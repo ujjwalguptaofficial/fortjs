@@ -5,7 +5,6 @@ import { Controller } from "./controller";
 import { HttpResult } from "../types";
 import { HttpRequest } from "../types/http_request";
 import { HttpResponse } from "../types/http_response";
-import { HttpFile } from "../model/http_file";
 import { FileManager } from "../model/file_manager";
 
 export abstract class Guard implements Controller {
@@ -15,7 +14,7 @@ export abstract class Guard implements Controller {
     body: { [key: string]: any };
     session: SessionProvider;
     cookie: CookieManager;
-    params: { [key: string]: any };
+    params?: { [key: string]: string };
     data: { [key: string]: any };
     file: FileManager;
     abstract check(): Promise<HttpResult>;

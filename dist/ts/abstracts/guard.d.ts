@@ -16,8 +16,8 @@ export declare abstract class Guard implements Controller {
     };
     session: SessionProvider;
     cookie: CookieManager;
-    params: {
-        [key: string]: any;
+    params?: {
+        [key: string]: string;
     };
     data: {
         [key: string]: any;
