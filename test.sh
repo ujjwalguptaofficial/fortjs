@@ -1,9 +1,9 @@
 #create the build file
 npm run buildpack
 
-# Run random folder test
+# Run general folder test
 
-cd tests/random
+cd tests/general
 npm install
 ls
 npm run install:build:test

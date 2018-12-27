@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.2 - 26/12/2018
+ * @license :fortjs - V1.4.3 - 27/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -3243,7 +3243,7 @@ var CookieManager = /** @class */ (function () {
             cookies.push("Path=" + cookie.path);
         }
         if (cookie.domain) {
-            cookies.push("Domain=" + cookie.path);
+            cookies.push("Domain=" + cookie.domain);
         }
         return cookies.join('; ');
     };
