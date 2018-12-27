@@ -35,7 +35,6 @@ export class ModelUserGuard extends Guard {
         const user = new User(this.body);
         // here i am using a plugin to validate but you can write your own code too. 
         const errMsg = this.validate(user);
-        console.log("err", errMsg);
         if (errMsg == null) {
             // pass user to worker method, so that they dont need to parse again
             this.data.user = user;

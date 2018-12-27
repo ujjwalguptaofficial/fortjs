@@ -15,13 +15,7 @@ export class UserController extends Controller {
     @route("/")
     @guards([ModelUserGuard])
     async addUser() {
-        const user = {
-            name: this.body.name,
-            gender: this.body.gender,
-            address: this.body.address,
-            emailId: this.body.emailId,
-            password: this.body.password
-        };
+        const user = this.data.user;
         const service = new UserService();
         const newUser = service.addUser(user);
         return jsonResult(newUser, HTTP_STATUS_CODE.Created);
@@ -47,7 +41,7 @@ export class UserController extends Controller {
     @route("/{id}")
     async getUser() {
 
-        const userId = Number(this.params.id);
+        const userId = Number(this.param.id);
         const user = new UserService().getUser(userId);
         if (user == null) {
             return textResult("invalid id");
@@ -60,7 +54,7 @@ export class UserController extends Controller {
     @route("/{id}")
     async removeUser() {
 
-        const userId = Number(this.params.id);
+        const userId = Number(this.param.id);
         const service = new UserService();
         const user = service.getUser(userId);
         if (user != null) {

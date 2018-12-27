@@ -28,7 +28,7 @@
   "dependencies": {
     "@types/validator": "^9.4.4",
     "eshtml": "^0.2.1",
-    "fortjs": "^1.2.1",
+    "fortjs": "^1.4.4",
     "validator": "^10.9.0"
   }
 }
