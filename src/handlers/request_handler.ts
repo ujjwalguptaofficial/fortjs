@@ -57,7 +57,7 @@ export class RequestHandler extends PostHandler {
         controllerObj.body = this.body;
         controllerObj.session = this.session_;
         controllerObj.cookie = this.cookieManager;
-        controllerObj.params = this.routeMatchInfo_.params;
+        controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
         controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(
@@ -89,7 +89,7 @@ export class RequestHandler extends PostHandler {
             guardObj.response = this.response as HttpResponse;
             guardObj.data = this.data_;
             guardObj.file = this.file;
-            guardObj.params = this.routeMatchInfo_.params;
+            guardObj.param = this.routeMatchInfo_.params;
             return await guardObj.check();
         }));
     }

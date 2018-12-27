@@ -14,7 +14,7 @@ export abstract class Guard implements Controller {
     body: { [key: string]: any };
     session: SessionProvider;
     cookie: CookieManager;
-    params?: { [key: string]: string };
+    param?: { [key: string]: string };
     data: { [key: string]: any };
     file: FileManager;
     abstract check(): Promise<HttpResult>;
