@@ -4,7 +4,7 @@ export class CookieController extends Controller {
     @worker([HTTP_METHOD.Post])
     @route('/{cookieName}')
     async setCookie() {
-        const cookieName = this.params.cookieName;
+        const cookieName = this.param.cookieName;
         const cookieValue = this.body.cookieValue;
         const cookie = new HttpCookie(cookieName, cookieValue);
         cookie.maxAge = 5000;
@@ -15,7 +15,7 @@ export class CookieController extends Controller {
     @worker([HTTP_METHOD.Get])
     @route('/{cookieName}')
     async  getCookie() {
-        const cookieName = this.params.cookieName;
+        const cookieName = this.param.cookieName;
         if (this.cookie.isExist(cookieName)) {
             const cookie = this.cookie.getCookie(cookieName);
             return jsonResult(cookie);
@@ -30,7 +30,7 @@ export class CookieController extends Controller {
     @worker([HTTP_METHOD.Put])
     @route('/{cookieName}')
     async updateCookie() {
-        const cookieName = this.params.cookieName;
+        const cookieName = this.param.cookieName;
         const cookieValue = this.body.cookieValue;
         // const savedCookie = this.cookie.getCookie(cookieName);
         // this.cookie.removeCookie(savedCookie);
@@ -42,7 +42,7 @@ export class CookieController extends Controller {
     @worker([HTTP_METHOD.Delete])
     @route('/{cookieName}')
     async removeCookie() {
-        const cookieName = this.params.cookieName;
+        const cookieName = this.param.cookieName;
         const cookie = this.cookie.getCookie(cookieName);
         this.cookie.removeCookie(cookie);
         return textResult('deleted');

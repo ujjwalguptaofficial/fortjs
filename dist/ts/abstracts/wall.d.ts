@@ -8,7 +8,7 @@ export declare abstract class Wall implements Controller {
     request: HttpRequest;
     response: HttpResponse;
     query: {
-        [key: string]: any;
+        [key: string]: string;
     };
     session: SessionProvider;
     cookie: CookieManager;

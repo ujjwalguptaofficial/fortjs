@@ -10,7 +10,7 @@ import { FileManager } from "../model/file_manager";
 export abstract class Shield implements Controller {
     request: HttpRequest;
     response: HttpResponse;
-    query: { [key: string]: any };
+    query: { [key: string]: string };
    
     session: SessionProvider;
     cookie: CookieManager;

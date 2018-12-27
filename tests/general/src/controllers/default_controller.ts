@@ -6,7 +6,7 @@ export class DefaultController extends Controller {
     @defaultWorker()
     default() {
         // just for making sure these fields has been initiated
-        const params = this.params;
+        const params = this.param;
         const query = this.query;
         const data = this.data;
         return new Promise((res, rej) => {

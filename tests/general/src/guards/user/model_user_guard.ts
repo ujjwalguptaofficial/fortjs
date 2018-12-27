@@ -6,7 +6,7 @@ export class ModelUserGuard extends Guard {
 
     async check() {
         //console.log("data", this.data);
-        const params = this.params;
+        const params = this.param;
         const query = this.query;
         const data = this.data;
         const user: User = new User(this.body);

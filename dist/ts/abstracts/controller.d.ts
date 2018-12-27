@@ -7,7 +7,7 @@ export declare abstract class Controller {
     request: HttpRequest;
     response: HttpResponse;
     query: {
-        [key: string]: any;
+        [key: string]: string;
     };
     body?: {
         [key: string]: any;

@@ -10,7 +10,7 @@ import { FileManager } from "../model/file_manager";
 export abstract class Guard implements Controller {
     request: HttpRequest;
     response: HttpResponse;
-    query: { [key: string]: any };
+    query: { [key: string]: string };
     body: { [key: string]: any };
     session: SessionProvider;
     cookie: CookieManager;

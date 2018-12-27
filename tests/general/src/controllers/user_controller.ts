@@ -26,7 +26,7 @@ export class UserController extends Controller {
     @route("/{id}")
     async getUser() {
         try {
-            const userId = Number(this.params.id);
+            const userId = Number(this.param.id);
             const user = this.service.getUser(userId);
             if (user == null) {
                 return textResult("invalid id");
@@ -56,7 +56,7 @@ export class UserController extends Controller {
     @route("/{id}")
     async removeUser() {
         try {
-            const userId = Number(this.params.id);
+            const userId = Number(this.param.id);
             const user = this.service.getUser(userId);
             if (user != null) {
                 this.service.removeUser(userId);
