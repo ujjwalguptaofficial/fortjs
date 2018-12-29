@@ -840,152 +840,6 @@ var MemorySessionProvider = /** @class */ (function (_super) {
 
 /***/ }),
 
-/***/ "./src/fort.ts":
-/*!*********************!*\
-  !*** ./src/fort.ts ***!
-  \*********************/
-/*! exports provided: Fort */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return Fort; });
-/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./handlers/route_handler */ "./src/handlers/route_handler.ts");
-/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./global */ "./src/global.ts");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.ts");
-/* harmony import */ var _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extra/memory_session_provider */ "./src/extra/memory_session_provider.ts");
-/* harmony import */ var _models_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models/error_handler */ "./src/models/error_handler.ts");
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
-/* harmony import */ var _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./handlers/request_handler */ "./src/handlers/request_handler.ts");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! http */ "http");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./enums/etag_type */ "./src/enums/etag_type.ts");
-/* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/log_helper */ "./src/helpers/log_helper.ts");
-/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./enums/error_type */ "./src/enums/error_type.ts");
-/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./helpers/promise */ "./src/helpers/promise.ts");
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-
-
-
-
-
-
-
-
-
-
-
-
-var Fort = /** @class */ (function () {
-    function Fort() {
-        this.routes = [];
-        this.walls = [];
-    }
-    Fort.prototype.isArray_ = function (value) {
-        return _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isArray(value);
-    };
-    Fort.prototype.saveAppOption_ = function (option) {
-        var defaultEtagConfig = {
-            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
-        };
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = option.port == null ? 4000 : option.port;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders = option.folders == null ? [] : option.folders;
-        if (this.isArray_(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders) === false) {
-            throw new Error("Option folders should be an array");
-        }
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName + "_session_id";
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
-            this.sessionProvider;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _models_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
-    };
-    Fort.prototype.create = function (option) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                if (option == null) {
-                    option = {};
-                }
-                if (option.defaultPath != null && option.defaultPath[0] === "/") {
-                    option.defaultPath = option.defaultPath.substr(1);
-                }
-                if (this.routes == null) {
-                    this.routes = [];
-                }
-                this.routes.forEach(function (route) {
-                    if (route.path[0] === "/") {
-                        route.path = route.path.substr(1);
-                    }
-                    _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
-                });
-                this.saveAppOption_(option);
-                this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
-                    new _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
-                }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
-                    if (err.code === 'EADDRINUSE') {
-                        new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_10__["ERROR_TYPE"].PortInUse, _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).throw();
-                    }
-                    else {
-                        throw err;
-                    }
-                });
-                return [2 /*return*/];
-            });
-        });
-    };
-    Fort.prototype.destroy = function () {
-        var _this = this;
-        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
-            _this.httpServer.close(res);
-        });
-    };
-    return Fort;
-}());
-
-
-
-/***/ }),
-
 /***/ "./src/global.ts":
 /*!***********************!*\
   !*** ./src/global.ts ***!
@@ -3077,7 +2931,7 @@ var viewResult = function (viewName, models) { return __awaiter(_this, void 0, v
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Fort, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie, Fort, Router */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3135,13 +2989,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["HttpCookie"]; });
 
-/* harmony import */ var _fort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fort */ "./src/fort.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _fort__WEBPACK_IMPORTED_MODULE_5__["Fort"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["Fort"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["Router"]; });
 
 
 
 // export * from './interfaces/index';
-
 
 
 
@@ -3363,6 +3217,152 @@ var FileManager = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/models/fort.ts":
+/*!****************************!*\
+  !*** ./src/models/fort.ts ***!
+  \****************************/
+/*! exports provided: Fort */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return Fort; });
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../global */ "./src/global.ts");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util */ "./src/util.ts");
+/* harmony import */ var _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../extra/memory_session_provider */ "./src/extra/memory_session_provider.ts");
+/* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./error_handler */ "./src/models/error_handler.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+/* harmony import */ var _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../handlers/request_handler */ "./src/handlers/request_handler.ts");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! http */ "http");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../enums/etag_type */ "./src/enums/etag_type.ts");
+/* harmony import */ var _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../helpers/log_helper */ "./src/helpers/log_helper.ts");
+/* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../enums/error_type */ "./src/enums/error_type.ts");
+/* harmony import */ var _helpers_promise__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../helpers/promise */ "./src/helpers/promise.ts");
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+var Fort = /** @class */ (function () {
+    function Fort() {
+        this.routes = [];
+        this.walls = [];
+    }
+    Fort.prototype.isArray_ = function (value) {
+        return _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isArray(value);
+    };
+    Fort.prototype.saveAppOption_ = function (option) {
+        var defaultEtagConfig = {
+            type: _enums_etag_type__WEBPACK_IMPORTED_MODULE_8__["ETag_Type"].Weak
+        };
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port = option.port == null ? 4000 : option.port;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].shouldParsePost = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.shouldParsePost) ? true : option.shouldParsePost;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionTimeOut = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders = option.folders == null ? [] : option.folders;
+        if (this.isArray_(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders) === false) {
+            throw new Error("Option folders should be an array");
+        }
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = _util__WEBPACK_IMPORTED_MODULE_2__["Util"].isNullOrEmpty(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_5__["__AppName"] : option.appName;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName + "_session_id";
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].walls = this.walls;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
+            this.sessionProvider;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
+    };
+    Fort.prototype.create = function (option) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (option == null) {
+                    option = {};
+                }
+                if (option.defaultPath != null && option.defaultPath[0] === "/") {
+                    option.defaultPath = option.defaultPath.substr(1);
+                }
+                if (this.routes == null) {
+                    this.routes = [];
+                }
+                this.routes.forEach(function (route) {
+                    if (route.path[0] === "/") {
+                        route.path = route.path.substr(1);
+                    }
+                    _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
+                });
+                this.saveAppOption_(option);
+                this.httpServer = http__WEBPACK_IMPORTED_MODULE_7__["createServer"](function (req, res) {
+                    new _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__["RequestHandler"](req, res).handle();
+                }).listen(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).once("error", function (err) {
+                    if (err.code === 'EADDRINUSE') {
+                        new _helpers_log_helper__WEBPACK_IMPORTED_MODULE_9__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_10__["ERROR_TYPE"].PortInUse, _global__WEBPACK_IMPORTED_MODULE_1__["Global"].port).throw();
+                    }
+                    else {
+                        throw err;
+                    }
+                });
+                return [2 /*return*/];
+            });
+        });
+    };
+    Fort.prototype.destroy = function () {
+        var _this = this;
+        return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
+            _this.httpServer.close(res);
+        });
+    };
+    return Fort;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/models/http_cookie.ts":
 /*!***********************************!*\
   !*** ./src/models/http_cookie.ts ***!
@@ -3389,7 +3389,7 @@ var HttpCookie = /** @class */ (function () {
 /*!*****************************!*\
   !*** ./src/models/index.ts ***!
   \*****************************/
-/*! exports provided: ErrorHandler, HttpCookie */
+/*! exports provided: ErrorHandler, HttpCookie, Fort, Router */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3400,7 +3400,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _http_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http_cookie */ "./src/models/http_cookie.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _http_cookie__WEBPACK_IMPORTED_MODULE_1__["HttpCookie"]; });
 
+/* harmony import */ var _fort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fort */ "./src/models/fort.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _fort__WEBPACK_IMPORTED_MODULE_2__["Fort"]; });
 
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./router */ "./src/models/router.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return _router__WEBPACK_IMPORTED_MODULE_3__["Router"]; });
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./src/models/router.ts":
+/*!******************************!*\
+  !*** ./src/models/router.ts ***!
+  \******************************/
+/*! exports provided: Router */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return Router; });
+/* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
+
+var Router = /** @class */ (function () {
+    function Router() {
+        this.routes = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection;
+    }
+    return Router;
+}());
 
 
 
