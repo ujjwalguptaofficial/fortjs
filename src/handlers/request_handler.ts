@@ -4,11 +4,11 @@ import { Controller } from "../abstracts/controller";
 import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
 import { Global } from "../global";
 import { parseCookie } from "../helpers/parse_cookie";
-import { CookieManager } from "../model/cookie_manager";
-import { GenericSessionProvider } from "../model/generic_session_provider";
-import { GenericGuard } from "../model/generic_guard";
+import { CookieManager } from "../models/cookie_manager";
+import { GenericSessionProvider } from "../models/generic_session_provider";
+import { GenericGuard } from "../models/generic_guard";
 import { parseAndMatchRoute } from "../helpers/parse_match_route";
-import { IRouteMatch } from "../interfaces/route_match";
+import { RouteMatch } from "../types/route_match";
 import { HTTP_METHOD } from "../enums/http_method";
 import { HttpResult } from "../types";
 import { PostHandler } from "./post_handler";
@@ -20,7 +20,7 @@ export class RequestHandler extends PostHandler {
     private session_: GenericSessionProvider;
     private query_: any;
     private data_ = {};
-    private routeMatchInfo_: IRouteMatch;
+    private routeMatchInfo_: RouteMatch;
 
 
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {

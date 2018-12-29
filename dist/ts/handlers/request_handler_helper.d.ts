@@ -2,7 +2,7 @@
 import * as http from "http";
 import { MIME_TYPE } from "../enums/mime_type";
 import { HTTP_METHOD } from "../enums/http_method";
-import { CookieManager } from "../model/cookie_manager";
+import { CookieManager } from "../models/cookie_manager";
 import { Wall } from "../abstracts/wall";
 export declare class RequestHandlerHelper {
     protected cookieManager: CookieManager;

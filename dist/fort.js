@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.4 - 27/12/2018
+ * @license :fortjs - V1.4.4 - 29/12/2018
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -854,7 +854,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./global */ "./src/global.ts");
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util */ "./src/util.ts");
 /* harmony import */ var _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extra/memory_session_provider */ "./src/extra/memory_session_provider.ts");
-/* harmony import */ var _model_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model/error_handler */ "./src/model/error_handler.ts");
+/* harmony import */ var _models_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models/error_handler */ "./src/models/error_handler.ts");
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
 /* harmony import */ var _handlers_request_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./handlers/request_handler */ "./src/handlers/request_handler.ts");
 /* harmony import */ var http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! http */ "http");
@@ -938,7 +938,7 @@ var Fort = /** @class */ (function () {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].viewEngine = this.viewEngine == null ? null : new this.viewEngine();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
             this.sessionProvider;
-        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _model_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _models_error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
     };
     Fort.prototype.create = function (option) {
         return __awaiter(this, void 0, void 0, function () {
@@ -978,10 +978,6 @@ var Fort = /** @class */ (function () {
         return Object(_helpers_promise__WEBPACK_IMPORTED_MODULE_11__["promise"])(function (res, rej) {
             _this.httpServer.close(res);
         });
-    };
-    Fort.prototype.mapPath = function (oldPath, newPath) {
-    };
-    Fort.prototype.mapVirtualPath = function (actualPath, mappedPath) {
     };
     return Fort;
 }());
@@ -1522,7 +1518,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var multiparty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! multiparty */ "multiparty");
 /* harmony import */ var multiparty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(multiparty__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _model_file_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../model/file_manager */ "./src/model/file_manager.ts");
+/* harmony import */ var _models_file_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../models/file_manager */ "./src/models/file_manager.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1583,7 +1579,7 @@ var PostHandler = /** @class */ (function (_super) {
     __extends(PostHandler, _super);
     function PostHandler() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.file = new _model_file_manager__WEBPACK_IMPORTED_MODULE_7__["FileManager"]();
+        _this.file = new _models_file_manager__WEBPACK_IMPORTED_MODULE_7__["FileManager"]();
         return _this;
     }
     PostHandler.prototype.getPostRawData_ = function () {
@@ -1695,7 +1691,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../global */ "./src/global.ts");
 /* harmony import */ var _helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../helpers/parse_cookie */ "./src/helpers/parse_cookie.ts");
-/* harmony import */ var _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../model/cookie_manager */ "./src/model/cookie_manager.ts");
+/* harmony import */ var _models_cookie_manager__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/cookie_manager */ "./src/models/cookie_manager.ts");
 /* harmony import */ var _helpers_parse_match_route__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers/parse_match_route */ "./src/helpers/parse_match_route.ts");
 /* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../enums/http_method */ "./src/enums/http_method.ts");
 /* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
@@ -1851,7 +1847,7 @@ var RequestHandler = /** @class */ (function (_super) {
             var rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
             var parsedCookies = Object(_helpers_parse_cookie__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
-            this.cookieManager = new _model_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
+            this.cookieManager = new _models_cookie_manager__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
             this.session_.sessionId = parsedCookies[_global__WEBPACK_IMPORTED_MODULE_2__["Global"].appSessionIdentifier];
             this.session_.cookie = this.cookieManager;
         }
@@ -2968,7 +2964,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var renderView = function (viewName, model) {
+var renderView = function (viewName, models) {
     if (Object(_is_env_dev__WEBPACK_IMPORTED_MODULE_1__["isEnvDev"])()) {
         if (_global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine == null) {
             new _log_helper__WEBPACK_IMPORTED_MODULE_2__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_3__["ERROR_TYPE"].UndefinedViewEngine).throw();
@@ -2976,7 +2972,7 @@ var renderView = function (viewName, model) {
     }
     return _global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine.render({
         view: viewName,
-        model: model
+        models: models
     });
 };
 
@@ -3058,11 +3054,11 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var _this = undefined;
 
 
-var viewResult = function (viewName, model) { return __awaiter(_this, void 0, void 0, function () {
+var viewResult = function (viewName, models) { return __awaiter(_this, void 0, void 0, function () {
     var viewData;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, model)];
+            case 0: return [4 /*yield*/, Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, models)];
             case 1:
                 viewData = _a.sent();
                 return [2 /*return*/, {
@@ -3134,10 +3130,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["viewResult"]; });
 
-/* harmony import */ var _model_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./model/index */ "./src/model/index.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _model_index__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
+/* harmony import */ var _models_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models/index */ "./src/models/index.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _model_index__WEBPACK_IMPORTED_MODULE_4__["HttpCookie"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["HttpCookie"]; });
 
 /* harmony import */ var _fort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./fort */ "./src/fort.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return _fort__WEBPACK_IMPORTED_MODULE_5__["Fort"]; });
@@ -3154,10 +3150,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/model/cookie_manager.ts":
-/*!*************************************!*\
-  !*** ./src/model/cookie_manager.ts ***!
-  \*************************************/
+/***/ "./src/models/cookie_manager.ts":
+/*!**************************************!*\
+  !*** ./src/models/cookie_manager.ts ***!
+  \**************************************/
 /*! exports provided: CookieManager */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3254,10 +3250,10 @@ var CookieManager = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/model/error_handler.ts":
-/*!************************************!*\
-  !*** ./src/model/error_handler.ts ***!
-  \************************************/
+/***/ "./src/models/error_handler.ts":
+/*!*************************************!*\
+  !*** ./src/models/error_handler.ts ***!
+  \*************************************/
 /*! exports provided: ErrorHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3327,10 +3323,10 @@ var ErrorHandler = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/model/file_manager.ts":
-/*!***********************************!*\
-  !*** ./src/model/file_manager.ts ***!
-  \***********************************/
+/***/ "./src/models/file_manager.ts":
+/*!************************************!*\
+  !*** ./src/models/file_manager.ts ***!
+  \************************************/
 /*! exports provided: FileManager */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3367,10 +3363,10 @@ var FileManager = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/model/http_cookie.ts":
-/*!**********************************!*\
-  !*** ./src/model/http_cookie.ts ***!
-  \**********************************/
+/***/ "./src/models/http_cookie.ts":
+/*!***********************************!*\
+  !*** ./src/models/http_cookie.ts ***!
+  \***********************************/
 /*! exports provided: HttpCookie */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3389,19 +3385,19 @@ var HttpCookie = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/model/index.ts":
-/*!****************************!*\
-  !*** ./src/model/index.ts ***!
-  \****************************/
+/***/ "./src/models/index.ts":
+/*!*****************************!*\
+  !*** ./src/models/index.ts ***!
+  \*****************************/
 /*! exports provided: ErrorHandler, HttpCookie */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error_handler */ "./src/model/error_handler.ts");
+/* harmony import */ var _error_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./error_handler */ "./src/models/error_handler.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _error_handler__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"]; });
 
-/* harmony import */ var _http_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http_cookie */ "./src/model/http_cookie.ts");
+/* harmony import */ var _http_cookie__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./http_cookie */ "./src/models/http_cookie.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return _http_cookie__WEBPACK_IMPORTED_MODULE_1__["HttpCookie"]; });
 
 

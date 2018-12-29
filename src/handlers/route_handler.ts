@@ -1,10 +1,10 @@
-import { IRouteInfo } from "../interfaces/route_info";
-import { GenericShield } from "../model/generic_shield";
-import { IRouteActionInfo } from "../interfaces/route_action_info";
-import { GenericGuard } from "../model/generic_guard";
+import { RouteInfo } from "../types/route_info";
+import { GenericShield } from "../models/generic_shield";
+import { RouteActionInfo } from "../types/route_action_info";
+import { GenericGuard } from "../models/generic_guard";
 import { Route } from "../types/route";
 
-const routerCollection: IRouteInfo[] = [];
+const routerCollection: RouteInfo[] = [];
 export class RouteHandler {
 
     static get routerCollection() {
@@ -51,7 +51,7 @@ export class RouteHandler {
         }
     }
 
-    static addWorker(newAction: IRouteActionInfo, className: string) {
+    static addWorker(newAction: RouteActionInfo, className: string) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({

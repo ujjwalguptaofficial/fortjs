@@ -1,9 +1,9 @@
 import { HTTP_METHOD } from "../enums";
-import { GenericGuard } from "../model/generic_guard";
+import { GenericGuard } from "../models/generic_guard";
 
-export interface IRouteActionInfo {
+export type RouteActionInfo = {
     workerName: string;
     methodsAllowed: HTTP_METHOD[];
     guards: Array<typeof GenericGuard>;
     pattern: string;
-}
+};

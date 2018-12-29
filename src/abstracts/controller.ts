@@ -1,8 +1,8 @@
 import { SessionProvider } from "./session_provider";
-import { CookieManager } from "../model/cookie_manager";
+import { CookieManager } from "../models/cookie_manager";
 import { HttpResponse } from "../types/http_response";
 import { HttpRequest } from "../types/http_request";
-import { FileManager } from "../model/file_manager";
+import { FileManager } from "../models/file_manager";
 export abstract class Controller {
     request: HttpRequest;
     response: HttpResponse;

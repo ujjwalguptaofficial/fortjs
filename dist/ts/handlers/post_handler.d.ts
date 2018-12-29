@@ -1,5 +1,5 @@
 import { ControllerHandler } from "./controller_handler";
-import { FileManager } from "../model/file_manager";
+import { FileManager } from "../models/file_manager";
 export declare class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager;

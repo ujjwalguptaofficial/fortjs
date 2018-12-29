@@ -1,6 +1,6 @@
 import { Shield } from "../abstracts";
 import { RouteHandler } from "../handlers/route_handler";
-import { GenericShield } from "../model/generic_shield";
+import { GenericShield } from "../models/generic_shield";
 
 export const shields = (shieldsValue: Array<typeof Shield>): ClassDecorator => {
     return (target: any) => {

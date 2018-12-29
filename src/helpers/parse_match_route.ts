@@ -1,5 +1,5 @@
 import { RouteHandler } from "../handlers/route_handler";
-import { IRouteMatch } from "../interfaces/route_match";
+import { RouteMatch } from "../types/route_match";
 import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";
 
@@ -16,9 +16,9 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
         url += Global.defaultPath;
     }
     const urlParts = url.split("/");
-    const matchedRoute: IRouteMatch = {
+    const matchedRoute: RouteMatch = {
         allows: []
-    } as IRouteMatch;
+    } as RouteMatch;
     const firstPart = urlParts[1];
     const route = RouteHandler.routerCollection.find(qry => qry.path === firstPart);
     if (route != null) {

@@ -6,8 +6,8 @@ import * as ContentType from "content-type";
 import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
 import { MultiPartParseResult } from "../types/multi_part_parse_result";
-import { HttpFile } from "../model/http_file";
-import { FileManager } from "../model/file_manager";
+import { HttpFile } from "../models/http_file";
+import { FileManager } from "../models/file_manager";
 export class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager = new FileManager();

@@ -1,1 +1,1 @@
-export declare const renderView: (viewName: string, model?: any) => Promise<string>;
+export declare const renderView: (viewName: string, models?: any) => Promise<string>;

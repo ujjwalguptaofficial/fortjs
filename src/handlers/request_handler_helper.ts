@@ -5,7 +5,7 @@ import { MIME_TYPE } from "../enums/mime_type";
 import { HTTP_METHOD } from "../enums/http_method";
 import { Global } from "../global";
 import * as Negotiator from "negotiator";
-import { CookieManager } from "../model/cookie_manager";
+import { CookieManager } from "../models/cookie_manager";
 import { Wall } from "../abstracts/wall";
 import { IException } from "../interfaces/exception";
 import { Util } from "../util";

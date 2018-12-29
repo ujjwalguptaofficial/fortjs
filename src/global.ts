@@ -1,8 +1,8 @@
 import * as http from "http";
-import { GenericSessionProvider } from "./model/generic_session_provider";
-import { GenericWall } from "./model/generic_wall";
+import { GenericSessionProvider } from "./models/generic_session_provider";
+import { GenericWall } from "./models/generic_wall";
 import { ViewEngine } from "./abstracts/view_engine";
-import { ErrorHandler } from "./model/error_handler";
+import { ErrorHandler } from "./models/error_handler";
 import { EtagOption } from "./types/etag_option";
 import { FolderMap } from "./types/folder_map";
 

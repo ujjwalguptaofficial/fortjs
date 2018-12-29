@@ -6,9 +6,9 @@ export declare type ViewEngineData = {
      */
     view: string;
     /**
-     * view model
+     * view models
      *
      * @type {*}
      */
-    model: any;
+    models: any;
 };

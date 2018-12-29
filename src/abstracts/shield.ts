@@ -1,11 +1,11 @@
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
-import { CookieManager } from "../model/cookie_manager";
+import { CookieManager } from "../models/cookie_manager";
 import { HttpResult } from "../types";
 import { HttpRequest } from "../types/http_request";
 import { HttpResponse } from "../types/http_response";
-import { HttpFile } from "../model/http_file";
-import { FileManager } from "../model/file_manager";
+import { HttpFile } from "../models/http_file";
+import { FileManager } from "../models/file_manager";
 
 export abstract class Shield implements Controller {
     request: HttpRequest;

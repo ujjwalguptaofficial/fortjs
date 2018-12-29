@@ -1,5 +1,5 @@
 import { RouteHandler } from "../handlers/route_handler";
-import { GenericGuard } from "../model/generic_guard";
+import { GenericGuard } from "../models/generic_guard";
 import { Guard } from "../abstracts/guard";
 
 export const guards = (value: Array<typeof Guard>): MethodDecorator => {

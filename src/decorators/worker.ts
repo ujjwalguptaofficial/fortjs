@@ -1,11 +1,11 @@
 import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../handlers/route_handler";
-import { IRouteActionInfo } from "../interfaces/route_action_info";
+import { RouteActionInfo } from "../types/route_action_info";
 
 export const worker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator => {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const className = (target.constructor.name as string);
-        const actionInfo: IRouteActionInfo = {
+        const actionInfo: RouteActionInfo = {
             workerName: methodName,
             methodsAllowed: allowedMethods == null ? [
                 HTTP_METHOD.Delete, HTTP_METHOD.Get, HTTP_METHOD.Post, HTTP_METHOD.Patch, HTTP_METHOD.Put
