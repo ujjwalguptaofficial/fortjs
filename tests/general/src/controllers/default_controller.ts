@@ -1,9 +1,9 @@
-import { Controller, viewResult, worker, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult } from "fortjs";
+import { Controller, viewResult, Worker, HTTP_METHOD, Route, jsonResult, htmlResult, textResult, DefaultWorker, redirectResult } from "fortjs";
 import { UserService } from "../services/user_service";
 
 export class DefaultController extends Controller {
 
-    @defaultWorker()
+    @DefaultWorker()
     default() {
         // just for making sure these fields has been initiated
         const params = this.param;
@@ -14,7 +14,7 @@ export class DefaultController extends Controller {
         })
     }
 
-    @worker([HTTP_METHOD.Post])
+    @Worker([HTTP_METHOD.Post])
     async login() {
         const emailId = this.body.emailId;
         const pwd = this.body.password;
@@ -37,35 +37,35 @@ export class DefaultController extends Controller {
         }
     }
 
-    @worker([HTTP_METHOD.Get])
-    @route("/login")
+    @Worker([HTTP_METHOD.Get])
+    @Route("/login")
     async getloginForm() {
         const result = viewResult("login_form");
         return result;
     }
 
-    @worker([HTTP_METHOD.Get])
+    @Worker([HTTP_METHOD.Get])
     text() {
         return new Promise((resolve, reject) => {
             resolve(textResult("text"));
         });
     }
 
-    @worker()
+    @Worker()
     json() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult({ key: 'hello', value: 'world' }));
         });
     }
 
-    @worker()
+    @Worker()
     html() {
         return new Promise((resolve, reject) => {
             resolve(htmlResult(`<h1>hey there i am html</h1>`));
         });
     }
 
-    @worker([HTTP_METHOD.Post])
+    @Worker([HTTP_METHOD.Post])
     post() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));
@@ -73,19 +73,19 @@ export class DefaultController extends Controller {
     }
 
 
-    @worker()
+    @Worker()
     async redirect() {
         return await redirectResult("html");
     }
 
-    @worker()
+    @Worker()
     async getData() {
         return jsonResult(this.data);
     }
 
-    @worker()
+    @Worker()
     async logOut() {
-       await this.session.clear();
-       return textResult("Logged out");
+        await this.session.clear();
+        return textResult("Logged out");
     }
 }

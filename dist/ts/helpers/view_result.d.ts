@@ -1,2 +1,2 @@
 import { HttpResult } from "../types";
-export declare const viewResult: (viewName: string, models?: any) => Promise<HttpResult>;
+export declare const viewResult: (viewName: string, model?: any) => Promise<HttpResult>;

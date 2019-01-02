@@ -26,7 +26,7 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
         const urlPartLength = urlParts.length;
         if (urlPartLength === 2) { // url does not have action path
             const pattern = `/${route.path}/`;
-            route.actions.every(action => {
+            route.workers.every(action => {
                 if (action.pattern === pattern) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
                         matchedRoute.actionInfo = action;
@@ -44,7 +44,7 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
         else {
             const regex1 = /{(.*)}(?!.)/;
             const regex2 = /{(.*)}\.(\w+)(?!.)/;
-            route.actions.every(routeActionInfo => {
+            route.workers.every(routeActionInfo => {
                 const patternSplit = routeActionInfo.pattern.split("/");
                 if (urlPartLength === patternSplit.length) {
                     let isMatched = true;

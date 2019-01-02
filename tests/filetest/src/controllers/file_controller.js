@@ -1,12 +1,12 @@
 import {
     Controller,
-    defaultWorker,
+    DefaultWorker,
     htmlResult,
     textResult,
     renderView,
-    route,
+    Route,
     fileResult,
-    worker,
+    Worker,
     HTTP_METHOD,
     jsonResult
 } from "fortjs";
@@ -14,7 +14,7 @@ import {
 import * as Path from "path";
 
 export class FileController extends Controller {
-    @defaultWorker()
+    @DefaultWorker()
     async default () {
         try {
             const viewData = await renderView('controller:default,action:default');
@@ -28,8 +28,8 @@ export class FileController extends Controller {
         }
     }
 
-    @route("/scripts/{file}.js")
-    @worker()
+    @Route("/scripts/{file}.js")
+    @Worker()
     async getScripts() {
         // check for file exist when there is no upload
         // do not remove this
@@ -38,8 +38,8 @@ export class FileController extends Controller {
         return fileResult(filePath);
     }
 
-    @worker([HTTP_METHOD.Post])
-    @route("/upload")
+    @Worker([HTTP_METHOD.Post])
+    @Route("/upload")
     async uploadFile() {
         const pathToSave = Path.join(__dirname, "../upload.png");
         let result;
@@ -53,8 +53,8 @@ export class FileController extends Controller {
         return textResult(result);
     }
 
-    @worker([HTTP_METHOD.Get])
-    @route("/upload")
+    @Worker([HTTP_METHOD.Get])
+    @Route("/upload")
     async getUploadForm() {
         return htmlResult(`<html><head></head><body>\
         <form method="POST" enctype="multipart/form-data">\

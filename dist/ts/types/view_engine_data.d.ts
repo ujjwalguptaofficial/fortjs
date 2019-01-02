@@ -10,5 +10,5 @@ export declare type ViewEngineData = {
      *
      * @type {*}
      */
-    models: any;
+    model: any;
 };

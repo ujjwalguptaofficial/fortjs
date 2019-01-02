@@ -1,11 +1,12 @@
 import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../handlers/route_handler";
-import { RouteActionInfo } from "../types/route_action_info";
+import { WorkerInfo } from "../types/worker_info";
 
-export const worker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator => {
+// tslint:disable-next-line
+export const Worker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator => {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const className = (target.constructor.name as string);
-        const actionInfo: RouteActionInfo = {
+        const actionInfo: WorkerInfo = {
             workerName: methodName,
             methodsAllowed: allowedMethods == null ? [
                 HTTP_METHOD.Delete, HTTP_METHOD.Get, HTTP_METHOD.Post, HTTP_METHOD.Patch, HTTP_METHOD.Put

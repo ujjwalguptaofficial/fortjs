@@ -1,7 +1,7 @@
 /*!
- * @license :fortjs - V1.4.4 - 29/12/2018
+ * @license :fortjs - V1.4.4 - 02/01/2019
  * https://github.com/ujjwalguptaofficial/fortjs
- * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
+ * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -344,17 +344,18 @@ var __ContentLength = "Content-Length";
 /*!******************************************!*\
   !*** ./src/decorators/default_worker.ts ***!
   \******************************************/
-/*! exports provided: defaultWorker */
+/*! exports provided: DefaultWorker */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return defaultWorker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DefaultWorker", function() { return DefaultWorker; });
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 /* harmony import */ var _enums_http_method__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/http_method */ "./src/enums/http_method.ts");
 
 
-var defaultWorker = function (allowedMethods) {
+// tslint:disable-next-line
+var DefaultWorker = function (allowedMethods) {
     return function (target, methodName, descriptor) {
         var className = target.constructor.name;
         var actionInfo = {
@@ -374,15 +375,16 @@ var defaultWorker = function (allowedMethods) {
 /*!**********************************!*\
   !*** ./src/decorators/guards.ts ***!
   \**********************************/
-/*! exports provided: guards */
+/*! exports provided: Guards */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "guards", function() { return guards; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Guards", function() { return Guards; });
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
-var guards = function (value) {
+// tslint:disable-next-line
+var Guards = function (value) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
         _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(value, className, methodName);
@@ -396,25 +398,25 @@ var guards = function (value) {
 /*!*********************************!*\
   !*** ./src/decorators/index.ts ***!
   \*********************************/
-/*! exports provided: worker, shields, guards, route, defaultWorker */
+/*! exports provided: Worker, Shields, Guards, Route, DefaultWorker */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./worker */ "./src/decorators/worker.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return _worker__WEBPACK_IMPORTED_MODULE_0__["worker"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Worker", function() { return _worker__WEBPACK_IMPORTED_MODULE_0__["Worker"]; });
 
 /* harmony import */ var _shields__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shields */ "./src/decorators/shields.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return _shields__WEBPACK_IMPORTED_MODULE_1__["shields"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Shields", function() { return _shields__WEBPACK_IMPORTED_MODULE_1__["Shields"]; });
 
 /* harmony import */ var _guards__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./guards */ "./src/decorators/guards.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "guards", function() { return _guards__WEBPACK_IMPORTED_MODULE_2__["guards"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Guards", function() { return _guards__WEBPACK_IMPORTED_MODULE_2__["Guards"]; });
 
 /* harmony import */ var _route__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./route */ "./src/decorators/route.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "route", function() { return _route__WEBPACK_IMPORTED_MODULE_3__["route"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return _route__WEBPACK_IMPORTED_MODULE_3__["Route"]; });
 
 /* harmony import */ var _default_worker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./default_worker */ "./src/decorators/default_worker.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return _default_worker__WEBPACK_IMPORTED_MODULE_4__["defaultWorker"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DefaultWorker", function() { return _default_worker__WEBPACK_IMPORTED_MODULE_4__["DefaultWorker"]; });
 
 
 
@@ -429,15 +431,16 @@ __webpack_require__.r(__webpack_exports__);
 /*!*********************************!*\
   !*** ./src/decorators/route.ts ***!
   \*********************************/
-/*! exports provided: route */
+/*! exports provided: Route */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "route", function() { return route; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return Route; });
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
-var route = function (format) {
+// tslint:disable-next-line
+var Route = function (format) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
         _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addPattern(format, className, methodName);
@@ -451,15 +454,16 @@ var route = function (format) {
 /*!***********************************!*\
   !*** ./src/decorators/shields.ts ***!
   \***********************************/
-/*! exports provided: shields */
+/*! exports provided: Shields */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return shields; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Shields", function() { return Shields; });
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
-var shields = function (shieldsValue) {
+// tslint:disable-next-line
+var Shields = function (shieldsValue) {
     return function (target) {
         var className = target.name;
         _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addShields(shieldsValue, className);
@@ -473,17 +477,18 @@ var shields = function (shieldsValue) {
 /*!**********************************!*\
   !*** ./src/decorators/worker.ts ***!
   \**********************************/
-/*! exports provided: worker */
+/*! exports provided: Worker */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return worker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Worker", function() { return Worker; });
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 
 
-var worker = function (allowedMethods) {
+// tslint:disable-next-line
+var Worker = function (allowedMethods) {
     return function (target, methodName, descriptor) {
         var className = target.constructor.name;
         var actionInfo = {
@@ -2101,7 +2106,7 @@ var RouteHandler = /** @class */ (function () {
         var route = routerCollection.find(function (x) { return x.controllerName === value.controller.name; });
         if (route == null) {
             routerCollection.push({
-                actions: [],
+                workers: [],
                 controller: value.controller,
                 controllerName: value.controller.name,
                 path: value.path,
@@ -2112,7 +2117,7 @@ var RouteHandler = /** @class */ (function () {
             route.controller = value.controller;
             route.path = value.path;
             // change pattern value since we have controller name now.
-            route.actions.forEach(function (actionInfo) {
+            route.workers.forEach(function (actionInfo) {
                 // check if we are not adding again
                 // if (actionInfo.pattern.indexOf(value.path) < 0) {
                 actionInfo.pattern = "/" + value.path + actionInfo.pattern;
@@ -2124,7 +2129,7 @@ var RouteHandler = /** @class */ (function () {
         var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
         if (index < 0) {
             routerCollection.push({
-                actions: [],
+                workers: [],
                 controller: null,
                 controllerName: className,
                 shields: shields,
@@ -2139,7 +2144,7 @@ var RouteHandler = /** @class */ (function () {
         var router = routerCollection.find(function (x) { return x.controllerName === className; });
         if (router == null) {
             routerCollection.push({
-                actions: [newAction],
+                workers: [newAction],
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -2147,10 +2152,10 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.actions.find(function (val) { return val.workerName === newAction.workerName; });
+            var savedAction = router.workers.find(function (val) { return val.workerName === newAction.workerName; });
             if (savedAction == null) {
                 newAction.pattern = router.path == null ? newAction.pattern : "/" + router.path + newAction.pattern;
-                router.actions.push(newAction);
+                router.workers.push(newAction);
             }
             else {
                 savedAction.methodsAllowed = newAction.methodsAllowed;
@@ -2163,7 +2168,7 @@ var RouteHandler = /** @class */ (function () {
         var pattern = actionName.toLowerCase();
         if (index < 0) {
             routerCollection.push({
-                actions: [{
+                workers: [{
                         workerName: actionName,
                         guards: guards,
                         methodsAllowed: null,
@@ -2176,9 +2181,9 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = routerCollection[index].actions.find(function (val) { return val.workerName === actionName; });
+            var savedAction = routerCollection[index].workers.find(function (val) { return val.workerName === actionName; });
             if (savedAction == null) {
-                routerCollection[index].actions.push({
+                routerCollection[index].workers.push({
                     workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
@@ -2194,7 +2199,7 @@ var RouteHandler = /** @class */ (function () {
         var router = routerCollection.find(function (x) { return x.controllerName === className; });
         if (router == null) {
             routerCollection.push({
-                actions: [{
+                workers: [{
                         workerName: actionName,
                         guards: [],
                         methodsAllowed: null,
@@ -2207,10 +2212,10 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.actions.find(function (val) { return val.workerName === actionName; });
+            var savedAction = router.workers.find(function (val) { return val.workerName === actionName; });
             pattern = router.path == null ? pattern : "/" + router.path + pattern;
             if (savedAction == null) {
-                router.actions.push({
+                router.workers.push({
                     workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
@@ -2683,7 +2688,7 @@ var parseAndMatchRoute = function (url, reqMethod) {
         var urlPartLength_1 = urlParts.length;
         if (urlPartLength_1 === 2) { // url does not have action path
             var pattern_1 = "/" + route.path + "/";
-            route.actions.every(function (action) {
+            route.workers.every(function (action) {
                 if (action.pattern === pattern_1) {
                     if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
                         matchedRoute.actionInfo = action;
@@ -2701,7 +2706,7 @@ var parseAndMatchRoute = function (url, reqMethod) {
         else {
             var regex1_1 = /{(.*)}(?!.)/;
             var regex2_1 = /{(.*)}\.(\w+)(?!.)/;
-            route.actions.every(function (routeActionInfo) {
+            route.workers.every(function (routeActionInfo) {
                 var patternSplit = routeActionInfo.pattern.split("/");
                 if (urlPartLength_1 === patternSplit.length) {
                     var isMatched_1 = true;
@@ -2818,7 +2823,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var renderView = function (viewName, models) {
+var renderView = function (viewName, model) {
     if (Object(_is_env_dev__WEBPACK_IMPORTED_MODULE_1__["isEnvDev"])()) {
         if (_global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine == null) {
             new _log_helper__WEBPACK_IMPORTED_MODULE_2__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_3__["ERROR_TYPE"].UndefinedViewEngine).throw();
@@ -2826,7 +2831,7 @@ var renderView = function (viewName, models) {
     }
     return _global__WEBPACK_IMPORTED_MODULE_0__["Global"].viewEngine.render({
         view: viewName,
-        models: models
+        model: model
     });
 };
 
@@ -2908,11 +2913,11 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var _this = undefined;
 
 
-var viewResult = function (viewName, models) { return __awaiter(_this, void 0, void 0, function () {
+var viewResult = function (viewName, model) { return __awaiter(_this, void 0, void 0, function () {
     var viewData;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, models)];
+            case 0: return [4 /*yield*/, Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, model)];
             case 1:
                 viewData = _a.sent();
                 return [2 /*return*/, {
@@ -2931,7 +2936,7 @@ var viewResult = function (viewName, models) { return __awaiter(_this, void 0, v
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, worker, shields, guards, route, defaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie, Fort, Router */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie, Fort, Router */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2950,15 +2955,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Wall", function() { return _abstracts_index__WEBPACK_IMPORTED_MODULE_0__["Wall"]; });
 
 /* harmony import */ var _decorators_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./decorators/index */ "./src/decorators/index.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "worker", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["worker"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Worker", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["Worker"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "shields", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["shields"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Shields", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["Shields"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "guards", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["guards"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Guards", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["Guards"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "route", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["route"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["Route"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "defaultWorker", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["defaultWorker"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DefaultWorker", function() { return _decorators_index__WEBPACK_IMPORTED_MODULE_1__["DefaultWorker"]; });
 
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./enums */ "./src/enums/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_2__["MIME_TYPE"]; });

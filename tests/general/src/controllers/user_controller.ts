@@ -1,11 +1,11 @@
-import { Controller, worker, HTTP_METHOD, htmlResult, textResult, shields, guards, jsonResult, route } from "fortjs";
+import { Controller, Worker, HTTP_METHOD, htmlResult, textResult, Shields, Guards, jsonResult, Route } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
 import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
-@shields([AuthenticationShield])
+@Shields([AuthenticationShield])
 export class UserController extends Controller {
     service: UserService;
 
@@ -14,16 +14,16 @@ export class UserController extends Controller {
         this.service = new UserService();
     }
 
-    @worker([HTTP_METHOD.Get])
-    @route("/")
+    @Worker([HTTP_METHOD.Get])
+    @Route("/")
     default() {
         return new Promise((resolve, reject) => {
             resolve(htmlResult("user default action"));
         });
     }
 
-    @worker([HTTP_METHOD.Get])
-    @route("/{id}")
+    @Worker([HTTP_METHOD.Get])
+    @Route("/{id}")
     async getUser() {
         try {
             const userId = Number(this.param.id);
@@ -39,9 +39,9 @@ export class UserController extends Controller {
         }
     }
 
-    @worker([HTTP_METHOD.Post])
-    @guards([ModelUserGuard])
-    @route("/")
+    @Worker([HTTP_METHOD.Post])
+    @Guards([ModelUserGuard])
+    @Route("/")
     async addUser() {
         try {
             const user: User = this.data.user;
@@ -52,8 +52,8 @@ export class UserController extends Controller {
         }
     }
 
-    @worker([HTTP_METHOD.Delete])
-    @route("/{id}")
+    @Worker([HTTP_METHOD.Delete])
+    @Route("/{id}")
     async removeUser() {
         try {
             const userId = Number(this.param.id);
@@ -72,9 +72,9 @@ export class UserController extends Controller {
         }
     }
 
-    @worker([HTTP_METHOD.Put])
-    @guards([ModelUserGuard])
-    @route("/")
+    @Worker([HTTP_METHOD.Put])
+    @Guards([ModelUserGuard])
+    @Route("/")
     async updateUser() {
         try {
             const user: User = this.data.user;
@@ -92,8 +92,8 @@ export class UserController extends Controller {
         }
     }
 
-    @worker()
-    @route('/counter/shield')
+    @Worker()
+    @Route('/counter/shield')
     async getCounter() {
         return jsonResult(this.data);
     }
