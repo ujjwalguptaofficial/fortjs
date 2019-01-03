@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.4.4 - 02/01/2019
+ * @license :fortjs - V1.4.4 - 03/01/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -2278,6 +2278,18 @@ __webpack_require__.r(__webpack_exports__);
 var FileHelper = /** @class */ (function () {
     function FileHelper() {
     }
+    FileHelper.getAllFilesFrom = function (src) {
+        return new Promise(function (res, rej) {
+            fs__WEBPACK_IMPORTED_MODULE_0__["readdir"](src, function (err, filenames) {
+                if (err) {
+                    rej(err);
+                }
+                else {
+                    res(filenames);
+                }
+            });
+        });
+    };
     FileHelper.isPathExist = function (path) {
         return Object(_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (resolve, reject) {
             try {
@@ -2347,6 +2359,40 @@ var FileHelper = /** @class */ (function () {
                 });
                 readStream.pipe(writeStream);
             };
+        });
+    };
+    FileHelper.createDir = function (path) {
+        return new Promise(function (resolve, reject) {
+            try {
+                fs__WEBPACK_IMPORTED_MODULE_0__["mkdir"](path, function (err) {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        resolve();
+                    }
+                });
+            }
+            catch (ex) {
+                reject(ex);
+            }
+        });
+    };
+    FileHelper.writeFile = function (path, contents) {
+        return new Promise(function (resolve, reject) {
+            try {
+                fs__WEBPACK_IMPORTED_MODULE_0__["writeFile"](path, contents, { flag: 'w' }, function (err) {
+                    if (err) {
+                        reject(err);
+                    }
+                    else {
+                        resolve();
+                    }
+                });
+            }
+            catch (ex) {
+                reject(ex);
+            }
         });
     };
     return FileHelper;
@@ -2479,7 +2525,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, FileHelper */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2507,6 +2553,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _view_result__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./view_result */ "./src/helpers/view_result.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _view_result__WEBPACK_IMPORTED_MODULE_7__["viewResult"]; });
+
+/* harmony import */ var _file_helper__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./file_helper */ "./src/helpers/file_helper.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FileHelper", function() { return _file_helper__WEBPACK_IMPORTED_MODULE_8__["FileHelper"]; });
+
 
 
 
@@ -2936,7 +2986,7 @@ var viewResult = function (viewName, model) { return __awaiter(_this, void 0, vo
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie, Fort, Router */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, FileHelper, ErrorHandler, HttpCookie, Fort, Router */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2988,6 +3038,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["redirectResult"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["viewResult"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FileHelper", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["FileHelper"]; });
 
 /* harmony import */ var _models_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models/index */ "./src/models/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
