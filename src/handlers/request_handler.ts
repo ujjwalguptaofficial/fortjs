@@ -36,7 +36,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private runWallIncoming_() {
-        return Promise.all(Global.walls.map(async (wall) => {
+        return Promise.all(Global.walls.map((wall) => {
             const wallObj = new wall();
             wallObj.cookie = this.cookieManager;
             wallObj.session = this.session_;
@@ -45,7 +45,7 @@ export class RequestHandler extends PostHandler {
             wallObj.data = this.data_;
             wallObj.query = this.query_;
             this.wallInstances.push(wallObj);
-            return await wallObj.onIncoming();
+            return wallObj.onIncoming();
         }));
     }
 
@@ -66,7 +66,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private executeShieldsProtection_() {
-        return Promise.all(this.routeMatchInfo_.shields.map(async shield => {
+        return Promise.all(this.routeMatchInfo_.shields.map(shield => {
             const shieldObj = new shield();
             shieldObj.cookie = this.cookieManager;
             shieldObj.query = this.query_;
@@ -74,12 +74,12 @@ export class RequestHandler extends PostHandler {
             shieldObj.request = this.request as HttpRequest;
             shieldObj.response = this.response as HttpResponse;
             shieldObj.data = this.data_;
-            return await shieldObj.protect();
+            return shieldObj.protect();
         }));
     }
 
     private executeGuardsCheck_(guards: Array<typeof GenericGuard>) {
-        return Promise.all(guards.map(async guard => {
+        return Promise.all(guards.map(guard => {
             const guardObj = new guard();
             guardObj.body = this.body;
             guardObj.cookie = this.cookieManager;
@@ -90,7 +90,7 @@ export class RequestHandler extends PostHandler {
             guardObj.data = this.data_;
             guardObj.file = this.file;
             guardObj.param = this.routeMatchInfo_.params;
-            return await guardObj.check();
+            return guardObj.check();
         }));
     }
 

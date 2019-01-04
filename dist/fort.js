@@ -1626,24 +1626,17 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.runWallIncoming_ = function () {
         var _this = this;
-        return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) { return __awaiter(_this, void 0, void 0, function () {
-            var wallObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        wallObj = new wall();
-                        wallObj.cookie = this.cookieManager;
-                        wallObj.session = this.session_;
-                        wallObj.request = this.request;
-                        wallObj.response = this.response;
-                        wallObj.data = this.data_;
-                        wallObj.query = this.query_;
-                        this.wallInstances.push(wallObj);
-                        return [4 /*yield*/, wallObj.onIncoming()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
+        return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) {
+            var wallObj = new wall();
+            wallObj.cookie = _this.cookieManager;
+            wallObj.session = _this.session_;
+            wallObj.request = _this.request;
+            wallObj.response = _this.response;
+            wallObj.data = _this.data_;
+            wallObj.query = _this.query_;
+            _this.wallInstances.push(wallObj);
+            return wallObj.onIncoming();
+        }));
     };
     RequestHandler.prototype.runController_ = function () {
         var controllerObj = new this.routeMatchInfo_.controller();
@@ -1660,46 +1653,32 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;
-        return Promise.all(this.routeMatchInfo_.shields.map(function (shield) { return __awaiter(_this, void 0, void 0, function () {
-            var shieldObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        shieldObj = new shield();
-                        shieldObj.cookie = this.cookieManager;
-                        shieldObj.query = this.query_;
-                        shieldObj.session = this.session_;
-                        shieldObj.request = this.request;
-                        shieldObj.response = this.response;
-                        shieldObj.data = this.data_;
-                        return [4 /*yield*/, shieldObj.protect()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
+        return Promise.all(this.routeMatchInfo_.shields.map(function (shield) {
+            var shieldObj = new shield();
+            shieldObj.cookie = _this.cookieManager;
+            shieldObj.query = _this.query_;
+            shieldObj.session = _this.session_;
+            shieldObj.request = _this.request;
+            shieldObj.response = _this.response;
+            shieldObj.data = _this.data_;
+            return shieldObj.protect();
+        }));
     };
     RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
         var _this = this;
-        return Promise.all(guards.map(function (guard) { return __awaiter(_this, void 0, void 0, function () {
-            var guardObj;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        guardObj = new guard();
-                        guardObj.body = this.body;
-                        guardObj.cookie = this.cookieManager;
-                        guardObj.query = this.query_;
-                        guardObj.session = this.session_;
-                        guardObj.request = this.request;
-                        guardObj.response = this.response;
-                        guardObj.data = this.data_;
-                        guardObj.file = this.file;
-                        guardObj.param = this.routeMatchInfo_.params;
-                        return [4 /*yield*/, guardObj.check()];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
+        return Promise.all(guards.map(function (guard) {
+            var guardObj = new guard();
+            guardObj.body = _this.body;
+            guardObj.cookie = _this.cookieManager;
+            guardObj.query = _this.query_;
+            guardObj.session = _this.session_;
+            guardObj.request = _this.request;
+            guardObj.response = _this.response;
+            guardObj.data = _this.data_;
+            guardObj.file = _this.file;
+            guardObj.param = _this.routeMatchInfo_.params;
+            return guardObj.check();
+        }));
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {
         if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
@@ -1890,19 +1869,12 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
-                return [2 /*return*/, Promise.all(this.wallInstances.reverse().map(function (wallObj) { return __awaiter(_this, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!(wallObj.onOutgoing != null)) return [3 /*break*/, 2];
-                                    return [4 /*yield*/, wallObj.onOutgoing()];
-                                case 1: return [2 /*return*/, _a.sent()];
-                                case 2: return [2 /*return*/];
-                            }
-                        });
-                    }); }))];
+                return [2 /*return*/, Promise.all(this.wallInstances.reverse().map(function (wallObj) {
+                        if (wallObj.onOutgoing != null) {
+                            return wallObj.onOutgoing();
+                        }
+                    }))];
             });
         });
     };
