@@ -1,19 +1,19 @@
-import { Controller, textResult, defaultWorker, jsonResult, worker, route, HTTP_STATUS_CODE, HTTP_METHOD, guards } from 'fortjs';
+import { Controller, textResult, DefaultWorker, jsonResult, Worker, Route, HTTP_STATUS_CODE, HTTP_METHOD, Guards } from 'fortjs';
 import { UserService } from '../services/user_service';
 import { ModelUserGuard } from '../guards/model_user_guard';
 import { User } from '../models/user';
 
 export class UserController extends Controller {
 
-    @defaultWorker()
+    @DefaultWorker()
     async getUsers() {
         const service = new UserService();
         return jsonResult(service.getUsers());
     }
 
-    @worker([HTTP_METHOD.Post])
-    @route("/")
-    @guards([ModelUserGuard])
+    @Worker([HTTP_METHOD.Post])
+    @Route("/")
+    @Guards([ModelUserGuard])
     async addUser() {
         const user = this.data.user;
         const service = new UserService();
@@ -21,9 +21,9 @@ export class UserController extends Controller {
         return jsonResult(newUser, HTTP_STATUS_CODE.Created);
     }
 
-    @worker([HTTP_METHOD.Put])
-    @guards([ModelUserGuard])
-    @route("/")
+    @Worker([HTTP_METHOD.Put])
+    @Guards([ModelUserGuard])
+    @Route("/")
     async updateUser() {
 
         const user: User = this.data.user;
@@ -37,8 +37,8 @@ export class UserController extends Controller {
 
     }
 
-    @worker([HTTP_METHOD.Get])
-    @route("/{id}")
+    @Worker([HTTP_METHOD.Get])
+    @Route("/{id}")
     async getUser() {
 
         const userId = Number(this.param.id);
@@ -50,8 +50,8 @@ export class UserController extends Controller {
 
     }
 
-    @worker([HTTP_METHOD.Delete])
-    @route("/{id}")
+    @Worker([HTTP_METHOD.Delete])
+    @Route("/{id}")
     async removeUser() {
 
         const userId = Number(this.param.id);

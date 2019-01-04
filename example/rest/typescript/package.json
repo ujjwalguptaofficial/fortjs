@@ -23,7 +23,7 @@
   "dependencies": {
     "class-validator": "^0.9.1",
     "eshtml": "^0.2.1",
-    "fortjs": "^1.4.4"
+    "fortjs": "^1.5.0"
   },
   "devDependencies": {
     "@types/node": "^10.12.15",
