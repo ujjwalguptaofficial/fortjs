@@ -33,7 +33,7 @@ describe("/default", () => {
         }).then(res => {
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'application/xml');
-            expect(res.data).to.be.equal('<?xml version="1.0" encoding="utf-8"?><document><key>hello</key><value>world</value></document>');
+            expect(res.data).to.be.equal('<?xml version="1.0" encoding="utf-8"?><root><key>hello</key><value>world</value></root>');
             done();
         }).catch(done)
     })

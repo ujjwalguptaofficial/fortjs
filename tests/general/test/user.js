@@ -1,6 +1,7 @@
 let {
     request,
-    expect
+    expect,
+    browserAccept
 } = require('./common');
 
 const cookie = require('cookie');
@@ -20,6 +21,17 @@ describe("/user", () => {
                 password: 'admin'
             }
             expect(res.body).to.be.eql(user);
+            done();
+        })
+    })
+
+    it("/{userId} with 0", (done) => {
+        request.get('/user/0').accept(browserAccept).buffer().end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/xml');
+            console.log(res);
+            expect(res.text).to.be.eql(`<?xml version="1.0" encoding="utf-8"?><users><user><id>1</id><name>ujjwal</name><address>bhubaneswar india</address><emailId>ujjwal@mg.com</emailId><gender>male</gender><password>admin</password></user></users>`);
             done();
         })
     })
@@ -105,7 +117,7 @@ describe("/user", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(7);
+            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(8);
             done();
         })
     })

@@ -506,6 +506,28 @@ var Worker = function (allowedMethods) {
 
 /***/ }),
 
+/***/ "./src/enums/data_type.ts":
+/*!********************************!*\
+  !*** ./src/enums/data_type.ts ***!
+  \********************************/
+/*! exports provided: DATA_TYPE */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DATA_TYPE", function() { return DATA_TYPE; });
+var DATA_TYPE;
+(function (DATA_TYPE) {
+    DATA_TYPE["String"] = "string";
+    DATA_TYPE["Number"] = "number";
+    DATA_TYPE["Array"] = "array";
+    DATA_TYPE["Object"] = "object";
+    DATA_TYPE["Function"] = "function";
+})(DATA_TYPE || (DATA_TYPE = {}));
+
+
+/***/ }),
+
 /***/ "./src/enums/error_type.ts":
 /*!*********************************!*\
   !*** ./src/enums/error_type.ts ***!
@@ -878,12 +900,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControllerHandler", function() { return ControllerHandler; });
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
 /* harmony import */ var _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/mime_type */ "./src/enums/mime_type.ts");
-/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsontoxml */ "jsontoxml");
-/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
-/* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./file_handler */ "./src/handlers/file_handler.ts");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
+/* harmony import */ var _file_handler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./file_handler */ "./src/handlers/file_handler.ts");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _helpers_xml_helper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers/xml_helper */ "./src/helpers/xml_helper.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -952,11 +973,7 @@ var ControllerHandler = /** @class */ (function (_super) {
                 return this.controllerResult_.responseData;
             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Xml:
                 if (typeof this.controllerResult_.responseData === 'object') {
-                    return jsontoxml__WEBPACK_IMPORTED_MODULE_2__({
-                        document: this.controllerResult_.responseData
-                    }, {
-                        xmlHeader: true
-                    });
+                    return _helpers_xml_helper__WEBPACK_IMPORTED_MODULE_5__["XmlHelper"].fromJsToXml(this.controllerResult_.responseData);
                 }
                 return this.controllerResult_.responseData;
             default:
@@ -965,12 +982,12 @@ var ControllerHandler = /** @class */ (function (_super) {
     };
     ControllerHandler.prototype.finishResponse_ = function (negotiateMimeType) {
         var _a;
-        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["__ContentType"]] = negotiateMimeType, _a));
+        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["__ContentType"]] = negotiateMimeType, _a));
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
     };
     ControllerHandler.prototype.handleRedirectResult_ = function () {
         this.response.setHeader('Location', this.controllerResult_.responseData);
-        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_3__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult_.responseData });
+        this.response.writeHead(this.controllerResult_.statusCode || _enums_http_status_code__WEBPACK_IMPORTED_MODULE_2__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult_.responseData });
         this.response.end();
     };
     ControllerHandler.prototype.handleFormatResult_ = function () {
@@ -986,7 +1003,7 @@ var ControllerHandler = /** @class */ (function (_super) {
     };
     ControllerHandler.prototype.handleFileResult_ = function () {
         var result = this.controllerResult_;
-        var parsedPath = path__WEBPACK_IMPORTED_MODULE_5__["parse"](result.file.filePath);
+        var parsedPath = path__WEBPACK_IMPORTED_MODULE_4__["parse"](result.file.filePath);
         if (result.file.shouldDownload === true) {
             var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
             this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + parsedPath.ext);
@@ -1037,7 +1054,7 @@ var ControllerHandler = /** @class */ (function (_super) {
         });
     };
     return ControllerHandler;
-}(_file_handler__WEBPACK_IMPORTED_MODULE_4__["FileHandler"]));
+}(_file_handler__WEBPACK_IMPORTED_MODULE_3__["FileHandler"]));
 
 
 
@@ -2256,6 +2273,33 @@ var fileResult = function (filePath) {
 
 /***/ }),
 
+/***/ "./src/helpers/get_data_type.ts":
+/*!**************************************!*\
+  !*** ./src/helpers/get_data_type.ts ***!
+  \**************************************/
+/*! exports provided: getDataType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataType", function() { return getDataType; });
+/* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
+
+var getDataType = function (value) {
+    var type = typeof value;
+    switch (type) {
+        case 'object':
+            if (Array.isArray(value)) {
+                return _enums_data_type__WEBPACK_IMPORTED_MODULE_0__["DATA_TYPE"].Array;
+            }
+        default:
+            return type;
+    }
+};
+
+
+/***/ }),
+
 /***/ "./src/helpers/get_mime_type_from_extension.ts":
 /*!*****************************************************!*\
   !*** ./src/helpers/get_mime_type_from_extension.ts ***!
@@ -2804,6 +2848,64 @@ var viewResult = function (viewName, model) { return __awaiter(_this, void 0, vo
         }
     });
 }); };
+
+
+/***/ }),
+
+/***/ "./src/helpers/xml_helper.ts":
+/*!***********************************!*\
+  !*** ./src/helpers/xml_helper.ts ***!
+  \***********************************/
+/*! exports provided: XmlHelper */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "XmlHelper", function() { return XmlHelper; });
+/* harmony import */ var _get_data_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./get_data_type */ "./src/helpers/get_data_type.ts");
+/* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
+/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsontoxml */ "jsontoxml");
+/* harmony import */ var jsontoxml__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsontoxml__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+var XmlHelper = /** @class */ (function () {
+    function XmlHelper() {
+    }
+    XmlHelper.fromJsToXml = function (value) {
+        var addKeyToObjectIfNeeded = function (key, obj) {
+            var _a;
+            var type = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(obj);
+            if (type === _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Object) {
+                var keys = Object.keys(obj);
+                if (keys.length !== 1) {
+                    obj = (_a = {},
+                        _a[key] = obj,
+                        _a);
+                }
+            }
+            return obj;
+        };
+        var dataType = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(value);
+        switch (dataType) {
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Array:
+                value.forEach(function (val, index) {
+                    value[index] = addKeyToObjectIfNeeded("item", val);
+                });
+                value = {
+                    root: value
+                };
+                break;
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Object:
+                value = addKeyToObjectIfNeeded("root", value);
+        }
+        return jsontoxml__WEBPACK_IMPORTED_MODULE_2__(value, {
+            xmlHeader: true
+        });
+    };
+    return XmlHelper;
+}());
+
 
 
 /***/ }),

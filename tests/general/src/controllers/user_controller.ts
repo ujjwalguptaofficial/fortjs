@@ -23,15 +23,40 @@ export class UserController extends Controller {
     }
 
     @Worker([HTTP_METHOD.Get])
+    @Route("/All")
+    async getAll() {
+        const user = this.service.getUsers();
+        return jsonResult({
+            users: [{
+                user: user[0]
+            }]
+        });
+    }
+
+    @Worker([HTTP_METHOD.Get])
     @Route("/{id}")
     async getUser() {
         try {
             const userId = Number(this.param.id);
-            const user = this.service.getUser(userId);
-            if (user == null) {
-                return textResult("invalid id");
+            if (userId === 0) {
+                let users = this.service.getUsers();
+                let userss = users.map(val => {
+                    return {
+                        user: val
+                    }
+                });
+                return jsonResult({
+                    users: [userss]
+                });
             }
-            return jsonResult(user);
+            else {
+                const user = this.service.getUser(userId);
+                if (user == null) {
+                    return textResult("invalid id");
+                }
+                return jsonResult(user);
+            }
+
         }
         catch (ex) {
             console.log("exception hit", ex);

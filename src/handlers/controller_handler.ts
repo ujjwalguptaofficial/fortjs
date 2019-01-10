@@ -7,6 +7,7 @@ import { HTTP_STATUS_CODE } from "../enums/http_status_code";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { HttpFormatResult } from "../types";
+import { XmlHelper } from "../helpers/xml_helper";
 
 export class ControllerHandler extends FileHandler {
     private controllerResult_: HttpResult;
@@ -20,11 +21,7 @@ export class ControllerHandler extends FileHandler {
                 return this.controllerResult_.responseData;
             case MIME_TYPE.Xml:
                 if (typeof this.controllerResult_.responseData === 'object') {
-                    return jsontoxml({
-                        document: this.controllerResult_.responseData
-                    }, {
-                            xmlHeader: true
-                        });
+                    return XmlHelper.fromJsToXml(this.controllerResult_.responseData);
                 }
                 return this.controllerResult_.responseData;
             default:
