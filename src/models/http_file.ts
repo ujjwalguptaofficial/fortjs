@@ -1,5 +1,4 @@
-import { FileHelper } from "../helpers/file_helper";
-
+ 
 export class HttpFile {
     /**
      * same as name - the field name for this file

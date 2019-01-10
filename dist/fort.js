@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.5.0 - 04/01/2019
+ * @license :fortjs - V1.5.0 - 10/01/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -2250,18 +2250,6 @@ __webpack_require__.r(__webpack_exports__);
 var FileHelper = /** @class */ (function () {
     function FileHelper() {
     }
-    FileHelper.getAllFilesFrom = function (src) {
-        return new Promise(function (res, rej) {
-            fs__WEBPACK_IMPORTED_MODULE_0__["readdir"](src, function (err, filenames) {
-                if (err) {
-                    rej(err);
-                }
-                else {
-                    res(filenames);
-                }
-            });
-        });
-    };
     FileHelper.isPathExist = function (path) {
         return Object(_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (resolve, reject) {
             try {

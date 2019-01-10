@@ -3,20 +3,6 @@ import { promise } from "./promise";
 
 export class FileHelper {
 
-    static getAllFilesFrom(src: string): Promise<string[]> {
-        return new Promise((res, rej) => {
-            Fs.readdir(src, (err, filenames) => {
-                if (err) {
-                    rej(err);
-                }
-                else {
-                    res(filenames);
-                }
-            });
-        });
-    }
-
-
     static isPathExist(path: string): Promise<boolean> {
         return promise((resolve, reject) => {
             try {

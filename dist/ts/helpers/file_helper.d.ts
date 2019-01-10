@@ -1,5 +1,4 @@
 export declare class FileHelper {
-    static getAllFilesFrom(src: string): Promise<string[]>;
     static isPathExist(path: string): Promise<boolean>;
     static isDirectory(path: string): Promise<boolean>;
     static readFile(path: string): Promise<string>;
