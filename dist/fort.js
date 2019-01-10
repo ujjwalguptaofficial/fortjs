@@ -2232,136 +2232,6 @@ var downloadResult = function (filePath, downloadFileName) {
 
 /***/ }),
 
-/***/ "./src/helpers/file_helper.ts":
-/*!************************************!*\
-  !*** ./src/helpers/file_helper.ts ***!
-  \************************************/
-/*! exports provided: FileHelper */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileHelper", function() { return FileHelper; });
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs */ "fs");
-/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _promise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./promise */ "./src/helpers/promise.ts");
-
-
-var FileHelper = /** @class */ (function () {
-    function FileHelper() {
-    }
-    FileHelper.isPathExist = function (path) {
-        return Object(_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (resolve, reject) {
-            try {
-                fs__WEBPACK_IMPORTED_MODULE_0__["exists"](path, function (isExist) {
-                    resolve(isExist);
-                });
-            }
-            catch (ex) {
-                reject(ex);
-            }
-        });
-    };
-    FileHelper.isDirectory = function (path) {
-        return Object(_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (resolve, reject) {
-            try {
-                fs__WEBPACK_IMPORTED_MODULE_0__["lstat"](path, function (err, status) {
-                    if (err) {
-                        reject(err);
-                    }
-                    else {
-                        resolve(status.isDirectory());
-                    }
-                });
-            }
-            catch (ex) {
-                reject(ex);
-            }
-        });
-    };
-    FileHelper.readFile = function (path) {
-        return Object(_promise__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (resolve, reject) {
-            try {
-                fs__WEBPACK_IMPORTED_MODULE_0__["readFile"](path, function (err, data) {
-                    if (err) {
-                        reject(err);
-                    }
-                    else {
-                        resolve(data);
-                    }
-                });
-            }
-            catch (ex) {
-                reject(ex);
-            }
-        });
-    };
-    FileHelper.copyFile = function (oldPath, newPath) {
-        return new Promise(function (res, rej) {
-            fs__WEBPACK_IMPORTED_MODULE_0__["rename"](oldPath, newPath, function (err) {
-                if (err) {
-                    if (err.code === 'EXDEV') {
-                        copy();
-                    }
-                    else {
-                        rej(err);
-                    }
-                }
-                res();
-            });
-            var copy = function () {
-                var readStream = fs__WEBPACK_IMPORTED_MODULE_0__["createReadStream"](oldPath);
-                var writeStream = fs__WEBPACK_IMPORTED_MODULE_0__["createWriteStream"](newPath);
-                readStream.on('error', rej);
-                writeStream.on('error', rej);
-                readStream.on('close', function () {
-                    fs__WEBPACK_IMPORTED_MODULE_0__["unlink"](oldPath, res);
-                });
-                readStream.pipe(writeStream);
-            };
-        });
-    };
-    FileHelper.createDir = function (path) {
-        return new Promise(function (resolve, reject) {
-            try {
-                fs__WEBPACK_IMPORTED_MODULE_0__["mkdir"](path, function (err) {
-                    if (err) {
-                        reject(err);
-                    }
-                    else {
-                        resolve();
-                    }
-                });
-            }
-            catch (ex) {
-                reject(ex);
-            }
-        });
-    };
-    FileHelper.writeFile = function (path, contents) {
-        return new Promise(function (resolve, reject) {
-            try {
-                fs__WEBPACK_IMPORTED_MODULE_0__["writeFile"](path, contents, { flag: 'w' }, function (err) {
-                    if (err) {
-                        reject(err);
-                    }
-                    else {
-                        resolve();
-                    }
-                });
-            }
-            catch (ex) {
-                reject(ex);
-            }
-        });
-    };
-    return FileHelper;
-}());
-
-
-
-/***/ }),
-
 /***/ "./src/helpers/file_result.ts":
 /*!************************************!*\
   !*** ./src/helpers/file_result.ts ***!
@@ -2485,7 +2355,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, FileHelper */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2513,10 +2383,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _view_result__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./view_result */ "./src/helpers/view_result.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _view_result__WEBPACK_IMPORTED_MODULE_7__["viewResult"]; });
-
-/* harmony import */ var _file_helper__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./file_helper */ "./src/helpers/file_helper.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FileHelper", function() { return _file_helper__WEBPACK_IMPORTED_MODULE_8__["FileHelper"]; });
-
 
 
 
@@ -2946,7 +2812,7 @@ var viewResult = function (viewName, model) { return __awaiter(_this, void 0, vo
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, FileHelper, ErrorHandler, HttpCookie, Fort, Router */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, ErrorHandler, HttpCookie, Fort, Router */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2998,8 +2864,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "redirectResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["redirectResult"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "viewResult", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["viewResult"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FileHelper", function() { return _helpers_index__WEBPACK_IMPORTED_MODULE_3__["FileHelper"]; });
 
 /* harmony import */ var _models_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models/index */ "./src/models/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _models_index__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
@@ -3204,7 +3068,8 @@ var ErrorHandler = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FileManager", function() { return FileManager; });
-/* harmony import */ var _helpers_file_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../helpers/file_helper */ "./src/helpers/file_helper.ts");
+/* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs-extra */ "fs-extra");
+/* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs_extra__WEBPACK_IMPORTED_MODULE_0__);
 
 var FileManager = /** @class */ (function () {
     function FileManager() {
@@ -3225,7 +3090,7 @@ var FileManager = /** @class */ (function () {
      * @memberof FileManager
      */
     FileManager.prototype.saveTo = function (fileName, pathToSave) {
-        return _helpers_file_helper__WEBPACK_IMPORTED_MODULE_0__["FileHelper"].copyFile(this.files[fileName].path, pathToSave);
+        return fs_extra__WEBPACK_IMPORTED_MODULE_0__["copy"](this.files[fileName].path, pathToSave);
     };
     return FileManager;
 }());
@@ -3527,6 +3392,17 @@ module.exports = require("fresh");
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ "fs-extra":
+/*!***************************!*\
+  !*** external "fs-extra" ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("fs-extra");
 
 /***/ }),
 

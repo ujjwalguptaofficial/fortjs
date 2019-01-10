@@ -13,5 +13,5 @@ export declare class FileManager {
      * @returns
      * @memberof FileManager
      */
-    saveTo(fileName: string, pathToSave: string): Promise<{}>;
+    saveTo(fileName: string, pathToSave: string): Promise<void>;
 }

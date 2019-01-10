@@ -1,6 +1,6 @@
 import { HttpFile } from "./http_file";
-import { FileHelper } from "../helpers/file_helper";
-
+import * as Fs from "fs-extra";
+ 
 export class FileManager {
     files: { [key: string]: HttpFile } = {};
 
@@ -21,6 +21,6 @@ export class FileManager {
      * @memberof FileManager
      */
     saveTo(fileName: string, pathToSave: string) {
-        return FileHelper.copyFile(this.files[fileName].path, pathToSave);
+        return Fs.copy(this.files[fileName].path, pathToSave);
     }
 }
