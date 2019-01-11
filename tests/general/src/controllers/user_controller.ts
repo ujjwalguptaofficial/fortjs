@@ -23,17 +23,6 @@ export class UserController extends Controller {
     }
 
     @Worker([HTTP_METHOD.Get])
-    @Route("/All")
-    async getAll() {
-        const user = this.service.getUsers();
-        return jsonResult({
-            users: [{
-                user: user[0]
-            }]
-        });
-    }
-
-    @Worker([HTTP_METHOD.Get])
     @Route("/{id}")
     async getUser() {
         try {

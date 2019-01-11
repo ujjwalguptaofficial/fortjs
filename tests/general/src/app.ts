@@ -1,4 +1,4 @@
-import { Fort } from 'fortjs';
+import { Fort, Router } from 'fortjs';
 import { routes } from './routes';
 import { FortViewEngine } from 'eshtml';
 import * as Path from "path";
@@ -32,5 +32,6 @@ new App().create({
     }]
 }).then(() => {
     console.log("Your fort is located at address - localhost:8080");
+    // console.log("routes are: ", JSON.stringify(new Router().routes))
 })
 
