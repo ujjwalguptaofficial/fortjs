@@ -71,7 +71,7 @@ export class Fort {
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
     }
 
-    async create(option: AppOption): Promise<any> {
+    create(option: AppOption): Promise<void> {
         if (option == null) {
             option = {
 
@@ -93,20 +93,22 @@ export class Fort {
         });
 
         this.saveAppOption_(option);
-
-        this.httpServer = http.createServer((req, res) => {
-            new RequestHandler(req, res).handle();
-        }).listen(Global.port).once("error", (err) => {
-            if ((err as any).code === 'EADDRINUSE') {
-                new LogHelper(ERROR_TYPE.PortInUse, Global.port).throw();
-            }
-            else {
-                throw err;
-            }
+        return promise((res, rej) => {
+            this.httpServer = http.createServer((request, response) => {
+                new RequestHandler(request, response).handle();
+            }).once("error", (err) => {
+                if ((err as any).code === 'EADDRINUSE') {
+                    const error = new LogHelper(ERROR_TYPE.PortInUse, Global.port).get();
+                    rej(error);
+                }
+                else {
+                    rej(err);
+                }
+            }).once('listening', res).listen(Global.port);
         });
     }
 
-    destroy(): Promise<any> {
+    destroy(): Promise<void> {
         return promise((res, rej) => {
             this.httpServer.close(res);
         });

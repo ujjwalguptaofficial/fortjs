@@ -1,6 +1,5 @@
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let server = require('../build/app');
 let {
     request,
     expect,
@@ -8,7 +7,28 @@ let {
     url,
     forbiddenText
 } = require('./common');
+
+
+
 chai.use(chaiHttp);
+require('../build/app');
+// require('./server');
+require('./cookie');
+require('./default');
+require('./file_test');
+require('./random');
+require('./user');
+
+
+require('./wall');
+
+// process.exit(0);
+
+
+// run();
+
+
+
 
 
 

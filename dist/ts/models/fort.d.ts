@@ -29,6 +29,6 @@ export declare class Fort {
     errorHandler?: typeof ErrorHandler;
     private isArray_;
     private saveAppOption_;
-    create(option: AppOption): Promise<any>;
-    destroy(): Promise<any>;
+    create(option: AppOption): Promise<void>;
+    destroy(): Promise<void>;
 }

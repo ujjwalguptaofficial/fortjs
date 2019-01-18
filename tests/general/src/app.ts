@@ -17,21 +17,26 @@ export class App extends Fort {
 
 const contentsPath = Path.join(__dirname, "../contents");
 
-new App().create({
-    defaultPath: "/default",
-    port: 8080,
-    folders: [{
-        alias: "contents",
-        path: contentsPath
-    }, {
-        alias: "dist",
-        path: contentsPath
-    }, {
-        alias: "/",
-        path: contentsPath
-    }]
-}).then(() => {
-    console.log("Your fort is located at address - localhost:8080");
-    // console.log("routes are: ", JSON.stringify(new Router().routes))
-})
+const initServer = () => {
+    return new App().create({
+        defaultPath: "/default",
+        port: 8080,
+        folders: [{
+            alias: "contents",
+            path: contentsPath
+        }, {
+            alias: "dist",
+            path: contentsPath
+        }, {
+            alias: "/",
+            path: contentsPath
+        }]
+    })
 
+
+}
+
+initServer();
+
+exports.initServer = initServer;
+exports.Router = Router;
