@@ -4,6 +4,7 @@ import { Wall, ViewEngine, SessionProvider } from "../abstracts";
 import { AppOption } from "../types";
 import { ErrorHandler } from "./error_handler";
 import * as http from "http";
+import { XmlParser } from "../abstracts/xml_parser";
 export declare class Fort {
     routes: Route[];
     walls: Array<typeof Wall>;
@@ -27,6 +28,13 @@ export declare class Fort {
      * @type {typeof ErrorHandler}
      */
     errorHandler?: typeof ErrorHandler;
+    /**
+     * XmlParser class - used to parse the xml
+     *
+     * @type {typeof XmlParser}
+     * @memberof Fort
+     */
+    xmlParser?: typeof XmlParser;
     private isArray_;
     private saveAppOption_;
     create(option: AppOption): Promise<void>;

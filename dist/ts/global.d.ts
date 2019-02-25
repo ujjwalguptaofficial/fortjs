@@ -6,6 +6,7 @@ import { ViewEngine } from "./abstracts/view_engine";
 import { ErrorHandler } from "./models/error_handler";
 import { EtagOption } from "./types/etag_option";
 import { FolderMap } from "./types/folder_map";
+import { XmlParser } from "./abstracts/xml_parser";
 export declare class Global {
     static request: http.IncomingMessage;
     static response: http.ServerResponse;
@@ -24,4 +25,5 @@ export declare class Global {
     static eTag?: EtagOption;
     static folders?: FolderMap[];
     static appSessionIdentifier: string;
+    static xmlParser: typeof XmlParser;
 }

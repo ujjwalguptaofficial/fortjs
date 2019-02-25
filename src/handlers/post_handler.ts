@@ -8,6 +8,7 @@ import * as Multiparty from "multiparty";
 import { MultiPartParseResult } from "../types/multi_part_parse_result";
 import { HttpFile } from "../models/http_file";
 import { FileManager } from "../models/file_manager";
+import { Global } from "../global";
 export class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager = new FileManager();
@@ -62,10 +63,11 @@ export class PostHandler extends ControllerHandler {
             }
             else {
                 const bodyBuffer = await this.getPostRawData_();
+                const bodyDataAsString = bodyBuffer.toString();
                 switch (contentType) {
                     case MIME_TYPE.Json:
                         try {
-                            postData = JSON.parse(bodyBuffer.toString());
+                            postData = JSON.parse(bodyDataAsString);
                         }
                         catch (ex) {
                             /* tslint:disable-next-line */
@@ -74,9 +76,12 @@ export class PostHandler extends ControllerHandler {
                         break;
                     case MIME_TYPE.Text:
                     case MIME_TYPE.Html:
-                        postData = bodyBuffer.toString(); break;
+                        postData = bodyDataAsString; break;
                     case MIME_TYPE.FormUrlEncoded:
-                        postData = QueryString.parse(bodyBuffer.toString()); break;
+                        postData = QueryString.parse(bodyDataAsString); break;
+                    case MIME_TYPE.Xml:
+                        postData = new (Global as any).xmlParser().parse(bodyDataAsString);
+                        break;
                     default:
                         postData = {};
                 }
@@ -85,7 +90,7 @@ export class PostHandler extends ControllerHandler {
             return postData;
         }
         catch (ex) {
-            throw ex;
+            return Promise.reject(ex);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.5.1 - 18/01/2019
+ * @license :fortjs - V1.5.1 - 25/02/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1395,6 +1395,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var multiparty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! multiparty */ "multiparty");
 /* harmony import */ var multiparty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(multiparty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _models_file_manager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../models/file_manager */ "./src/models/file_manager.ts");
+/* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../global */ "./src/global.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -1451,6 +1452,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
 var PostHandler = /** @class */ (function (_super) {
     __extends(PostHandler, _super);
     function PostHandler() {
@@ -1495,7 +1497,7 @@ var PostHandler = /** @class */ (function (_super) {
     };
     PostHandler.prototype.parsePostData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var postData, contentType, result, bodyBuffer, ex_1;
+            var postData, contentType, result, bodyBuffer, bodyDataAsString, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1515,10 +1517,11 @@ var PostHandler = /** @class */ (function (_super) {
                     case 2: return [4 /*yield*/, this.getPostRawData_()];
                     case 3:
                         bodyBuffer = _a.sent();
+                        bodyDataAsString = bodyBuffer.toString();
                         switch (contentType) {
                             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
                                 try {
-                                    postData = JSON.parse(bodyBuffer.toString());
+                                    postData = JSON.parse(bodyDataAsString);
                                 }
                                 catch (ex) {
                                     /* tslint:disable-next-line */
@@ -1527,10 +1530,13 @@ var PostHandler = /** @class */ (function (_super) {
                                 break;
                             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
                             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
-                                postData = bodyBuffer.toString();
+                                postData = bodyDataAsString;
                                 break;
                             case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
-                                postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyBuffer.toString());
+                                postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyDataAsString);
+                                break;
+                            case _enums_mime_type__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Xml:
+                                postData = new _global__WEBPACK_IMPORTED_MODULE_8__["Global"].xmlParser().parse(bodyDataAsString);
                                 break;
                             default:
                                 postData = {};
@@ -1539,7 +1545,7 @@ var PostHandler = /** @class */ (function (_super) {
                     case 4: return [2 /*return*/, postData];
                     case 5:
                         ex_1 = _a.sent();
-                        throw ex_1;
+                        return [2 /*return*/, Promise.reject(ex_1)];
                     case 6: return [2 /*return*/];
                 }
             });
@@ -3265,6 +3271,7 @@ var Fort = /** @class */ (function () {
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].sessionProvider = this.sessionProvider == null ? _extra_memory_session_provider__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"] :
             this.sessionProvider;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].errorHandler = this.errorHandler == null ? _error_handler__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"] : this.errorHandler;
+        _global__WEBPACK_IMPORTED_MODULE_1__["Global"].xmlParser = this.xmlParser;
     };
     Fort.prototype.create = function (option) {
         var _this = this;

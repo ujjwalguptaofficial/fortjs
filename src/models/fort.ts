@@ -15,6 +15,7 @@ import { LogHelper } from "../helpers/log_helper";
 import { ERROR_TYPE } from "../enums/error_type";
 import { GenericSessionProvider } from "./generic_session_provider";
 import { promise } from "../helpers/promise";
+import { XmlParser } from "../abstracts/xml_parser";
 
 export class Fort {
     routes: Route[] = [];
@@ -43,6 +44,14 @@ export class Fort {
      */
     errorHandler?: typeof ErrorHandler;
 
+    /**
+     * XmlParser class - used to parse the xml 
+     *
+     * @type {typeof XmlParser}
+     * @memberof Fort
+     */
+    xmlParser?: typeof XmlParser;
+
     private isArray_(value) {
         return Util.isArray(value);
     }
@@ -69,6 +78,7 @@ export class Fort {
         Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
+        Global.xmlParser = this.xmlParser;
     }
 
     create(option: AppOption): Promise<void> {
