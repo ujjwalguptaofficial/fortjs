@@ -11,12 +11,16 @@ Fort based MVC web framework for nodejs targeting good code structures & modular
 
 # Why fortjs
 
-* Based On Architecture Fort - [Fort](https://github.com/ujjwalguptaofficial/fortjs) is an architecture on top of MVC.
+* Based On Architecture Fort - [Fort](https://github.com/ujjwalguptaofficial/fort) is an architecture on top of MVC.
 * TypeScript Support - Made in typescript so fully supported for typescript users.
 * Next Gen Javascript - Divide your app into classes, use arrow functions, decorators, async await etc.
 * No Callback - FortJs uses async await or promise.
 * Fun To Create - You are not creating an app but a fort. 
 * Readable Code - Code written for FortJs are more beautiful & readable.
+
+# Examples
+
+Check out examples in examples folder.
 
 # Website
 
