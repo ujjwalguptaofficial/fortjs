@@ -1,8 +1,15 @@
-import { Fort } from 'fortjs';
-import { routes } from './routes';
-import { FortViewEngine } from 'eshtml';
+import {
+    Fort
+} from 'fortjs';
+import {
+    routes
+} from './routes';
+import {
+    FortViewEngine
+} from 'eshtml';
 import * as path from "path";
 import * as socketIo from "socket.io";
+
 
 export class App extends Fort {
     constructor() {
@@ -39,4 +46,3 @@ app.create({
 }).catch(err => {
     console.error(err);
 })
-
