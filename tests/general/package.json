@@ -19,8 +19,10 @@
   "dependencies": {
     "class-validator": "^0.9.1",
     "cookie": "^0.3.1",
+    "copy-webpack-plugin": "^5.0.2",
     "eshtml": "^0.2.2",
     "form-data": "^2.3.3",
+    "mustache": "^3.0.1",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2"

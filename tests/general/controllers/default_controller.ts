@@ -10,8 +10,8 @@ export class DefaultController extends Controller {
         const query = this.query;
         const data = this.data;
         return new Promise((res, rej) => {
-            res(viewResult("index", { title: "Welcome to fort" }));
-        })
+            res(viewResult("default/index.html", { title: "Welcome to fort" }));
+        });
     }
 
     @Worker([HTTP_METHOD.Post])

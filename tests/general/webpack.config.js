@@ -3,8 +3,7 @@ const nodeExternals = require('webpack-node-externals');
 const nodemonPlugin = require('nodemon-webpack-plugin')
 module.exports = {
     entry: [
-        path.resolve(__dirname, 'src/app.ts'),
-        path.resolve(__dirname, 'src/views/index.ts'),
+        path.resolve(__dirname, 'app.ts')
     ],
     devtool: 'source-map',
     target: "node",

@@ -79,6 +79,7 @@ export class Fort {
             this.sessionProvider as typeof GenericSessionProvider;
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
         Global.xmlParser = this.xmlParser;
+        Global.viewPath = option.viewPath == null ? "views" : option.viewPath;
     }
 
     create(option: AppOption): Promise<void> {

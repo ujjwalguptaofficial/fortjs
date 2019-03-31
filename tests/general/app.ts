@@ -1,22 +1,22 @@
-import { Fort, Router } from 'fortjs';
+import { Fort, Router, ViewEngine } from 'fortjs';
 import { routes } from './routes';
-import { FortViewEngine } from 'eshtml';
 import * as Path from "path";
 import { RequestLogger } from './walls/request_logger';
 import { CustomErrorHandler } from './extra/custom_error_handler';
+import { MustacheViewEngine } from './mustache_view_engine';
 
 export class App extends Fort {
     errorHandler = CustomErrorHandler;
     constructor() {
         super();
         this.routes = routes;
-        this.viewEngine = FortViewEngine;
+        this.viewEngine = MustacheViewEngine;
         this.walls = [RequestLogger];
     }
 }
 
 const contentsPath = Path.join(__dirname, "../contents");
-
+// const staticFolderPath = Path.join(__dirname, "../static");
 const initServer = () => {
     return new App().create({
         defaultPath: "/default",
@@ -31,10 +31,13 @@ const initServer = () => {
             alias: "/",
             path: contentsPath
         }]
-    })
+    }).then(() => {
+        console.log("server started at port: 8080");
+    }).catch(err => {
+        console.error(err);
+    });
 
-
-}
+};
 
 initServer();
 

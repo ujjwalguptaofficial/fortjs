@@ -20,6 +20,7 @@ export class MoustacheViewEngine implements ViewEngine {
             });
         });
     }
+    
     async render(value: ViewEngineData) {
         const viewData = await this.getViewDataFromFile(value.view);
         return Mustache.render(viewData, value.model);
