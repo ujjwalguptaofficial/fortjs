@@ -12,7 +12,8 @@
     "build:test": "npm run build && npm run test",
     "install:build:test": "npm run install:lib && npm run build && npm run test",
     "webpack:watch": "webpack --config webpack.config.js --watch",
-    "start": "npm run webpack:watch"
+    "start": "npm run webpack:watch",
+    "start:prod": "NODE_ENV=production npm run webpack:watch"
   },
   "author": "",
   "license": "ISC",

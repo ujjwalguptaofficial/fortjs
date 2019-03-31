@@ -88,4 +88,9 @@ export class DefaultController extends Controller {
         await this.session.clear();
         return textResult("Logged out");
     }
+
+    @Worker()
+    async getEnv() {
+        return jsonResult(process.env);
+    }
 }

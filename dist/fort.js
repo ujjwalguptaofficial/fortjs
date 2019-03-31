@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.5.1 - 30/03/2019
+ * @license :fortjs - V1.5.1 - 31/03/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -2446,6 +2446,7 @@ var getViewFromFile = function (fileLocation) {
                             encoding: 'utf8'
                         });
                     };
+                    console.log("environment is :" + process.env.NODE_ENV);
                     if (!Object(_is_env_production__WEBPACK_IMPORTED_MODULE_1__["isEnvProduction"])()) return [3 /*break*/, 3];
                     if (!(viewCache[fileLocation] == null)) return [3 /*break*/, 2];
                     _a = viewCache;
@@ -2550,7 +2551,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isEnvDev", function() { return isEnvDev; });
 var isEnvDev = function () {
-    return "development" === 'development';
+    return process.env.NODE_ENV === 'development';
 };
 
 
@@ -2567,7 +2568,7 @@ var isEnvDev = function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isEnvProduction", function() { return isEnvProduction; });
 var isEnvProduction = function () {
-    return "development" === "production";
+    return process.env.NODE_ENV === "production";
 };
 
 

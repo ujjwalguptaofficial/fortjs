@@ -7,7 +7,13 @@ module.exports = {
     ],
     devtool: 'source-map',
     target: "node",
-    mode: 'development',
+    mode: process.env.NODE_ENV || 'development',
+    optimization: {
+        // We no not want to minimize our code.
+        minimize: false,
+        // do not set NODE_ENV
+        nodeEnv: false
+    },
     node: {
         console: false,
         global: false,

@@ -5,6 +5,7 @@ const banner = require('./license');
 
 module.exports = [{
     name: "fort",
+    mode: process.env.NODE_ENV || 'development',
     target: "node",
     entry: "./src/index.ts",
     devtool: 'source-map',
@@ -14,6 +15,11 @@ module.exports = [{
         library: 'FortJs',
         libraryTarget: "commonjs2"
     },
+    optimization: {
+        // We no not want to minimize our code.
+        minimize: false,
+        nodeEnv: false
+    },
     node: {
         console: false,
         global: false,
@@ -21,6 +27,7 @@ module.exports = [{
         Buffer: false,
         __filename: false,
         __dirname: false,
+        NODE_ENV: false
     },
     module: {
         rules: [{
@@ -31,7 +38,6 @@ module.exports = [{
             }
         }]
     },
-    mode: 'development',
     resolve: {
         extensions: ['.ts'] // '' is needed to find modules like "jquery"
     },
