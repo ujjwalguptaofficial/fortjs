@@ -2446,7 +2446,6 @@ var getViewFromFile = function (fileLocation) {
                             encoding: 'utf8'
                         });
                     };
-                    console.log("environment is :" + process.env.NODE_ENV);
                     if (!Object(_is_env_production__WEBPACK_IMPORTED_MODULE_1__["isEnvProduction"])()) return [3 /*break*/, 3];
                     if (!(viewCache[fileLocation] == null)) return [3 /*break*/, 2];
                     _a = viewCache;

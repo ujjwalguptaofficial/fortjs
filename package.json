@@ -23,7 +23,7 @@
     "webpack": "webpack --config src/webpack.config.js",
     "buildpack": "npm run lint && npm run build && npm pack",
     "build": "npm run webpack",
-    "deploy": "NODE_ENV=prodcution && npm run webpack"
+    "deploy": "NODE_ENV=prodcution && npm run buildpack"
   },
   "author": "Ujjwal Gupta",
   "license": "MIT",
