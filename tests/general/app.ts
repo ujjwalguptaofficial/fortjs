@@ -3,14 +3,14 @@ import { routes } from './routes';
 import * as Path from "path";
 import { RequestLogger } from './walls/request_logger';
 import { CustomErrorHandler } from './extra/custom_error_handler';
-import { MustacheViewEngine } from './mustache_view_engine';
+import { MustacheViewEngine } from 'fortjs';
 
 export class App extends Fort {
     errorHandler = CustomErrorHandler;
     constructor() {
         super();
         this.routes = routes;
-        this.viewEngine = MustacheViewEngine;
+        // this.viewEngine = MustacheViewEngine;
         this.walls = [RequestLogger];
     }
 }

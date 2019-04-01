@@ -16,6 +16,7 @@ import { ERROR_TYPE } from "../enums/error_type";
 import { GenericSessionProvider } from "./generic_session_provider";
 import { promise } from "../helpers/promise";
 import { XmlParser } from "../abstracts/xml_parser";
+import { MustacheViewEngine } from "../extra";
 
 export class Fort {
     routes: Route[] = [];
@@ -74,7 +75,7 @@ export class Fort {
         Global.appSessionIdentifier = `${Global.appName}_session_id`;
         Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         Global.walls = this.walls as any;
-        Global.viewEngine = this.viewEngine == null ? null : new (this.viewEngine as any)();
+        Global.viewEngine = this.viewEngine == null ? new MustacheViewEngine() : new (this.viewEngine as any)();
         Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;

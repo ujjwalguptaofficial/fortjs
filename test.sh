@@ -1,5 +1,5 @@
 #create the build file
-npm run buildpack
+npm run build:prod
 
 # Run general folder test
 
