@@ -1,14 +1,19 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const nodemonPlugin = require('nodemon-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const nodemonPlugin = require('nodemon-webpack-plugin')
 module.exports = {
     entry: [
-        path.resolve(__dirname, 'src/app.ts')
+        path.resolve(__dirname, 'index.ts')
     ],
     devtool: 'source-map',
     target: "node",
-    mode: 'development',
+    mode: process.env.NODE_ENV || 'development',
+    optimization: {
+        // We no not want to minimize our code.
+        minimize: false,
+        // do not set NODE_ENV
+        nodeEnv: false
+    },
     node: {
         console: false,
         global: false,
@@ -34,11 +39,6 @@ module.exports = {
         path: path.resolve(__dirname, 'build/'),
         pathinfo: true
     },
-    plugins: [new nodemonPlugin(),
-        new CopyPlugin([{
-            from: './src/views',
-            to: "views"
-        }])
-    ],
+    plugins: [new nodemonPlugin()],
     externals: [nodeExternals()]
 };

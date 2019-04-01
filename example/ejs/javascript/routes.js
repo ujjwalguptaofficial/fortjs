@@ -1,4 +1,6 @@
-import { DefaultController } from "./controllers/default_controller";
+import {
+    DefaultController
+} from "./controllers/default_controller";
 
 export const routes = [{
     path: "/default",

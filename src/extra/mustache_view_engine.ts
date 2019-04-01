@@ -1,4 +1,4 @@
- import * as Mustache from "mustache";
+import * as Mustache from "mustache";
 import { ViewEngineData } from "../types";
 import { getViewFromFile } from "../helpers";
 import { ViewEngine } from "../abstracts";

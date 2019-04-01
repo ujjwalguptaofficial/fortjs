@@ -6,6 +6,7 @@
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
     "webpack:watch": "webpack --config webpack.config.js --watch",
+    "lint": "tslint src/**/*.ts",
     "build": "npm run webpack",
     "start": "npm run webpack:watch && opn http://localhost:4000"
   },
@@ -20,15 +21,15 @@
   },
   "homepage": "https://github.com/ujjwalguptaofficial/fortjs-typescript-starter#readme",
   "dependencies": {
-    "eshtml": "^0.2.1",
-    "fortjs": "^1.5.0",
-    "moustache": "0.0.2"
+    "ejs": "^2.6.1",
+    "fortjs": "^1.5.2"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^4.6.0",
+    "@types/node": "^10.12.15",
     "nodemon-webpack-plugin": "^4.0.6",
     "ts-loader": "^5.3.1",
     "tslint": "^5.11.0",
+    "tslint-config-security": "^1.13.0",
     "typescript": "^3.2.2",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
