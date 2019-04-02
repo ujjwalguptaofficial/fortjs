@@ -27,8 +27,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "eshtml": "^0.2.2",
-    "fortjs": "^1.5.1",
+    "fortjs": "^1.5.2",
     "socket.io": "^2.2.0"
   }
 }

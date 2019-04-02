@@ -1,21 +1,17 @@
 import {
-    Controller,
-    DefaultWorker,
-    htmlResult,
-    textResult,
-    renderView,
-    viewResult,
-    Worker
+    Controller, DefaultWorker, Worker, htmlResult,
+    textResult, renderView, viewResult, Route, HTTP_METHOD
 } from "fortjs";
 
 export class DefaultController extends Controller {
+
     @DefaultWorker()
-    async default () {
+    async index() {
         try {
             const model = {
                 title: 'FortJs'
             }
-            const result = await viewResult('controller:default,worker:default', model);
+            const result = await viewResult('default/index.html', model);
             return result;
         } catch (ex) {
             console.log(ex);
@@ -26,10 +22,11 @@ export class DefaultController extends Controller {
         }
     }
 
-    @Worker( )
+    @Worker([HTTP_METHOD.Get])
+    @Route('/chat')
     async chat() {
         try {
-            const viewData = await renderView('controller:default,worker:chat');
+            const viewData = await renderView('default/chat.html');
             const result = await htmlResult(viewData);
             return result;
         } catch (ex) {
