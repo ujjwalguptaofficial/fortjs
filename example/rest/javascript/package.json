@@ -18,6 +18,7 @@
     "@babel/preset-env": "^7.1.6",
     "@types/node": "^10.12.15",
     "babel-loader": "^8.0.4",
+    "eslint": "^5.10.0",
     "nodemon-webpack-plugin": "^4.0.6",
     "opn-cli": "^4.0.0",
     "tslint-config-security": "^1.13.0",
@@ -26,9 +27,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "@types/validator": "^9.4.4",
-    "eshtml": "^0.2.1",
-    "fortjs": "^1.5.0",
-    "validator": "^10.9.0"
+    "fortjs": "^1.5.2",
+    "validator": "^10.11.0"
   }
 }

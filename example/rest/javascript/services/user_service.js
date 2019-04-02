@@ -2,8 +2,6 @@ import {
     User
 } from "../models/user";
 
-
-
 const store = {
     users: [{
         id: 1,
