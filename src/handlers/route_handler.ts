@@ -2,7 +2,7 @@ import { RouteInfo } from "../types/route_info";
 import { GenericShield } from "../models/generic_shield";
 import { WorkerInfo } from "../types/worker_info";
 import { GenericGuard } from "../models/generic_guard";
-import { Route } from "../types/route";
+import { ParentRoute } from "../types/route";
 
 const routerCollection: RouteInfo[] = [];
 export class RouteHandler {
@@ -11,7 +11,7 @@ export class RouteHandler {
         return routerCollection;
     }
 
-    static addToRouterCollection(value: Route) {
+    static addToRouterCollection(value: ParentRoute) {
         const route = routerCollection.find(x => x.controllerName === value.controller.name);
         if (route == null) {
             routerCollection.push({

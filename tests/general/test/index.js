@@ -18,7 +18,7 @@ require('./default');
 require('./file_test');
 require('./random');
 require('./user');
-
+require('./session');
 
 require('./wall');
 

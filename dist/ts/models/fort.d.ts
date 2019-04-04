@@ -1,12 +1,12 @@
 /// <reference types="node" />
-import { Route } from "../types/route";
+import { ParentRoute } from "../types/route";
 import { Wall, ViewEngine, SessionProvider } from "../abstracts";
 import { AppOption } from "../types";
 import { ErrorHandler } from "./error_handler";
 import * as http from "http";
 import { XmlParser } from "../abstracts/xml_parser";
 export declare class Fort {
-    routes: Route[];
+    routes: ParentRoute[];
     walls: Array<typeof Wall>;
     httpServer: http.Server;
     /**

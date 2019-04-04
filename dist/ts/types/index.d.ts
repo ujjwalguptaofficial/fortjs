@@ -5,3 +5,4 @@ export * from './view_engine_data';
 export * from './http_request';
 export * from './http_response';
 export * from './route_info';
+export * from './route';

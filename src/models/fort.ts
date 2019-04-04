@@ -1,4 +1,4 @@
-import { Route } from "../types/route";
+import { ParentRoute } from "../types/route";
 import { Wall, ViewEngine, SessionProvider } from "../abstracts";
 import { AppOption } from "../types";
 import { RouteHandler } from "../handlers/route_handler";
@@ -19,7 +19,7 @@ import { XmlParser } from "../abstracts/xml_parser";
 import { MustacheViewEngine } from "../extra";
 
 export class Fort {
-    routes: Route[] = [];
+    routes: ParentRoute[] = [];
     walls: Array<typeof Wall> = [];
     httpServer: http.Server;
 

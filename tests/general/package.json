@@ -34,7 +34,7 @@
     "@types/validator": "^9.4.3",
     "axios": "^0.18.0",
     "chai": "^4.2.0",
-    "chai-http": "^4.2.0",
+    "chai-http": "^4.2.1",
     "mocha": "^5.2.0",
     "nodemon-webpack-plugin": "^4.0.7",
     "request": "^2.88.0"

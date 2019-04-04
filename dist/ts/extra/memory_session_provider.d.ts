@@ -1,7 +1,7 @@
 import { SessionProvider } from "../abstracts/session_provider";
 import { SessionValue } from "../types/session_value";
 export declare class MemorySessionProvider extends SessionProvider {
-    get(key: string): Promise<SessionValue>;
+    get(key: string): Promise<any>;
     isExist(key: string): Promise<boolean>;
     getAll(): Promise<SessionValue[]>;
     set(key: string, val: any): Promise<void>;

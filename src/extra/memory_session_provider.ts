@@ -13,10 +13,10 @@ const sessionValues: ISessionValueFormat[] = [];
 export class MemorySessionProvider extends SessionProvider {
 
     async get(key: string) {
-        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-        if (savedValue != null) {
-            const value = savedValue.datas.find(qry => qry.key === key);
-            return value;
+        const savedSession = sessionValues.find(q => q.identifier === this.sessionId);
+        if (savedSession != null) {
+            const session = savedSession.datas.find(qry => qry.key === key);
+            return session.value;
         }
         return null;
     }
@@ -50,10 +50,16 @@ export class MemorySessionProvider extends SessionProvider {
             });
         }
         else {
-            savedValue.datas.push({
-                key: key,
-                value: val
-            });
+            const savedSessionData = savedValue.datas.find(q => q.key === key);
+            if (savedSessionData == null) {
+                savedValue.datas.push({
+                    key: key,
+                    value: val
+                });
+            }
+            else {
+                savedSessionData.value = val;
+            }
         }
     }
 
