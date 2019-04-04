@@ -3393,17 +3393,40 @@ var FileManager = /** @class */ (function () {
     function FileManager() {
         this.files = {};
     }
+    /**
+     * get total no of files
+     *
+     * @returns - number
+     * @memberof FileManager
+     */
+    FileManager.prototype.filesCount = function () {
+        return Object.keys(this.files).length;
+    };
+    /**
+     * check for existance of file
+     *
+     * @param {string} fileName
+     * @returns - true if exist otherwise false
+     * @memberof FileManager
+     */
     FileManager.prototype.isExist = function (fileName) {
         return this.files[fileName] != null;
     };
+    /**
+     * return the file
+     *
+     * @param {string} fileName
+     * @returns
+     * @memberof FileManager
+     */
     FileManager.prototype.getFile = function (fileName) {
         return this.files[fileName];
     };
     /**
      * saves file to supplied path
      *
-     * @param {string} fileName
-     * @param {string} pathToSave
+     * @param {string} fileName - name of file to be saved
+     * @param {string} pathToSave - location of file with extension
      * @returns
      * @memberof FileManager
      */
