@@ -1,9 +1,8 @@
 /// <reference types="node" />
+import { MIME_TYPE, HTTP_METHOD } from "../enums";
 import * as http from "http";
-import { MIME_TYPE } from "../enums/mime_type";
-import { HTTP_METHOD } from "../enums/http_method";
-import { CookieManager } from "../models/cookie_manager";
-import { Wall } from "../abstracts/wall";
+import { CookieManager } from "../models";
+import { Wall } from "../abstracts";
 export declare class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;

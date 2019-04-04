@@ -1,14 +1,14 @@
-import { HTTP_STATUS_CODE } from "../enums/http_status_code";
+import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
 import * as http from "http";
 import { __ContentType } from "../constant";
-import { MIME_TYPE } from "../enums/mime_type";
-import { HTTP_METHOD } from "../enums/http_method";
 import { Global } from "../global";
 import * as Negotiator from "negotiator";
-import { CookieManager } from "../models/cookie_manager";
-import { Wall } from "../abstracts/wall";
-import { IException } from "../interfaces/exception";
+import { CookieManager } from "../models";
+import { Wall } from "../abstracts";
+import { IException } from "../interfaces";
 import { Util } from "../util";
+
+
 export class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;

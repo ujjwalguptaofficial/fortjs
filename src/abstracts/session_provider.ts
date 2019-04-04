@@ -1,7 +1,7 @@
-import { CookieManager } from "../models/cookie_manager";
+import { CookieManager } from "../models";
 import * as getUniqId from "uniqid";
 import { Global } from "../global";
-import { SessionValue } from "../types/session_value";
+import { SessionValue } from "../types";
 
 export abstract class SessionProvider {
 

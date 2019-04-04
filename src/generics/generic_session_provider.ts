@@ -1,6 +1,7 @@
 import { SessionProvider } from "../abstracts";
-import { SessionValue } from "../types/session_value";
-import { CookieManager } from "./cookie_manager";
+import { SessionValue } from "../types";
+import { CookieManager } from "../models";
+
 
 export class GenericSessionProvider extends SessionProvider {
     sessionId: string;
@@ -31,6 +32,6 @@ export class GenericSessionProvider extends SessionProvider {
     }
 
     async clear() {
-        
+
     }
 }

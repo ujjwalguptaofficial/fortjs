@@ -1,6 +1,6 @@
 import { SessionProvider } from "../abstracts";
 import { SessionValue } from "../types";
-import { CookieManager } from "./cookie_manager";
+import { CookieManager } from "../models";
 export declare class GenericSessionProvider extends SessionProvider {
     sessionId: string;
     cookie: CookieManager;

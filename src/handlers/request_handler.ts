@@ -1,19 +1,15 @@
 import * as http from "http";
 import * as url from 'url';
-import { Controller } from "../abstracts/controller";
+import { Controller } from "../abstracts";
 import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
 import { Global } from "../global";
-import { parseCookie } from "../helpers/parse_cookie";
-import { CookieManager } from "../models/cookie_manager";
-import { GenericSessionProvider } from "../models/generic_session_provider";
-import { GenericGuard } from "../models/generic_guard";
-import { parseAndMatchRoute } from "../helpers/parse_match_route";
-import { RouteMatch } from "../types/route_match";
-import { HTTP_METHOD } from "../enums/http_method";
-import { HttpResult } from "../types";
+import { parseCookie, parseAndMatchRoute } from "../helpers";
+import { CookieManager } from "../models";
+import { GenericSessionProvider, GenericGuard } from "../generics";
+import { RouteMatch, HttpResult, HttpRequest, HttpResponse } from "../types";
+import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
-import { HttpRequest } from "../types/http_request";
-import { HttpResponse } from "../types/http_response";
+
 
 export class RequestHandler extends PostHandler {
 

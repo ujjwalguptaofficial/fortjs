@@ -1,4 +1,4 @@
-import { Shield } from "../abstracts/shield";
+import { Shield } from "../abstracts";
 import { HttpResult } from "../types";
 
 export class GenericShield extends Shield {

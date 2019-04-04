@@ -1,5 +1,5 @@
-import { IException } from "../interfaces/exception";
-import { promise } from "../helpers/promise";
+import { IException } from "../interfaces";
+import { promise } from "../helpers";
 
 export class ErrorHandler {
     onServerError(ex: IException): Promise<string> {

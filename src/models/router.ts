@@ -1,5 +1,5 @@
-import { RouteInfo } from "../types/route_info";
-import { RouteHandler } from "../handlers/route_handler";
+import { RouteInfo } from "../types";
+import { RouteHandler } from "../handlers";
 
 export class Router {
     routes: RouteInfo[] = RouteHandler.routerCollection;

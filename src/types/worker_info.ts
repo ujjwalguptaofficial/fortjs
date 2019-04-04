@@ -1,5 +1,5 @@
 import { HTTP_METHOD } from "../enums";
-import { GenericGuard } from "../models/generic_guard";
+import { GenericGuard } from "../generics";
 
 export type WorkerInfo = {
     workerName: string;

@@ -1,4 +1,4 @@
-import { IException } from "../interfaces/exception";
+import { IException } from "../interfaces";
 export declare class ErrorHandler {
     onServerError(ex: IException): Promise<string>;
     onBadRequest(ex: IException): Promise<string>;

@@ -1,4 +1,4 @@
-import { RouteHandler } from "../handlers/route_handler";
+import { RouteHandler } from "../handlers";
 
 // tslint:disable-next-line
 export const Route = (format: string): MethodDecorator => {

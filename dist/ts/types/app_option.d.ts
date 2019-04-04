@@ -1,5 +1,4 @@
-import { EtagOption } from "./etag_option";
-import { FolderMap } from "./folder_map";
+import { FolderMap, EtagOption } from ".";
 export declare type AppOption = {
     /**
      * port at which app will listen, default - 4000

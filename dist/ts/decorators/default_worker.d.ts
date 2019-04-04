@@ -1,2 +1,2 @@
-import { HTTP_METHOD } from "../enums/http_method";
+import { HTTP_METHOD } from "../enums";
 export declare const DefaultWorker: (allowedMethods?: HTTP_METHOD[]) => MethodDecorator;

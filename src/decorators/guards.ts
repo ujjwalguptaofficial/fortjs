@@ -1,5 +1,5 @@
-import { RouteHandler } from "../handlers/route_handler";
-import { GenericGuard } from "../models/generic_guard";
+import { RouteHandler } from "../handlers";
+import { GenericGuard } from "../generics";
 import { Guard } from "../abstracts/guard";
 
 // tslint:disable-next-line

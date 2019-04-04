@@ -1,12 +1,9 @@
 /// <reference types="node" />
 import * as http from "http";
-import { GenericSessionProvider } from "./models/generic_session_provider";
-import { GenericWall } from "./models/generic_wall";
-import { ViewEngine } from "./abstracts/view_engine";
-import { ErrorHandler } from "./models/error_handler";
-import { EtagOption } from "./types/etag_option";
-import { FolderMap } from "./types/folder_map";
-import { XmlParser } from "./abstracts/xml_parser";
+import { ErrorHandler } from "./models";
+import { ViewEngine, XmlParser } from "./abstracts";
+import { EtagOption, FolderMap } from "./types";
+import { GenericSessionProvider, GenericWall } from "./generics";
 export declare class Global {
     static request: http.IncomingMessage;
     static response: http.ServerResponse;

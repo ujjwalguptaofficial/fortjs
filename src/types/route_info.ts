@@ -1,7 +1,5 @@
-
 import { WorkerInfo } from "./worker_info";
-import { GenericShield } from "../models/generic_shield";
-import { GenericController } from "../models/generic_controller";
+import { GenericShield, GenericController } from "../generics";
 
 export type RouteInfo = {
     controller: typeof GenericController;

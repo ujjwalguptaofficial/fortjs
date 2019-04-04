@@ -1,11 +1,6 @@
-import { Controller } from "./controller";
-import { SessionProvider } from "./session_provider";
-import { CookieManager } from "../models/cookie_manager";
-import { HttpResult } from "../types";
-import { HttpRequest } from "../types/http_request";
-import { HttpResponse } from "../types/http_response";
-import { HttpFile } from "../models/http_file";
-import { FileManager } from "../models/file_manager";
+import { HttpRequest, HttpResponse, HttpResult } from "../types";
+import { CookieManager } from "../models";
+import { SessionProvider, Controller } from ".";
 
 export abstract class Wall implements Controller {
     request: HttpRequest;
@@ -13,7 +8,7 @@ export abstract class Wall implements Controller {
     query: { [key: string]: string };
     session: SessionProvider;
     cookie: CookieManager;
-   
+
     data: { [key: string]: any };
 
     abstract onIncoming(): Promise<HttpResult>;

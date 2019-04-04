@@ -1,14 +1,15 @@
 import { ControllerHandler } from "./controller_handler";
-import { promise } from "../helpers/promise";
+import { promise } from "../helpers";
 import { __ContentType } from "../constant";
-import { MIME_TYPE } from "../enums/mime_type";
+import { MIME_TYPE } from "../enums";
 import * as ContentType from "content-type";
 import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
-import { MultiPartParseResult } from "../types/multi_part_parse_result";
-import { HttpFile } from "../models/http_file";
-import { FileManager } from "../models/file_manager";
+import { MultiPartParseResult } from "../types";
+import { FileManager } from "../models";
 import { Global } from "../global";
+
+
 export class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager = new FileManager();

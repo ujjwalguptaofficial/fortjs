@@ -1,4 +1,4 @@
-import { IHttpCookie } from "../interfaces/http_cookie";
+import { IHttpCookie } from "../interfaces";
 
 export class HttpCookie implements IHttpCookie {
     name: string;

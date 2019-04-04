@@ -1,7 +1,7 @@
 import { Shield } from "../abstracts";
-import { RouteHandler } from "../handlers/route_handler";
-import { GenericShield } from "../models/generic_shield";
-
+import { RouteHandler } from "../handlers";
+import { GenericShield } from "../generics";
+ 
 // tslint:disable-next-line
 export const Shields = (shieldsValue: Array<typeof Shield>): ClassDecorator => {
     return (target: any) => {

@@ -1,9 +1,6 @@
-import { Controller } from "./controller";
-import { SessionProvider } from "./session_provider";
-import { CookieManager } from "../models/cookie_manager";
-import { HttpResult } from "../types";
-import { HttpRequest } from "../types/http_request";
-import { HttpResponse } from "../types/http_response";
+import { HttpRequest, HttpResponse, HttpResult } from "../types";
+import { CookieManager } from "../models";
+import { SessionProvider, Controller } from ".";
 export declare abstract class Wall implements Controller {
     request: HttpRequest;
     response: HttpResponse;

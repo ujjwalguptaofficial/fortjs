@@ -1,6 +1,6 @@
 import { HTTP_METHOD } from "../enums";
-import { RouteHandler } from "../handlers/route_handler";
-import { WorkerInfo } from "../types/worker_info";
+import { RouteHandler } from "../handlers";
+import { WorkerInfo } from "../types";
 
 // tslint:disable-next-line
 export const Worker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator => {

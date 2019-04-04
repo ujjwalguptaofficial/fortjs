@@ -1,4 +1,4 @@
-import { HttpFile } from "../models/http_file";
+import { HttpFile } from "../models";
 
 export type MultiPartParseResult = {
     field: { [key: string]: any };

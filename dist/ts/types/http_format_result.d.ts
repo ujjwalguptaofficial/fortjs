@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CODE } from "../enums/http_status_code";
+import { HTTP_STATUS_CODE } from "../enums";
 export declare type HttpFormatResult = {
     statusCode: HTTP_STATUS_CODE;
     responseFormat?: {

@@ -1,5 +1,4 @@
-import { EtagOption } from "./etag_option";
-import { FolderMap } from "./folder_map";
+import { FolderMap, EtagOption } from ".";
 
 export type AppOption = {
     /**

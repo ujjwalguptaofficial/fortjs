@@ -1,5 +1,5 @@
 import { HttpCookie } from "./http_cookie";
-import { IHttpCookie } from "../interfaces/http_cookie";
+import { IHttpCookie } from "../interfaces";
 
 export class CookieManager {
     private responseCookie_: string[] = [];

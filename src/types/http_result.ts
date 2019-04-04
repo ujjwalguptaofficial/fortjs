@@ -1,6 +1,5 @@
-import { HTTP_STATUS_CODE } from "../enums/http_status_code";
-import { MIME_TYPE } from "../enums/mime_type";
-import { FileResultInfo } from "./file_result_info";
+import { HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
+import { FileResultInfo } from ".";
 
 
 export type HttpResult = {

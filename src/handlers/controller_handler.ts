@@ -1,13 +1,10 @@
 
-import { HttpResult } from "../types/http_result";
+import { HttpResult, HttpFormatResult } from "../types";
 import { __SetCookie, __ContentType } from "../constant";
-import { MIME_TYPE } from "../enums/mime_type";
-import * as jsontoxml from "jsontoxml";
-import { HTTP_STATUS_CODE } from "../enums/http_status_code";
+import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
-import { HttpFormatResult } from "../types";
-import { XmlHelper } from "../helpers/xml_helper";
+import { XmlHelper } from "../helpers";
 
 export class ControllerHandler extends FileHandler {
     private controllerResult_: HttpResult;

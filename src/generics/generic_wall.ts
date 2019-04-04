@@ -1,4 +1,4 @@
-import { Wall } from "../abstracts/wall";
+import { Wall } from "../abstracts";
 import { HttpResult } from "../types";
 
 export class GenericWall extends Wall {

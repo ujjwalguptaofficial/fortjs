@@ -1,4 +1,4 @@
-import { RouteInfo } from "../types/route_info";
+import { RouteInfo } from "../types";
 export declare class Router {
     routes: RouteInfo[];
 }

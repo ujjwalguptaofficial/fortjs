@@ -1,4 +1,4 @@
-import { Guard } from "../abstracts/guard";
+import { Guard } from "../abstracts";
 import { HttpResult } from "../types";
 
 export class GenericGuard extends Guard {

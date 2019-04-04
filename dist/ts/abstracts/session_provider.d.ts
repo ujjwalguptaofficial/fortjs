@@ -1,5 +1,5 @@
-import { CookieManager } from "../models/cookie_manager";
-import { SessionValue } from "../types/session_value";
+import { CookieManager } from "../models";
+import { SessionValue } from "../types";
 export declare abstract class SessionProvider {
     sessionId: string;
     protected cookie: CookieManager;

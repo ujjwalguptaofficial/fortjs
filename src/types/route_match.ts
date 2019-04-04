@@ -1,7 +1,6 @@
-import { WorkerInfo } from "./worker_info";
-import { GenericShield } from "../models/generic_shield";
-import { GenericController } from "../models/generic_controller";
+import { WorkerInfo } from ".";
 import { HTTP_METHOD } from "../enums";
+import { GenericController, GenericShield } from "../generics";
 
 export type RouteMatch = {
   controller: typeof GenericController;

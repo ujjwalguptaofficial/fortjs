@@ -1,8 +1,5 @@
-import { RouteInfo } from "../types/route_info";
-import { GenericShield } from "../models/generic_shield";
-import { WorkerInfo } from "../types/worker_info";
-import { GenericGuard } from "../models/generic_guard";
-import { ParentRoute } from "../types/route";
+import { RouteInfo, WorkerInfo, ParentRoute } from "../types";
+import { GenericShield, GenericGuard } from "../generics";
 
 const routerCollection: RouteInfo[] = [];
 export class RouteHandler {
