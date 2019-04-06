@@ -42,10 +42,15 @@ export class FileController extends Controller {
     @Route("/upload")
     async uploadFile() {
         const pathToSave = Path.join(__dirname, "../upload.png");
-        let result = {};
+        console.log("count", this.file.count);
+        let result = {
+            count: this.file.count
+        };
         if (this.file.count > 0) {
-            result = this.file.files[0];
-            result.count = this.file.count;
+            result = {
+                ...result,
+                ...this.file.files[0]
+            };
         }
         if (this.file.isExist('jsstore') === true) {
             await this.file.saveTo('jsstore', pathToSave);
