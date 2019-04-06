@@ -1,38 +1,36 @@
 import { HttpFile } from "./http_file";
 export declare class FileManager {
-    files: {
-        [key: string]: HttpFile;
-    };
     /**
      * get total no of files
      *
      * @returns - number
      * @memberof FileManager
      */
-    filesCount(): number;
+    readonly count: number;
+    files: HttpFile[];
     /**
      * check for existance of file
      *
-     * @param {string} fileName
-     * @returns - true if exist otherwise false
+     * @param {string} fieldName
+     * @returns
      * @memberof FileManager
      */
-    isExist(fileName: string): boolean;
+    isExist(fieldName: string): boolean;
     /**
      * return the file
      *
-     * @param {string} fileName
+     * @param {string} fieldName
      * @returns
      * @memberof FileManager
      */
-    getFile(fileName: string): HttpFile;
+    getFile(fieldName: string): HttpFile;
     /**
      * saves file to supplied path
      *
-     * @param {string} fileName - name of file to be saved
-     * @param {string} pathToSave - location of file with extension
+     * @param {string} fieldName
+     * @param {string} pathToSave
      * @returns
      * @memberof FileManager
      */
-    saveTo(fileName: string, pathToSave: string): Promise<void>;
+    saveTo(fieldName: string, pathToSave: string): Promise<void>;
 }

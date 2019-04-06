@@ -1,3 +1,5 @@
+/// <reference types="node" />
+import { IncomingHttpHeaders } from "http2";
 export declare class HttpFile {
     /**
      * same as name - the field name for this file
@@ -6,7 +8,7 @@ export declare class HttpFile {
     /**
      * the filename that the user reports for the file
      */
-    originalFileName: string;
+    originalFilename: string;
     /**
      * the absolute path of the uploaded file on disk
      */
@@ -14,7 +16,7 @@ export declare class HttpFile {
     /**
      * the HTTP headers that were sent along with this file
      */
-    headers: any;
+    headers: IncomingHttpHeaders;
     /**
      * size of the file in bytes
      */

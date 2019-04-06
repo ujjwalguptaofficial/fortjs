@@ -56,18 +56,23 @@ describe("/file", () => {
         request.post('/file/upload').attach("jsstore", "static/fort_js_logo_200_137.png").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res).to.have.header('content-type', 'text/plain');
-            expect(res.text).to.be.equal('file saved');
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body.responseText).to.be.equal('file saved');
+            expect(res.body.fieldName).to.be.equal('jsstore');
+            expect(res.body.count).to.be.equal(1);
+            expect(res.body.originalFilename).to.be.equal('fort_js_logo_200_137.png');
             done();
         });
     })
 
-    it('/upload with right file name', (done) => {
+    it('/upload with wrong file name', (done) => {
         request.post('/file/upload').attach("jsstdddore", "static/fort_js_logo_200_137.png").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res).to.have.header('content-type', 'text/plain');
-            expect(res.text).to.be.equal('file not saved');
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body.responseText).to.be.equal('file not saved');
+            expect(res.body.fieldName).to.be.equal('jsstdddore');
+            expect(res.body.originalFilename).to.be.equal('fort_js_logo_200_137.png');
             done();
         });
     })

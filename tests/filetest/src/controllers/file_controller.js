@@ -42,15 +42,18 @@ export class FileController extends Controller {
     @Route("/upload")
     async uploadFile() {
         const pathToSave = Path.join(__dirname, "../upload.png");
-        let result;
+        let result = {};
+        if (this.file.count > 0) {
+            result = this.file.files[0];
+            result.count = this.file.count;
+        }
         if (this.file.isExist('jsstore') === true) {
             await this.file.saveTo('jsstore', pathToSave);
-            result = "file saved";
+            result.responseText = "file saved";
         } else {
-            result = "file not saved";
+            result.responseText = "file not saved";
         }
-
-        return textResult(result);
+        return jsonResult(result);
     }
 
     @Worker([HTTP_METHOD.Get])

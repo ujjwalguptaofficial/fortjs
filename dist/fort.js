@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.5.3 - 04/04/2019
+ * @license :fortjs - V1.5.3 - 06/04/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1635,7 +1635,7 @@ var PostHandler = /** @class */ (function (_super) {
     };
     PostHandler.prototype.parseMultiPartData_ = function () {
         var _this = this;
-        return new Promise(function (res, rej) {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (res, rej) {
             new multiparty__WEBPACK_IMPORTED_MODULE_6__["Form"]().parse(_this.request, function (err, fields, files) {
                 if (err) {
                     rej(err);
@@ -3500,49 +3500,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs-extra */ "fs-extra");
 /* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs_extra__WEBPACK_IMPORTED_MODULE_0__);
 
+var files;
 var FileManager = /** @class */ (function () {
     function FileManager() {
-        this.files = {};
     }
-    /**
-     * get total no of files
-     *
-     * @returns - number
-     * @memberof FileManager
-     */
-    FileManager.prototype.filesCount = function () {
-        return Object.keys(this.files).length;
-    };
+    Object.defineProperty(FileManager.prototype, "count", {
+        /**
+         * get total no of files
+         *
+         * @returns - number
+         * @memberof FileManager
+         */
+        get: function () {
+            return Object.keys(files).length;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FileManager.prototype, "files", {
+        get: function () {
+            var results = [];
+            for (var file in files) {
+                results.push(files[file]);
+            }
+            return results;
+        },
+        set: function (value) {
+            files = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * check for existance of file
      *
-     * @param {string} fileName
-     * @returns - true if exist otherwise false
+     * @param {string} fieldName
+     * @returns
      * @memberof FileManager
      */
-    FileManager.prototype.isExist = function (fileName) {
-        return this.files[fileName] != null;
+    FileManager.prototype.isExist = function (fieldName) {
+        return files[fieldName] != null;
     };
     /**
      * return the file
      *
-     * @param {string} fileName
+     * @param {string} fieldName
      * @returns
      * @memberof FileManager
      */
-    FileManager.prototype.getFile = function (fileName) {
-        return this.files[fileName];
+    FileManager.prototype.getFile = function (fieldName) {
+        return files[fieldName];
     };
     /**
      * saves file to supplied path
      *
-     * @param {string} fileName - name of file to be saved
-     * @param {string} pathToSave - location of file with extension
+     * @param {string} fieldName
+     * @param {string} pathToSave
      * @returns
      * @memberof FileManager
      */
-    FileManager.prototype.saveTo = function (fileName, pathToSave) {
-        return fs_extra__WEBPACK_IMPORTED_MODULE_0__["copy"](this.files[fileName].path, pathToSave);
+    FileManager.prototype.saveTo = function (fieldName, pathToSave) {
+        return fs_extra__WEBPACK_IMPORTED_MODULE_0__["copy"](files[fieldName].path, pathToSave);
     };
     return FileManager;
 }());

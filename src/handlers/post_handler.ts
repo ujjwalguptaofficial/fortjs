@@ -27,7 +27,7 @@ export class PostHandler extends ControllerHandler {
     }
 
     private parseMultiPartData_(): Promise<MultiPartParseResult> {
-        return new Promise((res, rej) => {
+        return promise((res, rej) => {
             new Multiparty.Form().parse(this.request, (err, fields, files) => {
                 if (err) {
                     rej(err);
@@ -60,7 +60,7 @@ export class PostHandler extends ControllerHandler {
             if (contentType === MIME_TYPE.FormMultiPart) {
                 const result = await this.parseMultiPartData_();
                 postData = result.field;
-                this.file.files = result.file;
+                this.file.files = result.file as any;
             }
             else {
                 const bodyBuffer = await this.getPostRawData_();

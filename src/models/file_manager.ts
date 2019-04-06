@@ -1,8 +1,9 @@
 import { HttpFile } from "./http_file";
 import * as Fs from "fs-extra";
 
+let files: { [fieldName: string]: HttpFile };
 export class FileManager {
-    files: { [key: string]: HttpFile } = {};
+
 
     /**
      * get total no of files
@@ -10,41 +11,53 @@ export class FileManager {
      * @returns - number
      * @memberof FileManager
      */
-    filesCount() {
-        return Object.keys(this.files).length;
+    get count() {
+        return Object.keys(files).length;
+    }
+
+    get files() {
+        const results: HttpFile[] = [];
+        for (const file in files) {
+            results.push(files[file]);
+        }
+        return results;
+    }
+
+    set files(value) {
+        files = value as any;
     }
 
     /**
      * check for existance of file
      *
-     * @param {string} fileName
-     * @returns - true if exist otherwise false
+     * @param {string} fieldName
+     * @returns
      * @memberof FileManager
      */
-    isExist(fileName: string) {
-        return this.files[fileName] != null;
+    isExist(fieldName: string) {
+        return files[fieldName] != null;
     }
 
     /**
      * return the file
      *
-     * @param {string} fileName
+     * @param {string} fieldName
      * @returns
      * @memberof FileManager
      */
-    getFile(fileName: string) {
-        return this.files[fileName];
+    getFile(fieldName: string) {
+        return files[fieldName];
     }
 
     /**
      * saves file to supplied path
      *
-     * @param {string} fileName - name of file to be saved
-     * @param {string} pathToSave - location of file with extension
+     * @param {string} fieldName
+     * @param {string} pathToSave
      * @returns
      * @memberof FileManager
      */
-    saveTo(fileName: string, pathToSave: string) {
-        return Fs.copy(this.files[fileName].path, pathToSave);
+    saveTo(fieldName: string, pathToSave: string) {
+        return Fs.copy(files[fieldName].path, pathToSave);
     }
 }
