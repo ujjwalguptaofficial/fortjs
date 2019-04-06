@@ -32,7 +32,7 @@ export class FileController extends Controller {
     @Worker()
     async getScripts() {
         // check for file exist when there is no upload
-        // do not remove this
+        // Note :- do not remove this
         const isFileExist = this.file.isExist('jsstore');
         const filePath = Path.join(__dirname, "../static/scripts/", `${this.param.file}.js`);
         return fileResult(filePath);

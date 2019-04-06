@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.5.4 - 06/04/2019
+ * @license :fortjs - V1.5.5 - 06/04/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1605,7 +1605,7 @@ var CookieManager = /** @class */ (function () {
 
 // CONCATENATED MODULE: ./src/models/file_manager.ts
 
-var files;
+var files = {};
 var file_manager_FileManager = /** @class */ (function () {
     function FileManager() {
     }

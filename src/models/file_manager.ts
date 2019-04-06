@@ -1,7 +1,7 @@
 import { HttpFile } from "./http_file";
 import * as Fs from "fs-extra";
 
-let files: { [fieldName: string]: HttpFile };
+let files: { [fieldName: string]: HttpFile } = {};
 export class FileManager {
 
 
