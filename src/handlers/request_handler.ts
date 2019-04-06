@@ -27,7 +27,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private registerEvents_() {
-        this.request.on('error', this.onBadRequest);
+        this.request.on('error', this.onBadRequest.bind(this));
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 

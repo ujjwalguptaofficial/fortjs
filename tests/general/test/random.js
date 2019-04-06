@@ -106,4 +106,14 @@ describe("/random", () => {
             done();
         })
     })
+
+    it("/null + get", (done) => {
+        request.get('/random/null').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/plain');
+            expect(res.text).to.be.equal("");
+            done();
+        })
+    })
 })

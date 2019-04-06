@@ -4,7 +4,7 @@ import { __SetCookie, __ContentType } from "../constant";
 import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
-import { XmlHelper } from "../helpers";
+import { XmlHelper, textResult } from "../helpers";
 
 export class ControllerHandler extends FileHandler {
     private controllerResult_: HttpResult;
@@ -66,6 +66,7 @@ export class ControllerHandler extends FileHandler {
     }
 
     async onResultEvaluated(result: HttpResult | HttpFormatResult) {
+        result = result || textResult("");
         await this.runWallOutgoing();
         this.controllerResult_ = result as HttpResult;
         if (this.cookieManager != null) {

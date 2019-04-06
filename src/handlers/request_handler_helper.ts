@@ -21,7 +21,7 @@ export class RequestHandlerHelper {
     }
 
     protected async runWallOutgoing() {
-        return Promise.all(this.wallInstances.reverse().map(wallObj => {
+        return Promise.all(this.wallInstances.reverse().map(function (wallObj) {
             if (wallObj.onOutgoing != null) {
                 return wallObj.onOutgoing();
             }

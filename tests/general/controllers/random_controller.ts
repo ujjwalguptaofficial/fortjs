@@ -56,4 +56,9 @@ export class RandomController extends Controller {
         return fileResult(pathLocation);
     }
 
+
+    @Worker()
+    async null() {
+
+    }
 }
