@@ -1236,41 +1236,6 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 
@@ -1316,34 +1281,21 @@ var FileHandler = /** @class */ (function (_super) {
         });
     };
     FileHandler.prototype.handleFileRequestFromAbsolutePath = function (absolutePath, fileType) {
-        return __awaiter(this, void 0, void 0, function () {
-            var fileInfo, ex_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.getFileStats_(absolutePath)];
-                    case 1:
-                        fileInfo = _a.sent();
-                        if (fileInfo != null) {
-                            if (fileInfo.isDirectory() === true) {
-                                this.handleFileRequestForFolder_(absolutePath, fileInfo);
-                            }
-                            else {
-                                this.sendFile_(absolutePath, fileType, fileInfo);
-                            }
-                        }
-                        else {
-                            this.onNotFound();
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_1 = _a.sent();
-                        this.onErrorOccured(ex_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/, null];
+        var _this = this;
+        this.getFileStats_(absolutePath).then(function (fileInfo) {
+            if (fileInfo != null) {
+                if (fileInfo.isDirectory() === true) {
+                    _this.handleFileRequestForPath_(absolutePath);
                 }
-            });
+                else {
+                    _this.sendFile_(absolutePath, fileType, fileInfo);
+                }
+            }
+            else {
+                _this.onNotFound();
+            }
+        }).catch(function (ex) {
+            _this.onErrorOccured(ex);
         });
     };
     FileHandler.prototype.checkForFolderAllowAndReturnPath_ = function (urlPath) {
@@ -1383,66 +1335,41 @@ var FileHandler = /** @class */ (function (_super) {
      * @returns
      * @memberof FileHandler
      */
-    FileHandler.prototype.handleFileRequestForFolder_ = function (absolutePath, fileInfo) {
-        return __awaiter(this, void 0, void 0, function () {
-            var fileType, ex_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](absolutePath, "index.html");
-                        return [4 /*yield*/, this.getFileStats_(absolutePath)];
-                    case 1:
-                        fileInfo = _a.sent();
-                        if (fileInfo != null) {
-                            fileType = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html;
-                            this.sendFile_(absolutePath, fileType, fileInfo);
-                        }
-                        else {
-                            this.onNotFound();
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_2 = _a.sent();
-                        this.onErrorOccured(ex_2);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
+    FileHandler.prototype.handleFileRequestForPath_ = function (absolutePath) {
+        var _this = this;
+        absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](absolutePath, "index.html");
+        this.getFileStats_(absolutePath).then(function (fileInfo) {
+            if (fileInfo != null) {
+                var fileType = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html;
+                _this.sendFile_(absolutePath, fileType, fileInfo);
+            }
+            else {
+                _this.onNotFound();
+            }
+        }).catch(function (ex) {
+            _this.onErrorOccured(ex);
         });
     };
-    FileHandler.prototype.handleFileRequestForFolder = function (urlPath) {
-        return __awaiter(this, void 0, void 0, function () {
-            var absFilePath, fileInfo, ex_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 4, , 5]);
-                        absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
-                        if (!(absFilePath != null)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.getFileStats_(absFilePath)];
-                    case 1:
-                        fileInfo = _a.sent();
-                        if (fileInfo != null && fileInfo.isDirectory() === true) {
-                            this.handleFileRequestForFolder_(absFilePath, fileInfo);
-                        }
-                        else {
-                            this.onNotFound();
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        this.onNotFound();
-                        _a.label = 3;
-                    case 3: return [3 /*break*/, 5];
-                    case 4:
-                        ex_3 = _a.sent();
-                        this.onErrorOccured(ex_3);
-                        return [3 /*break*/, 5];
-                    case 5: return [2 /*return*/];
-                }
-            });
-        });
-    };
+    // protected async handleFileRequestForFolder(urlPath: string) {
+    //     try {
+    //         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
+    //         if (absFilePath != null) {
+    //             const fileInfo = await this.getFileStats_(absFilePath);
+    //             if (fileInfo != null && fileInfo.isDirectory() === true) {
+    //                 this.handleFileRequestForPath_(absFilePath);
+    //             }
+    //             else {
+    //                 this.onNotFound();
+    //             }
+    //         }
+    //         else {
+    //             this.onNotFound();
+    //         }
+    //     }
+    //     catch (ex) {
+    //         this.onErrorOccured(ex);
+    //     }
+    // }
     FileHandler.prototype.isClientHasFreshFile_ = function (lastModified, etagValue) {
         return fresh__WEBPACK_IMPORTED_MODULE_8__(this.request.headers, {
             'etag': etagValue,
@@ -1450,55 +1377,43 @@ var FileHandler = /** @class */ (function (_super) {
         });
     };
     FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, mimeType, negotiateMimeType, lastModified, eTagValue, readStream, ex_4;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 1:
-                        _b.sent();
-                        mimeType = void 0;
-                        if (fileType[0] === '.') { // its extension
-                            mimeType = Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType);
-                        }
-                        else { // mime type
-                            mimeType = fileType;
-                        }
-                        negotiateMimeType = this.getContentTypeFromNegotiation(mimeType);
-                        if (negotiateMimeType != null) {
-                            lastModified = fileInfo.mtime.toUTCString();
-                            eTagValue = etag__WEBPACK_IMPORTED_MODULE_7__(fileInfo, {
-                                weak: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag.type === _enums__WEBPACK_IMPORTED_MODULE_0__["ETag_Type"].Weak
-                            });
-                            if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                                this.response.statusCode = _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotModified;
-                                this.response.end();
-                            }
-                            else {
-                                this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
-                                    _a[_constant__WEBPACK_IMPORTED_MODULE_3__["__ContentType"]] = mimeType,
-                                    _a['Etag'] = eTagValue,
-                                    _a['Last-Modified'] = lastModified,
-                                    _a));
-                                readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](filePath);
-                                // Handle non-existent file
-                                readStream.on('error', this.onErrorOccured.bind(this));
-                                readStream.pipe(this.response);
-                            }
-                        }
-                        else {
-                            this.onNotAcceptableRequest();
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_4 = _b.sent();
-                        this.onErrorOccured(ex_4);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+        var _this = this;
+        this.runWallOutgoing().then(function () {
+            var _a;
+            var mimeType;
+            if (fileType[0] === '.') { // its extension
+                mimeType = Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType);
+            }
+            else { // mime type
+                mimeType = fileType;
+            }
+            var negotiateMimeType = _this.getContentTypeFromNegotiation(mimeType);
+            if (negotiateMimeType != null) {
+                var lastModified = fileInfo.mtime.toUTCString();
+                var eTagValue = etag__WEBPACK_IMPORTED_MODULE_7__(fileInfo, {
+                    weak: _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag.type === _enums__WEBPACK_IMPORTED_MODULE_0__["ETag_Type"].Weak
+                });
+                if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                    _this.response.statusCode = _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotModified;
+                    _this.response.end();
                 }
-            });
+                else {
+                    _this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
+                        _a[_constant__WEBPACK_IMPORTED_MODULE_3__["__ContentType"]] = mimeType,
+                        _a['Etag'] = eTagValue,
+                        _a['Last-Modified'] = lastModified,
+                        _a));
+                    var readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](filePath);
+                    // Handle non-existent file
+                    readStream.on('error', _this.onErrorOccured.bind(_this));
+                    readStream.pipe(_this.response);
+                }
+            }
+            else {
+                _this.onNotAcceptableRequest();
+            }
+        }).catch(function (ex) {
+            _this.onErrorOccured(ex);
         });
     };
     return FileHandler;

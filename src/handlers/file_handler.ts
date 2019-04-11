@@ -47,12 +47,11 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    protected async handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
-        try {
-            const fileInfo = await this.getFileStats_(absolutePath);
+    protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
+        this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
-                    this.handleFileRequestForFolder_(absolutePath, fileInfo);
+                    this.handleFileRequestForPath_(absolutePath);
                 }
                 else {
                     this.sendFile_(absolutePath, fileType, fileInfo);
@@ -61,16 +60,14 @@ export class FileHandler extends RequestHandlerHelper {
             else {
                 this.onNotFound();
             }
-        }
-        catch (ex) {
+        }).catch(ex => {
             this.onErrorOccured(ex);
-        }
-        return null;
+        });
     }
 
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
         const fileInfo = this.getFileInfoFromUrl_(urlPath);
-        const getAbsPath = () => {
+        const getAbsPath = function () {
             const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
                 return path.join(folder.path, fileInfo.file);
@@ -84,7 +81,6 @@ export class FileHandler extends RequestHandlerHelper {
             absPath = getAbsPath();
         }
         return absPath;
-
     }
 
     protected handleFileRequest(urlPath: string) {
@@ -108,10 +104,10 @@ export class FileHandler extends RequestHandlerHelper {
      * @returns
      * @memberof FileHandler
      */
-    private async handleFileRequestForFolder_(absolutePath: string, fileInfo: Fs.Stats) {
-        try {
-            absolutePath = path.join(absolutePath, "index.html");
-            fileInfo = await this.getFileStats_(absolutePath);
+    private handleFileRequestForPath_(absolutePath: string) {
+
+        absolutePath = path.join(absolutePath, "index.html");
+        this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 const fileType = MIME_TYPE.Html;
                 this.sendFile_(absolutePath, fileType, fileInfo);
@@ -119,32 +115,31 @@ export class FileHandler extends RequestHandlerHelper {
             else {
                 this.onNotFound();
             }
-        }
-        catch (ex) {
+        }).catch(ex => {
             this.onErrorOccured(ex);
-        }
+        });
     }
 
-    protected async handleFileRequestForFolder(urlPath: string) {
-        try {
-            const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
-            if (absFilePath != null) {
-                const fileInfo = await this.getFileStats_(absFilePath);
-                if (fileInfo != null && fileInfo.isDirectory() === true) {
-                    this.handleFileRequestForFolder_(absFilePath, fileInfo);
-                }
-                else {
-                    this.onNotFound();
-                }
-            }
-            else {
-                this.onNotFound();
-            }
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
-        }
-    }
+    // protected async handleFileRequestForFolder(urlPath: string) {
+    //     try {
+    //         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
+    //         if (absFilePath != null) {
+    //             const fileInfo = await this.getFileStats_(absFilePath);
+    //             if (fileInfo != null && fileInfo.isDirectory() === true) {
+    //                 this.handleFileRequestForPath_(absFilePath);
+    //             }
+    //             else {
+    //                 this.onNotFound();
+    //             }
+    //         }
+    //         else {
+    //             this.onNotFound();
+    //         }
+    //     }
+    //     catch (ex) {
+    //         this.onErrorOccured(ex);
+    //     }
+    // }
 
     private isClientHasFreshFile_(lastModified: string, etagValue: string) {
         return fresh(this.request.headers, {
@@ -153,9 +148,8 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    private async sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
-        try {
-            await this.runWallOutgoing();
+    private sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
+        this.runWallOutgoing().then(() => {
             let mimeType;
             if (fileType[0] === '.') { // its extension
                 mimeType = getMimeTypeFromExtension(fileType);
@@ -188,9 +182,8 @@ export class FileHandler extends RequestHandlerHelper {
             else {
                 this.onNotAcceptableRequest();
             }
-        }
-        catch (ex) {
+        }).catch(ex => {
             this.onErrorOccured(ex);
-        }
+        });
     }
 }

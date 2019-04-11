@@ -2,7 +2,7 @@ import { RequestHandlerHelper } from "./request_handler_helper";
 export declare class FileHandler extends RequestHandlerHelper {
     private getFileInfoFromUrl_;
     private getFileStats_;
-    protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string): Promise<any>;
+    protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string): void;
     private checkForFolderAllowAndReturnPath_;
     protected handleFileRequest(urlPath: string): void;
     /**
@@ -15,8 +15,7 @@ export declare class FileHandler extends RequestHandlerHelper {
      * @returns
      * @memberof FileHandler
      */
-    private handleFileRequestForFolder_;
-    protected handleFileRequestForFolder(urlPath: string): Promise<void>;
+    private handleFileRequestForPath_;
     private isClientHasFreshFile_;
     private sendFile_;
 }
