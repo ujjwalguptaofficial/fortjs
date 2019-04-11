@@ -107,65 +107,62 @@ export class RequestHandler extends PostHandler {
         this.response.sendDate = true;
     }
 
-    private async onRouteMatched_() {
-        const actionInfo = this.routeMatchInfo_.actionInfo;
-        if (actionInfo == null) {
-            this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-        }
-        else {
-            let shieldProtectionResult;
-            try {
-                shieldProtectionResult = await this.executeShieldsProtection_();
-            }
-            catch (ex) {
-                return Promise.reject(ex);
-            }
-            const responseByShield = shieldProtectionResult.find(qry => qry != null);
-            if (responseByShield == null) {
-                let guardsCheckResult;
-                try {
-                    await this.handlePostData();
-                    guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
-                }
-                catch (ex) {
-                    return Promise.reject(ex);
-                }
-                const responseByGuard = guardsCheckResult.find(qry => qry != null);
-                if (responseByGuard == null) {
-                    this.runController_();
-                }
-                else {
-                    this.onResultEvaluated(responseByGuard);
-                }
+    private onRouteMatched_() {
+        try {
+            const actionInfo = this.routeMatchInfo_.actionInfo;
+            if (actionInfo == null) {
+                this.onMethodNotAllowed(this.routeMatchInfo_.allows);
             }
             else {
-                this.onResultEvaluated(responseByShield);
+                this.executeShieldsProtection_().then(shieldProtectionResult => {
+                    const responseByShield = shieldProtectionResult.find(qry => qry != null);
+                    if (responseByShield == null) {
+                        this.handlePostData().then(() => {
+                            this.executeGuardsCheck_(actionInfo.guards).then(guardsCheckResult => {
+                                const responseByGuard = guardsCheckResult.find(qry => qry != null);
+                                if (responseByGuard == null) {
+                                    this.runController_();
+                                }
+                                else {
+                                    this.onResultEvaluated(responseByGuard);
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        this.onResultEvaluated(responseByShield);
+                    }
+                });
             }
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
         }
     }
 
-    private async execute_() {
+    private execute_() {
         try {
             const urlDetail = url.parse(this.request.url, true);
             this.query_ = urlDetail.query;
             this.parseCookieFromRequest_();
-            const wallProtectionResult = await this.runWallIncoming_();
-            const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
-            if (responseByWall == null) {
-                const pathUrl = urlDetail.pathname;
-                const requestMethod = this.request.method as HTTP_METHOD;
-                this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-                if (this.routeMatchInfo_ == null) { // no route matched
-                    // it may be a file or folder then
-                    this.handleFileRequest(pathUrl);
+            this.runWallIncoming_().then(wallProtectionResult => {
+                const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
+                if (responseByWall == null) {
+                    const pathUrl = urlDetail.pathname;
+                    const requestMethod = this.request.method as HTTP_METHOD;
+                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
+                    if (this.routeMatchInfo_ == null) { // no route matched
+                        // it may be a file or folder then
+                        this.handleFileRequest(pathUrl);
+                    }
+                    else {
+                        this.onRouteMatched_();
+                    }
                 }
                 else {
-                    this.onRouteMatched_();
+                    this.onResultEvaluated(responseByWall);
                 }
-            }
-            else {
-                this.onResultEvaluated(responseByWall);
-            }
+            });
         }
         catch (ex) {
             this.onErrorOccured(ex);

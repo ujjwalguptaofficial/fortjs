@@ -14,7 +14,7 @@ export class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager = new FileManager();
 
-    protected getPostRawData_() {
+    private getPostRawData_() {
         const body = [];
         return promise((res, rej) => {
             this.request.on('data', (chunk) => {
@@ -22,6 +22,8 @@ export class PostHandler extends ControllerHandler {
             }).on('end', () => {
                 const bodyBuffer = Buffer.concat(body);
                 res(bodyBuffer);
+            }).on("error", function (err) {
+                rej(err);
             });
         });
     }

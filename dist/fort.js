@@ -1049,41 +1049,6 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 
@@ -1141,56 +1106,40 @@ var ControllerHandler = /** @class */ (function (_super) {
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     };
     ControllerHandler.prototype.onResultEvaluated = function (result) {
-        return __awaiter(this, void 0, void 0, function () {
-            var ex_1, contentType, negotiateMimeType;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        result = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_1 = _a.sent();
-                        return [2 /*return*/, Promise.reject(ex_1)];
-                    case 4:
-                        this.controllerResult_ = result;
-                        if (this.cookieManager != null) {
-                            this.cookieManager.responseCookie_.forEach(function (value) {
-                                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
-                            });
-                        }
-                        if (result.shouldRedirect == null || result.shouldRedirect === false) {
-                            if (result.responseFormat == null) {
-                                if (result.file == null) {
-                                    contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
-                                    negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
-                                    if (negotiateMimeType != null) {
-                                        this.finishResponse_(negotiateMimeType);
-                                    }
-                                    else {
-                                        this.onNotAcceptableRequest();
-                                    }
-                                }
-                                else {
-                                    this.handleFileResult_();
-                                }
-                            }
-                            else {
-                                this.handleFormatResult_();
-                            }
+        var _this = this;
+        result = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
+        this.runWallOutgoing().then(function () {
+            _this.controllerResult_ = result;
+            if (_this.cookieManager != null) {
+                _this.cookieManager.responseCookie_.forEach(function (value) {
+                    _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
+                });
+            }
+            if (result.shouldRedirect == null || result.shouldRedirect === false) {
+                if (result.responseFormat == null) {
+                    if (result.file == null) {
+                        var contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
+                        var negotiateMimeType = _this.getContentTypeFromNegotiation(contentType);
+                        if (negotiateMimeType != null) {
+                            _this.finishResponse_(negotiateMimeType);
                         }
                         else {
-                            this.handleRedirectResult_();
+                            _this.onNotAcceptableRequest();
                         }
-                        return [2 /*return*/];
+                    }
+                    else {
+                        _this.handleFileResult_();
+                    }
                 }
-            });
+                else {
+                    _this.handleFormatResult_();
+                }
+            }
+            else {
+                _this.handleRedirectResult_();
+            }
+        }).catch(function (ex) {
+            _this.onErrorOccured(ex);
         });
     };
     return ControllerHandler;
@@ -1555,6 +1504,8 @@ var PostHandler = /** @class */ (function (_super) {
             }).on('end', function () {
                 var bodyBuffer = Buffer.concat(body);
                 res(bodyBuffer);
+            }).on("error", function (err) {
+                rej(err);
             });
         });
     };
@@ -1815,103 +1766,70 @@ var RequestHandler = /** @class */ (function (_super) {
         this.response.sendDate = true;
     };
     RequestHandler.prototype.onRouteMatched_ = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var actionInfo, shieldProtectionResult, ex_1, responseByShield, guardsCheckResult, ex_2, responseByGuard;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        actionInfo = this.routeMatchInfo_.actionInfo;
-                        if (!(actionInfo == null)) return [3 /*break*/, 1];
-                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                        return [3 /*break*/, 12];
-                    case 1:
-                        shieldProtectionResult = void 0;
-                        _a.label = 2;
-                    case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, this.executeShieldsProtection_()];
-                    case 3:
-                        shieldProtectionResult = _a.sent();
-                        return [3 /*break*/, 5];
-                    case 4:
-                        ex_1 = _a.sent();
-                        return [2 /*return*/, Promise.reject(ex_1)];
-                    case 5:
-                        responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByShield == null)) return [3 /*break*/, 11];
-                        guardsCheckResult = void 0;
-                        _a.label = 6;
-                    case 6:
-                        _a.trys.push([6, 9, , 10]);
-                        return [4 /*yield*/, this.handlePostData()];
-                    case 7:
-                        _a.sent();
-                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 8:
-                        guardsCheckResult = _a.sent();
-                        return [3 /*break*/, 10];
-                    case 9:
-                        ex_2 = _a.sent();
-                        return [2 /*return*/, Promise.reject(ex_2)];
-                    case 10:
-                        responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
-                        if (responseByGuard == null) {
-                            this.runController_();
-                        }
-                        else {
-                            this.onResultEvaluated(responseByGuard);
-                        }
-                        return [3 /*break*/, 12];
-                    case 11:
-                        this.onResultEvaluated(responseByShield);
-                        _a.label = 12;
-                    case 12: return [2 /*return*/];
-                }
-            });
-        });
+        var _this = this;
+        try {
+            var actionInfo_1 = this.routeMatchInfo_.actionInfo;
+            if (actionInfo_1 == null) {
+                this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+            }
+            else {
+                this.executeShieldsProtection_().then(function (shieldProtectionResult) {
+                    var responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
+                    if (responseByShield == null) {
+                        _this.handlePostData().then(function () {
+                            _this.executeGuardsCheck_(actionInfo_1.guards).then(function (guardsCheckResult) {
+                                var responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
+                                if (responseByGuard == null) {
+                                    _this.runController_();
+                                }
+                                else {
+                                    _this.onResultEvaluated(responseByGuard);
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        _this.onResultEvaluated(responseByShield);
+                    }
+                });
+            }
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
+        }
     };
     RequestHandler.prototype.execute_ = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, wallProtectionResult, responseByWall, pathUrl, requestMethod, ex_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
-                        this.query_ = urlDetail.query;
-                        this.parseCookieFromRequest_();
-                        return [4 /*yield*/, this.runWallIncoming_()];
-                    case 1:
-                        wallProtectionResult = _a.sent();
-                        responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
-                        if (responseByWall == null) {
-                            pathUrl = urlDetail.pathname;
-                            requestMethod = this.request.method;
-                            this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
-                            if (this.routeMatchInfo_ == null) { // no route matched
-                                // it may be a file or folder then
-                                this.handleFileRequest(pathUrl);
-                            }
-                            else {
-                                this.onRouteMatched_();
-                            }
-                        }
-                        else {
-                            this.onResultEvaluated(responseByWall);
-                        }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_3 = _a.sent();
-                        this.onErrorOccured(ex_3);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+        var _this = this;
+        try {
+            var urlDetail_1 = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
+            this.query_ = urlDetail_1.query;
+            this.parseCookieFromRequest_();
+            this.runWallIncoming_().then(function (wallProtectionResult) {
+                var responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
+                if (responseByWall == null) {
+                    var pathUrl = urlDetail_1.pathname;
+                    var requestMethod = _this.request.method;
+                    _this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
+                    if (_this.routeMatchInfo_ == null) { // no route matched
+                        // it may be a file or folder then
+                        _this.handleFileRequest(pathUrl);
+                    }
+                    else {
+                        _this.onRouteMatched_();
+                    }
+                }
+                else {
+                    _this.onResultEvaluated(responseByWall);
                 }
             });
-        });
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
+        }
     };
     RequestHandler.prototype.handlePostData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var body, ex_4;
+            var body, ex_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -1929,8 +1847,8 @@ var RequestHandler = /** @class */ (function (_super) {
                         this.body = body;
                         return [3 /*break*/, 5];
                     case 4:
-                        ex_4 = _a.sent();
-                        this.onBadRequest(ex_4);
+                        ex_1 = _a.sent();
+                        this.onBadRequest(ex_1);
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];
                 }

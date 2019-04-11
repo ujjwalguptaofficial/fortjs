@@ -3,7 +3,7 @@ import { FileManager } from "../models";
 export declare class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager;
-    protected getPostRawData_(): Promise<{}>;
+    private getPostRawData_;
     private parseMultiPartData_;
     protected parsePostData(): Promise<any>;
 }
