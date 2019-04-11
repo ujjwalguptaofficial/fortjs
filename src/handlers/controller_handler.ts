@@ -67,7 +67,12 @@ export class ControllerHandler extends FileHandler {
 
     async onResultEvaluated(result: HttpResult | HttpFormatResult) {
         result = result || textResult("");
-        await this.runWallOutgoing();
+        try {
+            await this.runWallOutgoing();
+        }
+        catch (ex) {
+            return Promise.reject(ex);
+        }
         this.controllerResult_ = result as HttpResult;
         if (this.cookieManager != null) {
             ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {

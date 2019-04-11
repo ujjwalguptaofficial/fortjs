@@ -107,6 +107,43 @@ export class RequestHandler extends PostHandler {
         this.response.sendDate = true;
     }
 
+    private async onRouteMatched_() {
+        const actionInfo = this.routeMatchInfo_.actionInfo;
+        if (actionInfo == null) {
+            this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+        }
+        else {
+            let shieldProtectionResult;
+            try {
+                shieldProtectionResult = await this.executeShieldsProtection_();
+            }
+            catch (ex) {
+                return Promise.reject(ex);
+            }
+            const responseByShield = shieldProtectionResult.find(qry => qry != null);
+            if (responseByShield == null) {
+                let guardsCheckResult;
+                try {
+                    await this.handlePostData();
+                    guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
+                }
+                catch (ex) {
+                    return Promise.reject(ex);
+                }
+                const responseByGuard = guardsCheckResult.find(qry => qry != null);
+                if (responseByGuard == null) {
+                    this.runController_();
+                }
+                else {
+                    this.onResultEvaluated(responseByGuard);
+                }
+            }
+            else {
+                this.onResultEvaluated(responseByShield);
+            }
+        }
+    }
+
     private async execute_() {
         try {
             const urlDetail = url.parse(this.request.url, true);
@@ -123,28 +160,7 @@ export class RequestHandler extends PostHandler {
                     this.handleFileRequest(pathUrl);
                 }
                 else {
-                    const actionInfo = this.routeMatchInfo_.actionInfo;
-                    if (actionInfo == null) {
-                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-                    }
-                    else {
-                        const shieldProtectionResult = await this.executeShieldsProtection_();
-                        const responseByShield = shieldProtectionResult.find(qry => qry != null);
-                        if (responseByShield == null) {
-                            await this.handlePostData();
-                            const guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
-                            const responseByGuard = guardsCheckResult.find(qry => qry != null);
-                            if (responseByGuard == null) {
-                                this.runController_();
-                            }
-                            else {
-                                this.onResultEvaluated(responseByGuard);
-                            }
-                        }
-                        else {
-                            this.onResultEvaluated(responseByShield);
-                        }
-                    }
+                    this.onRouteMatched_();
                 }
             }
             else {

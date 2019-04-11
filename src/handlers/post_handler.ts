@@ -50,48 +50,57 @@ export class PostHandler extends ControllerHandler {
     }
 
     protected async parsePostData() {
-        try {
-            let postData;
 
-            let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
-            if (contentType != null) {
-                contentType = ContentType.parse(contentType as string).type;
+        let postData;
+
+        let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
+        if (contentType != null) {
+            contentType = ContentType.parse(contentType as string).type;
+        }
+        if (contentType === MIME_TYPE.FormMultiPart) {
+            let result;
+            try {
+                result = await this.parseMultiPartData_();
             }
-            if (contentType === MIME_TYPE.FormMultiPart) {
-                const result = await this.parseMultiPartData_();
-                postData = result.field;
-                this.file.files = result.file as any;
+            catch (ex) {
+                return Promise.reject(ex);
             }
-            else {
-                const bodyBuffer = await this.getPostRawData_();
-                const bodyDataAsString = bodyBuffer.toString();
-                switch (contentType) {
-                    case MIME_TYPE.Json:
-                        try {
-                            postData = JSON.parse(bodyDataAsString);
-                        }
-                        catch (ex) {
-                            /* tslint:disable-next-line */
-                            throw "Post data is invalid";
-                        }
-                        break;
-                    case MIME_TYPE.Text:
-                    case MIME_TYPE.Html:
-                        postData = bodyDataAsString; break;
-                    case MIME_TYPE.FormUrlEncoded:
-                        postData = QueryString.parse(bodyDataAsString); break;
-                    case MIME_TYPE.Xml:
-                        postData = new (Global as any).xmlParser().parse(bodyDataAsString);
-                        break;
-                    default:
-                        postData = {};
-                }
+            postData = result.field;
+            this.file.files = result.file as any;
+        }
+        else {
+            let bodyBuffer;
+            try {
+                bodyBuffer = await this.getPostRawData_();
+            }
+            catch (ex) {
+                return Promise.reject(ex);
             }
 
-            return postData;
+            const bodyDataAsString = bodyBuffer.toString();
+            switch (contentType) {
+                case MIME_TYPE.Json:
+                    try {
+                        postData = JSON.parse(bodyDataAsString);
+                    }
+                    catch (ex) {
+                        return Promise.reject("Post data is invalid");
+                    }
+                    break;
+                case MIME_TYPE.Text:
+                case MIME_TYPE.Html:
+                    postData = bodyDataAsString; break;
+                case MIME_TYPE.FormUrlEncoded:
+                    postData = QueryString.parse(bodyDataAsString); break;
+                case MIME_TYPE.Xml:
+                    postData = new (Global as any).xmlParser().parse(bodyDataAsString);
+                    break;
+                default:
+                    postData = {};
+            }
         }
-        catch (ex) {
-            return Promise.reject(ex);
-        }
+
+        return postData;
+
     }
 }

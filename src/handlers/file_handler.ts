@@ -123,7 +123,6 @@ export class FileHandler extends RequestHandlerHelper {
         catch (ex) {
             this.onErrorOccured(ex);
         }
-        return null;
     }
 
     protected async handleFileRequestForFolder(urlPath: string) {
@@ -145,7 +144,6 @@ export class FileHandler extends RequestHandlerHelper {
         catch (ex) {
             this.onErrorOccured(ex);
         }
-        return null;
     }
 
     private isClientHasFreshFile_(lastModified: string, etagValue: string) {
@@ -194,6 +192,5 @@ export class FileHandler extends RequestHandlerHelper {
         catch (ex) {
             this.onErrorOccured(ex);
         }
-        return null;
     }
 }

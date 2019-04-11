@@ -16,7 +16,7 @@ export declare class FileHandler extends RequestHandlerHelper {
      * @memberof FileHandler
      */
     private handleFileRequestForFolder_;
-    protected handleFileRequestForFolder(urlPath: string): Promise<any>;
+    protected handleFileRequestForFolder(urlPath: string): Promise<void>;
     private isClientHasFreshFile_;
     private sendFile_;
 }

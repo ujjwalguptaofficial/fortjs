@@ -14,6 +14,7 @@ export declare class RequestHandler extends PostHandler {
     private executeGuardsCheck_;
     private parseCookieFromRequest_;
     private setPreHeader_;
+    private onRouteMatched_;
     private execute_;
     handlePostData(): Promise<void>;
     handle(): Promise<void>;
