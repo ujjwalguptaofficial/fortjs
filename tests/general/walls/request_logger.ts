@@ -3,22 +3,26 @@ let reqCount = 0;
 export class RequestLogger extends Wall {
 
     private getIP(req) {
-        var ip = (req.headers['x-forwarded-for'] || '').split(',').pop() ||
+        const ip = (req.headers['x-forwarded-for'] || '').split(',').pop() ||
             req.connection.remoteAddress ||
             req.socket.remoteAddress ||
-            req.connection.socket.remoteAddress
+            req.connection.socket.remoteAddress;
         return ip;
     }
+
     async onIncoming() {
-       
+
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
         // console.log("reqcount", this.data.reqCount);
         // console.log("body", this.body);
         // console.log("query", this.query);
-       // console.log("headers", this.request.headers);
+        // console.log("headers", this.request.headers);
         if (this.request.headers['blockbywall'] != null || this.query.blockByWall == 'true') {
             return textResult("blocked by wall");
+        }
+        else if (this.request.headers['throwException']) {
+            throw "thrown by wall";
         }
         return null;
     }

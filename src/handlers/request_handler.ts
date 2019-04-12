@@ -107,62 +107,75 @@ export class RequestHandler extends PostHandler {
         this.response.sendDate = true;
     }
 
-    private onRouteMatched_() {
-        try {
-            const actionInfo = this.routeMatchInfo_.actionInfo;
-            if (actionInfo == null) {
-                this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+    private async onRouteMatched_() {
+        const actionInfo = this.routeMatchInfo_.actionInfo;
+        if (actionInfo == null) {
+            this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+        }
+        else {
+            let shieldProtectionResult;
+            try {
+                shieldProtectionResult = await this.executeShieldsProtection_();
+            }
+            catch (ex) {
+                this.onErrorOccured(ex);
+                return;
+            }
+            const responseByShield = shieldProtectionResult.find(qry => qry != null);
+            if (responseByShield == null) {
+                try {
+                    await this.handlePostData();
+                }
+                catch (ex) {
+                    this.onBadRequest(ex);
+                    return;
+                }
+                let guardsCheckResult;
+                try {
+                    guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
+                }
+                catch (ex) {
+                    this.onErrorOccured(ex);
+                    return;
+                }
+                const responseByGuard = guardsCheckResult.find(qry => qry != null);
+                if (responseByGuard == null) {
+                    this.runController_();
+                }
+                else {
+                    this.onResultEvaluated(responseByGuard);
+                }
             }
             else {
-                this.executeShieldsProtection_().then(shieldProtectionResult => {
-                    const responseByShield = shieldProtectionResult.find(qry => qry != null);
-                    if (responseByShield == null) {
-                        this.handlePostData().then(() => {
-                            this.executeGuardsCheck_(actionInfo.guards).then(guardsCheckResult => {
-                                const responseByGuard = guardsCheckResult.find(qry => qry != null);
-                                if (responseByGuard == null) {
-                                    this.runController_();
-                                }
-                                else {
-                                    this.onResultEvaluated(responseByGuard);
-                                }
-                            });
-                        });
-                    }
-                    else {
-                        this.onResultEvaluated(responseByShield);
-                    }
-                });
+                this.onResultEvaluated(responseByShield);
             }
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
         }
     }
 
-    private execute_() {
+    private async execute_() {
+        // there are many methid being called here, which has chances of throwing error
+        // so using global level try block
         try {
             const urlDetail = url.parse(this.request.url, true);
             this.query_ = urlDetail.query;
             this.parseCookieFromRequest_();
-            this.runWallIncoming_().then(wallProtectionResult => {
-                const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
-                if (responseByWall == null) {
-                    const pathUrl = urlDetail.pathname;
-                    const requestMethod = this.request.method as HTTP_METHOD;
-                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-                    if (this.routeMatchInfo_ == null) { // no route matched
-                        // it may be a file or folder then
-                        this.handleFileRequest(pathUrl);
-                    }
-                    else {
-                        this.onRouteMatched_();
-                    }
+            const wallProtectionResult = await this.runWallIncoming_();
+            const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
+            if (responseByWall == null) {
+                const pathUrl = urlDetail.pathname;
+                const requestMethod = this.request.method as HTTP_METHOD;
+                this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
+                if (this.routeMatchInfo_ == null) { // no route matched
+                    // it may be a file or folder then
+                    this.handleFileRequest(pathUrl);
                 }
                 else {
-                    this.onResultEvaluated(responseByWall);
+                    this.onRouteMatched_();
                 }
-            });
+            }
+            else {
+                this.onResultEvaluated(responseByWall);
+            }
         }
         catch (ex) {
             this.onErrorOccured(ex);
@@ -175,11 +188,10 @@ export class RequestHandler extends PostHandler {
         }
         else if (Global.shouldParsePost === true) {
             try {
-                const body = await this.parsePostData();
-                this.body = body;
+                this.body = await this.parsePostData();
             }
             catch (ex) {
-                this.onBadRequest(ex);
+                return Promise.reject(ex);
             }
         }
     }

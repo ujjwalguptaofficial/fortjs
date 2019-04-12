@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.5.5 - 11/04/2019
+ * @license :fortjs - V1.5.5 - 12/04/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1766,90 +1766,133 @@ var RequestHandler = /** @class */ (function (_super) {
         this.response.sendDate = true;
     };
     RequestHandler.prototype.onRouteMatched_ = function () {
-        var _this = this;
-        try {
-            var actionInfo_1 = this.routeMatchInfo_.actionInfo;
-            if (actionInfo_1 == null) {
-                this.onMethodNotAllowed(this.routeMatchInfo_.allows);
-            }
-            else {
-                this.executeShieldsProtection_().then(function (shieldProtectionResult) {
-                    var responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
-                    if (responseByShield == null) {
-                        _this.handlePostData().then(function () {
-                            _this.executeGuardsCheck_(actionInfo_1.guards).then(function (guardsCheckResult) {
-                                var responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
-                                if (responseByGuard == null) {
-                                    _this.runController_();
-                                }
-                                else {
-                                    _this.onResultEvaluated(responseByGuard);
-                                }
-                            });
-                        });
-                    }
-                    else {
-                        _this.onResultEvaluated(responseByShield);
-                    }
-                });
-            }
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
-        }
-    };
-    RequestHandler.prototype.execute_ = function () {
-        var _this = this;
-        try {
-            var urlDetail_1 = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
-            this.query_ = urlDetail_1.query;
-            this.parseCookieFromRequest_();
-            this.runWallIncoming_().then(function (wallProtectionResult) {
-                var responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
-                if (responseByWall == null) {
-                    var pathUrl = urlDetail_1.pathname;
-                    var requestMethod = _this.request.method;
-                    _this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
-                    if (_this.routeMatchInfo_ == null) { // no route matched
-                        // it may be a file or folder then
-                        _this.handleFileRequest(pathUrl);
-                    }
-                    else {
-                        _this.onRouteMatched_();
-                    }
-                }
-                else {
-                    _this.onResultEvaluated(responseByWall);
+        return __awaiter(this, void 0, void 0, function () {
+            var actionInfo, shieldProtectionResult, ex_1, responseByShield, ex_2, guardsCheckResult, ex_3, responseByGuard;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        actionInfo = this.routeMatchInfo_.actionInfo;
+                        if (!(actionInfo == null)) return [3 /*break*/, 1];
+                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+                        return [3 /*break*/, 15];
+                    case 1:
+                        shieldProtectionResult = void 0;
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, this.executeShieldsProtection_()];
+                    case 3:
+                        shieldProtectionResult = _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
+                        ex_1 = _a.sent();
+                        this.onErrorOccured(ex_1);
+                        return [2 /*return*/];
+                    case 5:
+                        responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
+                        if (!(responseByShield == null)) return [3 /*break*/, 14];
+                        _a.label = 6;
+                    case 6:
+                        _a.trys.push([6, 8, , 9]);
+                        return [4 /*yield*/, this.handlePostData()];
+                    case 7:
+                        _a.sent();
+                        return [3 /*break*/, 9];
+                    case 8:
+                        ex_2 = _a.sent();
+                        this.onBadRequest(ex_2);
+                        return [2 /*return*/];
+                    case 9:
+                        guardsCheckResult = void 0;
+                        _a.label = 10;
+                    case 10:
+                        _a.trys.push([10, 12, , 13]);
+                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
+                    case 11:
+                        guardsCheckResult = _a.sent();
+                        return [3 /*break*/, 13];
+                    case 12:
+                        ex_3 = _a.sent();
+                        this.onErrorOccured(ex_3);
+                        return [2 /*return*/];
+                    case 13:
+                        responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
+                        if (responseByGuard == null) {
+                            this.runController_();
+                        }
+                        else {
+                            this.onResultEvaluated(responseByGuard);
+                        }
+                        return [3 /*break*/, 15];
+                    case 14:
+                        this.onResultEvaluated(responseByShield);
+                        _a.label = 15;
+                    case 15: return [2 /*return*/];
                 }
             });
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
-        }
+        });
+    };
+    RequestHandler.prototype.execute_ = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var urlDetail, wallProtectionResult, responseByWall, pathUrl, requestMethod, ex_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
+                        this.query_ = urlDetail.query;
+                        this.parseCookieFromRequest_();
+                        return [4 /*yield*/, this.runWallIncoming_()];
+                    case 1:
+                        wallProtectionResult = _a.sent();
+                        responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
+                        if (responseByWall == null) {
+                            pathUrl = urlDetail.pathname;
+                            requestMethod = this.request.method;
+                            this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
+                            if (this.routeMatchInfo_ == null) { // no route matched
+                                // it may be a file or folder then
+                                this.handleFileRequest(pathUrl);
+                            }
+                            else {
+                                this.onRouteMatched_();
+                            }
+                        }
+                        else {
+                            this.onResultEvaluated(responseByWall);
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_4 = _a.sent();
+                        this.onErrorOccured(ex_4);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
     };
     RequestHandler.prototype.handlePostData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var body, ex_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a, ex_5;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if (!(this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
                         this.body = {};
                         return [3 /*break*/, 5];
                     case 1:
                         if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 5];
-                        _a.label = 2;
+                        _b.label = 2;
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
+                        _b.trys.push([2, 4, , 5]);
+                        _a = this;
                         return [4 /*yield*/, this.parsePostData()];
                     case 3:
-                        body = _a.sent();
-                        this.body = body;
+                        _a.body = _b.sent();
                         return [3 /*break*/, 5];
                     case 4:
-                        ex_1 = _a.sent();
-                        this.onBadRequest(ex_1);
-                        return [3 /*break*/, 5];
+                        ex_5 = _b.sent();
+                        return [2 /*return*/, Promise.reject(ex_5)];
                     case 5: return [2 /*return*/];
                 }
             });
