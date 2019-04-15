@@ -28,13 +28,24 @@ describe("wall test", () => {
         })
     })
 
+    it("/thrown by wall using header", (done) => {
+        const body = {
+            throwException: 'true'
+        }
+        request.post('/default/getdata').set(body).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            done();
+        })
+    })
+
 
     it("/getdata", (done) => {
         request.get('/default/getdata').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('reqCount').equal(61);
+            expect(res.body).haveOwnProperty('reqCount').equal(62);
             done();
         })
     })

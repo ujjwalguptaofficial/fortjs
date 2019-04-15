@@ -27,7 +27,7 @@ export class ControllerHandler extends FileHandler {
         }
     }
 
-    private finishResponse_(negotiateMimeType: MIME_TYPE) {
+    private endResponse_(negotiateMimeType: MIME_TYPE) {
         this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
             { [__ContentType]: negotiateMimeType });
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
@@ -45,7 +45,7 @@ export class ControllerHandler extends FileHandler {
         const key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
         if (key != null) {
             this.controllerResult_.responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
-            this.finishResponse_(negotiateMimeType);
+            this.endResponse_(negotiateMimeType);
         }
         else {
             this.onNotAcceptableRequest();
@@ -80,7 +80,7 @@ export class ControllerHandler extends FileHandler {
                         const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
                         const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                         if (negotiateMimeType != null) {
-                            this.finishResponse_(negotiateMimeType);
+                            this.endResponse_(negotiateMimeType);
                         }
                         else {
                             this.onNotAcceptableRequest();

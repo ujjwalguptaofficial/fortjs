@@ -21,9 +21,11 @@ export class RequestLogger extends Wall {
         if (this.request.headers['blockbywall'] != null || this.query.blockByWall == 'true') {
             return textResult("blocked by wall");
         }
-        else if (this.request.headers['throwException']) {
-            throw "thrown by wall";
+        else if (this.request.headers['throwexception'] != null) {
+            console.log("throwing by wall");
+            throw new Error("thrown by wall");
         }
+        console.log("headers",this.request.headers['throwexception']);
         return null;
     }
 }

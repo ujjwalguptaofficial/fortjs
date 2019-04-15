@@ -1075,7 +1075,7 @@ var ControllerHandler = /** @class */ (function (_super) {
                 return this.controllerResult_.responseData;
         }
     };
-    ControllerHandler.prototype.finishResponse_ = function (negotiateMimeType) {
+    ControllerHandler.prototype.endResponse_ = function (negotiateMimeType) {
         var _a;
         this.response.writeHead(this.controllerResult_.statusCode || _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_0__["__ContentType"]] = negotiateMimeType, _a));
         this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
@@ -1090,7 +1090,7 @@ var ControllerHandler = /** @class */ (function (_super) {
         var key = Object.keys(this.controllerResult_.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
         if (key != null) {
             this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
-            this.finishResponse_(negotiateMimeType);
+            this.endResponse_(negotiateMimeType);
         }
         else {
             this.onNotAcceptableRequest();
@@ -1121,7 +1121,7 @@ var ControllerHandler = /** @class */ (function (_super) {
                         var contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
                         var negotiateMimeType = _this.getContentTypeFromNegotiation(contentType);
                         if (negotiateMimeType != null) {
-                            _this.finishResponse_(negotiateMimeType);
+                            _this.endResponse_(negotiateMimeType);
                         }
                         else {
                             _this.onNotAcceptableRequest();
