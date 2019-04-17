@@ -143,4 +143,28 @@ describe("/user", () => {
             done();
         })
     })
+
+    it("/thrown by shield using header", (done) => {
+        const body = {
+            throwexceptionbyshield: 'true'
+        }
+        request.post('/user/').set(body).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res.text).to.contains("thrown by shield")
+            done();
+        })
+    })
+
+    // it("/thrown by guard using header", (done) => {
+    //     const body = {
+    //         throwexceptionbyguard: 'true'
+    //     }
+    //     request.post('/user/').set(body).end((err, res) => {
+    //         expect(err).to.be.null;
+    //         expect(res).to.have.status(500);
+    //         expect(res.text).to.contains("thrown by guard")
+    //         done();
+    //     })
+    // })
 });

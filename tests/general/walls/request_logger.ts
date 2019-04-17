@@ -22,10 +22,8 @@ export class RequestLogger extends Wall {
             return textResult("blocked by wall");
         }
         else if (this.request.headers['throwexception'] != null) {
-            console.log("throwing by wall");
             throw new Error("thrown by wall");
         }
-        console.log("headers",this.request.headers['throwexception']);
         return null;
     }
 }

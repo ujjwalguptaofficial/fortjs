@@ -5,7 +5,11 @@ import { validate } from "class-validator";
 export class ModelUserGuard extends Guard {
 
     async check() {
-        //console.log("data", this.data);
+        // throw new Error("thrown by guard");
+        console.log("data", this.data);
+        if (this.request.headers['throwexceptionbyguard'] != null) {
+            throw new Error("thrown by guard");
+        }
         const params = this.param;
         const query = this.query;
         const data = this.data;

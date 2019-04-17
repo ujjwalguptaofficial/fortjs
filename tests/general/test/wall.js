@@ -35,6 +35,7 @@ describe("wall test", () => {
         request.post('/default/getdata').set(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(500);
+            expect(res.text).to.contains("thrown by wall")
             done();
         })
     })
@@ -45,7 +46,7 @@ describe("wall test", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('reqCount').equal(62);
+            expect(res.body).haveOwnProperty('reqCount').equal(63);
             done();
         })
     })

@@ -40,7 +40,7 @@ export class DefaultController extends Controller {
     @Worker([HTTP_METHOD.Get])
     @Route("/login")
     async getloginForm() {
-        const result = viewResult("login_form.html");
+        const result = viewResult("default/login_form.html");
         return result;
     }
 
