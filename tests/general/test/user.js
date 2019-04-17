@@ -121,6 +121,18 @@ describe("/user", () => {
         })
     })
 
+    it("/thrown by guard using header", (done) => {
+        const body = {
+            throwexceptionbyguard: 'true'
+        }
+        request.post('/user/').set(body).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res.text).to.contains("thrown by guard")
+            done();
+        })
+    })
+
     it("/logout", (done) => {
         request.get('/default/logout').end((err, res) => {
             expect(err).to.be.null;
@@ -156,15 +168,5 @@ describe("/user", () => {
         })
     })
 
-    // it("/thrown by guard using header", (done) => {
-    //     const body = {
-    //         throwexceptionbyguard: 'true'
-    //     }
-    //     request.post('/user/').set(body).end((err, res) => {
-    //         expect(err).to.be.null;
-    //         expect(res).to.have.status(500);
-    //         expect(res.text).to.contains("thrown by guard")
-    //         done();
-    //     })
-    // })
+  
 });

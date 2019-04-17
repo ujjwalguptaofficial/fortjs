@@ -6,7 +6,7 @@ export class ModelUserGuard extends Guard {
 
     async check() {
         // throw new Error("thrown by guard");
-        console.log("data", this.data);
+        // console.log("data", this.data);
         if (this.request.headers['throwexceptionbyguard'] != null) {
             throw new Error("thrown by guard");
         }
