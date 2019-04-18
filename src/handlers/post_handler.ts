@@ -60,25 +60,12 @@ export class PostHandler extends ControllerHandler {
             contentType = ContentType.parse(contentType as string).type;
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
-            let result;
-            try {
-                result = await this.parseMultiPartData_();
-            }
-            catch (ex) {
-                return Promise.reject(ex);
-            }
+            const result = await this.parseMultiPartData_();
             postData = result.field;
             this.file.files = result.file as any;
         }
         else {
-            let bodyBuffer;
-            try {
-                bodyBuffer = await this.getPostRawData_();
-            }
-            catch (ex) {
-                return Promise.reject(ex);
-            }
-
+            const bodyBuffer = await this.getPostRawData_();
             const bodyDataAsString = bodyBuffer.toString();
             switch (contentType) {
                 case MIME_TYPE.Json:
@@ -86,7 +73,8 @@ export class PostHandler extends ControllerHandler {
                         postData = JSON.parse(bodyDataAsString);
                     }
                     catch (ex) {
-                        return Promise.reject("Post data is invalid");
+                        // tslint:disable-next-line
+                        throw "Post data is invalid";
                     }
                     break;
                 case MIME_TYPE.Text:

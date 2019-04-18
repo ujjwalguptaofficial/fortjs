@@ -187,12 +187,7 @@ export class RequestHandler extends PostHandler {
             this.body = {};
         }
         else if (Global.shouldParsePost === true) {
-            try {
-                this.body = await this.parsePostData();
-            }
-            catch (ex) {
-                return Promise.reject(ex);
-            }
+            this.body = await this.parsePostData();
         }
     }
 
