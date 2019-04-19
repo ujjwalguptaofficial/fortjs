@@ -153,7 +153,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private async execute_() {
-        // there are many methid being called here, which has chances of throwing error
+        // there are many methods being called here, which has chances of throwing error
         // so using global level try block
         try {
             const urlDetail = url.parse(this.request.url, true);
