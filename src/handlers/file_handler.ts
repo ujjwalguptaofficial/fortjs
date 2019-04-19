@@ -120,27 +120,6 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    // protected async handleFileRequestForFolder(urlPath: string) {
-    //     try {
-    //         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
-    //         if (absFilePath != null) {
-    //             const fileInfo = await this.getFileStats_(absFilePath);
-    //             if (fileInfo != null && fileInfo.isDirectory() === true) {
-    //                 this.handleFileRequestForPath_(absFilePath);
-    //             }
-    //             else {
-    //                 this.onNotFound();
-    //             }
-    //         }
-    //         else {
-    //             this.onNotFound();
-    //         }
-    //     }
-    //     catch (ex) {
-    //         this.onErrorOccured(ex);
-    //     }
-    // }
-
     private isClientHasFreshFile_(lastModified: string, etagValue: string) {
         return fresh(this.request.headers, {
             'etag': etagValue,
