@@ -91,11 +91,19 @@ export class Fort {
         if (this.routes == null) {
             this.routes = [];
         }
+        // removing / from routes
         this.routes.forEach(route => {
             if (route.path[0] === "/") {
                 route.path = route.path.substr(1);
             }
             RouteHandler.addToRouterCollection(route);
+        });
+
+        // remove / from files routes
+        option.folders.forEach(folder => {
+            if (folder.alias[0] === "/" && folder.alias.length > 1) {
+                folder.alias = folder.alias.substr(1);
+            }
         });
 
         this.saveAppOption_(option);

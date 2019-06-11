@@ -22,7 +22,7 @@ const initServer = () => {
         defaultPath: "/default",
         port: 8080,
         folders: [{
-            alias: "contents",
+            alias: "/contents",
             path: contentsPath
         }, {
             alias: "dist",
