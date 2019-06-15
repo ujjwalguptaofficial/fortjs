@@ -21,9 +21,10 @@
   "scripts": {
     "lint": "tslint src/**/*.ts",
     "webpack": "webpack --config src/webpack.config.js",
-    "buildpack": "npm run lint && npm run build && npm pack",
-    "build": "npm run webpack",
-    "deploy": "NODE_ENV=production npm run buildpack"
+    "build": "npm run lint && npm run webpack",
+    "build:test": "npm run build && npm pack && npm run test",
+    "deploy": "NODE_ENV=production npm run buildpack",
+    "test": "node test_runner.js"
   },
   "author": "Ujjwal Gupta",
   "license": "MIT",

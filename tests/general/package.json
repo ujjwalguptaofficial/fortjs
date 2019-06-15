@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "install:lib": "npm i ../../fortjs-1.5.8.tgz --no-save",
+    "install:lib": "node installer.js",
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
     "build": "webpack --config webpack.config.js",
