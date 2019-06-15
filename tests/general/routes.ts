@@ -10,13 +10,13 @@ export const routes: ParentRoute[] = [{
     path: "/default"
 }, {
     controller: RandomController,
-    path: "/random"
+    path: "random"
 }, {
     controller: UserController,
     path: "/user"
 }, {
     controller: CookieController,
-    path: "/cookie"
+    path: "/cookie/"
 }, {
     controller: SessionController,
     path: "/session"

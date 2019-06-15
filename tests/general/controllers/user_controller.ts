@@ -107,7 +107,7 @@ export class UserController extends Controller {
     }
 
     @Worker()
-    @Route('/counter/shield')
+    @Route('/counter/shield/')
     async getCounter() {
         return jsonResult(this.data);
     }
