@@ -13,3 +13,4 @@ export * from './xml_helper';
 export * from "./get_mime_type_from_extension";
 export * from "./parse_match_route";
 export * from "./parse_cookie";
+export * from './add_route';

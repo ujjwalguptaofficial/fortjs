@@ -8,7 +8,7 @@ export class RouteHandler {
         return routerCollection;
     }
 
-    static addToRouterCollection(value: ParentRoute) {
+    static addControllerRoute(value: ParentRoute) {
         const route = routerCollection.find(x => x.controllerName === value.controller.name);
         if (route == null) {
             routerCollection.push({
@@ -105,7 +105,7 @@ export class RouteHandler {
         }
     }
 
-    static addPattern(pattern: string, className: string, actionName: string) {
+    static addWorkerRoute(routePattern: string, className: string, actionName: string) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({
@@ -113,7 +113,7 @@ export class RouteHandler {
                     workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: routePattern
                 }],
                 controller: null,
                 controllerName: className,
@@ -123,17 +123,17 @@ export class RouteHandler {
         }
         else {
             const savedAction = router.workers.find(val => val.workerName === actionName);
-            pattern = router.path == null ? pattern : `/${router.path}${pattern}`;
+            routePattern = router.path == null ? routePattern : `/${router.path}${routePattern}`;
             if (savedAction == null) {
                 router.workers.push({
                     workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: routePattern
                 });
             }
             else {
-                savedAction.pattern = pattern;
+                savedAction.pattern = routePattern;
             }
         }
     }

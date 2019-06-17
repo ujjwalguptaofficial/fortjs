@@ -99,7 +99,7 @@ export class Fort {
             if (route.path[route.path.length - 1] === "/") {
                 route.path = route.path.substr(0, route.path.length - 1);
             }
-            RouteHandler.addToRouterCollection(route);
+            RouteHandler.addControllerRoute(route);
         });
 
         // remove / from files routes

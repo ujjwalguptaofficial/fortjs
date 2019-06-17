@@ -8,6 +8,6 @@ export const Route = (format: string): MethodDecorator => {
         if (format != null && format !== '/' && format[format.length - 1] === '/') {
             format = format.substr(0, format.length - 1);
         }
-        RouteHandler.addPattern(format, className, methodName);
+        RouteHandler.addWorkerRoute(format, className, methodName);
     });
 };
