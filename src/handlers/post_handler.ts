@@ -14,14 +14,14 @@ export class PostHandler extends ControllerHandler {
     protected body: any;
     protected file: FileManager = new FileManager();
 
-    private getPostRawData_() {
+    private getPostRawData_(): Promise<string> {
         const body = [];
         return promise((res, rej) => {
             this.request.on('data', (chunk) => {
                 body.push(chunk);
             }).on('end', () => {
                 const bodyBuffer = Buffer.concat(body);
-                res(bodyBuffer);
+                res(bodyBuffer.toString());
             }).on("error", function (err) {
                 rej(err);
             });
@@ -65,8 +65,7 @@ export class PostHandler extends ControllerHandler {
             this.file.files = result.file as any;
         }
         else {
-            const bodyBuffer = await this.getPostRawData_();
-            const bodyDataAsString = bodyBuffer.toString();
+            const bodyDataAsString = await this.getPostRawData_();
             switch (contentType) {
                 case MIME_TYPE.Json:
                     try {

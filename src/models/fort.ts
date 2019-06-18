@@ -10,7 +10,7 @@ import { RequestHandler } from "../handlers";
 import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
 import { LogHelper, promise } from "../helpers";
-import { GenericSessionProvider } from "../generics";
+import { GenericSessionProvider, GenericXmlParser } from "../generics";
 
 export class Fort {
     routes: ParentRoute[] = [];
@@ -73,7 +73,7 @@ export class Fort {
         Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
         Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
-        Global.xmlParser = this.xmlParser;
+        Global.xmlParser = this.xmlParser == null ? GenericXmlParser : this.xmlParser;
         Global.viewPath = option.viewPath == null ? "views" : option.viewPath;
     }
 

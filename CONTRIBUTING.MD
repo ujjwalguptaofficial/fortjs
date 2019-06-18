@@ -13,7 +13,7 @@ Thing that should not be change -
 7. tslint 
 8. do not commit anything in dist folder        
 
-These are the files which contains some config & makes the jsstore bug free thats why we dont want user to change as thing may become messy. But we understand that sometimes you need to change these things, so in that case please give a description files name with reason of why you need to change in the pull request.
+These are the files which contains some config & makes the fortjs bug free thats why we dont want user to change as thing may become messy. But we understand that sometimes you need to change these things, so in that case please give a description files name with reason of why you need to change in the pull request.
 
 ## Documentation
 
@@ -35,7 +35,7 @@ If you have anything that helps users learn fortjs and you want them to list on 
 
 Setting up fortjs in your local is very easy - 
 
-* Just fork and clone from your repo list or just clone from jsstore repos
+* Just fork and clone from your repo list or just clone from fortjs repos
 * Run npm install - this will install all dependencies
 * There are multiple commands that you can see in package.json.
 
