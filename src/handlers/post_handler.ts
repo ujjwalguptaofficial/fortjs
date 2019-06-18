@@ -1,5 +1,5 @@
 import { ControllerHandler } from "./controller_handler";
-import { promise } from "../helpers";
+import { promise, JsonHelper } from "../helpers";
 import { __ContentType } from "../constant";
 import { MIME_TYPE } from "../enums";
 import * as ContentType from "content-type";
@@ -68,13 +68,7 @@ export class PostHandler extends ControllerHandler {
             const bodyDataAsString = await this.getPostRawData_();
             switch (contentType) {
                 case MIME_TYPE.Json:
-                    try {
-                        postData = JSON.parse(bodyDataAsString);
-                    }
-                    catch (ex) {
-                        // tslint:disable-next-line
-                        throw "Post data is invalid";
-                    }
+                    postData = JsonHelper.parse(bodyDataAsString);
                     break;
                 case MIME_TYPE.Text:
                 case MIME_TYPE.Html:

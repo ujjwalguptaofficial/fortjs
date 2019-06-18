@@ -13,6 +13,7 @@ export declare class RequestHandlerHelper {
     protected getContentTypeFromNegotiation(type: MIME_TYPE): MIME_TYPE;
     protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]): MIME_TYPE;
     private getAvailableTypes_;
+    private onExceptionOccured_;
     protected onBadRequest(error: any): Promise<void>;
     protected onForbiddenRequest(): Promise<void>;
     protected onNotAcceptableRequest(): Promise<void>;

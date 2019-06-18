@@ -7,6 +7,7 @@ import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
 import { Util } from "../util";
+import { JsonHelper } from "../helpers";
 
 
 export class RequestHandlerHelper {
@@ -59,60 +60,71 @@ export class RequestHandlerHelper {
         return null;
     }
 
+    private onExceptionOccured_(ex) {
+        this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(JsonHelper.stringify(ex));
+    }
+
     protected async onBadRequest(error) {
+        let errMessage;
         try {
-            const errMessage = await new Global.errorHandler().onBadRequest(error);
-            this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(errMessage);
+            errMessage = await new Global.errorHandler().onBadRequest(error);
         }
         catch (ex) {
-            this.response.end(JSON.stringify(ex));
+            return this.onExceptionOccured_(ex);
         }
+        this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(errMessage);
     }
 
     protected async onForbiddenRequest() {
+        let errMessage;
         try {
-            const errMessage = await new Global.errorHandler().onForbiddenRequest();
-            this.response.writeHead(HTTP_STATUS_CODE.Forbidden, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(errMessage);
+            errMessage = await new Global.errorHandler().onForbiddenRequest();
         }
-        catch (err) {
-            this.response.end(JSON.stringify(err));
+        catch (ex) {
+            return this.onExceptionOccured_(ex);
         }
+        this.response.writeHead(HTTP_STATUS_CODE.Forbidden, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(errMessage);
     }
 
     protected async onNotAcceptableRequest() {
+        let errMessage;
         try {
-            const errMessage = await new Global.errorHandler().onNotAcceptableRequest();
-            this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(errMessage);
+            errMessage = await new Global.errorHandler().onNotAcceptableRequest();
         }
-        catch (err) {
-            this.response.end(JSON.stringify(err));
+        catch (ex) {
+            return this.response.end(JsonHelper.stringify(ex));
         }
+        this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(errMessage);
     }
 
     protected async onNotFound() {
+        let errMessage;
         try {
-            const errMessage = await new Global.errorHandler().onNotFound(this.request.url);
-            this.response.writeHead(HTTP_STATUS_CODE.NotFound, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(errMessage);
+            errMessage = await new Global.errorHandler().onNotFound(this.request.url);
         }
-        catch (err) {
-            this.response.end(JSON.stringify(err));
+        catch (ex) {
+            return this.onExceptionOccured_(ex);
         }
+        this.response.writeHead(HTTP_STATUS_CODE.NotFound, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(errMessage);
     }
 
     protected async onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
+        let errMessage;
         try {
-            const errMessage = await new Global.errorHandler().onMethodNotAllowed();
-            this.response.setHeader("Allow", allowedMethods.join(","));
-            this.response.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(errMessage);
+            errMessage = await new Global.errorHandler().onMethodNotAllowed();
+
         }
-        catch (err) {
-            this.response.end(JSON.stringify(err));
+        catch (ex) {
+            return this.onExceptionOccured_(ex);
         }
+        this.response.setHeader("Allow", allowedMethods.join(","));
+        this.response.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(errMessage);
     }
 
     protected async onErrorOccured(error) {
@@ -121,14 +133,14 @@ export class RequestHandlerHelper {
                 message: error
             } as IException;
         }
-
+        let errMessage;
         try {
-            const result = await new Global.errorHandler().onServerError(error);
-            this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(result);
+            errMessage = await new Global.errorHandler().onServerError(error);
         }
-        catch (err) {
-            this.response.end(JSON.stringify(err));
+        catch (ex) {
+            return this.onExceptionOccured_(ex);
         }
+        this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end(errMessage);
     }
 }

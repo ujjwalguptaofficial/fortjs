@@ -1892,13 +1892,7 @@ var PostHandler = /** @class */ (function (_super) {
                         bodyDataAsString = _a.sent();
                         switch (contentType) {
                             case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
-                                try {
-                                    postData = JSON.parse(bodyDataAsString);
-                                }
-                                catch (ex) {
-                                    // tslint:disable-next-line
-                                    throw "Post data is invalid";
-                                }
+                                postData = _helpers__WEBPACK_IMPORTED_MODULE_1__["JsonHelper"].parse(bodyDataAsString);
                                 break;
                             case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
                             case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
@@ -2243,6 +2237,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! negotiator */ "negotiator");
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util */ "./src/util.ts");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -2278,6 +2273,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 
 
 
@@ -2329,6 +2325,11 @@ var RequestHandlerHelper = /** @class */ (function () {
         }
         return null;
     };
+    RequestHandlerHelper.prototype.onExceptionOccured_ = function (ex) {
+        var _a;
+        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
+        this.response.end(_helpers__WEBPACK_IMPORTED_MODULE_5__["JsonHelper"].stringify(ex));
+    };
     RequestHandlerHelper.prototype.onBadRequest = function (error) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, errMessage, ex_1;
@@ -2339,21 +2340,21 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onBadRequest(error)];
                     case 1:
                         errMessage = _b.sent();
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
                         return [3 /*break*/, 3];
                     case 2:
                         ex_1 = _b.sent();
-                        this.response.end(JSON.stringify(ex_1));
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [2 /*return*/, this.onExceptionOccured_(ex_1)];
+                    case 3:
+                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].BadRequest, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [2 /*return*/];
                 }
             });
         });
     };
     RequestHandlerHelper.prototype.onForbiddenRequest = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, err_1;
+            var _a, errMessage, ex_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -2361,21 +2362,21 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onForbiddenRequest()];
                     case 1:
                         errMessage = _b.sent();
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
                         return [3 /*break*/, 3];
                     case 2:
-                        err_1 = _b.sent();
-                        this.response.end(JSON.stringify(err_1));
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        ex_2 = _b.sent();
+                        return [2 /*return*/, this.onExceptionOccured_(ex_2)];
+                    case 3:
+                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [2 /*return*/];
                 }
             });
         });
     };
     RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, err_2;
+            var _a, errMessage, ex_3;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -2383,21 +2384,21 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onNotAcceptableRequest()];
                     case 1:
                         errMessage = _b.sent();
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
                         return [3 /*break*/, 3];
                     case 2:
-                        err_2 = _b.sent();
-                        this.response.end(JSON.stringify(err_2));
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        ex_3 = _b.sent();
+                        return [2 /*return*/, this.response.end(_helpers__WEBPACK_IMPORTED_MODULE_5__["JsonHelper"].stringify(ex_3))];
+                    case 3:
+                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotAcceptable, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [2 /*return*/];
                 }
             });
         });
     };
     RequestHandlerHelper.prototype.onNotFound = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, err_3;
+            var _a, errMessage, ex_4;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -2405,21 +2406,21 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onNotFound(this.request.url)];
                     case 1:
                         errMessage = _b.sent();
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotFound, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
                         return [3 /*break*/, 3];
                     case 2:
-                        err_3 = _b.sent();
-                        this.response.end(JSON.stringify(err_3));
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        ex_4 = _b.sent();
+                        return [2 /*return*/, this.onExceptionOccured_(ex_4)];
+                    case 3:
+                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotFound, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [2 /*return*/];
                 }
             });
         });
     };
     RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, err_4;
+            var _a, errMessage, ex_5;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -2427,22 +2428,22 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onMethodNotAllowed()];
                     case 1:
                         errMessage = _b.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        ex_5 = _b.sent();
+                        return [2 /*return*/, this.onExceptionOccured_(ex_5)];
+                    case 3:
                         this.response.setHeader("Allow", allowedMethods.join(","));
                         this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
                         this.response.end(errMessage);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        err_4 = _b.sent();
-                        this.response.end(JSON.stringify(err_4));
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
     };
     RequestHandlerHelper.prototype.onErrorOccured = function (error) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, result, err_5;
+            var _a, errMessage, ex_6;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -2456,15 +2457,15 @@ var RequestHandlerHelper = /** @class */ (function () {
                         _b.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onServerError(error)];
                     case 2:
-                        result = _b.sent();
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(result);
+                        errMessage = _b.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        err_5 = _b.sent();
-                        this.response.end(JSON.stringify(err_5));
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        ex_6 = _b.sent();
+                        return [2 /*return*/, this.onExceptionOccured_(ex_6)];
+                    case 4:
+                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
+                        this.response.end(errMessage);
+                        return [2 /*return*/];
                 }
             });
         });
@@ -2894,7 +2895,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2943,6 +2944,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _parse_cookie__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./parse_cookie */ "./src/helpers/parse_cookie.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseCookie", function() { return _parse_cookie__WEBPACK_IMPORTED_MODULE_14__["parseCookie"]; });
+
+/* harmony import */ var _json_helper__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./json_helper */ "./src/helpers/json_helper.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "JsonHelper", function() { return _json_helper__WEBPACK_IMPORTED_MODULE_15__["JsonHelper"]; });
+
 
 
 
@@ -2993,6 +2998,38 @@ __webpack_require__.r(__webpack_exports__);
 var isEnvProduction = function () {
     return process.env.NODE_ENV === "production";
 };
+
+
+/***/ }),
+
+/***/ "./src/helpers/json_helper.ts":
+/*!************************************!*\
+  !*** ./src/helpers/json_helper.ts ***!
+  \************************************/
+/*! exports provided: JsonHelper */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonHelper", function() { return JsonHelper; });
+var JsonHelper = /** @class */ (function () {
+    function JsonHelper() {
+    }
+    JsonHelper.parse = function (value) {
+        try {
+            return JSON.parse(value);
+        }
+        catch (ex) {
+            // tslint:disable-next-line
+            throw "Post data is invalid";
+        }
+    };
+    JsonHelper.stringify = function (value) {
+        return JSON.stringify(value);
+    };
+    return JsonHelper;
+}());
+
 
 
 /***/ }),
@@ -3454,7 +3491,7 @@ var XmlHelper = /** @class */ (function () {
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, MustacheViewEngine, MemorySessionProvider */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, MustacheViewEngine, MemorySessionProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3526,6 +3563,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseAndMatchRoute", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseCookie", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["parseCookie"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "JsonHelper", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["JsonHelper"]; });
 
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models */ "./src/models/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _models__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
