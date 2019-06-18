@@ -1,8 +1,11 @@
 import { XmlParser } from "../abstracts";
+import { IException } from "../interfaces";
 
 export class GenericXmlParser implements XmlParser {
     async parse(xml: string): Promise<string> {
         // tslint:disable-next-line
-        throw "no xml parser configured";
+        throw {
+            message: "no xml parser configured"
+        } as IException;
     }
 }

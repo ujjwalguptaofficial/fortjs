@@ -1,3 +1,5 @@
+import { IException } from "../interfaces";
+
 export class JsonHelper {
     static parse(value: string) {
         try {
@@ -5,7 +7,9 @@ export class JsonHelper {
         }
         catch (ex) {
             // tslint:disable-next-line
-            throw "Post data is invalid";
+            throw {
+                message: "Post data is invalid"
+            } as IException;
         }
     }
 

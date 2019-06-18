@@ -1309,7 +1309,9 @@ var GenericXmlParser = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 // tslint:disable-next-line
-                throw "no xml parser configured";
+                throw {
+                    message: "no xml parser configured"
+                };
             });
         });
     };
@@ -3029,7 +3031,9 @@ var JsonHelper = /** @class */ (function () {
         }
         catch (ex) {
             // tslint:disable-next-line
-            throw "Post data is invalid";
+            throw {
+                message: "Post data is invalid"
+            };
         }
     };
     JsonHelper.stringify = function (value) {

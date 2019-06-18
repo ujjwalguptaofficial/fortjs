@@ -84,7 +84,7 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('content-type', 'text/html');
-            expect(res.text).to.be.equal(badRequestMsg);
+            expect(res.text).to.contains("message : Post data is invalid");
             done();
         })
     })
@@ -108,6 +108,17 @@ describe("/default", () => {
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'application/json');
             expect(res.text).to.be.equal('{"key":"hello"}');
+            done();
+        })
+    });
+
+    it('/post with xml', (done) => {
+        const data = `<?xml version="1.0" encoding="UTF-8" ?>
+        <key>hello</key>`
+        request.post('/default/post').type('application/xml').send(data).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(400);
+            expect(res.text).to.contains('message : no xml parser configured');
             done();
         })
     });

@@ -15,7 +15,6 @@ export class LogHelper implements IError {
     throw() {
         const errMsg = this.get();
         throw JSON.stringify(errMsg);
-
     }
 
     static log(msg) {
