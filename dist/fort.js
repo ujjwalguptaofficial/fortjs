@@ -2895,7 +2895,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlace, removeFirstSlace */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2947,6 +2947,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _json_helper__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./json_helper */ "./src/helpers/json_helper.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "JsonHelper", function() { return _json_helper__WEBPACK_IMPORTED_MODULE_15__["JsonHelper"]; });
+
+/* harmony import */ var _remove_last_slace__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./remove_last_slace */ "./src/helpers/remove_last_slace.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeLastSlace", function() { return _remove_last_slace__WEBPACK_IMPORTED_MODULE_16__["removeLastSlace"]; });
+
+/* harmony import */ var _remove_first_slace__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./remove_first_slace */ "./src/helpers/remove_first_slace.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlace", function() { return _remove_first_slace__WEBPACK_IMPORTED_MODULE_17__["removeFirstSlace"]; });
+
+
 
 
 
@@ -3162,17 +3170,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseAndMatchRoute", function() { return parseAndMatchRoute; });
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 /* harmony import */ var _global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../global */ "./src/global.ts");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! . */ "./src/helpers/index.ts");
+
 
 
 var parseAndMatchRoute = function (url, reqMethod) {
-    var urlLength = url.length;
-    // removing / from url;
-    if (url[urlLength - 1] === "/") {
-        url = url.substr(0, urlLength - 1);
-    }
+    url = Object(___WEBPACK_IMPORTED_MODULE_2__["removeLastSlace"])(url);
     // add default path if url is /
     if (url === "") {
-        url += _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath;
+        url = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].defaultPath;
     }
     var urlParts = url.split("/");
     var matchedRoute = {
@@ -3297,6 +3303,49 @@ var redirectResult = function (url) {
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Redirect,
         shouldRedirect: true
     };
+};
+
+
+/***/ }),
+
+/***/ "./src/helpers/remove_first_slace.ts":
+/*!*******************************************!*\
+  !*** ./src/helpers/remove_first_slace.ts ***!
+  \*******************************************/
+/*! exports provided: removeFirstSlace */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlace", function() { return removeFirstSlace; });
+var removeFirstSlace = function (value) {
+    // remove / from string at 0th index
+    if (value[0] === "/") {
+        return value.substr(1);
+    }
+    return value;
+};
+
+
+/***/ }),
+
+/***/ "./src/helpers/remove_last_slace.ts":
+/*!******************************************!*\
+  !*** ./src/helpers/remove_last_slace.ts ***!
+  \******************************************/
+/*! exports provided: removeLastSlace */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeLastSlace", function() { return removeLastSlace; });
+var removeLastSlace = function (url) {
+    var urlLength = url.length;
+    // removing / from url;
+    if (url[urlLength - 1] === "/") {
+        return url.substr(0, urlLength - 1);
+    }
+    return url;
 };
 
 
@@ -3491,7 +3540,7 @@ var XmlHelper = /** @class */ (function () {
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, MustacheViewEngine, MemorySessionProvider */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlace, removeFirstSlace, ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, MustacheViewEngine, MemorySessionProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3565,6 +3614,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseCookie", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["parseCookie"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "JsonHelper", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["JsonHelper"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeLastSlace", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["removeLastSlace"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlace", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["removeFirstSlace"]; });
 
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models */ "./src/models/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _models__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });
@@ -3920,30 +3973,30 @@ var Fort = /** @class */ (function () {
         if (option == null) {
             option = {};
         }
-        if (option.defaultPath != null && option.defaultPath[0] === "/") {
-            option.defaultPath = option.defaultPath.substr(1);
+        if (option.defaultPath != null) {
+            option.defaultPath = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeFirstSlace"])(option.defaultPath);
         }
         if (this.routes == null) {
             this.routes = [];
         }
         // removing / from routes
         this.routes.forEach(function (route) {
-            if (route.path[0] === "/") {
-                route.path = route.path.substr(1);
-            }
-            if (route.path[route.path.length - 1] === "/") {
-                route.path = route.path.substr(0, route.path.length - 1);
-            }
+            route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeFirstSlace"])(route.path);
+            route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeLastSlace"])(route.path);
             _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
         });
         // remove / from files routes
         option.folders.forEach(function (folder) {
             var length = folder.alias.length;
-            if (folder.alias[0] === "/" && length > 1) {
-                folder.alias = folder.alias.substr(1);
-            }
-            if (length > 1 && folder.alias[length - 1] === "/") {
-                folder.alias = folder.alias.substr(0, length - 1);
+            if (length > 1) {
+                folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeFirstSlace"])(folder.alias);
+                folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeLastSlace"])(folder.alias);
+                // if (folder.alias[0] === "/") {
+                //     folder.alias = folder.alias.substr(1);
+                // }
+                // if (folder.alias[length - 1] === "/") {
+                //     folder.alias = folder.alias.substr(0, length - 1);
+                // }
             }
         });
         this.saveAppOption_(option);

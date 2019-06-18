@@ -9,7 +9,7 @@ import { __AppName } from "../constant";
 import { RequestHandler } from "../handlers";
 import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
-import { LogHelper, promise } from "../helpers";
+import { LogHelper, promise, removeLastSlace, removeFirstSlace } from "../helpers";
 import { GenericSessionProvider, GenericXmlParser } from "../generics";
 
 export class Fort {
@@ -84,8 +84,8 @@ export class Fort {
             };
         }
 
-        if (option.defaultPath != null && option.defaultPath[0] === "/") {
-            option.defaultPath = option.defaultPath.substr(1);
+        if (option.defaultPath != null) {
+            option.defaultPath = removeFirstSlace(option.defaultPath);
         }
 
         if (this.routes == null) {
@@ -93,24 +93,19 @@ export class Fort {
         }
         // removing / from routes
         this.routes.forEach(route => {
-            if (route.path[0] === "/") {
-                route.path = route.path.substr(1);
-            }
-            if (route.path[route.path.length - 1] === "/") {
-                route.path = route.path.substr(0, route.path.length - 1);
-            }
+            route.path = removeFirstSlace(route.path);
+            route.path = removeLastSlace(route.path);
             RouteHandler.addToRouterCollection(route);
         });
 
         // remove / from files routes
         option.folders.forEach(folder => {
             const length = folder.alias.length;
-            if (folder.alias[0] === "/" && length > 1) {
-                folder.alias = folder.alias.substr(1);
+            if (length > 1) {
+                folder.alias = removeFirstSlace(folder.alias);
+                folder.alias = removeLastSlace(folder.alias);
             }
-            if (length > 1 && folder.alias[length - 1] === "/") {
-                folder.alias = folder.alias.substr(0, length - 1);
-            }
+
         });
 
         this.saveAppOption_(option);

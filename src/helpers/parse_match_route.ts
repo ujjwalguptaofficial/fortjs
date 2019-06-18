@@ -2,18 +2,15 @@ import { RouteHandler } from "../handlers/route_handler";
 import { RouteMatch } from "../types/route_match";
 import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";
+import { removeLastSlace } from ".";
 
 
 export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
 
-    const urlLength = url.length;
-    // removing / from url;
-    if (url[urlLength - 1] === "/") {
-        url = url.substr(0, urlLength - 1);
-    }
+    url = removeLastSlace(url);
     // add default path if url is /
     if (url === "") {
-        url += Global.defaultPath;
+        url = Global.defaultPath;
     }
     const urlParts = url.split("/");
     const matchedRoute: RouteMatch = {
