@@ -2086,7 +2086,7 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 0:
                         actionInfo = this.routeMatchInfo_.actionInfo;
                         if (!(actionInfo == null)) return [3 /*break*/, 1];
-                        this.onMethodNotAllowed(this.routeMatchInfo_.allows);
+                        this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
                         return [3 /*break*/, 15];
                     case 1:
                         shieldProtectionResult = void 0;
@@ -3174,7 +3174,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var parseAndMatchRoute = function (url, reqMethod) {
+var parseAndMatchRoute = function (url, httpMethod) {
     url = Object(___WEBPACK_IMPORTED_MODULE_2__["removeLastSlace"])(url);
     // add default path if url is /
     if (url === "") {
@@ -3182,7 +3182,7 @@ var parseAndMatchRoute = function (url, reqMethod) {
     }
     var urlParts = url.split("/");
     var matchedRoute = {
-        allows: []
+        allowedHttpMethod: []
     };
     var firstPart = urlParts[1];
     var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
@@ -3193,14 +3193,14 @@ var parseAndMatchRoute = function (url, reqMethod) {
             var pattern_1 = "/" + route.path + "/";
             route.workers.every(function (action) {
                 if (action.pattern === pattern_1) {
-                    if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
+                    if (action.methodsAllowed.indexOf(httpMethod) >= 0) {
                         matchedRoute.actionInfo = action;
                         matchedRoute.params = {};
                         matchedRoute.shields = route.shields;
                         return false;
                     }
                     else {
-                        matchedRoute.allows = matchedRoute.allows.concat(action.methodsAllowed);
+                        matchedRoute.allowedHttpMethod = matchedRoute.allowedHttpMethod.concat(action.methodsAllowed);
                     }
                 }
                 return true;
@@ -3237,24 +3237,21 @@ var parseAndMatchRoute = function (url, reqMethod) {
                         return true;
                     });
                     if (isMatched_1 === true) {
-                        if (routeActionInfo.methodsAllowed.indexOf(reqMethod) >= 0) {
+                        if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
                             matchedRoute.actionInfo = routeActionInfo;
                             matchedRoute.params = params_1;
                             matchedRoute.shields = route.shields;
                             return false;
                         }
                         else {
-                            matchedRoute.allows = matchedRoute.allows.concat(routeActionInfo.methodsAllowed);
+                            matchedRoute.allowedHttpMethod = matchedRoute.allowedHttpMethod.concat(routeActionInfo.methodsAllowed);
                         }
                     }
                 }
                 return true;
             });
         }
-        if (matchedRoute.controller == null) {
-            return null;
-        }
-        else if (matchedRoute.actionInfo == null && matchedRoute.allows.length === 0) {
+        if (matchedRoute.actionInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
             return null;
         }
         return matchedRoute;
@@ -3991,12 +3988,6 @@ var Fort = /** @class */ (function () {
             if (length > 1) {
                 folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeFirstSlace"])(folder.alias);
                 folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_8__["removeLastSlace"])(folder.alias);
-                // if (folder.alias[0] === "/") {
-                //     folder.alias = folder.alias.substr(1);
-                // }
-                // if (folder.alias[length - 1] === "/") {
-                //     folder.alias = folder.alias.substr(0, length - 1);
-                // }
             }
         });
         this.saveAppOption_(option);

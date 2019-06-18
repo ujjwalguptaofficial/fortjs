@@ -6,5 +6,5 @@ export declare type RouteMatch = {
     actionInfo: WorkerInfo;
     params: any;
     shields: Array<typeof GenericShield>;
-    allows: HTTP_METHOD[];
+    allowedHttpMethod: HTTP_METHOD[];
 };

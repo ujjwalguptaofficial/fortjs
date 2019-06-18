@@ -5,7 +5,7 @@ import { HTTP_METHOD } from "../enums";
 import { removeLastSlace } from ".";
 
 
-export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
+export const parseAndMatchRoute = (url: string, httpMethod: HTTP_METHOD) => {
 
     url = removeLastSlace(url);
     // add default path if url is /
@@ -14,7 +14,7 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
     }
     const urlParts = url.split("/");
     const matchedRoute: RouteMatch = {
-        allows: []
+        allowedHttpMethod: []
     } as RouteMatch;
     const firstPart = urlParts[1];
     const route = RouteHandler.routerCollection.find(qry => qry.path === firstPart);
@@ -25,14 +25,14 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
             const pattern = `/${route.path}/`;
             route.workers.every(action => {
                 if (action.pattern === pattern) {
-                    if (action.methodsAllowed.indexOf(reqMethod) >= 0) {
+                    if (action.methodsAllowed.indexOf(httpMethod) >= 0) {
                         matchedRoute.actionInfo = action;
                         matchedRoute.params = {};
                         matchedRoute.shields = route.shields;
                         return false;
                     }
                     else {
-                        matchedRoute.allows = [...matchedRoute.allows, ...action.methodsAllowed];
+                        matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...action.methodsAllowed];
                     }
                 }
                 return true;
@@ -69,24 +69,21 @@ export const parseAndMatchRoute = (url: string, reqMethod: HTTP_METHOD) => {
                         return true;
                     });
                     if (isMatched === true) {
-                        if (routeActionInfo.methodsAllowed.indexOf(reqMethod) >= 0) {
+                        if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
                             matchedRoute.actionInfo = routeActionInfo;
                             matchedRoute.params = params;
                             matchedRoute.shields = route.shields;
                             return false;
                         }
                         else {
-                            matchedRoute.allows = [...matchedRoute.allows, ...routeActionInfo.methodsAllowed];
+                            matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...routeActionInfo.methodsAllowed];
                         }
                     }
                 }
                 return true;
             });
         }
-        if (matchedRoute.controller == null) {
-            return null;
-        }
-        else if (matchedRoute.actionInfo == null && matchedRoute.allows.length === 0) {
+        if (matchedRoute.actionInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
             return null;
         }
         return matchedRoute;
