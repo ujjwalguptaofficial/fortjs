@@ -14,5 +14,5 @@ export * from "./get_mime_type_from_extension";
 export * from "./parse_match_route";
 export * from "./parse_cookie";
 export * from './json_helper';
-export * from './remove_last_slace';
-export * from './remove_first_slace';
+export * from './remove_last_slash';
+export * from './remove_first_slash';

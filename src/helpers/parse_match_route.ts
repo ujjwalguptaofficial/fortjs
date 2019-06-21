@@ -2,12 +2,12 @@ import { RouteHandler } from "../handlers/route_handler";
 import { RouteMatch } from "../types/route_match";
 import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";
-import { removeLastSlace } from ".";
+import { removeLastSlash } from ".";
 
 
 export const parseAndMatchRoute = (url: string, httpMethod: HTTP_METHOD) => {
 
-    url = removeLastSlace(url);
+    url = removeLastSlash(url);
     // add default path if url is /
     if (url === "") {
         url = Global.defaultPath;
