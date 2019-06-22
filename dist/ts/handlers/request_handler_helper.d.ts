@@ -20,4 +20,5 @@ export declare class RequestHandlerHelper {
     protected onNotFound(): Promise<void>;
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]): Promise<void>;
     protected onErrorOccured(error: any): Promise<void>;
+    protected onRequestOptions(allowedMethods: HTTP_METHOD[]): Promise<void>;
 }

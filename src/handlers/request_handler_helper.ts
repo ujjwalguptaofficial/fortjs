@@ -143,4 +143,10 @@ export class RequestHandlerHelper {
         this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);
     }
+
+    protected async onRequestOptions(allowedMethods: HTTP_METHOD[]) {
+        this.response.setHeader("Allow", allowedMethods.join(","));
+        this.response.writeHead(HTTP_STATUS_CODE.Ok, { [__ContentType]: MIME_TYPE.Html });
+        this.response.end("");
+    }
 }

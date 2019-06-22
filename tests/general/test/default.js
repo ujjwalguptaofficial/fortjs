@@ -134,6 +134,17 @@ describe("/default", () => {
         })
     })
 
+    it('/post + http method: option', (done) => {
+        request.options('/default/post').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/html');
+            expect(res).to.have.header('allow', 'POST');
+            expect(res.text).to.be.equal("");
+            done();
+        })
+    })
+
     it("/redirect test", (done) => {
         request.get('/default/redirect').redirects(0).end((err, res) => {
             expect(err).to.be.null;

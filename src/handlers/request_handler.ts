@@ -110,7 +110,12 @@ export class RequestHandler extends PostHandler {
     private async onRouteMatched_() {
         const actionInfo = this.routeMatchInfo_.actionInfo;
         if (actionInfo == null) {
-            this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
+            if (this.request.method === HTTP_METHOD.Options) {
+                this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
+            }
+            else {
+                this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
+            }
         }
         else {
             let shieldProtectionResult;
