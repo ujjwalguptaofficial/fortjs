@@ -1458,18 +1458,19 @@ var ControllerHandler = /** @class */ (function (_super) {
     ControllerHandler.prototype.getDataBasedOnMimeType_ = function (mimeType) {
         switch (mimeType) {
             case _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Json:
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text:
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Html:
                 if (typeof this.controllerResult_.responseData === 'object') {
                     return JSON.stringify(this.controllerResult_.responseData);
                 }
-                return this.controllerResult_.responseData;
+                break;
             case _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Xml:
                 if (typeof this.controllerResult_.responseData === 'object') {
                     return _helpers__WEBPACK_IMPORTED_MODULE_4__["XmlHelper"].fromJsToXml(this.controllerResult_.responseData);
                 }
-                return this.controllerResult_.responseData;
-            default:
-                return this.controllerResult_.responseData;
+                break;
         }
+        return this.controllerResult_.responseData;
     };
     ControllerHandler.prototype.endResponse_ = function (negotiateMimeType) {
         var _a;
@@ -1508,11 +1509,9 @@ var ControllerHandler = /** @class */ (function (_super) {
         var _this = this;
         result = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
         this.controllerResult_ = result;
-        if (this.cookieManager != null) {
-            this.cookieManager.responseCookie_.forEach(function (value) {
-                _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
-            });
-        }
+        this.cookieManager.responseCookie_.forEach(function (value) {
+            _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
+        });
         if (result.shouldRedirect == null || result.shouldRedirect === false) {
             if (result.responseFormat == null) {
                 if (result.file == null) {
@@ -2133,6 +2132,9 @@ var RequestHandler = /** @class */ (function (_super) {
             this.session_.sessionId = parsedCookies[_global__WEBPACK_IMPORTED_MODULE_2__["Global"].appSessionIdentifier];
             this.session_.cookie = this.cookieManager;
         }
+        else {
+            this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"]({});
+        }
     };
     RequestHandler.prototype.setPreHeader_ = function () {
         this.response.setHeader('X-Powered-By', _global__WEBPACK_IMPORTED_MODULE_2__["Global"].appName);
@@ -2353,9 +2355,6 @@ var RequestHandlerHelper = /** @class */ (function () {
             outgoingResults.push(this.wallInstances[i].onOutgoing());
         }
         return Promise.all(outgoingResults);
-        // return Promise.all(this.wallInstances.reverse().map(function (wallObj) {
-        //     return wallObj.onOutgoing();
-        // }));
     };
     RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
         var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_3__(this.request);

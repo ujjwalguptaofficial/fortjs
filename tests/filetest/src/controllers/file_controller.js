@@ -15,7 +15,7 @@ import * as Path from "path";
 
 export class FileController extends Controller {
     @DefaultWorker()
-    async default () {
+    async default() {
         try {
             const viewData = await renderView('controller:default,action:default');
             const result = await htmlResult(viewData);
@@ -71,5 +71,13 @@ export class FileController extends Controller {
          <input type="submit">\
        </form>\
      </body></html>`);
+    }
+
+    @Worker([HTTP_METHOD.Get])
+    async getCookie() {
+
+        const result = textResult(this.cookie.getCookie('hello'));
+        console.log(result);
+        return result;
     }
 }

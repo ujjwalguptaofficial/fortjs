@@ -12,19 +12,19 @@ export class ControllerHandler extends FileHandler {
     private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {
         switch (mimeType) {
             case MIME_TYPE.Json:
+            case MIME_TYPE.Text:
+            case MIME_TYPE.Html:
                 if (typeof this.controllerResult_.responseData === 'object') {
                     return JSON.stringify(this.controllerResult_.responseData);
                 }
-                return this.controllerResult_.responseData;
+                break;
             case MIME_TYPE.Xml:
                 if (typeof this.controllerResult_.responseData === 'object') {
                     return XmlHelper.fromJsToXml(this.controllerResult_.responseData);
                 }
-                return this.controllerResult_.responseData;
-            default:
-                return this.controllerResult_.responseData;
-
+                break;
         }
+        return this.controllerResult_.responseData;
     }
 
     private endResponse_(negotiateMimeType: MIME_TYPE) {
@@ -72,11 +72,11 @@ export class ControllerHandler extends FileHandler {
     private handleResponseResult_(result: HttpResult | HttpFormatResult) {
         result = result || textResult("");
         this.controllerResult_ = result as HttpResult;
-        if (this.cookieManager != null) {
-            ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
-                this.response.setHeader(__SetCookie, value);
-            });
-        }
+
+        ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
+            this.response.setHeader(__SetCookie, value);
+        });
+
         if ((result as HttpResult).shouldRedirect == null || (result as HttpResult).shouldRedirect === false) {
             if ((result as HttpFormatResult).responseFormat == null) {
                 if ((result as HttpResult).file == null) {

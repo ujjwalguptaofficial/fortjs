@@ -99,6 +99,9 @@ export class RequestHandler extends PostHandler {
             this.session_.sessionId = parsedCookies[Global.appSessionIdentifier];
             this.session_.cookie = this.cookieManager;
         }
+        else {
+            this.cookieManager = new CookieManager({});
+        }
     }
 
     private setPreHeader_() {

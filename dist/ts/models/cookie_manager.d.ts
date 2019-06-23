@@ -2,7 +2,9 @@ import { HttpCookie } from "./http_cookie";
 export declare class CookieManager {
     private responseCookie_;
     private cookieCollection_;
-    constructor(parsedValue: any);
+    constructor(parsedValue: {
+        [key: string]: string;
+    });
     /**
      * return cookie by name
      *

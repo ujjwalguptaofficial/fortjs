@@ -31,7 +31,8 @@ new App().create({
         alias: "/",
         path: staticPath
     }],
-    appName: "MyFort"
+    appName: "MyFort",
+    shouldParseCookie: false
 });
 
 console.log("Your fort is located at address - localhost:4000");

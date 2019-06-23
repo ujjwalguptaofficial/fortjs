@@ -43,5 +43,12 @@ describe("/default", () => {
         });
     })
 
-    
+    it("/file/getCookie", done => {
+        request.get('/file/getCookie').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
+        });
+    })
+
 });

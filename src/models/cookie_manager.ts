@@ -5,7 +5,7 @@ export class CookieManager {
     private responseCookie_: string[] = [];
     private cookieCollection_: { [key: string]: string };
 
-    constructor(parsedValue) {
+    constructor(parsedValue: { [key: string]: string }) {
         this.cookieCollection_ = parsedValue;
     }
 

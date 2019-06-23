@@ -23,9 +23,6 @@ export class RequestHandlerHelper {
             outgoingResults.push(this.wallInstances[i].onOutgoing());
         }
         return Promise.all(outgoingResults);
-        // return Promise.all(this.wallInstances.reverse().map(function (wallObj) {
-        //     return wallObj.onOutgoing();
-        // }));
     }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
