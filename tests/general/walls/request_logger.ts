@@ -26,7 +26,7 @@ export class RequestLogger extends Wall {
     }
 
     async onOutgoing() {
-        console.log('outgoing');
+        // console.log('executing request logger');
         this.response.setHeader('Custom-Header-From-Outgoing-Wall', '*');
     }
 }

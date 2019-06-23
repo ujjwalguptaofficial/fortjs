@@ -4,6 +4,7 @@ import * as Path from "path";
 import { RequestLogger } from './walls/request_logger';
 import { CustomErrorHandler } from './extra/custom_error_handler';
 import { MustacheViewEngine } from 'fortjs';
+import { Wall1 } from './walls/wall1';
 
 export class App extends Fort {
     errorHandler = CustomErrorHandler;
@@ -11,7 +12,7 @@ export class App extends Fort {
         super();
         this.routes = routes;
         // this.viewEngine = MustacheViewEngine;
-        this.walls = [RequestLogger];
+        this.walls = [RequestLogger, Wall1];
     }
 }
 
