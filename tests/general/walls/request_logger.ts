@@ -11,7 +11,7 @@ export class RequestLogger extends Wall {
     }
 
     async onIncoming() {
-
+        console.log('incoming');
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
         // console.log("reqcount", this.data.reqCount);
@@ -24,6 +24,13 @@ export class RequestLogger extends Wall {
         else if (this.request.headers['throwexception'] != null) {
             throw new Error("thrown by wall");
         }
+        return null;
+    }
+
+    async onOutgoing() {
+        console.log('outgoing');
+        // this.response.setHeader('Access-Control-Allow-Origin', '*');
+        // this.response.setHeader("Access-Control-Allow-Headers", 'Content-Type');
         return null;
     }
 }

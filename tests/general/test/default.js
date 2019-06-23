@@ -136,6 +136,7 @@ describe("/default", () => {
 
     it('/post + http method: option', (done) => {
         request.options('/default/post').end((err, res) => {
+            console.log(res.header);
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');

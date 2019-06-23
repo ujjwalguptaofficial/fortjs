@@ -33,7 +33,6 @@ export declare class Fort {
      * @memberof Fort
      */
     xmlParser?: typeof XmlParser;
-    private isArray_;
     private saveAppOption_;
     create(option: AppOption): Promise<void>;
     destroy(): Promise<void>;

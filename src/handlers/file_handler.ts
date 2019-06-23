@@ -7,6 +7,7 @@ import * as Fs from "fs";
 import { getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
+import { isNullOrEmpty } from "../utils";
 
 type FileInfo = {
     folder: string,
@@ -19,7 +20,7 @@ export class FileHandler extends RequestHandlerHelper {
         const fileInfo = {
             file: ""
         } as FileInfo;
-        if (splittedValue.length > 2 || !this.isNullOrEmpty(path.parse(urlPath).ext)) {
+        if (splittedValue.length > 2 || !isNullOrEmpty(path.parse(urlPath).ext)) {
             fileInfo.folder = splittedValue[1];
             fileInfo.file = splittedValue.splice(2).join("/");
             return fileInfo;

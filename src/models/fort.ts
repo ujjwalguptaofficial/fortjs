@@ -2,7 +2,6 @@ import { ParentRoute, AppOption, EtagOption } from "../types";
 import { Wall, ViewEngine, SessionProvider, XmlParser } from "../abstracts";
 import { RouteHandler } from "../handlers";
 import { Global } from "../global";
-import { Util } from "../util";
 import { MemorySessionProvider, MustacheViewEngine } from "../extra";
 import { ErrorHandler } from ".";
 import { __AppName } from "../constant";
@@ -11,6 +10,8 @@ import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash } from "../helpers";
 import { GenericSessionProvider, GenericXmlParser } from "../generics";
+import { isNull, isNullOrEmpty } from "../utils";
+import { isArray } from "util";
 
 export class Fort {
     routes: ParentRoute[] = [];
@@ -47,10 +48,6 @@ export class Fort {
      */
     xmlParser?: typeof XmlParser;
 
-    private isArray_(value) {
-        return Util.isArray(value);
-    }
-
     private saveAppOption_(option: AppOption) {
         const defaultEtagConfig = {
             type: ETag_Type.Weak
@@ -58,14 +55,14 @@ export class Fort {
 
         Global.port = option.port == null ? 4000 : option.port;
         Global.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
-        Global.shouldParsePost = Util.isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        Global.sessionTimeOut = Util.isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        Global.shouldParsePost = isNull(option.shouldParsePost) ? true : option.shouldParsePost;
+        Global.sessionTimeOut = isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
         Global.folders = option.folders == null ? [] : option.folders;
-        if (this.isArray_(Global.folders) === false) {
+        if (isArray(Global.folders) === false) {
             throw new Error(`Option folders should be an array`);
         }
-        Global.defaultPath = Util.isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
-        Global.appName = Util.isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
+        Global.defaultPath = isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        Global.appName = isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
         Global.appSessionIdentifier = `${Global.appName}_session_id`;
         Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
         Global.walls = this.walls as any;

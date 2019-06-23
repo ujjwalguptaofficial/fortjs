@@ -55,7 +55,7 @@
     "jsontoxml": "^1.0.1",
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",
-    "negotiator": "^0.6.1",
+    "negotiator": "^0.6.2",
     "uniqid": "^5.0.3"
   }
 }

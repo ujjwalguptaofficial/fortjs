@@ -6,7 +6,6 @@ import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
-import { Util } from "../util";
 import { JsonHelper } from "../helpers";
 
 
@@ -17,14 +16,15 @@ export class RequestHandlerHelper {
 
     protected wallInstances: Wall[] = [];
 
-    protected isNullOrEmpty(value) {
-        return Util.isNullOrEmpty(value);
-    }
-
-    protected async runWallOutgoing() {
-        return Promise.all(this.wallInstances.reverse().map(function (wallObj) {
-            return wallObj.onOutgoing();
-        }));
+    protected runWallOutgoing() {
+        const outgoingResults: Array<Promise<any>> = [];
+        for (let length = this.wallInstances.length, i = length - 1; i >= 0; i--) {
+            outgoingResults.push(this.wallInstances[i].onOutgoing());
+        }
+        return Promise.all(outgoingResults);
+        // return Promise.all(this.wallInstances.reverse().map(function (wallObj) {
+        //     return wallObj.onOutgoing();
+        // }));
     }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
@@ -58,18 +58,14 @@ export class RequestHandlerHelper {
         return null;
     }
 
-    private onExceptionOccured_(ex) {
-        this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(JsonHelper.stringify(ex));
-    }
-
     protected async onBadRequest(error) {
         let errMessage;
         try {
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onBadRequest(error);
         }
         catch (ex) {
-            return this.onExceptionOccured_(ex);
+            return this.onErrorOccured(ex);
         }
         this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);
@@ -78,10 +74,11 @@ export class RequestHandlerHelper {
     protected async onForbiddenRequest() {
         let errMessage;
         try {
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onForbiddenRequest();
         }
         catch (ex) {
-            return this.onExceptionOccured_(ex);
+            return this.onErrorOccured(ex);
         }
         this.response.writeHead(HTTP_STATUS_CODE.Forbidden, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);
@@ -90,10 +87,11 @@ export class RequestHandlerHelper {
     protected async onNotAcceptableRequest() {
         let errMessage;
         try {
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onNotAcceptableRequest();
         }
         catch (ex) {
-            return this.response.end(JsonHelper.stringify(ex));
+            return this.onErrorOccured(ex);
         }
         this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);
@@ -102,10 +100,11 @@ export class RequestHandlerHelper {
     protected async onNotFound() {
         let errMessage;
         try {
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onNotFound(this.request.url);
         }
         catch (ex) {
-            return this.onExceptionOccured_(ex);
+            return this.onErrorOccured(ex);
         }
         this.response.writeHead(HTTP_STATUS_CODE.NotFound, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);
@@ -114,11 +113,11 @@ export class RequestHandlerHelper {
     protected async onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
         let errMessage;
         try {
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onMethodNotAllowed();
-
         }
         catch (ex) {
-            return this.onExceptionOccured_(ex);
+            return this.onErrorOccured(ex);
         }
         this.response.setHeader("Allow", allowedMethods.join(","));
         this.response.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [__ContentType]: MIME_TYPE.Html });
@@ -133,16 +132,25 @@ export class RequestHandlerHelper {
         }
         let errMessage;
         try {
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onServerError(error);
         }
         catch (ex) {
-            return this.onExceptionOccured_(ex);
+            this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
+            this.response.end(JsonHelper.stringify(ex));
+            return;
         }
         this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);
     }
 
     protected async onRequestOptions(allowedMethods: HTTP_METHOD[]) {
+        try {
+            await this.runWallOutgoing();
+        }
+        catch (ex) {
+            return this.onErrorOccured(ex);
+        }
         this.response.setHeader("Allow", allowedMethods.join(","));
         this.response.writeHead(HTTP_STATUS_CODE.Ok, { [__ContentType]: MIME_TYPE.Html });
         this.response.end("");
