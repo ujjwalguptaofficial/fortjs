@@ -65,40 +65,50 @@ export class ControllerHandler extends FileHandler {
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     }
 
-    onResultEvaluated(result: HttpResult | HttpFormatResult) {
+    onResultFromWall(result: HttpResult | HttpFormatResult) {
+        this.handleResponseResult_(result);
+    }
+
+    private handleResponseResult_(result: HttpResult | HttpFormatResult) {
         result = result || textResult("");
-        this.runWallOutgoing().then(() => {
-            this.controllerResult_ = result as HttpResult;
-            if (this.cookieManager != null) {
-                ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
-                    this.response.setHeader(__SetCookie, value);
-                });
-            }
-            if ((result as HttpResult).shouldRedirect == null || (result as HttpResult).shouldRedirect === false) {
-                if ((result as HttpFormatResult).responseFormat == null) {
-                    if ((result as HttpResult).file == null) {
-                        const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
-                        const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-                        if (negotiateMimeType != null) {
-                            this.endResponse_(negotiateMimeType);
-                        }
-                        else {
-                            this.onNotAcceptableRequest();
-                        }
+        this.controllerResult_ = result as HttpResult;
+        if (this.cookieManager != null) {
+            ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
+                this.response.setHeader(__SetCookie, value);
+            });
+        }
+        if ((result as HttpResult).shouldRedirect == null || (result as HttpResult).shouldRedirect === false) {
+            if ((result as HttpFormatResult).responseFormat == null) {
+                if ((result as HttpResult).file == null) {
+                    const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
+                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                    if (negotiateMimeType != null) {
+                        this.endResponse_(negotiateMimeType);
                     }
                     else {
-                        this.handleFileResult_();
+                        this.onNotAcceptableRequest();
                     }
                 }
                 else {
-                    this.handleFormatResult_();
+                    this.handleFileResult_();
                 }
             }
             else {
-                this.handleRedirectResult_();
+                this.handleFormatResult_();
             }
-        }).catch(ex => {
+        }
+        else {
+            this.handleRedirectResult_();
+        }
+    }
+
+    async  onResultEvaluated(result: HttpResult | HttpFormatResult) {
+        try {
+            await this.runWallOutgoing();
+        } catch (ex) {
             this.onErrorOccured(ex);
-        });
+            return;
+        }
+        this.handleResponseResult_(result);
     }
 }

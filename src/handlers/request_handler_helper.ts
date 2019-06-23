@@ -125,7 +125,7 @@ export class RequestHandlerHelper {
         this.response.end(errMessage);
     }
 
-    protected async onErrorOccured(error, isFromInComingWall?) {
+    protected async onErrorOccured(error) {
         if (typeof error === 'string') {
             error = {
                 message: error
@@ -133,9 +133,7 @@ export class RequestHandlerHelper {
         }
         let errMessage;
         try {
-            if (isNull(isFromInComingWall)) {
-                await this.runWallOutgoing();
-            }
+            await this.runWallOutgoing();
             errMessage = await new Global.errorHandler().onServerError(error);
         }
         catch (ex) {

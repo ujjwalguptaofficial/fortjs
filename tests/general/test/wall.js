@@ -11,6 +11,7 @@ describe("wall test", () => {
         request.get('/default/getdata').query(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', null);
             expect(res.text).to.be.equal('blocked by wall');
             done();
         })
@@ -23,6 +24,7 @@ describe("wall test", () => {
         request.post('/default/getdata').set(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', null);
             expect(res.text).to.be.equal('blocked by wall');
             done();
         })
@@ -36,7 +38,7 @@ describe("wall test", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(500);
             expect(res.text).to.contains("thrown by wall");
-            expect(res).to.have.header('custom-header-from-outgoing-wall', null);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             done();
         })
     })
