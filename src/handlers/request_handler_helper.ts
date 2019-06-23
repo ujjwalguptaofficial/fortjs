@@ -7,6 +7,7 @@ import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
 import { JsonHelper } from "../helpers";
+import { isNull } from "../utils";
 
 
 export class RequestHandlerHelper {
@@ -124,7 +125,7 @@ export class RequestHandlerHelper {
         this.response.end(errMessage);
     }
 
-    protected async onErrorOccured(error) {
+    protected async onErrorOccured(error, isFromInComingWall?) {
         if (typeof error === 'string') {
             error = {
                 message: error
@@ -132,7 +133,9 @@ export class RequestHandlerHelper {
         }
         let errMessage;
         try {
-            await this.runWallOutgoing();
+            if (isNull(isFromInComingWall)) {
+                await this.runWallOutgoing();
+            }
             errMessage = await new Global.errorHandler().onServerError(error);
         }
         catch (ex) {

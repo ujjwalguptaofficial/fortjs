@@ -22,6 +22,7 @@
     "lint": "tslint src/**/*.ts",
     "webpack": "webpack --config src/webpack.config.js",
     "build": "npm run lint && npm run webpack",
+    "buildpack": "npm run lint && npm run webpack && npm pack",
     "build:test": "npm run build && npm pack && npm run test",
     "deploy": "NODE_ENV=production npm run build:test",
     "test": "node test_runner.js"

@@ -2157,17 +2157,27 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.execute_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, wallProtectionResult, responseByWall, pathUrl, requestMethod, ex_4;
+            var urlDetail, wallProtectionResult, err_1, responseByWall, pathUrl, requestMethod, ex_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 5, , 6]);
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         this.query_ = urlDetail.query;
                         this.parseCookieFromRequest_();
-                        return [4 /*yield*/, this.runWallIncoming_()];
+                        wallProtectionResult = void 0;
+                        _a.label = 1;
                     case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.runWallIncoming_()];
+                    case 2:
                         wallProtectionResult = _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        err_1 = _a.sent();
+                        this.onErrorOccured(err_1, true);
+                        return [2 /*return*/];
+                    case 4:
                         responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
                         if (responseByWall == null) {
                             pathUrl = urlDetail.pathname;
@@ -2184,12 +2194,12 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onResultEvaluated(responseByWall);
                         }
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 6];
+                    case 5:
                         ex_4 = _a.sent();
                         this.onErrorOccured(ex_4);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 6];
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -2247,6 +2257,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! negotiator */ "negotiator");
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -2282,6 +2293,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 
 
 
@@ -2455,7 +2467,7 @@ var RequestHandlerHelper = /** @class */ (function () {
             });
         });
     };
-    RequestHandlerHelper.prototype.onErrorOccured = function (error) {
+    RequestHandlerHelper.prototype.onErrorOccured = function (error, isFromInComingWall) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, _b, errMessage, ex_6;
             return __generator(this, function (_c) {
@@ -2468,20 +2480,22 @@ var RequestHandlerHelper = /** @class */ (function () {
                         }
                         _c.label = 1;
                     case 1:
-                        _c.trys.push([1, 4, , 5]);
+                        _c.trys.push([1, 5, , 6]);
+                        if (!Object(_utils__WEBPACK_IMPORTED_MODULE_5__["isNull"])(isFromInComingWall)) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.runWallOutgoing()];
                     case 2:
                         _c.sent();
-                        return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onServerError(error)];
-                    case 3:
-                        errMessage = _c.sent();
-                        return [3 /*break*/, 5];
+                        _c.label = 3;
+                    case 3: return [4 /*yield*/, new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].errorHandler().onServerError(error)];
                     case 4:
+                        errMessage = _c.sent();
+                        return [3 /*break*/, 6];
+                    case 5:
                         ex_6 = _c.sent();
                         this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
                         this.response.end(_helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex_6));
                         return [2 /*return*/];
-                    case 5:
+                    case 6:
                         this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_b = {}, _b[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _b));
                         this.response.end(errMessage);
                         return [2 /*return*/];

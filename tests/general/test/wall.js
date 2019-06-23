@@ -35,7 +35,8 @@ describe("wall test", () => {
         request.post('/default/getdata').set(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(500);
-            expect(res.text).to.contains("thrown by wall")
+            expect(res.text).to.contains("thrown by wall");
+            expect(res).to.have.header('custom-header-from-outgoing-wall', null);
             done();
         })
     })

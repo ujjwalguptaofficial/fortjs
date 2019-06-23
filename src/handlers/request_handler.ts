@@ -164,7 +164,14 @@ export class RequestHandler extends PostHandler {
             const urlDetail = url.parse(this.request.url, true);
             this.query_ = urlDetail.query;
             this.parseCookieFromRequest_();
-            const wallProtectionResult = await this.runWallIncoming_();
+            let wallProtectionResult;
+            try {
+                wallProtectionResult = await this.runWallIncoming_();
+            }
+            catch (err) {
+                this.onErrorOccured(err, true);
+                return;
+            }
             const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
             if (responseByWall == null) {
                 const pathUrl = urlDetail.pathname;
