@@ -127,6 +127,7 @@ describe("/user", () => {
         }
         request.post('/user/').set(body).end((err, res) => {
             expect(err).to.be.null;
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.status(500);
             expect(res.text).to.contains("thrown by guard")
             done();
@@ -168,5 +169,5 @@ describe("/user", () => {
         })
     })
 
-  
+
 });

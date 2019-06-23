@@ -52,6 +52,7 @@ describe("/default", () => {
         request.get('/default/html').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.header('content-type', 'text/html');
             expect(res.text).to.be.equal('<h1>hey there i am html</h1>');
             done();
@@ -72,6 +73,7 @@ describe("/default", () => {
         request.post('/default/text').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(405);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.header('content-type', 'text/html');
             expect(res).to.have.header('allow', 'GET');
             expect(res.text).to.be.equal(methodNotAllowedMsg);
@@ -107,6 +109,7 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'application/json');
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res.text).to.be.equal('{"key":"hello"}');
             done();
         })
@@ -118,6 +121,7 @@ describe("/default", () => {
         request.post('/default/post').type('application/xml').send(data).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res.text).to.contains('message : no xml parser configured');
             done();
         })
@@ -140,6 +144,7 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.header('allow', 'POST');
             expect(res.text).to.be.equal("");
             done();
@@ -150,6 +155,7 @@ describe("/default", () => {
         request.get('/default/redirect').redirects(0).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(302);
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.header('location', 'html');
             done();
         })

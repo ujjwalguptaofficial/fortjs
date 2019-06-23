@@ -15,6 +15,7 @@ describe("/file test", () => {
     it('/contents/ => with slace ', (done) => {
         request.get('/contents/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');
             done();
@@ -42,6 +43,7 @@ describe("/file test", () => {
     it('/content/', (done) => {
         request.get('/content/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
+            expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
             expect(res).to.have.status(404);
             expect(res).to.have.header('content-type', 'text/html');
             done();
