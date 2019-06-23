@@ -11,6 +11,7 @@ export class RequestLogger extends Wall {
     }
 
     async onIncoming() {
+        this.response.setHeader('Custom-Header-From-Incoming-Wall', '1');
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
         // console.log("reqcount", this.data.reqCount);
