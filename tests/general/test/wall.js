@@ -21,7 +21,7 @@ describe("wall test", () => {
         const body = {
             blockByWall: 'true'
         }
-        request.post('/default/getdata').set(body).end((err, res) => {
+        request.post('/home/getdata').set(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('custom-header-from-outgoing-wall', null);
@@ -34,7 +34,7 @@ describe("wall test", () => {
         const body = {
             throwException: 'true'
         }
-        request.post('/default/getdata').set(body).end((err, res) => {
+        request.post('/home/getdata').set(body).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(500);
             expect(res.text).to.contains("thrown by wall");
@@ -45,7 +45,7 @@ describe("wall test", () => {
 
 
     it("/getdata", (done) => {
-        request.get('/default/getdata').end((err, res) => {
+        request.get('/home/getdata').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");

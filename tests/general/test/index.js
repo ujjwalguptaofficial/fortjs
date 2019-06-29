@@ -15,6 +15,7 @@ require('../build/app');
 // require('./server');
 require('./cookie');
 require('./default');
+require('./home');
 require('./file_test');
 require('./random');
 require('./user');

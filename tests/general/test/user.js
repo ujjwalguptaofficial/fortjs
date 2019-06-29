@@ -135,7 +135,7 @@ describe("/user", () => {
     })
 
     it("/logout", (done) => {
-        request.get('/default/logout').end((err, res) => {
+        request.get('/home/logout').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             const parsedCookie = cookie.parse(res.header[`set-cookie`][0]);

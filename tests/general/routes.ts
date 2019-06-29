@@ -11,7 +11,7 @@ export const routes: ParentRoute[] = [{
     path: "*"
 }, {
     controller: HomeController,
-    path: "/default"
+    path: "/home"
 }, {
     controller: RandomController,
     path: "random"
