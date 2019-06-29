@@ -1,7 +1,13 @@
 import { RouteInfo, WorkerInfo, ParentRoute } from "../types";
 import { GenericShield, GenericGuard } from "../generics";
+import { isNull } from "../utils";
 
 const routerCollection: RouteInfo[] = [];
+
+const getActionPattern = (parentRoute: ParentRoute, pattern: string) => {
+    return (isNull(parentRoute.path) || parentRoute.path === "*") ? pattern : `/${parentRoute.path}${pattern}`;
+};
+
 export class RouteHandler {
 
     static get routerCollection() {
@@ -26,7 +32,7 @@ export class RouteHandler {
             route.workers.forEach(actionInfo => {
                 // check if we are not adding again
                 // if (actionInfo.pattern.indexOf(value.path) < 0) {
-                actionInfo.pattern = `/${value.path}${actionInfo.pattern}`;
+                actionInfo.pattern = getActionPattern(value, actionInfo.pattern);
                 //}
             });
         }
@@ -62,7 +68,7 @@ export class RouteHandler {
         else {
             const savedAction = router.workers.find(val => val.workerName === newAction.workerName);
             if (savedAction == null) {
-                newAction.pattern = router.path == null ? newAction.pattern : `/${router.path}${newAction.pattern}`;
+                newAction.pattern = getActionPattern(router, newAction.pattern);
                 router.workers.push(newAction);
             }
             else {
@@ -123,7 +129,7 @@ export class RouteHandler {
         }
         else {
             const savedAction = router.workers.find(val => val.workerName === actionName);
-            pattern = router.path == null ? pattern : `/${router.path}${pattern}`;
+            pattern = getActionPattern(router, pattern);
             if (savedAction == null) {
                 router.workers.push({
                     workerName: actionName,

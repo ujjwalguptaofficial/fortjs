@@ -9,7 +9,7 @@ import { RequestHandler } from "../handlers";
 import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash } from "../helpers";
-import { GenericSessionProvider, GenericXmlParser } from "../generics";
+import { GenericSessionProvider, GenericXmlParser, GenericController } from "../generics";
 import { isNull, isNullOrEmpty } from "../utils";
 import { isArray } from "util";
 
@@ -61,7 +61,7 @@ export class Fort {
         if (isArray(Global.folders) === false) {
             throw new Error(`Option folders should be an array`);
         }
-        Global.defaultPath = isNull(option.defaultPath) === true ? "" : option.defaultPath.toLowerCase();
+        // Global.isDefaultRoute = isNull(option.defaultPath) === true ? "" : option.defaultPath.toLowerCase();
         Global.appName = isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
         Global.appSessionIdentifier = `${Global.appName}_session_id`;
         Global.eTag = isNull(option.eTag) ? defaultEtagConfig : option.eTag;
@@ -84,13 +84,22 @@ export class Fort {
         if (this.routes == null) {
             this.routes = [];
         }
+        let isDefaultRouteExist = false;
         // removing / from routes
         this.routes.forEach(route => {
             route.path = removeFirstSlash(route.path);
             route.path = removeLastSlash(route.path);
+            if (route.path === "*") {
+                isDefaultRouteExist = true;
+            }
             RouteHandler.addToRouterCollection(route);
         });
-
+        if (isDefaultRouteExist === false) {
+            RouteHandler.addToRouterCollection({
+                controller: GenericController,
+                path: "*"
+            });
+        }
         // remove / from files routes
         option.folders.forEach(folder => {
             const length = folder.alias.length;
