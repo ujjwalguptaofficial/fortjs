@@ -3,7 +3,7 @@ import {
     HTTP_STATUS_CODE,
     textResult
 }
-from "fortjs";
+    from "fortjs";
 import {
     User
 } from "../models/user";
@@ -12,9 +12,6 @@ import {
     isLength,
     isIn,
 } from "validator";
-import {
-    isNullOrUndefined
-} from "util";
 
 export class ModelUserGuard extends Guard {
 
