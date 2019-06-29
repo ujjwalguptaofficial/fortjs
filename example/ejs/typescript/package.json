@@ -22,7 +22,7 @@
   "homepage": "https://github.com/ujjwalguptaofficial/fortjs-typescript-starter#readme",
   "dependencies": {
     "ejs": "^2.6.1",
-    "fortjs": "^1.5.2"
+    "fortjs": "^1.6.0"
   },
   "devDependencies": {
     "@types/node": "^10.12.15",
@@ -34,5 +34,9 @@
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-node-externals": "^1.7.2"
+  },
+  "project": {
+    "framework": "fortjs",
+    "language": "typescript"
   }
 }

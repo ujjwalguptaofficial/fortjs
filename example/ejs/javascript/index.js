@@ -5,7 +5,6 @@ import {
 
 const app = new App();
 app.create({
-    defaultPath: "/default",
     folders: [{
         alias: "/",
         path: path.join(__dirname, "../static")
