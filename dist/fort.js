@@ -462,14 +462,16 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return Route; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+
 
 // tslint:disable-next-line
 var Route = function (format) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
         // remove / from route
-        if (format != null && format !== '/' && format[format.length - 1] === '/') {
-            format = format.substr(0, format.length - 1);
+        if (format != null && format !== '/') {
+            format = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(format);
         }
         _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addPattern(format, className, methodName);
     });
@@ -1374,7 +1376,6 @@ var Global = /** @class */ (function () {
     function Global() {
     }
     Global.walls = [];
-    Global.isDefaultRoute = false;
     return Global;
 }());
 
@@ -3277,9 +3278,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! . */ "./src/helpers/index.ts");
 
 
-var getRouteFromDefaultRoute = function (url) {
-    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === "*"; });
-};
 var checkRouteInWorkerForDefaultRoute = function (route, httpMethod, urlParts) {
     var matchedRoute = {
         allowedHttpMethod: []
@@ -3411,19 +3409,9 @@ var parseAndMatchRoute = function (url, httpMethod) {
     if (url !== "/") {
         url = Object(___WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(url);
     }
-    // add default path if url is /
-    // if (url === "") {
-    //     url = Global.defaultPath;
-    // }
     var urlParts = url.split("/");
     var firstPart = urlParts[1];
-    var route;
-    // if (Global.isDefaultRoute === true) {
-    //     route = RouteHandler.routerCollection.find(qry => qry.path === "*");
-    // }
-    // else {
-    route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
-    // }
+    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
     if (route == null) {
         route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === "*"; });
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);
@@ -4127,7 +4115,6 @@ var Fort = /** @class */ (function () {
         if (Object(util__WEBPACK_IMPORTED_MODULE_10__["isArray"])(_global__WEBPACK_IMPORTED_MODULE_1__["Global"].folders) === false) {
             throw new Error("Option folders should be an array");
         }
-        // Global.isDefaultRoute = isNull(option.defaultPath) === true ? "" : option.defaultPath.toLowerCase();
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNullOrEmpty"])(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_4__["__AppName"] : option.appName;
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appSessionIdentifier = _global__WEBPACK_IMPORTED_MODULE_1__["Global"].appName + "_session_id";
         _global__WEBPACK_IMPORTED_MODULE_1__["Global"].eTag = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(option.eTag) ? defaultEtagConfig : option.eTag;

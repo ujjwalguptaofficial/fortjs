@@ -16,7 +16,6 @@ export declare class Global {
     static viewEngine: ViewEngine;
     static walls: Array<typeof GenericWall>;
     static errorHandler: typeof ErrorHandler;
-    static isDefaultRoute: boolean;
     static connectonKeepAliveTimeout?: number;
     static appName?: string;
     static eTag?: EtagOption;

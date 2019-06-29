@@ -1,14 +1,8 @@
 import { RouteHandler } from "../handlers/route_handler";
 import { RouteMatch } from "../types/route_match";
-import { Global } from "../global";
 import { HTTP_METHOD } from "../enums";
 import { removeLastSlash } from ".";
 import { RouteInfo } from "../types";
-
-const getRouteFromDefaultRoute = (url: string) => {
-    const route = RouteHandler.routerCollection.find(qry => qry.path === "*");
-
-};
 
 const checkRouteInWorkerForDefaultRoute = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts: string[]) => {
 
@@ -149,20 +143,10 @@ export const parseAndMatchRoute = (url: string, httpMethod: HTTP_METHOD) => {
         url = removeLastSlash(url);
     }
 
-    // add default path if url is /
-    // if (url === "") {
-    //     url = Global.defaultPath;
-    // }
     const urlParts = url.split("/");
-
     const firstPart = urlParts[1];
-    let route;
-    // if (Global.isDefaultRoute === true) {
-    //     route = RouteHandler.routerCollection.find(qry => qry.path === "*");
-    // }
-    // else {
-    route = RouteHandler.routerCollection.find(qry => qry.path === firstPart);
-    // }
+    let route = RouteHandler.routerCollection.find(qry => qry.path === firstPart);
+
     if (route == null) {
         route = RouteHandler.routerCollection.find(qry => qry.path === "*");
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);

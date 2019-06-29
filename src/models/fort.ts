@@ -61,7 +61,6 @@ export class Fort {
         if (isArray(Global.folders) === false) {
             throw new Error(`Option folders should be an array`);
         }
-        // Global.isDefaultRoute = isNull(option.defaultPath) === true ? "" : option.defaultPath.toLowerCase();
         Global.appName = isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
         Global.appSessionIdentifier = `${Global.appName}_session_id`;
         Global.eTag = isNull(option.eTag) ? defaultEtagConfig : option.eTag;
