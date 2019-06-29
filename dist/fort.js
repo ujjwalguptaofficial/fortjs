@@ -2618,10 +2618,7 @@ var RouteHandler = /** @class */ (function () {
             route.path = value.path;
             // change pattern value since we have controller name now.
             route.workers.forEach(function (actionInfo) {
-                // check if we are not adding again
-                // if (actionInfo.pattern.indexOf(value.path) < 0) {
                 actionInfo.pattern = getActionPattern(value, actionInfo.pattern);
-                //}
             });
         }
     };
