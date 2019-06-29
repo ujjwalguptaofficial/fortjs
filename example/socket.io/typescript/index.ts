@@ -3,7 +3,6 @@ import * as path from "path";
 
 const app = new App();
 app.create({
-    defaultPath: "default",
     folders: [{
         alias: "/",
         path: path.join(__dirname, "../static")
@@ -13,4 +12,4 @@ app.create({
     app.initSocketIo();
 }).catch(err => {
     console.error(err);
-})
+});
