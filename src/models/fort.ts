@@ -61,17 +61,17 @@ export class Fort {
         if (isArray(Global.folders) === false) {
             throw new Error(`Option folders should be an array`);
         }
-        Global.defaultPath = isNull(option.defaultPath) === true ? "" : "/" + option.defaultPath.toLowerCase();
+        Global.defaultPath = isNull(option.defaultPath) === true ? "" : option.defaultPath.toLowerCase();
         Global.appName = isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
         Global.appSessionIdentifier = `${Global.appName}_session_id`;
-        Global.eTag = option.eTag == null ? defaultEtagConfig : option.eTag;
+        Global.eTag = isNull(option.eTag) ? defaultEtagConfig : option.eTag;
         Global.walls = this.walls as any;
-        Global.viewEngine = this.viewEngine == null ? new MustacheViewEngine() : new (this.viewEngine as any)();
-        Global.sessionProvider = this.sessionProvider == null ? MemorySessionProvider as any :
+        Global.viewEngine = isNull(this.viewEngine) ? new MustacheViewEngine() : new (this.viewEngine as any)();
+        Global.sessionProvider = isNull(this.sessionProvider) ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
-        Global.errorHandler = this.errorHandler == null ? ErrorHandler : this.errorHandler;
-        Global.xmlParser = this.xmlParser == null ? GenericXmlParser : this.xmlParser;
-        Global.viewPath = option.viewPath == null ? "views" : option.viewPath;
+        Global.errorHandler = isNull(this.errorHandler) ? ErrorHandler : this.errorHandler;
+        Global.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
+        Global.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
     }
 
     create(option: AppOption): Promise<void> {
@@ -79,10 +79,6 @@ export class Fort {
             option = {
 
             };
-        }
-
-        if (option.defaultPath != null) {
-            option.defaultPath = removeFirstSlash(option.defaultPath);
         }
 
         if (this.routes == null) {
