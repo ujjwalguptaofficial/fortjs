@@ -8,7 +8,7 @@ import { DefaultController } from "./controllers/default_controller";
 
 export const routes: ParentRoute[] = [{
     controller: DefaultController,
-    path: "*"
+    path: "/*"
 }, {
     controller: HomeController,
     path: "/home"

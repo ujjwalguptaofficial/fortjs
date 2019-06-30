@@ -1,8 +1,8 @@
-import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD } from "fortjs";
+import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker } from "fortjs";
 
 export class DefaultController extends Controller {
-    @Worker()
-    @Route("/")
+    
+    @DefaultWorker()
     async index() {
         // just for making sure these fields has been initiated
         const params = this.param;
