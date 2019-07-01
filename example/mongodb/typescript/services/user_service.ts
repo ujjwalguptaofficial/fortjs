@@ -17,7 +17,12 @@ export class UserService {
     }
 
     async getAllUsers() {
-        return userSchema.find();
+        let users = await userSchema.find();
+        users = users.map((user) => {
+            return user.toClient();
+        });
+        console.log('users', users);
+        return users;
     }
 
     async removeUserById(id: string) {
