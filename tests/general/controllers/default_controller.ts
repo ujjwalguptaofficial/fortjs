@@ -1,7 +1,7 @@
 import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker } from "fortjs";
-
+import { ObjectID } from "mongodb";
 export class DefaultController extends Controller {
-    
+
     @DefaultWorker()
     async index() {
         // just for making sure these fields has been initiated
@@ -20,5 +20,19 @@ export class DefaultController extends Controller {
         return jsonResult({
             friends: friends
         });
+    }
+
+    @Worker([HTTP_METHOD.Get])
+    @Route('/get-mongo')
+    async getMongoEquivalentData() {
+        return jsonResult([
+            {
+                _id: new ObjectID(),
+                name: 'ujjwal',
+                gender: 'male',
+                address: 'sadfsgbhfgtbrg',
+                __v: 0
+            }
+        ]);
     }
 }
