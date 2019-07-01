@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Fort based MVC web framework for nodejs targeting good code structures & modularity.",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
@@ -11,12 +11,11 @@
   },
   "displayName": "FortJs",
   "keywords": [
-    "web",
     "node",
     "framework",
     "typescript",
     "es6",
-    "rest"
+    "full stack"
   ],
   "scripts": {
     "lint": "tslint src/**/*.ts",

@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.6.0 - 29/06/2019
+ * @license :fortjs - V1.6.1 - 01/07/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -2593,8 +2593,16 @@ var controller_handler_ControllerHandler = /** @class */ (function (_super) {
     };
     ControllerHandler.prototype.endResponse_ = function (negotiateMimeType) {
         var _a;
+        var data;
+        try {
+            data = this.getDataBasedOnMimeType_(negotiateMimeType);
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
+            return;
+        }
         this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok, (_a = {}, _a[__ContentType] = negotiateMimeType, _a));
-        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+        this.response.end(data);
     };
     ControllerHandler.prototype.handleRedirectResult_ = function () {
         this.response.setHeader('Location', this.controllerResult_.responseData);
