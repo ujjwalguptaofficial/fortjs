@@ -3,6 +3,6 @@ import {
 } from "./controllers/default_controller";
 
 export const routes = [{
-    path: "/default",
+    path: "*",
     controller: DefaultController
 }]

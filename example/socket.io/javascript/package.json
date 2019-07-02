@@ -27,7 +27,11 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "fortjs": "^1.5.2",
+    "fortjs": "^1.6.0",
     "socket.io": "^2.2.0"
+  },
+  "project": {
+    "framework": "fortjs",
+    "language": "javascript"
   }
 }

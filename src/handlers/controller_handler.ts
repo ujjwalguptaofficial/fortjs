@@ -28,9 +28,18 @@ export class ControllerHandler extends FileHandler {
     }
 
     private endResponse_(negotiateMimeType: MIME_TYPE) {
+        let data;
+        try {
+            data = this.getDataBasedOnMimeType_(negotiateMimeType);
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
+            return;
+        }
+
         this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
             { [__ContentType]: negotiateMimeType });
-        this.response.end(this.getDataBasedOnMimeType_(negotiateMimeType));
+        this.response.end(data);
     }
 
     private handleRedirectResult_() {

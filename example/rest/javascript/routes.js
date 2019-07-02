@@ -6,7 +6,7 @@ import {
 } from "./controllers/user_controller";
 
 export const routes = [{
-    path: "/default",
+    path: "/*",
     controller: DefaultController
 }, {
     path: "/user",

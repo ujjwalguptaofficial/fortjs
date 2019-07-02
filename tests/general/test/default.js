@@ -68,4 +68,20 @@ describe("/default", () => {
 
     })
 
+    it('/get-mongo', (done) => {
+        request.get('/get-mongo').type("application/json").end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            done();
+        })
+    })
+
+    it('/get-mongo with browserAccept', (done) => {
+        request.get('/get-mongo').accept(browserAccept).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            done();
+        })
+    })
+
 });
