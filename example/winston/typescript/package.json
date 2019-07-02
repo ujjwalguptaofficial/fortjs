@@ -1,0 +1,44 @@
+{
+  "name": "fort-starter",
+  "version": "1.0.0",
+  "description": "Starter project for fortjs using typescript",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack --config webpack.config.js",
+    "webpack:watch": "webpack --config webpack.config.js --watch",
+    "lint": "tslint src/**/*.ts",
+    "build": "npm run webpack",
+    "start": "npm run webpack:watch",
+    "deploy": "NODE_ENV=production npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ujjwalguptaofficial/fortjs-typescript-starter.git"
+  },
+  "author": "Ujjwal Gupta",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ujjwalguptaofficial/fortjs-typescript-starter/issues"
+  },
+  "homepage": "https://github.com/ujjwalguptaofficial/fortjs-typescript-starter#readme",
+  "dependencies": {
+    "fortjs": "^1.6.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.15",
+    "@types/winston": "^2.4.4",
+    "nodemon-webpack-plugin": "^4.0.8",
+    "ts-loader": "^5.3.1",
+    "tslint": "^5.11.0",
+    "tslint-config-security": "^1.13.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.5",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "project": {
+    "framework": "fortjs",
+    "language": "typescript"
+  }
+}
