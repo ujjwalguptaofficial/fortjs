@@ -1,0 +1,38 @@
+{
+  "name": "fortjs-starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack --config webpack.config.js",
+    "webpack:watch": "webpack --config webpack.config.js --watch",
+    "lint": "tslint src/**/*.ts",
+    "build": "npm run webpack",
+    "start": "npm run webpack:watch",
+    "deploy": "NODE_ENV=production npm run build"
+  },
+  "author": "Ujjwal Gupta",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-decorators": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@types/node": "^10.12.15",
+    "babel-loader": "^8.0.4",
+    "eslint": "^5.10.0",
+    "nodemon-webpack-plugin": "^4.0.6",
+    "tslint-config-security": "^1.13.0",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "fortjs": "^1.6.1",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.9.0"
+  },
+  "project": {
+    "framework": "fortjs",
+    "language": "javascript"
+  }
+}
