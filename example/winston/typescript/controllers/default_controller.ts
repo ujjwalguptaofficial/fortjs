@@ -1,19 +1,20 @@
 import { Controller, DefaultWorker, textResult, viewResult, Worker } from "fortjs";
+import { logger } from "../logger";
 
 export class DefaultController extends Controller {
 
     @DefaultWorker()
     async index() {
         try {
-            const data = {
-                title: 'FortJs'
-            };
-            const result = await viewResult('default/index.html', data);
-            return result;
+            if (this.query.error == 'true') {
+                throw new Error("Exception occured");
+            }
+            else {
+                return textResult('Runing Ok');
+            }
         } catch (ex) {
-            // handle exception and show user a good message.
-            // save this ex in a file or db, so that you can know what's the issue and where
-            const result = await textResult("Our server is busy right now. Please try later.");
+            logger.error(`message - ${ex.message}, stack trace - ${ex.stack}`);
+            const result = textResult(`Our server is busy right now. Please try later.`);
             return result;
         }
     }
