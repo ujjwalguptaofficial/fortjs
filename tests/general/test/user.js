@@ -44,6 +44,17 @@ describe("/user", () => {
         })
     })
 
+    it("/ + guard_injection_test", (done) => {
+
+        request.post('/user?guard_injection_test=true').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.eql('hello injection ok in guard')
+            done();
+        })
+    })
+
+
     it("/ + post", (done) => {
         const user = {
             name: 'angela',
@@ -125,7 +136,7 @@ describe("/user", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(9);
+            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(10);
             done();
         })
     })

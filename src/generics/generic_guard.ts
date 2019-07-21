@@ -3,7 +3,11 @@ import { HttpResult } from "../types";
 
 export class GenericGuard extends Guard {
 
-    check(): Promise<HttpResult> {
+    constructor(...args) {
+        super();
+    }
+
+    check(...args): Promise<HttpResult> {
         return null;
     }
 }

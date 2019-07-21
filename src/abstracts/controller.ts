@@ -2,7 +2,7 @@ import { HttpRequest, HttpResponse } from "../types";
 import { CookieManager, FileManager } from "../models";
 import { SessionProvider } from ".";
 
- 
+
 export abstract class Controller {
     request: HttpRequest;
     response: HttpResponse;
@@ -14,4 +14,8 @@ export abstract class Controller {
     data: { [key: string]: any };
 
     file?: FileManager;
+
+    constructor(...args) {
+
+    }
 }

@@ -12,5 +12,9 @@ export abstract class Guard implements Controller {
     param?: { [key: string]: string };
     data: { [key: string]: any };
     file: FileManager;
-    abstract check(): Promise<HttpResult>;
+    abstract check(...args): Promise<HttpResult>;
+
+    constructor(...args) {
+
+    }
 }

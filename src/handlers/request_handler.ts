@@ -35,7 +35,8 @@ export class RequestHandler extends PostHandler {
 
     private runWallIncoming_() {
         return Promise.all(Global.walls.map((wall) => {
-            const wallObj = new wall();
+            const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
+            const wallObj = new wall(...constructorArgsValues);
             wallObj.cookie = this.cookieManager;
             wallObj.session = this.session_;
             wallObj.request = this.request as HttpRequest;
@@ -43,7 +44,8 @@ export class RequestHandler extends PostHandler {
             wallObj.data = this.data_;
             wallObj.query = this.query_;
             this.wallInstances.push(wallObj);
-            return wallObj.onIncoming();
+            const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
+            return wallObj.onIncoming(...methodArgsValues);
         }));
     }
 
@@ -59,28 +61,31 @@ export class RequestHandler extends PostHandler {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        const workerValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
-        controllerObj[this.routeMatchInfo_.workerInfo.workerName](...workerValues).then(
+        const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues).then(
             this.onResultEvaluated.bind(this)
         ).catch(this.onErrorOccured.bind(this));
     }
 
     private executeShieldsProtection_() {
         return Promise.all(this.routeMatchInfo_.shields.map(shield => {
-            const shieldObj = new shield();
+            const constructorArgsValues = InjectorHandler.getConstructorValues(shield.name);
+            const shieldObj = new shield(...constructorArgsValues);
             shieldObj.cookie = this.cookieManager;
             shieldObj.query = this.query_;
             shieldObj.session = this.session_;
             shieldObj.request = this.request as HttpRequest;
             shieldObj.response = this.response as HttpResponse;
             shieldObj.data = this.data_;
-            return shieldObj.protect();
+            const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
+            return shieldObj.protect(...methodArgsValues);
         }));
     }
 
     private executeGuardsCheck_(guards: Array<typeof GenericGuard>) {
         return Promise.all(guards.map(guard => {
-            const guardObj = new guard();
+            const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
+            const guardObj = new guard(...constructorArgsValues);
             guardObj.body = this.body;
             guardObj.cookie = this.cookieManager;
             guardObj.query = this.query_;
@@ -90,7 +95,8 @@ export class RequestHandler extends PostHandler {
             guardObj.data = this.data_;
             guardObj.file = this.file;
             guardObj.param = this.routeMatchInfo_.params;
-            return guardObj.check();
+            const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
+            return guardObj.check(...methodArgsValues);
         }));
     }
 

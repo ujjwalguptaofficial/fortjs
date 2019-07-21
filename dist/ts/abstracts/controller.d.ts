@@ -19,4 +19,5 @@ export declare abstract class Controller {
         [key: string]: any;
     };
     file?: FileManager;
+    constructor(...args: any[]);
 }

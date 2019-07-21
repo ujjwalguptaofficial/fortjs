@@ -11,8 +11,8 @@ export abstract class Wall implements Controller {
 
     data: { [key: string]: any };
 
-    abstract onIncoming(): Promise<HttpResult>;
-    async onOutgoing() {
+    abstract onIncoming(...args): Promise<HttpResult>;
+    async onOutgoing(...args) {
         return null;
     }
 }

@@ -1,12 +1,20 @@
-import { Guard, HttpResult, MIME_TYPE, HTTP_STATUS_CODE } from "fortjs";
+import { Guard, HttpResult, MIME_TYPE, HTTP_STATUS_CODE, Assign, textResult } from "fortjs";
 import { User } from "../../models/user";
 import { validate } from "class-validator";
 
 export class ModelUserGuard extends Guard {
+    constructorValue: string;
+    constructor(@Assign('hello') value: string) {
+        super();
+        this.constructorValue = value;
+    }
 
-    async check() {
+    async check(@Assign('injection ok in guard') value: string) {
         // throw new Error("thrown by guard");
         // console.log("data", this.data);
+        if (this.query.guard_injection_test != null) {
+            return textResult(`${this.constructorValue} ${value}`, 200);
+        }
         if (this.request.headers['throwexceptionbyguard'] != null) {
             throw new Error("thrown by guard");
         }

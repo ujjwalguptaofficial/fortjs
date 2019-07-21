@@ -104,6 +104,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Controller", function() { return Controller; });
 var Controller = /** @class */ (function () {
     function Controller() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
     }
     return Controller;
 }());
@@ -124,6 +128,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Guard", function() { return Guard; });
 var Guard = /** @class */ (function () {
     function Guard() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
     }
     return Guard;
 }());
@@ -305,6 +313,10 @@ var Wall = /** @class */ (function () {
     function Wall() {
     }
     Wall.prototype.onOutgoing = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, null];
@@ -1109,9 +1121,17 @@ var __extends = (undefined && undefined.__extends) || (function () {
 var GenericGuard = /** @class */ (function (_super) {
     __extends(GenericGuard, _super);
     function GenericGuard() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return _super.call(this) || this;
     }
     GenericGuard.prototype.check = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         return null;
     };
     return GenericGuard;
@@ -1246,9 +1266,17 @@ var __extends = (undefined && undefined.__extends) || (function () {
 var GenericShield = /** @class */ (function (_super) {
     __extends(GenericShield, _super);
     function GenericShield() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return _super.call(this) || this;
     }
     GenericShield.prototype.protect = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         return null;
     };
     return GenericShield;
@@ -1286,9 +1314,17 @@ var __extends = (undefined && undefined.__extends) || (function () {
 var GenericWall = /** @class */ (function (_super) {
     __extends(GenericWall, _super);
     function GenericWall() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return _super.call(this) || this;
     }
     GenericWall.prototype.onIncoming = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         return null;
     };
     return GenericWall;
@@ -2198,7 +2234,8 @@ var RequestHandler = /** @class */ (function (_super) {
     RequestHandler.prototype.runWallIncoming_ = function () {
         var _this = this;
         return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) {
-            var wallObj = new wall();
+            var constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(wall.name);
+            var wallObj = new (wall.bind.apply(wall, [void 0].concat(constructorArgsValues)))();
             wallObj.cookie = _this.cookieManager;
             wallObj.session = _this.session_;
             wallObj.request = _this.request;
@@ -2206,7 +2243,8 @@ var RequestHandler = /** @class */ (function (_super) {
             wallObj.data = _this.data_;
             wallObj.query = _this.query_;
             _this.wallInstances.push(wallObj);
-            return wallObj.onIncoming();
+            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(wall.name, 'onIncoming');
+            return wallObj.onIncoming.apply(wallObj, methodArgsValues);
         }));
     };
     RequestHandler.prototype.runController_ = function () {
@@ -2222,26 +2260,29 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        var workerValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
-        controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, workerValues).then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
+        var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, methodArgsValues).then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;
         return Promise.all(this.routeMatchInfo_.shields.map(function (shield) {
-            var shieldObj = new shield();
+            var constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(shield.name);
+            var shieldObj = new (shield.bind.apply(shield, [void 0].concat(constructorArgsValues)))();
             shieldObj.cookie = _this.cookieManager;
             shieldObj.query = _this.query_;
             shieldObj.session = _this.session_;
             shieldObj.request = _this.request;
             shieldObj.response = _this.response;
             shieldObj.data = _this.data_;
-            return shieldObj.protect();
+            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(shield.name, 'protect');
+            return shieldObj.protect.apply(shieldObj, methodArgsValues);
         }));
     };
     RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
         var _this = this;
         return Promise.all(guards.map(function (guard) {
-            var guardObj = new guard();
+            var constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(guard.name);
+            var guardObj = new (guard.bind.apply(guard, [void 0].concat(constructorArgsValues)))();
             guardObj.body = _this.body;
             guardObj.cookie = _this.cookieManager;
             guardObj.query = _this.query_;
@@ -2251,7 +2292,8 @@ var RequestHandler = /** @class */ (function (_super) {
             guardObj.data = _this.data_;
             guardObj.file = _this.file;
             guardObj.param = _this.routeMatchInfo_.params;
-            return guardObj.check();
+            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(guard.name, 'check');
+            return guardObj.check.apply(guardObj, methodArgsValues);
         }));
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {

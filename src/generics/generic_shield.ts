@@ -2,7 +2,11 @@ import { Shield } from "../abstracts";
 import { HttpResult } from "../types";
 
 export class GenericShield extends Shield {
-    protect(): Promise<HttpResult> {
+    constructor(...args) {
+        super();
+    }
+    
+    protect(...args): Promise<HttpResult> {
         return null;
     }
 }
