@@ -10,7 +10,8 @@ export const DefaultWorker = (allowedMethods?: HTTP_METHOD[]): MethodDecorator =
             workerName: methodName,
             methodsAllowed: allowedMethods == null ? [HTTP_METHOD.Get] : allowedMethods,
             guards: [],
-            pattern: "/"
+            pattern: "/",
+            values: []
         };
         RouteHandler.addWorker(actionInfo, className);
     };

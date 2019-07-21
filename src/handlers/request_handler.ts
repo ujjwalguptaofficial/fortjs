@@ -48,7 +48,6 @@ export class RequestHandler extends PostHandler {
 
     private runController_() {
         const constructorValues = RouteHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
-        console.log('val', constructorValues);
         const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
         controllerObj.request = this.request as HttpRequest;
         controllerObj.response = this.response;
@@ -59,7 +58,8 @@ export class RequestHandler extends PostHandler {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(
+        const workerValues = RouteHandler.getWorkerValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        controllerObj[this.routeMatchInfo_.workerInfo.workerName](...workerValues).then(
             this.onResultEvaluated.bind(this)
         ).catch(this.onErrorOccured.bind(this));
     }
@@ -114,7 +114,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private async onRouteMatched_() {
-        const actionInfo = this.routeMatchInfo_.actionInfo;
+        const actionInfo = this.routeMatchInfo_.workerInfo;
         if (actionInfo == null) {
             if (this.request.method === HTTP_METHOD.Options) {
                 this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);

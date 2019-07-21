@@ -5,4 +5,5 @@ export declare type WorkerInfo = {
     methodsAllowed: HTTP_METHOD[];
     guards: Array<typeof GenericGuard>;
     pattern: string;
+    values: any[];
 };

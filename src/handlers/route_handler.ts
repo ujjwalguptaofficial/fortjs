@@ -45,11 +45,41 @@ export class RouteHandler {
                 controllerName: className,
                 shields: [],
                 path: null,
-                values: []
+                values: [paramValue]
             });
         }
         else {
             routerCollection[index].values.splice(paramIndex, 0, paramValue);
+        }
+    }
+
+    static addWorkerValue(className: string, paramName: string, paramIndex, paramValue) {
+        const router = routerCollection.find(x => x.controllerName === className);
+        const action = {
+            guards: [],
+            methodsAllowed: [],
+            pattern: "",
+            values: [paramValue],
+            workerName: paramName
+        };
+        if (router == null) {
+            routerCollection.push({
+                workers: [action],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            const savedAction = router.workers.find(val => val.workerName === paramName);
+            if (savedAction == null) {
+                router.workers.push(action);
+            }
+            else {
+                savedAction.values.splice(paramIndex, 0, paramValue);
+            }
         }
     }
 
@@ -104,7 +134,8 @@ export class RouteHandler {
                     workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: pattern,
+                    values: []
                 }],
                 controller: null,
                 controllerName: className,
@@ -120,7 +151,8 @@ export class RouteHandler {
                     workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: pattern,
+                    values: []
                 });
             }
             else {
@@ -137,7 +169,8 @@ export class RouteHandler {
                     workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: pattern,
+                    values: []
                 }],
                 controller: null,
                 controllerName: className,
@@ -154,7 +187,8 @@ export class RouteHandler {
                     workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: pattern,
+                    values: []
                 });
             }
             else {
@@ -165,5 +199,9 @@ export class RouteHandler {
 
     static getConstructorValues(className: string) {
         return routerCollection.find(qry => qry.controllerName === className).values;
+    }
+
+    static getWorkerValues(className: string, workerName: string) {
+        return routerCollection.find(qry => qry.controllerName === className).workers.find(qry => qry.workerName === workerName).values;
     }
 }

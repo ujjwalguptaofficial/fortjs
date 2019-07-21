@@ -10,16 +10,17 @@ import { HTTP_STATUS_CODE } from "fortjs";
 export class UserController extends Controller {
     service: UserService;
 
-    constructor(@Assign(UserService) service: UserService) {
+    constructor(@Assign(UserService) service) {
         super();
-        this.service = new UserService();
+        this.service = new service();
     }
 
     @Worker([HTTP_METHOD.Get])
     @Route("/")
-    default(@Assign('hi') name: string) {
+    default(@Assign('user default action') message: string) {
+        console.log('aaaaaaaaaaaaaa', message);
         return new Promise((resolve, reject) => {
-            resolve(htmlResult("user default action"));
+            resolve(htmlResult(message));
         });
     }
 

@@ -43,7 +43,7 @@ const checkRouteInWorkerForDefaultRoute = (route: RouteInfo, httpMethod: HTTP_ME
             });
             if (isMatched === true) {
                 if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.actionInfo = routeActionInfo;
+                    matchedRoute.workerInfo = routeActionInfo;
                     matchedRoute.params = params;
                     matchedRoute.shields = route.shields;
                     return false;
@@ -55,7 +55,7 @@ const checkRouteInWorkerForDefaultRoute = (route: RouteInfo, httpMethod: HTTP_ME
         }
         return true;
     });
-    if (matchedRoute.actionInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
+    if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     return matchedRoute;
@@ -74,7 +74,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
         route.workers.every(action => {
             if (action.pattern === pattern) {
                 if (action.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.actionInfo = action;
+                    matchedRoute.workerInfo = action;
                     matchedRoute.params = {};
                     matchedRoute.shields = route.shields;
                     return false;
@@ -118,7 +118,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
                 });
                 if (isMatched === true) {
                     if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
-                        matchedRoute.actionInfo = routeActionInfo;
+                        matchedRoute.workerInfo = routeActionInfo;
                         matchedRoute.params = params;
                         matchedRoute.shields = route.shields;
                         return false;
@@ -131,7 +131,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
             return true;
         });
     }
-    if (matchedRoute.actionInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
+    if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     return matchedRoute;

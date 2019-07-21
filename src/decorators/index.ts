@@ -3,4 +3,4 @@ export * from './shields';
 export * from './guards';
 export * from './route';
 export * from './default_worker';
-export * from './value';
+export * from './assign';

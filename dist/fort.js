@@ -364,6 +364,34 @@ var __ContentLength = "Content-Length";
 
 /***/ }),
 
+/***/ "./src/decorators/assign.ts":
+/*!**********************************!*\
+  !*** ./src/decorators/assign.ts ***!
+  \**********************************/
+/*! exports provided: Assign */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Assign", function() { return Assign; });
+/* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+
+// tslint:disable-next-line
+var Assign = function (value) {
+    return function (target, paramName, paramIndex) {
+        var className = target.name || target.constructor.name;
+        if (paramName == null) {
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addConstructorValue(className, paramIndex, value);
+        }
+        else {
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addWorkerValue(className, paramName, paramIndex, value);
+        }
+    };
+};
+
+
+/***/ }),
+
 /***/ "./src/decorators/default_worker.ts":
 /*!******************************************!*\
   !*** ./src/decorators/default_worker.ts ***!
@@ -386,7 +414,8 @@ var DefaultWorker = function (allowedMethods) {
             workerName: methodName,
             methodsAllowed: allowedMethods == null ? [_enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_METHOD"].Get] : allowedMethods,
             guards: [],
-            pattern: "/"
+            pattern: "/",
+            values: []
         };
         _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addWorker(actionInfo, className);
     };
@@ -442,8 +471,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _default_worker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./default_worker */ "./src/decorators/default_worker.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DefaultWorker", function() { return _default_worker__WEBPACK_IMPORTED_MODULE_4__["DefaultWorker"]; });
 
-/* harmony import */ var _value__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./value */ "./src/decorators/value.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Assign", function() { return _value__WEBPACK_IMPORTED_MODULE_5__["Assign"]; });
+/* harmony import */ var _assign__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./assign */ "./src/decorators/assign.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Assign", function() { return _assign__WEBPACK_IMPORTED_MODULE_5__["Assign"]; });
 
 
 
@@ -507,32 +536,6 @@ var Shields = function (shieldsValue) {
 
 /***/ }),
 
-/***/ "./src/decorators/value.ts":
-/*!*********************************!*\
-  !*** ./src/decorators/value.ts ***!
-  \*********************************/
-/*! exports provided: Assign */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Assign", function() { return Assign; });
-/* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
-
-// tslint:disable-next-line
-var Assign = function (value) {
-    return function (target, propertyName, propertyIndex) {
-        var className = target.name || target.constructor.name;
-        console.log("value", value, "className", className, "property", propertyName, "index", propertyIndex);
-        if (propertyName == null) {
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addConstructorValue(className, propertyIndex, value);
-        }
-    };
-};
-
-
-/***/ }),
-
 /***/ "./src/decorators/worker.ts":
 /*!**********************************!*\
   !*** ./src/decorators/worker.ts ***!
@@ -557,7 +560,8 @@ var Worker = function (allowedMethods) {
                 _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Delete, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Post, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Patch, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Put
             ] : allowedMethods,
             guards: [],
-            pattern: "/" + methodName.toLowerCase()
+            pattern: "/" + methodName.toLowerCase(),
+            values: []
         };
         _handlers__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addWorker(actionInfo, className);
     };
@@ -2130,7 +2134,6 @@ var RequestHandler = /** @class */ (function (_super) {
     RequestHandler.prototype.runController_ = function () {
         var _a;
         var constructorValues = _route_handler__WEBPACK_IMPORTED_MODULE_7__["RouteHandler"].getConstructorValues(this.routeMatchInfo_.controller.name);
-        console.log('val', constructorValues);
         var controllerObj = new ((_a = this.routeMatchInfo_.controller).bind.apply(_a, [void 0].concat(constructorValues)))();
         controllerObj.request = this.request;
         controllerObj.response = this.response;
@@ -2141,7 +2144,8 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        controllerObj[this.routeMatchInfo_.actionInfo.workerName]().then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
+        var workerValues = _route_handler__WEBPACK_IMPORTED_MODULE_7__["RouteHandler"].getWorkerValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, workerValues).then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;
@@ -2196,7 +2200,7 @@ var RequestHandler = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        actionInfo = this.routeMatchInfo_.actionInfo;
+                        actionInfo = this.routeMatchInfo_.workerInfo;
                         if (!(actionInfo == null)) return [3 /*break*/, 1];
                         if (this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Options) {
                             this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
@@ -2679,11 +2683,40 @@ var RouteHandler = /** @class */ (function () {
                 controllerName: className,
                 shields: [],
                 path: null,
-                values: []
+                values: [paramValue]
             });
         }
         else {
             routerCollection[index].values.splice(paramIndex, 0, paramValue);
+        }
+    };
+    RouteHandler.addWorkerValue = function (className, paramName, paramIndex, paramValue) {
+        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        var action = {
+            guards: [],
+            methodsAllowed: [],
+            pattern: "",
+            values: [paramValue],
+            workerName: paramName
+        };
+        if (router == null) {
+            routerCollection.push({
+                workers: [action],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            var savedAction = router.workers.find(function (val) { return val.workerName === paramName; });
+            if (savedAction == null) {
+                router.workers.push(action);
+            }
+            else {
+                savedAction.values.splice(paramIndex, 0, paramValue);
+            }
         }
     };
     RouteHandler.addShields = function (shields, className) {
@@ -2735,7 +2768,8 @@ var RouteHandler = /** @class */ (function () {
                         workerName: actionName,
                         guards: guards,
                         methodsAllowed: null,
-                        pattern: pattern
+                        pattern: pattern,
+                        values: []
                     }],
                 controller: null,
                 controllerName: className,
@@ -2751,7 +2785,8 @@ var RouteHandler = /** @class */ (function () {
                     workerName: actionName,
                     guards: guards,
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: pattern,
+                    values: []
                 });
             }
             else {
@@ -2767,7 +2802,8 @@ var RouteHandler = /** @class */ (function () {
                         workerName: actionName,
                         guards: [],
                         methodsAllowed: null,
-                        pattern: pattern
+                        pattern: pattern,
+                        values: []
                     }],
                 controller: null,
                 controllerName: className,
@@ -2784,7 +2820,8 @@ var RouteHandler = /** @class */ (function () {
                     workerName: actionName,
                     guards: [],
                     methodsAllowed: null,
-                    pattern: pattern
+                    pattern: pattern,
+                    values: []
                 });
             }
             else {
@@ -2794,6 +2831,9 @@ var RouteHandler = /** @class */ (function () {
     };
     RouteHandler.getConstructorValues = function (className) {
         return routerCollection.find(function (qry) { return qry.controllerName === className; }).values;
+    };
+    RouteHandler.getWorkerValues = function (className, workerName) {
+        return routerCollection.find(function (qry) { return qry.controllerName === className; }).workers.find(function (qry) { return qry.workerName === workerName; }).values;
     };
     return RouteHandler;
 }());
@@ -3383,7 +3423,7 @@ var checkRouteInWorkerForDefaultRoute = function (route, httpMethod, urlParts) {
             });
             if (isMatched_1 === true) {
                 if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.actionInfo = routeActionInfo;
+                    matchedRoute.workerInfo = routeActionInfo;
                     matchedRoute.params = params_1;
                     matchedRoute.shields = route.shields;
                     return false;
@@ -3395,7 +3435,7 @@ var checkRouteInWorkerForDefaultRoute = function (route, httpMethod, urlParts) {
         }
         return true;
     });
-    if (matchedRoute.actionInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
+    if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     return matchedRoute;
@@ -3411,7 +3451,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
         route.workers.every(function (action) {
             if (action.pattern === pattern_1) {
                 if (action.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.actionInfo = action;
+                    matchedRoute.workerInfo = action;
                     matchedRoute.params = {};
                     matchedRoute.shields = route.shields;
                     return false;
@@ -3455,7 +3495,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
                 });
                 if (isMatched_2 === true) {
                     if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
-                        matchedRoute.actionInfo = routeActionInfo;
+                        matchedRoute.workerInfo = routeActionInfo;
                         matchedRoute.params = params_2;
                         matchedRoute.shields = route.shields;
                         return false;
@@ -3468,7 +3508,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
             return true;
         });
     }
-    if (matchedRoute.actionInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
+    if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     return matchedRoute;

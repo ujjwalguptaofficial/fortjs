@@ -51,7 +51,7 @@ describe("wall test", () => {
             expect(res.body).to.be.an("object");
             expect(res).to.have.header('custom-header-from-incoming-wall', '*');
             expect(res).to.have.header('wall-without-outgoing-wall', '*');
-            expect(res.body).haveOwnProperty('reqCount').equal(72);
+            expect(res.body).haveOwnProperty('reqCount').equal(73);
             done();
         })
     })

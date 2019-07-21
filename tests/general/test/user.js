@@ -8,6 +8,15 @@ const cookie = require('cookie');
 
 describe("/user", () => {
 
+    it("/", (done) => {
+        request.get('/user/').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.equal('user default action');
+            done();
+        })
+    })
+
     it("/{userId}", (done) => {
         request.get('/user/1').end((err, res) => {
             expect(err).to.be.null;
@@ -116,7 +125,7 @@ describe("/user", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(8);
+            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(9);
             done();
         })
     })
@@ -168,6 +177,4 @@ describe("/user", () => {
             done();
         })
     })
-
-
 });

@@ -4,7 +4,7 @@ import { GenericController, GenericShield } from "../generics";
 
 export type RouteMatch = {
   controller: typeof GenericController;
-  actionInfo: WorkerInfo;
+  workerInfo: WorkerInfo;
   params: any;
   shields: Array<typeof GenericShield>;
   allowedHttpMethod: HTTP_METHOD[];
