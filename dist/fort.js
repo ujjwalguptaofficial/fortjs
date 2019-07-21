@@ -381,10 +381,10 @@ var Assign = function (value) {
     return function (target, paramName, paramIndex) {
         var className = target.name || target.constructor.name;
         if (paramName == null) {
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addConstructorValue(className, paramIndex, value);
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].addConstructorValue(className, paramIndex, value);
         }
         else {
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addWorkerValue(className, paramName, paramIndex, value);
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].addWorkerValue(className, paramName, paramIndex, value);
         }
     };
 };
@@ -1822,7 +1822,7 @@ var FileHandler = /** @class */ (function (_super) {
 /*!*******************************!*\
   !*** ./src/handlers/index.ts ***!
   \*******************************/
-/*! exports provided: RouteHandler, RequestHandler, FileHandler, RequestHandlerHelper, ControllerResultHandler, PostHandler */
+/*! exports provided: RouteHandler, RequestHandler, FileHandler, RequestHandlerHelper, ControllerResultHandler, PostHandler, injectorValues, InjectorHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1845,11 +1845,89 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PostHandler", function() { return _post_handler__WEBPACK_IMPORTED_MODULE_5__["PostHandler"]; });
 
+/* harmony import */ var _injector_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./injector_handler */ "./src/handlers/injector_handler.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "injectorValues", function() { return _injector_handler__WEBPACK_IMPORTED_MODULE_6__["injectorValues"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "InjectorHandler", function() { return _injector_handler__WEBPACK_IMPORTED_MODULE_6__["InjectorHandler"]; });
 
 
 
 
 
+
+
+
+
+
+/***/ }),
+
+/***/ "./src/handlers/injector_handler.ts":
+/*!******************************************!*\
+  !*** ./src/handlers/injector_handler.ts ***!
+  \******************************************/
+/*! exports provided: injectorValues, InjectorHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "injectorValues", function() { return injectorValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InjectorHandler", function() { return InjectorHandler; });
+var injectorValues = [];
+var InjectorHandler = /** @class */ (function () {
+    function InjectorHandler() {
+    }
+    InjectorHandler.addConstructorValue = function (className, paramIndex, paramValue) {
+        var index = injectorValues.findIndex(function (x) { return x.className === className; });
+        if (index < 0) {
+            injectorValues.push({
+                className: className,
+                constructorValues: [paramValue],
+                methods: {}
+            });
+        }
+        else {
+            injectorValues[index].constructorValues.splice(paramIndex, 0, paramValue);
+        }
+    };
+    InjectorHandler.addWorkerValue = function (className, paramName, paramIndex, paramValue) {
+        var _a;
+        var savedValue = injectorValues.find(function (x) { return x.className === className; });
+        var value = {
+            className: className,
+            constructorValues: [],
+            methods: (_a = {},
+                _a[paramName] = [paramValue],
+                _a)
+        };
+        if (savedValue == null) {
+            injectorValues.push(value);
+        }
+        else {
+            var savedMethod = savedValue.methods[paramName];
+            if (savedMethod == null) {
+                savedValue.methods[paramName] = [paramValue];
+            }
+            else {
+                savedValue.methods[paramName].splice(paramIndex, 0, paramValue);
+            }
+        }
+    };
+    InjectorHandler.getConstructorValues = function (className) {
+        var savedValue = injectorValues.find(function (qry) { return qry.className === className; });
+        return savedValue == null ? [] : savedValue.constructorValues;
+    };
+    InjectorHandler.getMethodValues = function (className, methodName) {
+        var savedValue = injectorValues.find(function (qry) { return qry.className === className; });
+        if (savedValue != null) {
+            var valueForMethod = injectorValues.find(function (qry) { return qry.className === className; }).methods[methodName];
+            if (valueForMethod != null) {
+                return valueForMethod;
+            }
+        }
+        return [];
+    };
+    return InjectorHandler;
+}());
 
 
 
@@ -2046,7 +2124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models */ "./src/models/index.ts");
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 /* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
-/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./route_handler */ "./src/handlers/route_handler.ts");
+/* harmony import */ var _injector_handler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./injector_handler */ "./src/handlers/injector_handler.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2133,7 +2211,7 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.runController_ = function () {
         var _a;
-        var constructorValues = _route_handler__WEBPACK_IMPORTED_MODULE_7__["RouteHandler"].getConstructorValues(this.routeMatchInfo_.controller.name);
+        var constructorValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(this.routeMatchInfo_.controller.name);
         var controllerObj = new ((_a = this.routeMatchInfo_.controller).bind.apply(_a, [void 0].concat(constructorValues)))();
         controllerObj.request = this.request;
         controllerObj.response = this.response;
@@ -2144,7 +2222,7 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        var workerValues = _route_handler__WEBPACK_IMPORTED_MODULE_7__["RouteHandler"].getWorkerValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        var workerValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
         controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, workerValues).then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
@@ -2674,51 +2752,6 @@ var RouteHandler = /** @class */ (function () {
             });
         }
     };
-    RouteHandler.addConstructorValue = function (className, paramIndex, paramValue) {
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
-        if (index < 0) {
-            routerCollection.push({
-                workers: [],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null,
-                values: [paramValue]
-            });
-        }
-        else {
-            routerCollection[index].values.splice(paramIndex, 0, paramValue);
-        }
-    };
-    RouteHandler.addWorkerValue = function (className, paramName, paramIndex, paramValue) {
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        var action = {
-            guards: [],
-            methodsAllowed: [],
-            pattern: "",
-            values: [paramValue],
-            workerName: paramName
-        };
-        if (router == null) {
-            routerCollection.push({
-                workers: [action],
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null,
-                values: []
-            });
-        }
-        else {
-            var savedAction = router.workers.find(function (val) { return val.workerName === paramName; });
-            if (savedAction == null) {
-                router.workers.push(action);
-            }
-            else {
-                savedAction.values.splice(paramIndex, 0, paramValue);
-            }
-        }
-    };
     RouteHandler.addShields = function (shields, className) {
         var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
         if (index < 0) {
@@ -2828,12 +2861,6 @@ var RouteHandler = /** @class */ (function () {
                 savedAction.pattern = pattern;
             }
         }
-    };
-    RouteHandler.getConstructorValues = function (className) {
-        return routerCollection.find(function (qry) { return qry.controllerName === className; }).values;
-    };
-    RouteHandler.getWorkerValues = function (className, workerName) {
-        return routerCollection.find(function (qry) { return qry.controllerName === className; }).workers.find(function (qry) { return qry.workerName === workerName; }).values;
     };
     return RouteHandler;
 }());

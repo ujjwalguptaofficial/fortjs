@@ -10,6 +10,7 @@ import { RouteMatch, HttpResult, HttpRequest, HttpResponse } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
 import { RouteHandler } from "./route_handler";
+import { InjectorHandler } from "./injector_handler";
 
 
 export class RequestHandler extends PostHandler {
@@ -47,7 +48,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private runController_() {
-        const constructorValues = RouteHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
+        const constructorValues = InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
         const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
         controllerObj.request = this.request as HttpRequest;
         controllerObj.response = this.response;
@@ -58,7 +59,7 @@ export class RequestHandler extends PostHandler {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        const workerValues = RouteHandler.getWorkerValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        const workerValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
         controllerObj[this.routeMatchInfo_.workerInfo.workerName](...workerValues).then(
             this.onResultEvaluated.bind(this)
         ).catch(this.onErrorOccured.bind(this));

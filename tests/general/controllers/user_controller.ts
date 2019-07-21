@@ -18,7 +18,6 @@ export class UserController extends Controller {
     @Worker([HTTP_METHOD.Get])
     @Route("/")
     default(@Assign('user default action') message: string) {
-        console.log('aaaaaaaaaaaaaa', message);
         return new Promise((resolve, reject) => {
             resolve(htmlResult(message));
         });
