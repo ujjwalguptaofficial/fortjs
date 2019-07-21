@@ -6,7 +6,7 @@ import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { XmlHelper, textResult } from "../helpers";
 
-export class ControllerHandler extends FileHandler {
+export class ControllerResultHandler extends FileHandler {
     private controllerResult_: HttpResult;
 
     private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {

@@ -22,7 +22,8 @@ export class RouteHandler {
                 controller: value.controller as any,
                 controllerName: value.controller.name,
                 path: value.path,
-                shields: []
+                shields: [],
+                values: []
             });
         }
         else {
@@ -35,6 +36,23 @@ export class RouteHandler {
         }
     }
 
+    static addConstructorValue(className: string, paramIndex, paramValue) {
+        const index = routerCollection.findIndex(x => x.controllerName === className);
+        if (index < 0) {
+            routerCollection.push({
+                workers: [],
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            routerCollection[index].values.splice(paramIndex, 0, paramValue);
+        }
+    }
+
     static addShields(shields: Array<typeof GenericShield>, className: string) {
         const index = routerCollection.findIndex(x => x.controllerName === className);
         if (index < 0) {
@@ -43,7 +61,8 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: shields,
-                path: null
+                path: null,
+                values: []
             });
         }
         else {
@@ -59,7 +78,8 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                path: null
+                path: null,
+                values: []
             });
         }
         else {
@@ -89,7 +109,8 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                path: null
+                path: null,
+                values: []
             });
         }
         else {
@@ -121,7 +142,8 @@ export class RouteHandler {
                 controller: null,
                 controllerName: className,
                 shields: [],
-                path: null
+                path: null,
+                values: []
             });
         }
         else {
@@ -139,5 +161,9 @@ export class RouteHandler {
                 savedAction.pattern = pattern;
             }
         }
+    }
+
+    static getConstructorValues(className: string) {
+        return routerCollection.find(qry => qry.controllerName === className).values;
     }
 }

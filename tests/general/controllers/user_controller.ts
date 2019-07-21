@@ -1,22 +1,23 @@
-import { Controller, Worker, HTTP_METHOD, htmlResult, textResult, Shields, Guards, jsonResult, Route } from "fortjs";
+import { Controller, Worker, Assign, HTTP_METHOD, htmlResult, textResult, Shields, Guards, jsonResult, Route } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
 import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
+
 @Shields([AuthenticationShield])
 export class UserController extends Controller {
     service: UserService;
 
-    constructor() {
+    constructor(@Assign(UserService) service: UserService) {
         super();
         this.service = new UserService();
     }
 
     @Worker([HTTP_METHOD.Get])
     @Route("/")
-    default() {
+    default(@Assign('hi') name: string) {
         return new Promise((resolve, reject) => {
             resolve(htmlResult("user default action"));
         });

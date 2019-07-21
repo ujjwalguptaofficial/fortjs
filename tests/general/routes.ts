@@ -16,7 +16,7 @@ export const routes: ParentRoute[] = [{
     controller: RandomController,
     path: "random"
 }, {
-    controller: UserController,
+    controller: UserController as any,
     path: "/user"
 }, {
     controller: CookieController,

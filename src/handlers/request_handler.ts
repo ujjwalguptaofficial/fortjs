@@ -9,6 +9,7 @@ import { GenericSessionProvider, GenericGuard } from "../generics";
 import { RouteMatch, HttpResult, HttpRequest, HttpResponse } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
+import { RouteHandler } from "./route_handler";
 
 
 export class RequestHandler extends PostHandler {
@@ -46,7 +47,9 @@ export class RequestHandler extends PostHandler {
     }
 
     private runController_() {
-        const controllerObj: Controller = new this.routeMatchInfo_.controller();
+        const constructorValues = RouteHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
+        console.log('val', constructorValues);
+        const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
         controllerObj.request = this.request as HttpRequest;
         controllerObj.response = this.response;
         controllerObj.query = this.query_;

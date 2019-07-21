@@ -7,4 +7,5 @@ export type RouteInfo = {
     path: string;
     workers: WorkerInfo[];
     shields: Array<typeof GenericShield>;
+    values: any[];
 };

@@ -1,4 +1,4 @@
-import { ControllerHandler } from "./controller_handler";
+import { ControllerResultHandler } from "./controller_result_handler";
 import { promise, JsonHelper } from "../helpers";
 import { __ContentType } from "../constant";
 import { MIME_TYPE } from "../enums";
@@ -10,7 +10,7 @@ import { FileManager } from "../models";
 import { Global } from "../global";
 
 
-export class PostHandler extends ControllerHandler {
+export class PostHandler extends ControllerResultHandler {
     protected body: any;
     protected file: FileManager = new FileManager();
 

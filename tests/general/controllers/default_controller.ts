@@ -1,6 +1,13 @@
-import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker } from "fortjs";
+import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker, Assign } from "fortjs";
 import { ObjectID } from "mongodb";
+import { UserService } from "../services/user_service";
 export class DefaultController extends Controller {
+
+    constructor(@Assign(UserService) service: UserService, @Assign('world') hello) {
+        console.log('variable', service);
+        console.log('world', hello);
+        super();
+    }
 
     @DefaultWorker()
     async index() {
