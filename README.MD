@@ -18,6 +18,7 @@ Fort based MVC web framework for nodejs targeting good code structures & modular
 * Next Gen Javascript - Divide your app into classes, use arrow functions, decorators, async await etc.
 * Based On Architecture Fort - [Fort](https://github.com/ujjwalguptaofficial/fort) is an architecture on top of MVC.
 * TypeScript Support - Fully supported for typescript users.
+* Dependency injection
 
 
 
