@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Fort based MVC web framework for nodejs targeting good code structures & modularity.",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
@@ -51,12 +51,11 @@
     "content-type": "^1.0.4",
     "etag": "^1.8.1",
     "fresh": "^0.5.2",
-    "fs-extra": "^7.0.1",
+    "fs-extra": "^8.1.0",
     "jsontoxml": "^1.0.1",
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",
     "negotiator": "^0.6.2",
-    "reflect-metadata": "^0.1.13",
     "uniqid": "^5.0.3"
   }
 }
