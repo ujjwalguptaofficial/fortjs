@@ -74,11 +74,11 @@ export class ControllerResultHandler extends FileHandler {
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     }
 
-    onResultFromWall(result: HttpResult | HttpFormatResult) {
-        this.handleResponseResult_(result);
+    onTerminationFromWall(result: HttpResult | HttpFormatResult) {
+        this.handleFinalResult_(result);
     }
 
-    private handleResponseResult_(result: HttpResult | HttpFormatResult) {
+    private handleFinalResult_(result: HttpResult | HttpFormatResult) {
         result = result || textResult("");
         this.controllerResult_ = result as HttpResult;
 
@@ -111,13 +111,13 @@ export class ControllerResultHandler extends FileHandler {
         }
     }
 
-    async  onResultEvaluated(result: HttpResult | HttpFormatResult) {
+    async  onResultFromController(result: HttpResult | HttpFormatResult) {
         try {
             await this.runWallOutgoing();
         } catch (ex) {
             this.onErrorOccured(ex);
             return;
         }
-        this.handleResponseResult_(result);
+        this.handleFinalResult_(result);
     }
 }

@@ -6,8 +6,9 @@ import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
-import { JsonHelper } from "../helpers";
+import { JsonHelper, reverseLoop } from "../helpers";
 import { isNull } from "../utils";
+import { InjectorHandler } from "./injector_handler";
 
 
 export class RequestHandlerHelper {
@@ -20,8 +21,12 @@ export class RequestHandlerHelper {
     protected runWallOutgoing() {
         const outgoingResults: Array<Promise<any>> = [];
         for (let length = this.wallInstances.length, i = length - 1; i >= 0; i--) {
-            outgoingResults.push(this.wallInstances[i].onOutgoing());
+            const methodArgsValues = InjectorHandler.getMethodValues(this.wallInstances[i].constructor.name, 'onOutgoing');
+            outgoingResults.push(this.wallInstances[i].onOutgoing(...methodArgsValues));
         }
+        // reverseLoop(this.wallInstances, (value) => {
+        //     outgoingResults.push(value.onOutgoing());
+        // });
         return Promise.all(outgoingResults);
     }
 

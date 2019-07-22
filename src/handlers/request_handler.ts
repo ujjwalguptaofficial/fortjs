@@ -33,7 +33,7 @@ export class RequestHandler extends PostHandler {
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
-    private runWallIncoming_() {
+    private executeWallIncoming_() {
         return Promise.all(Global.walls.map((wall) => {
             const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
             const wallObj = new wall(...constructorArgsValues);
@@ -63,7 +63,7 @@ export class RequestHandler extends PostHandler {
         controllerObj.file = this.file;
         const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
         controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues).then(
-            this.onResultEvaluated.bind(this)
+            this.onResultFromController.bind(this)
         ).catch(this.onErrorOccured.bind(this));
     }
 
@@ -161,11 +161,11 @@ export class RequestHandler extends PostHandler {
                     this.runController_();
                 }
                 else {
-                    this.onResultEvaluated(responseByGuard);
+                    this.onResultFromController(responseByGuard);
                 }
             }
             else {
-                this.onResultEvaluated(responseByShield);
+                this.onResultFromController(responseByShield);
             }
         }
     }
@@ -177,7 +177,7 @@ export class RequestHandler extends PostHandler {
             const urlDetail = url.parse(this.request.url, true);
             this.query_ = urlDetail.query;
             this.parseCookieFromRequest_();
-            const wallProtectionResult = await this.runWallIncoming_();
+            const wallProtectionResult = await this.executeWallIncoming_();
             const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
             if (responseByWall == null) {
                 const pathUrl = urlDetail.pathname;
@@ -192,7 +192,7 @@ export class RequestHandler extends PostHandler {
                 }
             }
             else {
-                this.onResultFromWall(responseByWall);
+                this.onTerminationFromWall(responseByWall);
             }
         }
         catch (ex) {

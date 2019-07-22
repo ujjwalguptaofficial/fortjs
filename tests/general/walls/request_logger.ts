@@ -1,6 +1,12 @@
-import { Wall, textResult } from "fortjs";
+import { Wall, textResult, Assign } from "fortjs";
 let reqCount = 0;
 export class RequestLogger extends Wall {
+
+    injectionValue: string;
+    constructor(@Assign('wall constructor') value: string) {
+        super();
+        this.injectionValue = value;
+    }
 
     private getIP(req) {
         const ip = (req.headers['x-forwarded-for'] || '').split(',').pop() ||
@@ -10,7 +16,8 @@ export class RequestLogger extends Wall {
         return ip;
     }
 
-    async onIncoming() {
+    async onIncoming(@Assign('onIncoming called') value: string) {
+        this.injectionValue = `${this.injectionValue} ${value}`;
         this.response.setHeader('Custom-Header-From-Incoming-Wall', '1');
         this.data.ip = this.getIP(this.request);
         this.data.reqCount = ++reqCount;
@@ -26,8 +33,9 @@ export class RequestLogger extends Wall {
         }
     }
 
-    async onOutgoing() {
+    async onOutgoing(@Assign('on outgoing called') value: string) {
         // console.log('executing request logger');
         this.response.setHeader('Custom-Header-From-Outgoing-Wall', '*');
+        this.response.setHeader('injection-result', this.injectionValue + ` ${value}`);
     }
 }

@@ -1594,10 +1594,10 @@ var ControllerResultHandler = /** @class */ (function (_super) {
         }
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     };
-    ControllerResultHandler.prototype.onResultFromWall = function (result) {
-        this.handleResponseResult_(result);
+    ControllerResultHandler.prototype.onTerminationFromWall = function (result) {
+        this.handleFinalResult_(result);
     };
-    ControllerResultHandler.prototype.handleResponseResult_ = function (result) {
+    ControllerResultHandler.prototype.handleFinalResult_ = function (result) {
         var _this = this;
         result = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
         this.controllerResult_ = result;
@@ -1628,7 +1628,7 @@ var ControllerResultHandler = /** @class */ (function (_super) {
             this.handleRedirectResult_();
         }
     };
-    ControllerResultHandler.prototype.onResultEvaluated = function (result) {
+    ControllerResultHandler.prototype.onResultFromController = function (result) {
         return __awaiter(this, void 0, void 0, function () {
             var ex_1;
             return __generator(this, function (_a) {
@@ -1644,7 +1644,7 @@ var ControllerResultHandler = /** @class */ (function (_super) {
                         this.onErrorOccured(ex_1);
                         return [2 /*return*/];
                     case 3:
-                        this.handleResponseResult_(result);
+                        this.handleFinalResult_(result);
                         return [2 /*return*/];
                 }
             });
@@ -2239,7 +2239,7 @@ var RequestHandler = /** @class */ (function (_super) {
         this.request.on('error', this.onBadRequest.bind(this));
         this.response.on('error', this.onErrorOccured.bind(this));
     };
-    RequestHandler.prototype.runWallIncoming_ = function () {
+    RequestHandler.prototype.executeWallIncoming_ = function () {
         var _this = this;
         return Promise.all(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.map(function (wall) {
             var constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(wall.name);
@@ -2269,7 +2269,7 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
         var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
-        controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, methodArgsValues).then(this.onResultEvaluated.bind(this)).catch(this.onErrorOccured.bind(this));
+        controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, methodArgsValues).then(this.onResultFromController.bind(this)).catch(this.onErrorOccured.bind(this));
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;
@@ -2383,11 +2383,11 @@ var RequestHandler = /** @class */ (function (_super) {
                             this.runController_();
                         }
                         else {
-                            this.onResultEvaluated(responseByGuard);
+                            this.onResultFromController(responseByGuard);
                         }
                         return [3 /*break*/, 15];
                     case 14:
-                        this.onResultEvaluated(responseByShield);
+                        this.onResultFromController(responseByShield);
                         _a.label = 15;
                     case 15: return [2 /*return*/];
                 }
@@ -2404,7 +2404,7 @@ var RequestHandler = /** @class */ (function (_super) {
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         this.query_ = urlDetail.query;
                         this.parseCookieFromRequest_();
-                        return [4 /*yield*/, this.runWallIncoming_()];
+                        return [4 /*yield*/, this.executeWallIncoming_()];
                     case 1:
                         wallProtectionResult = _a.sent();
                         responseByWall = wallProtectionResult.find(function (qry) { return qry != null; });
@@ -2421,7 +2421,7 @@ var RequestHandler = /** @class */ (function (_super) {
                             }
                         }
                         else {
-                            this.onResultFromWall(responseByWall);
+                            this.onTerminationFromWall(responseByWall);
                         }
                         return [3 /*break*/, 3];
                     case 2:
@@ -2486,6 +2486,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! negotiator */ "negotiator");
 /* harmony import */ var negotiator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(negotiator__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _injector_handler__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./injector_handler */ "./src/handlers/injector_handler.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -2526,15 +2527,21 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
 var RequestHandlerHelper = /** @class */ (function () {
     function RequestHandlerHelper() {
         this.wallInstances = [];
     }
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
+        var _a;
         var outgoingResults = [];
         for (var length_1 = this.wallInstances.length, i = length_1 - 1; i >= 0; i--) {
-            outgoingResults.push(this.wallInstances[i].onOutgoing());
+            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_5__["InjectorHandler"].getMethodValues(this.wallInstances[i].constructor.name, 'onOutgoing');
+            outgoingResults.push((_a = this.wallInstances[i]).onOutgoing.apply(_a, methodArgsValues));
         }
+        // reverseLoop(this.wallInstances, (value) => {
+        //     outgoingResults.push(value.onOutgoing());
+        // });
         return Promise.all(outgoingResults);
     };
     RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
@@ -3184,7 +3191,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3242,6 +3249,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _remove_first_slash__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./remove_first_slash */ "./src/helpers/remove_first_slash.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlash", function() { return _remove_first_slash__WEBPACK_IMPORTED_MODULE_17__["removeFirstSlash"]; });
+
+/* harmony import */ var _reverse_loop__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./reverse_loop */ "./src/helpers/reverse_loop.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return _reverse_loop__WEBPACK_IMPORTED_MODULE_18__["reverseLoop"]; });
+
 
 
 
@@ -3728,6 +3739,25 @@ var renderView = function (viewName, model) {
 
 /***/ }),
 
+/***/ "./src/helpers/reverse_loop.ts":
+/*!*************************************!*\
+  !*** ./src/helpers/reverse_loop.ts ***!
+  \*************************************/
+/*! exports provided: reverseLoop */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return reverseLoop; });
+var reverseLoop = function (values, cb) {
+    for (var length_1 = this.wallInstances.length, i = length_1 - 1; i >= 0; i--) {
+        cb(values[i], i);
+    }
+};
+
+
+/***/ }),
+
 /***/ "./src/helpers/text_result.ts":
 /*!************************************!*\
   !*** ./src/helpers/text_result.ts ***!
@@ -3884,7 +3914,7 @@ var XmlHelper = /** @class */ (function () {
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, MustacheViewEngine, MemorySessionProvider */
+/*! exports provided: Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, MustacheViewEngine, MemorySessionProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3964,6 +3994,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeLastSlash", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["removeLastSlash"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlash", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["removeFirstSlash"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return _helpers__WEBPACK_IMPORTED_MODULE_3__["reverseLoop"]; });
 
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./models */ "./src/models/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return _models__WEBPACK_IMPORTED_MODULE_4__["ErrorHandler"]; });

@@ -8,7 +8,7 @@ export declare class RequestHandler extends PostHandler {
     private routeMatchInfo_;
     constructor(request: http.IncomingMessage, response: http.ServerResponse);
     private registerEvents_;
-    private runWallIncoming_;
+    private executeWallIncoming_;
     private runController_;
     private executeShieldsProtection_;
     private executeGuardsCheck_;
