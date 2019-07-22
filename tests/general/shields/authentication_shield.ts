@@ -1,8 +1,17 @@
-import { Shield, HttpResult, redirectResult } from "fortjs";
+import { Shield, HttpResult, redirectResult, Assign, textResult } from "fortjs";
 
 let counter = 0;
 export class AuthenticationShield extends Shield {
-    protect(): Promise<HttpResult> {
+    constructorValue: string;
+    constructor(@Assign('hello in shield') value: string) {
+        super();
+        this.constructorValue = value;
+    }
+
+    protect(@Assign('protect called') value: string): Promise<HttpResult> {
+        if (this.query.shield_injection_test != null) {
+            return textResult(`${this.constructorValue} ${value}`, 200) as any;
+        }
         return new Promise((resolve, reject) => {
             this.data.authenticationShieldCounter = ++counter;
             // console.log('data', this.data);

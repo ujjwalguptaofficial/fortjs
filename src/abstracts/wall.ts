@@ -15,4 +15,8 @@ export abstract class Wall implements Controller {
     async onOutgoing(...args) {
         return null;
     }
+
+    constructor(...args) {
+
+    }
 }

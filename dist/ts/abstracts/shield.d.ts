@@ -13,4 +13,5 @@ export declare abstract class Shield implements Controller {
         [key: string]: any;
     };
     abstract protect(...args: any[]): Promise<HttpResult>;
+    constructor(...args: any[]);
 }

@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.6.1 - 21/07/2019
+ * @license :fortjs - V1.6.1 - 22/07/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -236,6 +236,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Shield", function() { return Shield; });
 var Shield = /** @class */ (function () {
     function Shield() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
     }
     return Shield;
 }());
@@ -311,6 +315,10 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 };
 var Wall = /** @class */ (function () {
     function Wall() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
     }
     Wall.prototype.onOutgoing = function () {
         var args = [];

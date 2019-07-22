@@ -8,6 +8,15 @@ const cookie = require('cookie');
 
 describe("/user", () => {
 
+    it("/?shield_injection_test", (done) => {
+        request.get('/user/?shield_injection_test=true').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.equal('hello in shield protect called');
+            done();
+        })
+    })
+
     it("/", (done) => {
         request.get('/user/').end((err, res) => {
             expect(err).to.be.null;

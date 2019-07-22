@@ -14,4 +14,5 @@ export declare abstract class Wall implements Controller {
     };
     abstract onIncoming(...args: any[]): Promise<HttpResult>;
     onOutgoing(...args: any[]): Promise<any>;
+    constructor(...args: any[]);
 }
