@@ -2533,15 +2533,11 @@ var RequestHandlerHelper = /** @class */ (function () {
         this.wallInstances = [];
     }
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
-        var _a;
         var outgoingResults = [];
-        for (var length_1 = this.wallInstances.length, i = length_1 - 1; i >= 0; i--) {
-            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_5__["InjectorHandler"].getMethodValues(this.wallInstances[i].constructor.name, 'onOutgoing');
-            outgoingResults.push((_a = this.wallInstances[i]).onOutgoing.apply(_a, methodArgsValues));
-        }
-        // reverseLoop(this.wallInstances, (value) => {
-        //     outgoingResults.push(value.onOutgoing());
-        // });
+        Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["reverseLoop"])(this.wallInstances, function (value) {
+            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_5__["InjectorHandler"].getMethodValues(value.constructor.name, 'onOutgoing');
+            outgoingResults.push(value.onOutgoing(methodArgsValues));
+        });
         return Promise.all(outgoingResults);
     };
     RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
@@ -3750,7 +3746,7 @@ var renderView = function (viewName, model) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return reverseLoop; });
 var reverseLoop = function (values, cb) {
-    for (var length_1 = this.wallInstances.length, i = length_1 - 1; i >= 0; i--) {
+    for (var length_1 = values.length, i = length_1 - 1; i >= 0; i--) {
         cb(values[i], i);
     }
 };

@@ -20,13 +20,10 @@ export class RequestHandlerHelper {
 
     protected runWallOutgoing() {
         const outgoingResults: Array<Promise<any>> = [];
-        for (let length = this.wallInstances.length, i = length - 1; i >= 0; i--) {
-            const methodArgsValues = InjectorHandler.getMethodValues(this.wallInstances[i].constructor.name, 'onOutgoing');
-            outgoingResults.push(this.wallInstances[i].onOutgoing(...methodArgsValues));
-        }
-        // reverseLoop(this.wallInstances, (value) => {
-        //     outgoingResults.push(value.onOutgoing());
-        // });
+        reverseLoop(this.wallInstances, (value: Wall) => {
+            const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing');
+            outgoingResults.push(value.onOutgoing(methodArgsValues));
+        });
         return Promise.all(outgoingResults);
     }
 
