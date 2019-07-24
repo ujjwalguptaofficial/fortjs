@@ -73,7 +73,7 @@ export class Fort {
         Global.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
     }
 
-    create(option: AppOption): Promise<void> {
+    create(option?: AppOption): Promise<this> {
         if (option == null) {
             option = {
 
@@ -99,15 +99,17 @@ export class Fort {
                 path: "*"
             });
         }
-        // remove / from files routes
-        option.folders.forEach(folder => {
-            const length = folder.alias.length;
-            if (length > 1) {
-                folder.alias = removeFirstSlash(folder.alias);
-                folder.alias = removeLastSlash(folder.alias);
-            }
+        if (option.folders != null) {
+            // remove / from files routes
+            option.folders.forEach(folder => {
+                const length = folder.alias.length;
+                if (length > 1) {
+                    folder.alias = removeFirstSlash(folder.alias);
+                    folder.alias = removeLastSlash(folder.alias);
+                }
 
-        });
+            });
+        }
 
         this.saveAppOption_(option);
         return promise((res, rej) => {
@@ -121,7 +123,9 @@ export class Fort {
                 else {
                     rej(err);
                 }
-            }).once('listening', res).listen(Global.port);
+            }).once('listening', () => {
+                res(this);
+            }).listen(Global.port);
         });
     }
 
