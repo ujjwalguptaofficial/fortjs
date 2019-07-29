@@ -73,7 +73,7 @@ export class Fort {
         Global.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
     }
 
-    create(option?: AppOption): Promise<this> {
+    create(option?: AppOption): Promise<void> {
         if (option == null) {
             option = {
 
@@ -124,7 +124,7 @@ export class Fort {
                     rej(err);
                 }
             }).once('listening', () => {
-                res(this);
+                res();
             }).listen(Global.port);
         });
     }
