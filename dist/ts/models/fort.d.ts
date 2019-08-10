@@ -34,6 +34,6 @@ export declare class Fort {
      */
     xmlParser?: typeof XmlParser;
     private saveAppOption_;
-    create(option: AppOption): Promise<void>;
+    create(option?: AppOption): Promise<void>;
     destroy(): Promise<void>;
 }

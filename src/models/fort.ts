@@ -1,17 +1,15 @@
 import { ParentRoute, AppOption, EtagOption } from "../types";
 import { Wall, ViewEngine, SessionProvider, XmlParser } from "../abstracts";
-import { RouteHandler } from "../handlers";
+import { RouteHandler, RequestHandler } from "../handlers";
 import { Global } from "../global";
 import { MemorySessionProvider, MustacheViewEngine } from "../extra";
 import { ErrorHandler } from ".";
 import { __AppName } from "../constant";
-import { RequestHandler } from "../handlers";
 import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash } from "../helpers";
 import { GenericSessionProvider, GenericXmlParser, GenericController } from "../generics";
-import { isNull, isNullOrEmpty } from "../utils";
-import { isArray } from "util";
+import { isNull, isNullOrEmpty, isArray } from "../utils";
 
 export class Fort {
     routes: ParentRoute[] = [];
