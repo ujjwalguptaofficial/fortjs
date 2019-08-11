@@ -179,6 +179,27 @@ describe("/home", () => {
         })
     })
 
-    
+    it('/singleton test', (done) => {
+
+        request.get('/getSingletonValue').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.equal('asf');
+        })
+
+        var value = 'hello';
+
+        request.get('/setSingletonValue?value=' + value).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+        })
+
+        request.get('/getSingletonValue').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.equal(value);
+            done();
+        })
+    })
 
 });

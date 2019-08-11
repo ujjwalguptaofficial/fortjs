@@ -10,8 +10,13 @@ export class HomeController extends Controller {
     }
 
     @Worker()
-    changeSingletonValue(value: string) {
-        this.singleton.props = value;
+    async setSingletonValue() {
+        this.singleton.props = this.query.value;
+    }
+
+    @Worker()
+    async getSingletonValue(@Singleton(MySingleton) obj) {
+        return textResult(obj.props);
     }
 
     @DefaultWorker()

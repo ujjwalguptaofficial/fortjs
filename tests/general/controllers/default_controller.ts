@@ -1,4 +1,4 @@
-import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker, Assign, Singleton } from "fortjs";
+import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker, Assign, Singleton, textResult } from "fortjs";
 import { ObjectID } from "mongodb";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
@@ -11,8 +11,13 @@ export class DefaultController extends Controller {
     }
 
     @Worker()
-    changeSingletonValue(value: string) {
-        this.singleton.props = value;
+    async setSingletonValue() {
+        this.singleton.props = this.query.value;
+    }
+
+    @Worker()
+    async getSingletonValue(@Singleton(MySingleton) obj) {
+        return textResult(obj.props);
     }
 
     @DefaultWorker()
