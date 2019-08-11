@@ -1,16 +1,15 @@
 import { InjectorHandler } from "../handlers";
+import { __Constructor } from "../constant";
 
- 
+
 
 // tslint:disable-next-line
 export const Assign = (value): ParameterDecorator => {
-    return (target: any, paramName: string, paramIndex: number) => {
+    return (target: any, methodName: string, paramIndex: number) => {
         const className: string = target.name || target.constructor.name;
-        if (paramName == null) {
-            InjectorHandler.addConstructorValue(className, paramIndex, value);
+        if (methodName == null) {
+            methodName = __Constructor;
         }
-        else {
-            InjectorHandler.addWorkerValue(className, paramName, paramIndex, value);
-        }
+        InjectorHandler.addWorkerValue(className, methodName, paramIndex, value);
     };
 };

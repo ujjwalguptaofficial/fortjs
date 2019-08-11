@@ -362,7 +362,7 @@ var XmlParser = /** @class */ (function () {
 /*!*************************!*\
   !*** ./src/constant.ts ***!
   \*************************/
-/*! exports provided: __ContentType, __AppName, __Cookie, __SetCookie, __CurrentPath, __ContentLength */
+/*! exports provided: __ContentType, __AppName, __Cookie, __SetCookie, __CurrentPath, __ContentLength, __Constructor */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -373,6 +373,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__SetCookie", function() { return __SetCookie; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__CurrentPath", function() { return __CurrentPath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__ContentLength", function() { return __ContentLength; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__Constructor", function() { return __Constructor; });
 /* tslint:disable */
 var __ContentType = "Content-Type";
 var __AppName = "fort";
@@ -380,6 +381,7 @@ var __Cookie = "Cookie";
 var __SetCookie = 'Set-Cookie';
 var __CurrentPath = process.cwd();
 var __ContentLength = "Content-Length";
+var __Constructor = "const_constructor";
 
 
 /***/ }),
@@ -395,17 +397,17 @@ var __ContentLength = "Content-Length";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Assign", function() { return Assign; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+
 
 // tslint:disable-next-line
 var Assign = function (value) {
-    return function (target, paramName, paramIndex) {
+    return function (target, methodName, paramIndex) {
         var className = target.name || target.constructor.name;
-        if (paramName == null) {
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].addConstructorValue(className, paramIndex, value);
+        if (methodName == null) {
+            methodName = _constant__WEBPACK_IMPORTED_MODULE_1__["__Constructor"];
         }
-        else {
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].addWorkerValue(className, paramName, paramIndex, value);
-        }
+        _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].addWorkerValue(className, methodName, paramIndex, value);
     };
 };
 
@@ -1919,28 +1921,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "injectorValues", function() { return injectorValues; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "injectorValuesStore", function() { return injectorValuesStore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InjectorHandler", function() { return InjectorHandler; });
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
+
 var injectorValues = [];
 var injectorValuesStore = [];
 var InjectorHandler = /** @class */ (function () {
     function InjectorHandler() {
     }
-    InjectorHandler.addConstructorValue = function (className, paramIndex, paramValue) {
-        var indexOfValue = injectorValuesStore.indexOf(paramValue);
-        if (indexOfValue < 0) {
-            indexOfValue = injectorValuesStore.push(paramValue) - 1;
-        }
-        var index = injectorValues.findIndex(function (x) { return x.className === className; });
-        if (index < 0) {
-            injectorValues.push({
-                className: className,
-                constructorValues: [indexOfValue],
-                methods: {}
-            });
-        }
-        else {
-            injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
-        }
-    };
+    // static addConstructorValue(className: string, paramIndex, paramValue) {
+    //     let indexOfValue = injectorValuesStore.indexOf(paramValue);
+    //     if (indexOfValue < 0) {
+    //         indexOfValue = injectorValuesStore.push(paramValue) - 1;
+    //     }
+    //     const index = injectorValues.findIndex(x => x.className === className);
+    //     if (index < 0) {
+    //         injectorValues.push({
+    //             className: className,
+    //             constructorValues: [indexOfValue],
+    //             methods: {}
+    //         });
+    //     }
+    //     else {
+    //         injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
+    //     }
+    // }
     InjectorHandler.addWorkerValue = function (className, paramName, paramIndex, paramValue) {
         var _a;
         if (injectorValuesStore.indexOf(paramValue) < 0) {
@@ -1949,7 +1953,7 @@ var InjectorHandler = /** @class */ (function () {
         var savedValue = injectorValues.find(function (x) { return x.className === className; });
         var value = {
             className: className,
-            constructorValues: [],
+            // constructorValues: [],
             methods: (_a = {},
                 _a[paramName] = [paramValue],
                 _a)
@@ -1968,10 +1972,7 @@ var InjectorHandler = /** @class */ (function () {
         }
     };
     InjectorHandler.getConstructorValues = function (className) {
-        var savedValue = injectorValues.find(function (qry) { return qry.className === className; });
-        return savedValue == null ? [] : savedValue.constructorValues.map(function (val) {
-            return injectorValuesStore[val];
-        });
+        return this.getMethodValues(className, _constant__WEBPACK_IMPORTED_MODULE_0__["__Constructor"]);
     };
     InjectorHandler.getMethodValues = function (className, methodName) {
         var savedValue = injectorValues.find(function (qry) { return qry.className === className; });

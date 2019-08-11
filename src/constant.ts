@@ -6,3 +6,4 @@ export const __Cookie = "Cookie";
 export const __SetCookie = 'Set-Cookie';
 export const __CurrentPath = process.cwd();
 export const __ContentLength = "Content-Length";
+export const __Constructor = "const_constructor";

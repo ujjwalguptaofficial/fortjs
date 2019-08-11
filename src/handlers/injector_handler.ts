@@ -1,6 +1,7 @@
+import { __Constructor } from "../constant";
+
 type InjectorValue = {
     className: string;
-    constructorValues: any[],
     methods: {
         [methodName: string]: any[]
     }
@@ -9,24 +10,24 @@ export const injectorValues: InjectorValue[] = [];
 
 export const injectorValuesStore: any[] = [];
 export class InjectorHandler {
-    static addConstructorValue(className: string, paramIndex, paramValue) {
-        let indexOfValue = injectorValuesStore.indexOf(paramValue);
-        if (indexOfValue < 0) {
-            indexOfValue = injectorValuesStore.push(paramValue) - 1;
-        }
+    // static addConstructorValue(className: string, paramIndex, paramValue) {
+    //     let indexOfValue = injectorValuesStore.indexOf(paramValue);
+    //     if (indexOfValue < 0) {
+    //         indexOfValue = injectorValuesStore.push(paramValue) - 1;
+    //     }
 
-        const index = injectorValues.findIndex(x => x.className === className);
-        if (index < 0) {
-            injectorValues.push({
-                className: className,
-                constructorValues: [indexOfValue],
-                methods: {}
-            });
-        }
-        else {
-            injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
-        }
-    }
+    //     const index = injectorValues.findIndex(x => x.className === className);
+    //     if (index < 0) {
+    //         injectorValues.push({
+    //             className: className,
+    //             constructorValues: [indexOfValue],
+    //             methods: {}
+    //         });
+    //     }
+    //     else {
+    //         injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
+    //     }
+    // }
 
     static addWorkerValue(className: string, paramName: string, paramIndex, paramValue) {
         if (injectorValuesStore.indexOf(paramValue) < 0) {
@@ -36,7 +37,7 @@ export class InjectorHandler {
         const savedValue = injectorValues.find(x => x.className === className);
         const value: InjectorValue = {
             className: className,
-            constructorValues: [],
+            // constructorValues: [],
             methods: {
                 [paramName]: [paramValue]
             }
@@ -56,11 +57,7 @@ export class InjectorHandler {
     }
 
     static getConstructorValues(className: string) {
-        const savedValue = injectorValues.find(qry => qry.className === className);
-        return savedValue == null ? [] : savedValue.constructorValues.map((val) => {
-            return injectorValuesStore[val];
-        });
-
+        return this.getMethodValues(className, __Constructor);
     }
 
     static getMethodValues(className: string, methodName: string) {
