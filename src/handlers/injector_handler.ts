@@ -6,54 +6,38 @@ type InjectorValue = {
         [methodName: string]: any[]
     }
 };
-export const injectorValues: InjectorValue[] = [];
-
-export const injectorValuesStore: any[] = [];
+const injectorValues: InjectorValue[] = [];
+const injectorValuesStore: any[] = [];
+const singletons: {
+    [className: string]: number
+} = {};
 export class InjectorHandler {
-    // static addConstructorValue(className: string, paramIndex, paramValue) {
-    //     let indexOfValue = injectorValuesStore.indexOf(paramValue);
-    //     if (indexOfValue < 0) {
-    //         indexOfValue = injectorValuesStore.push(paramValue) - 1;
-    //     }
 
-    //     const index = injectorValues.findIndex(x => x.className === className);
-    //     if (index < 0) {
-    //         injectorValues.push({
-    //             className: className,
-    //             constructorValues: [indexOfValue],
-    //             methods: {}
-    //         });
-    //     }
-    //     else {
-    //         injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
-    //     }
-    // }
-
-    static addWorkerValue(className: string, paramName: string, paramIndex, paramValue) {
-        if (injectorValuesStore.indexOf(paramValue) < 0) {
+    static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
+        if (shouldFindIndex === true && injectorValuesStore.indexOf(paramValue) < 0) {
             paramValue = injectorValuesStore.push(paramValue) - 1;
         }
 
         const savedValue = injectorValues.find(x => x.className === className);
         const value: InjectorValue = {
             className: className,
-            // constructorValues: [],
             methods: {
-                [paramName]: [paramValue]
+                [methodName]: [paramValue]
             }
         };
         if (savedValue == null) {
             injectorValues.push(value);
         }
         else {
-            const savedMethod = savedValue.methods[paramName];
+            const savedMethod = savedValue.methods[methodName];
             if (savedMethod == null) {
-                savedValue.methods[paramName] = [paramValue];
+                savedValue.methods[methodName] = [paramValue];
             }
             else {
-                savedValue.methods[paramName].splice(paramIndex, 0, paramValue);
+                savedValue.methods[methodName].splice(paramIndex, 0, paramValue);
             }
         }
+        return paramValue;
     }
 
     static getConstructorValues(className: string) {
@@ -71,5 +55,15 @@ export class InjectorHandler {
             }
         }
         return [];
+    }
+
+    static addSingleton(className: string, methodName: string, paramIndex, paramValue) {
+        const singletonClassName = paramValue.constructor.name;
+        if (singletons[singletonClassName] == null) {
+            singletons[singletonClassName] = InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue());
+        }
+        else {
+            InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletons[singletonClassName], false);
+        }
     }
 }

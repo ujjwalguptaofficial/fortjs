@@ -1,4 +1,4 @@
-import { Controller, Worker, Assign, HTTP_METHOD, htmlResult, textResult, Shields, Guards, jsonResult, Route } from "fortjs";
+import { Controller, Worker, Assign, HTTP_METHOD, htmlResult, textResult, Shields, Guards, jsonResult, Route, Singleton } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
@@ -10,9 +10,9 @@ import { HTTP_STATUS_CODE } from "fortjs";
 export class UserController extends Controller {
     service: UserService;
 
-    constructor(@Assign(UserService) service) {
+    constructor(@Singleton(UserService) service) {
         super();
-        this.service = new service();
+        this.service = service;
     }
 
     @Worker([HTTP_METHOD.Get])
