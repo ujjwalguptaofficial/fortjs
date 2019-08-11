@@ -2,26 +2,37 @@ type InjectorValue = {
     className: string;
     constructorValues: any[],
     methods: {
-        [name: string]: any[]
+        [methodName: string]: any[]
     }
 };
 export const injectorValues: InjectorValue[] = [];
+
+export const injectorValuesStore: any[] = [];
 export class InjectorHandler {
     static addConstructorValue(className: string, paramIndex, paramValue) {
+        let indexOfValue = injectorValuesStore.indexOf(paramValue);
+        if (indexOfValue < 0) {
+            indexOfValue = injectorValuesStore.push(paramValue) - 1;
+        }
+
         const index = injectorValues.findIndex(x => x.className === className);
         if (index < 0) {
             injectorValues.push({
                 className: className,
-                constructorValues: [paramValue],
+                constructorValues: [indexOfValue],
                 methods: {}
             });
         }
         else {
-            injectorValues[index].constructorValues.splice(paramIndex, 0, paramValue);
+            injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
         }
     }
 
     static addWorkerValue(className: string, paramName: string, paramIndex, paramValue) {
+        if (injectorValuesStore.indexOf(paramValue) < 0) {
+            paramValue = injectorValuesStore.push(paramValue) - 1;
+        }
+
         const savedValue = injectorValues.find(x => x.className === className);
         const value: InjectorValue = {
             className: className,
@@ -46,16 +57,20 @@ export class InjectorHandler {
 
     static getConstructorValues(className: string) {
         const savedValue = injectorValues.find(qry => qry.className === className);
-        return savedValue == null ? [] : savedValue.constructorValues;
+        return savedValue == null ? [] : savedValue.constructorValues.map((val) => {
+            return injectorValuesStore[val];
+        });
 
     }
 
     static getMethodValues(className: string, methodName: string) {
         const savedValue = injectorValues.find(qry => qry.className === className);
         if (savedValue != null) {
-            const valueForMethod = injectorValues.find(qry => qry.className === className).methods[methodName];
-            if (valueForMethod != null) {
-                return valueForMethod;
+            const methodArgs = savedValue.methods[methodName];
+            if (methodArgs != null) {
+                return methodArgs.map(val => {
+                    return injectorValuesStore[val];
+                });
             }
         }
         return [];

@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.7.0 - 10/08/2019
+ * @license :fortjs - V1.7.0 - 11/08/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1866,7 +1866,7 @@ var FileHandler = /** @class */ (function (_super) {
 /*!*******************************!*\
   !*** ./src/handlers/index.ts ***!
   \*******************************/
-/*! exports provided: RouteHandler, RequestHandler, FileHandler, RequestHandlerHelper, ControllerResultHandler, PostHandler, injectorValues, InjectorHandler */
+/*! exports provided: RouteHandler, RequestHandler, FileHandler, RequestHandlerHelper, ControllerResultHandler, PostHandler, injectorValues, injectorValuesStore, InjectorHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1892,6 +1892,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _injector_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./injector_handler */ "./src/handlers/injector_handler.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "injectorValues", function() { return _injector_handler__WEBPACK_IMPORTED_MODULE_6__["injectorValues"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "injectorValuesStore", function() { return _injector_handler__WEBPACK_IMPORTED_MODULE_6__["injectorValuesStore"]; });
+
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "InjectorHandler", function() { return _injector_handler__WEBPACK_IMPORTED_MODULE_6__["InjectorHandler"]; });
 
 
@@ -1909,32 +1911,41 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************!*\
   !*** ./src/handlers/injector_handler.ts ***!
   \******************************************/
-/*! exports provided: injectorValues, InjectorHandler */
+/*! exports provided: injectorValues, injectorValuesStore, InjectorHandler */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "injectorValues", function() { return injectorValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "injectorValuesStore", function() { return injectorValuesStore; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InjectorHandler", function() { return InjectorHandler; });
 var injectorValues = [];
+var injectorValuesStore = [];
 var InjectorHandler = /** @class */ (function () {
     function InjectorHandler() {
     }
     InjectorHandler.addConstructorValue = function (className, paramIndex, paramValue) {
+        var indexOfValue = injectorValuesStore.indexOf(paramValue);
+        if (indexOfValue < 0) {
+            indexOfValue = injectorValuesStore.push(paramValue) - 1;
+        }
         var index = injectorValues.findIndex(function (x) { return x.className === className; });
         if (index < 0) {
             injectorValues.push({
                 className: className,
-                constructorValues: [paramValue],
+                constructorValues: [indexOfValue],
                 methods: {}
             });
         }
         else {
-            injectorValues[index].constructorValues.splice(paramIndex, 0, paramValue);
+            injectorValues[index].constructorValues.splice(paramIndex, 0, indexOfValue);
         }
     };
     InjectorHandler.addWorkerValue = function (className, paramName, paramIndex, paramValue) {
         var _a;
+        if (injectorValuesStore.indexOf(paramValue) < 0) {
+            paramValue = injectorValuesStore.push(paramValue) - 1;
+        }
         var savedValue = injectorValues.find(function (x) { return x.className === className; });
         var value = {
             className: className,
@@ -1958,14 +1969,18 @@ var InjectorHandler = /** @class */ (function () {
     };
     InjectorHandler.getConstructorValues = function (className) {
         var savedValue = injectorValues.find(function (qry) { return qry.className === className; });
-        return savedValue == null ? [] : savedValue.constructorValues;
+        return savedValue == null ? [] : savedValue.constructorValues.map(function (val) {
+            return injectorValuesStore[val];
+        });
     };
     InjectorHandler.getMethodValues = function (className, methodName) {
         var savedValue = injectorValues.find(function (qry) { return qry.className === className; });
         if (savedValue != null) {
-            var valueForMethod = injectorValues.find(function (qry) { return qry.className === className; }).methods[methodName];
-            if (valueForMethod != null) {
-                return valueForMethod;
+            var methodArgs = savedValue.methods[methodName];
+            if (methodArgs != null) {
+                return methodArgs.map(function (val) {
+                    return injectorValuesStore[val];
+                });
             }
         }
         return [];

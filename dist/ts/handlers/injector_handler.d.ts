@@ -2,10 +2,11 @@ declare type InjectorValue = {
     className: string;
     constructorValues: any[];
     methods: {
-        [name: string]: any[];
+        [methodName: string]: any[];
     };
 };
 export declare const injectorValues: InjectorValue[];
+export declare const injectorValuesStore: any[];
 export declare class InjectorHandler {
     static addConstructorValue(className: string, paramIndex: any, paramValue: any): void;
     static addWorkerValue(className: string, paramName: string, paramIndex: any, paramValue: any): void;
