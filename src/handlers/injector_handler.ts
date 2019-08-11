@@ -58,12 +58,14 @@ export class InjectorHandler {
     }
 
     static addSingleton(className: string, methodName: string, paramIndex, paramValue) {
-        const singletonClassName = paramValue.constructor.name;
-        if (singletons[singletonClassName] == null) {
-            singletons[singletonClassName] = InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue());
-        }
-        else {
-            InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletons[singletonClassName], false);
+        const singletonClassName = paramValue.name;
+        if (singletonClassName) {
+            if (singletons[singletonClassName] == null) {
+                singletons[singletonClassName] = InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue());
+            }
+            else {
+                InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletons[singletonClassName], false);
+            }
         }
     }
 }

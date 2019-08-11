@@ -4,5 +4,6 @@ export declare enum HTTP_METHOD {
     Put = "PUT",
     Patch = "PATCH",
     Delete = "DELETE",
-    Options = "OPTIONS"
+    Options = "OPTIONS",
+    Head = "HEAD"
 }

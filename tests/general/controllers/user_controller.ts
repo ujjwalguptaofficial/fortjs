@@ -10,7 +10,7 @@ import { HTTP_STATUS_CODE } from "fortjs";
 export class UserController extends Controller {
     service: UserService;
 
-    constructor(@Singleton(UserService) service) {
+    constructor(@Singleton(UserService) service: UserService) {
         super();
         this.service = service;
     }

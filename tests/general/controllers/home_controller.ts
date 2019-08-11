@@ -1,7 +1,18 @@
-import { Controller, viewResult, Worker, HTTP_METHOD, Route, jsonResult, htmlResult, textResult, DefaultWorker, redirectResult } from "fortjs";
+import { Controller, viewResult, Worker, HTTP_METHOD, Route, jsonResult, htmlResult, textResult, DefaultWorker, redirectResult, Singleton } from "fortjs";
 import { UserService } from "../services/user_service";
+import { MySingleton } from "../extra/singleton";
 
 export class HomeController extends Controller {
+    singleton: MySingleton;
+    constructor(@Singleton(MySingleton) obj) {
+        super();
+        this.singleton = obj;
+    }
+
+    @Worker()
+    changeSingletonValue(value: string) {
+        this.singleton.props = value;
+    }
 
     @DefaultWorker()
     default() {
