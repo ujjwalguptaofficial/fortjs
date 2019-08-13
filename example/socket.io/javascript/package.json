@@ -18,6 +18,7 @@
     "@babel/preset-env": "^7.1.6",
     "@types/node": "^10.12.15",
     "babel-loader": "^8.0.4",
+    "babel-plugin-parameter-decorator-custom": "^1.0.0",
     "eslint": "^5.10.0",
     "nodemon-webpack-plugin": "^4.0.6",
     "opn-cli": "^4.0.0",
@@ -27,7 +28,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "fortjs": "^1.6.0",
+    "fortjs": "^1.7.2",
     "socket.io": "^2.2.0"
   },
   "project": {

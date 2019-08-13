@@ -1,6 +1,6 @@
 import { DefaultController } from "./controllers/default_controller";
 
 export const routes = [{
-    path: "*",
+    path: "/*",
     controller: DefaultController
 }];

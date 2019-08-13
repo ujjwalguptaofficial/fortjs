@@ -7,15 +7,16 @@ import {
     renderView,
     viewResult,
     Route,
-    HTTP_METHOD
+    HTTP_METHOD,
+    Assign
 } from "fortjs";
 
 export class DefaultController extends Controller {
     @DefaultWorker()
-    async index() {
+    async index(@Assign('FortJs') title) {
         try {
             const model = {
-                title: 'FortJs'
+                title: title
             }
             const result = await viewResult('default/index.html', model);
             return result;
