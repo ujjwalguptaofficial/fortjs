@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.7.1 - 11/08/2019
+ * @license :fortjs - V1.7.2 - 13/08/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -3376,7 +3376,7 @@ var Assign = function (value) {
 var Singleton = function (value) {
     return function (target, methodName, paramIndex) {
         var className = target.name || target.constructor.name;
-        if (methodName == null) {
+        if (methodName == null || methodName === 'constructor') {
             methodName = __Constructor;
         }
         injector_handler_InjectorHandler.addSingleton(className, methodName, paramIndex, value);

@@ -7,7 +7,8 @@ import {
     Route,
     HTTP_STATUS_CODE,
     HTTP_METHOD,
-    Guards
+    Guards,
+    Singleton
 } from 'fortjs';
 import {
     UserService
@@ -15,16 +16,18 @@ import {
 import {
     ModelUserGuard
 } from '../guards/model_user_guard';
-import {
-    User
-} from '../models/user';
 
 export class UserController extends Controller {
 
+    constructor(@Singleton(UserService) service) {
+        super();
+        console.log('service', service);
+        this.service = service;
+    }
+
     @DefaultWorker()
     async getUsers() {
-        const service = new UserService();
-        return jsonResult(service.getUsers());
+        return jsonResult(this.service.getUsers());
     }
 
     @Worker([HTTP_METHOD.Post])
@@ -32,8 +35,7 @@ export class UserController extends Controller {
     @Guards([ModelUserGuard])
     async addUser() {
         const user = this.data.user;
-        const service = new UserService();
-        const newUser = service.addUser(user);
+        const newUser = this.service.addUser(user);
         return jsonResult(newUser, HTTP_STATUS_CODE.Created);
     }
 
@@ -43,7 +45,7 @@ export class UserController extends Controller {
     async updateUser() {
 
         const user = this.data.user;
-        const userUpdated = new UserService().updateUser(user);
+        const userUpdated = this.service.updateUser(user);
         if (userUpdated === true) {
             return textResult("user updated");
         } else {
@@ -57,7 +59,7 @@ export class UserController extends Controller {
     async getUser() {
 
         const userId = Number(this.param.id);
-        const user = new UserService().getUser(userId);
+        const user = this.service.getUser(userId);
         if (user == null) {
             return textResult("invalid id");
         }
@@ -70,10 +72,9 @@ export class UserController extends Controller {
     async removeUser() {
 
         const userId = Number(this.param.id);
-        const service = new UserService();
-        const user = service.getUser(userId);
+        const user = this.service.getUser(userId);
         if (user != null) {
-            service.removeUser(userId);
+            this.service.removeUser(userId);
             return textResult("user deleted");
         } else {
             return textResult("invalid user");
