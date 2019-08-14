@@ -11,6 +11,17 @@ let {
 } = require('./common');
 
 describe("/file", () => {
+
+    it('default path', (done) => {
+        request.get('/file').end((err, res) => {
+            expect(res.text).to.contains('Welcome to FortJs');
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.header['x-powered-by']).to.equal('MyFort');
+            done();
+        });
+    })
+
     it("/scripts/bundle.js", done => {
         request.get('/file/scripts/bundle.js').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;

@@ -8,16 +8,17 @@ import {
     fileResult,
     Worker,
     HTTP_METHOD,
-    jsonResult
+    jsonResult,
+    Assign
 } from "fortjs";
 
 import * as Path from "path";
 
 export class FileController extends Controller {
     @DefaultWorker()
-    async default() {
+    async default(@Assign('Welcome to FortJs') title) {
         try {
-            const viewData = await renderView('controller:default,action:default');
+            const viewData = await renderView('controller:default,action:default', { title: title });
             const result = await htmlResult(viewData);
             return result;
         } catch (ex) {

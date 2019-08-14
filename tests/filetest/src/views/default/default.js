@@ -6,11 +6,11 @@ import {
 // you can give any name but make sure its unique among all other views.
 @declareView('controller:default,action:default')
 export class DefaultView extends View {
-    async render() {
+    async render(data) {
         return `<!doctype html>
         <html>
         <head>
-        <title>FortJs</title>
+        <title>${data.title}</title>
         </head>
         <body>
         <div class="text-center" style="margin-top:50px;">
