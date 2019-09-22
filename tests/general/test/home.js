@@ -159,15 +159,6 @@ describe("/home", () => {
         })
     })
 
-    it("/user allowMe without login", (done) => {
-        request.get('/user/allowMe').redirects(0).end((err, res) => {
-            expect(err).to.be.null;
-            expect(res).to.have.status(200);
-            expect(res).to.have.header('location', '/default/login');
-            done();
-        })
-    })
-
     it("/default/login", (done) => {
         const user = {
             emailId: `ujjwal@mg.com`,

@@ -29,14 +29,14 @@ export class UserController extends Controller {
         try {
             const userId = Number(this.param.id);
             if (userId === 0) {
-                const usersFromDb = this.service.getUsers();
-                const users = usersFromDb.map(val => {
+                let users = this.service.getUsers();
+                let userss = users.map(val => {
                     return {
                         user: val
                     }
                 });
                 return jsonResult({
-                    users: [users]
+                    users: [userss]
                 });
             }
             else {
@@ -111,10 +111,5 @@ export class UserController extends Controller {
     @Route('/counter/shield/')
     async getCounter() {
         return jsonResult(this.data);
-    }
-
-    @Worker()
-    async allowMe(){
-        return textResult("i am allowed");
     }
 }
