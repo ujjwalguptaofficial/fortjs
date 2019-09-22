@@ -12,6 +12,8 @@ export abstract class Shield implements Controller {
 
     data: { [key: string]: any };
 
+    workerName: string;
+
     abstract protect(...args): Promise<HttpResult>;
 
     constructor(...args) {
