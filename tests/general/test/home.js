@@ -150,6 +150,16 @@ describe("/home", () => {
         })
     })
 
+    it("/user allowMe without login", (done) => {
+        request.get('/user/allow/Me').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/plain');
+            expect(res.text).to.be.equal('i am allowed');
+            done();
+        })
+    })
+
     it("/user without login", (done) => {
         request.get('/user/').redirects(0).end((err, res) => {
             expect(err).to.be.null;
@@ -201,5 +211,4 @@ describe("/home", () => {
             done();
         })
     })
-
 });

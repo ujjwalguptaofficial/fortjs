@@ -112,4 +112,10 @@ export class UserController extends Controller {
     async getCounter() {
         return jsonResult(this.data);
     }
+
+    @Worker()
+    @Route('/allow/me')
+    async allowMe(){
+        return textResult("i am allowed");
+    }
 }

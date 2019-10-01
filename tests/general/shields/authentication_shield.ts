@@ -25,7 +25,12 @@ export class AuthenticationShield extends Shield {
                     resolve(null);
                 }
                 else {
-                    resolve(redirectResult("/default/login"))
+                    if (this.workerName === 'allowMe') {
+                        resolve(null);
+                    }
+                    else {
+                        resolve(redirectResult("/default/login"));
+                    }
                 }
             });
         });

@@ -77,6 +77,7 @@ export class RequestHandler extends PostHandler {
             shieldObj.request = this.request as HttpRequest;
             shieldObj.response = this.response as HttpResponse;
             shieldObj.data = this.data_;
+            shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
             const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
             return shieldObj.protect(...methodArgsValues);
         }));

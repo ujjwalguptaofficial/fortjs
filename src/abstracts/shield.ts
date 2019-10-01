@@ -3,6 +3,7 @@ import { CookieManager } from "../models";
 import { SessionProvider, Controller } from ".";
 
 export abstract class Shield implements Controller {
+    workerName: string;
     request: HttpRequest;
     response: HttpResponse;
     query: { [key: string]: string };
