@@ -4722,7 +4722,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var initShield = function (shieldInstance, data) {
     var value = Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(shieldInstance, data);
-    value.workerName = data.workerName;
+    value.workerName = data && data.workerName;
     return value;
 };
 

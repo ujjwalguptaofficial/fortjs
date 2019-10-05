@@ -8,6 +8,6 @@ export type ShieldTestData = ControllerTestData & {
 
 export const initShield = (shieldInstance, data?: ShieldTestData) => {
     const value: ShieldTestData = initController(shieldInstance, data) as any;
-    value.workerName = data.workerName;
+    value.workerName = data && data.workerName;
     return value;
 };

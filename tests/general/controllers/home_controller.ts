@@ -3,32 +3,6 @@ import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 
 export class HomeController extends Controller {
-    singleton: MySingleton;
-    constructor(@Singleton(MySingleton) obj) {
-        super();
-        this.singleton = obj;
-    }
-
-    @Worker()
-    async setSingletonValue() {
-        this.singleton.props = this.query.value;
-    }
-
-    @Worker()
-    async getSingletonValue(@Singleton(MySingleton) obj) {
-        return textResult(obj.props);
-    }
-
-    @DefaultWorker()
-    default() {
-        // just for making sure these fields has been initiated
-        const params = this.param;
-        const query = this.query;
-        const data = this.data;
-        return new Promise((res, rej) => {
-            res(viewResult("default/index.html", { title: "fort" }));
-        });
-    }
 
     @Worker([HTTP_METHOD.Post])
     async login() {
