@@ -10,16 +10,6 @@ export class DefaultController extends Controller {
         this.singleton = obj;
     }
 
-    @Worker()
-    async setSingletonValue() {
-        this.singleton.props = this.query.value;
-    }
-
-    @Worker()
-    async getSingletonValue(@Singleton(MySingleton) obj) {
-        return textResult(obj.props);
-    }
-
     @DefaultWorker()
     async index(@Assign('Welcome to fort') title: string) {
         // just for making sure these fields has been initiated
@@ -29,6 +19,16 @@ export class DefaultController extends Controller {
         return new Promise((res, rej) => {
             res(viewResult("default/index.html", { title: title }));
         });
+    }
+
+    @Worker()
+    async setSingletonValue() {
+        this.singleton.props = this.query.value;
+    }
+
+    @Worker()
+    async getSingletonValue(@Singleton(MySingleton) obj) {
+        return textResult(obj.props);
     }
 
     @Worker([HTTP_METHOD.Get, HTTP_METHOD.Post])

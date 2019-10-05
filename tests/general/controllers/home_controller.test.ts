@@ -21,29 +21,6 @@ describe('DefaultController', () => {
         expect(result).toEqual(expectedResult);
     });
 
-    it('setSingletonValue', async () => {
-        controller.initialize({
-            query: {
-                value: 'hello world'
-            }
-        });
-        const output = await controller.setSingletonValue();
-        expect(output).toEqual(undefined);
-    });
-
-    it('getSingletonValue', async () => {
-        const expectedResult = await textResult('hello world');
-        const result = await controller.getSingletonValue(singleton);
-        expect(result).toEqual(expectedResult);
-    });
-
-    it('getFriends', async () => {
-        const expectedResult = await textResult('hello world');
-        const result = await controller.getSingletonValue(singleton);
-        expect(result).toEqual(expectedResult);
-    });
-
-
     afterAll(() => {
         return app.destroy();
     });
