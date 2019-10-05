@@ -15,7 +15,6 @@ describe('DefaultController', () => {
         });
         const controller = new DefaultController(new MySingleton());
         controller.initialize();
-        // initController(controller);
         const indexMethodOutput = await controller.index('FortJs');
         expect(indexMethodOutput).toEqual(expectedResult);
     });
