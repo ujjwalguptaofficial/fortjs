@@ -32,6 +32,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "eshtml": "^0.1.0"
+    "eshtml": "^0.1.0",
+    "fortjs": "^1.7.3"
   }
 }

@@ -87,6 +87,17 @@ describe("/file", () => {
         });
     })
 
+    it('/file check after upload without any file', (done) => {
+        request.post('/file/upload').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body.responseText).to.be.equal('file not saved');
+            expect(res.body.count).to.be.equal(0);
+            done();
+        });
+    })
+
     it('/upload with wrong file name', (done) => {
         request.post('/file/upload').attach("jsstdddore", "static/fort_js_logo_200_137.png").end((err, res) => {
             expect(err).to.be.null;
