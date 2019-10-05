@@ -1,5 +1,6 @@
 import { HttpFile } from "./http_file";
 export declare class FileManager {
+    private files_;
     /**
      * get total no of files
      *

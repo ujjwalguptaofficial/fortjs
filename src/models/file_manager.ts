@@ -1,9 +1,9 @@
 import { HttpFile } from "./http_file";
 import * as Fs from "fs-extra";
 
-let files: { [fieldName: string]: HttpFile } = {};
 export class FileManager {
 
+    private files_: { [fieldName: string]: HttpFile } = {};
 
     /**
      * get total no of files
@@ -12,19 +12,18 @@ export class FileManager {
      * @memberof FileManager
      */
     get count() {
-        return Object.keys(files).length;
+        return Object.keys(this.files_).length;
     }
 
     get files() {
-        const results: HttpFile[] = [];
-        for (const file in files) {
-            results.push(files[file]);
-        }
-        return results;
+
+        return Object.keys(this.files_).map(fileId => {
+            return this.files_[fileId];
+        });
     }
 
     set files(value) {
-        files = value as any;
+        this.files_ = value as any;
     }
 
     /**
@@ -35,7 +34,7 @@ export class FileManager {
      * @memberof FileManager
      */
     isExist(fieldName: string) {
-        return files[fieldName] != null;
+        return this.files_[fieldName] != null;
     }
 
     /**
@@ -46,7 +45,7 @@ export class FileManager {
      * @memberof FileManager
      */
     getFile(fieldName: string) {
-        return files[fieldName];
+        return this.files_[fieldName];
     }
 
     /**
@@ -58,6 +57,6 @@ export class FileManager {
      * @memberof FileManager
      */
     saveTo(fieldName: string, pathToSave: string) {
-        return Fs.copy(files[fieldName].path, pathToSave);
+        return Fs.copy(this.files_[fieldName].path, pathToSave);
     }
 }

@@ -4272,9 +4272,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs-extra */ "fs-extra");
 /* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs_extra__WEBPACK_IMPORTED_MODULE_0__);
 
-var files = {};
 var FileManager = /** @class */ (function () {
     function FileManager() {
+        this.files_ = {};
     }
     Object.defineProperty(FileManager.prototype, "count", {
         /**
@@ -4284,21 +4284,20 @@ var FileManager = /** @class */ (function () {
          * @memberof FileManager
          */
         get: function () {
-            return Object.keys(files).length;
+            return Object.keys(this.files_).length;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(FileManager.prototype, "files", {
         get: function () {
-            var results = [];
-            for (var file in files) {
-                results.push(files[file]);
-            }
-            return results;
+            var _this = this;
+            return Object.keys(this.files_).map(function (fileId) {
+                return _this.files_[fileId];
+            });
         },
         set: function (value) {
-            files = value;
+            this.files_ = value;
         },
         enumerable: true,
         configurable: true
@@ -4311,7 +4310,7 @@ var FileManager = /** @class */ (function () {
      * @memberof FileManager
      */
     FileManager.prototype.isExist = function (fieldName) {
-        return files[fieldName] != null;
+        return this.files_[fieldName] != null;
     };
     /**
      * return the file
@@ -4321,7 +4320,7 @@ var FileManager = /** @class */ (function () {
      * @memberof FileManager
      */
     FileManager.prototype.getFile = function (fieldName) {
-        return files[fieldName];
+        return this.files_[fieldName];
     };
     /**
      * saves file to supplied path
@@ -4332,7 +4331,7 @@ var FileManager = /** @class */ (function () {
      * @memberof FileManager
      */
     FileManager.prototype.saveTo = function (fieldName, pathToSave) {
-        return fs_extra__WEBPACK_IMPORTED_MODULE_0__["copy"](files[fieldName].path, pathToSave);
+        return fs_extra__WEBPACK_IMPORTED_MODULE_0__["copy"](this.files_[fieldName].path, pathToSave);
     };
     return FileManager;
 }());
