@@ -18,5 +18,9 @@ export abstract class Shield implements Controller {
     constructor(...args) {
 
     }
+
+    // initialize(data?: ShieldTestData) {
+    //     return initShield(this, data);
+    // }
 }
 

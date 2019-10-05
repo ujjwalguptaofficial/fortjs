@@ -8,7 +8,8 @@
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
     "build": "webpack --config webpack.config.js",
-    "test": "mocha test/index.js --exit",
+    "test": "npm run test:unit && mocha test/index.js --exit",
+    "test:unit": "cross-env NODE_ENV=test jest --runInBand",
     "build:test": "npm run build && npm run test",
     "build:test:dev": "NODE_ENV=development npm run build:test",
     "build:test:prod": "NODE_ENV=production npm run build:test",
@@ -32,13 +33,17 @@
     "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.18",
     "@types/mongodb": "^3.1.28",
     "@types/validator": "^9.4.3",
     "axios": "^0.18.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
+    "cross-env": "^6.0.3",
+    "jest": "^24.9.0",
     "mocha": "^5.2.0",
     "nodemon-webpack-plugin": "^4.0.7",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "ts-jest": "^24.1.0"
   }
 }

@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponse } from "../types";
 import { CookieManager, FileManager } from "../models";
 import { SessionProvider } from ".";
+import { initController } from "../test_helpers";
 
 
 export abstract class Controller {
@@ -17,5 +18,10 @@ export abstract class Controller {
 
     constructor(...args) {
 
+    }
+
+    initialize?(data?) {
+        console.log('this', this);
+        initController(this, data);
     }
 }

@@ -13,6 +13,7 @@
             "es2015",
             "dom"
         ],
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "esModuleInterop": true
     }
 }

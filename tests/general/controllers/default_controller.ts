@@ -5,7 +5,7 @@ import { MySingleton } from "../extra/singleton";
 export class DefaultController extends Controller {
 
     singleton: MySingleton;
-    constructor(@Singleton(MySingleton) obj) {
+    constructor(@Singleton(MySingleton) obj: MySingleton) {
         super();
         this.singleton = obj;
     }
@@ -21,13 +21,13 @@ export class DefaultController extends Controller {
     }
 
     @DefaultWorker()
-    async index() {
+    async index(@Assign('Welcome to fort') title: string) {
         // just for making sure these fields has been initiated
         const params = this.param;
         const query = this.query;
         const data = this.data;
         return new Promise((res, rej) => {
-            res(viewResult("default/index.html", { title: "Welcome to fort" }));
+            res(viewResult("default/index.html", { title: title }));
         });
     }
 

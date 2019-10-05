@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager, FileManager } from "../models";
-import { SessionProvider, Controller } from ".";
+import { Controller } from "./controller";
+import { SessionProvider } from "./session_provider";
 export declare abstract class Guard implements Controller {
     request: HttpRequest;
     response: HttpResponse;

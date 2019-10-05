@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager, FileManager } from "../models";
-import { SessionProvider, Controller } from ".";
+import { Controller } from "./controller";
+import { SessionProvider } from "./session_provider";
 
 export abstract class Guard implements Controller {
     request: HttpRequest;
@@ -17,4 +18,8 @@ export abstract class Guard implements Controller {
     constructor(...args) {
 
     }
+
+    // initialize(data?: GuardTestData) {
+    //     return initGuard(this, data);
+    // }
 }

@@ -2,6 +2,7 @@ import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager } from "../models";
 import { SessionProvider, Controller } from ".";
 
+
 export abstract class Wall implements Controller {
     request: HttpRequest;
     response: HttpResponse;
@@ -19,4 +20,8 @@ export abstract class Wall implements Controller {
     constructor(...args) {
 
     }
+
+    // initialize(data?: WallTestData) {
+    //     return initWall(this, data);
+    // }
 }
