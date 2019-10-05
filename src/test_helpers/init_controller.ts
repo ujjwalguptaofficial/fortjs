@@ -4,10 +4,11 @@ import { Global } from "../global";
 import { ControllerTestData } from "../types";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
+import { Controller } from "../abstracts";
 
 
 
-export const initController = (controllerInstance, data?: ControllerTestData) => {
+export const initController = (controllerInstance: Controller, data?: ControllerTestData) => {
     data = data || {};
     const parsedCookies = data.cookieValue || {};
     const headers = (data.request && data.request.headers) || {};

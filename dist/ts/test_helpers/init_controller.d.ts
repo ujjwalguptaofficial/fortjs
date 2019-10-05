@@ -1,2 +1,3 @@
 import { ControllerTestData } from "../types";
-export declare const initController: (controllerInstance: any, data?: ControllerTestData) => any;
+import { Controller } from "../abstracts";
+export declare const initController: (controllerInstance: Controller, data?: ControllerTestData) => Controller;

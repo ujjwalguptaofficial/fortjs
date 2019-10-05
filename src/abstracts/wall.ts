@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager } from "../models";
 import { SessionProvider, Controller } from ".";
+import { WallTestData, initWall } from "../test_helpers/init_wall";
 
 
 export abstract class Wall implements Controller {
@@ -21,7 +22,7 @@ export abstract class Wall implements Controller {
 
     }
 
-    // initialize(data?: WallTestData) {
-    //     return initWall(this, data);
-    // }
+    initialize(data?: WallTestData) {
+        return initWall(this, data);
+    }
 }

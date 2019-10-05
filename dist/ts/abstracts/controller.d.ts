@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse } from "../types";
+import { HttpRequest, HttpResponse, ControllerTestData } from "../types";
 import { CookieManager, FileManager } from "../models";
 import { SessionProvider } from ".";
 export declare abstract class Controller {
@@ -20,5 +20,5 @@ export declare abstract class Controller {
     };
     file?: FileManager;
     constructor(...args: any[]);
-    initialize?(data?: any): void;
+    initialize(data?: ControllerTestData): void;
 }

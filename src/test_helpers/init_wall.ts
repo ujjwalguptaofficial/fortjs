@@ -4,6 +4,6 @@ import { ControllerTestData } from "../types";
 
 export type WallTestData = ControllerTestData;
 
-export const initWall = (controllerInstance, data?: WallTestData) => {
-    return initController(controllerInstance, data);
+export const initWall = (wallInstance, data?: WallTestData) => {
+    return initController(wallInstance, data);
 };

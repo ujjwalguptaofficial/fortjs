@@ -112,7 +112,6 @@ var Controller = /** @class */ (function () {
         }
     }
     Controller.prototype.initialize = function (data) {
-        console.log('this', this);
         Object(_test_helpers__WEBPACK_IMPORTED_MODULE_0__["initController"])(this, data);
     };
     return Controller;
@@ -132,6 +131,8 @@ var Controller = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Guard", function() { return Guard; });
+/* harmony import */ var _test_helpers_init_guard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../test_helpers/init_guard */ "./src/test_helpers/init_guard.ts");
+
 var Guard = /** @class */ (function () {
     function Guard() {
         var args = [];
@@ -139,6 +140,9 @@ var Guard = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
     }
+    Guard.prototype.initialize = function (data) {
+        return Object(_test_helpers_init_guard__WEBPACK_IMPORTED_MODULE_0__["initGuard"])(this, data);
+    };
     return Guard;
 }());
 
@@ -240,6 +244,8 @@ var SessionProvider = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Shield", function() { return Shield; });
+/* harmony import */ var _test_helpers_init_shield__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../test_helpers/init_shield */ "./src/test_helpers/init_shield.ts");
+
 var Shield = /** @class */ (function () {
     function Shield() {
         var args = [];
@@ -247,6 +253,9 @@ var Shield = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
     }
+    Shield.prototype.initialize = function (data) {
+        return Object(_test_helpers_init_shield__WEBPACK_IMPORTED_MODULE_0__["initShield"])(this, data);
+    };
     return Shield;
 }());
 
@@ -284,6 +293,7 @@ var ViewEngine = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Wall", function() { return Wall; });
+/* harmony import */ var _test_helpers_init_wall__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../test_helpers/init_wall */ "./src/test_helpers/init_wall.ts");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -319,6 +329,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 var Wall = /** @class */ (function () {
     function Wall() {
         var args = [];
@@ -336,6 +347,9 @@ var Wall = /** @class */ (function () {
                 return [2 /*return*/, null];
             });
         });
+    };
+    Wall.prototype.initialize = function (data) {
+        return Object(_test_helpers_init_wall__WEBPACK_IMPORTED_MODULE_0__["initWall"])(this, data);
     };
     return Wall;
 }());
@@ -4671,6 +4685,65 @@ var initController = function (controllerInstance, data) {
     controllerInstance.data = data.data || {};
     controllerInstance.file = new _models__WEBPACK_IMPORTED_MODULE_0__["FileManager"]();
     return controllerInstance;
+};
+
+
+/***/ }),
+
+/***/ "./src/test_helpers/init_guard.ts":
+/*!****************************************!*\
+  !*** ./src/test_helpers/init_guard.ts ***!
+  \****************************************/
+/*! exports provided: initGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initGuard", function() { return initGuard; });
+/* harmony import */ var _init_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init_controller */ "./src/test_helpers/init_controller.ts");
+
+var initGuard = function (guardInstance, data) {
+    return Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(guardInstance, data);
+};
+
+
+/***/ }),
+
+/***/ "./src/test_helpers/init_shield.ts":
+/*!*****************************************!*\
+  !*** ./src/test_helpers/init_shield.ts ***!
+  \*****************************************/
+/*! exports provided: initShield */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initShield", function() { return initShield; });
+/* harmony import */ var _init_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init_controller */ "./src/test_helpers/init_controller.ts");
+
+var initShield = function (shieldInstance, data) {
+    var value = Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(shieldInstance, data);
+    value.workerName = data.workerName;
+    return value;
+};
+
+
+/***/ }),
+
+/***/ "./src/test_helpers/init_wall.ts":
+/*!***************************************!*\
+  !*** ./src/test_helpers/init_wall.ts ***!
+  \***************************************/
+/*! exports provided: initWall */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initWall", function() { return initWall; });
+/* harmony import */ var _init_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init_controller */ "./src/test_helpers/init_controller.ts");
+
+var initWall = function (wallInstance, data) {
+    return Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(wallInstance, data);
 };
 
 

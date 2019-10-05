@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager } from "../models";
 import { SessionProvider, Controller } from ".";
+import { ShieldTestData } from "../test_helpers/init_shield";
 export declare abstract class Shield implements Controller {
     workerName: string;
     request: HttpRequest;
@@ -15,4 +16,5 @@ export declare abstract class Shield implements Controller {
     };
     abstract protect(...args: any[]): Promise<HttpResult>;
     constructor(...args: any[]);
+    initialize(data?: ShieldTestData): ShieldTestData;
 }

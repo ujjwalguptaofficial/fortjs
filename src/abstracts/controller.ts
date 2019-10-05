@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse } from "../types";
+import { HttpRequest, HttpResponse, ControllerTestData } from "../types";
 import { CookieManager, FileManager } from "../models";
 import { SessionProvider } from ".";
 import { initController } from "../test_helpers";
@@ -20,8 +20,7 @@ export abstract class Controller {
 
     }
 
-    initialize?(data?) {
-        console.log('this', this);
+    initialize(data?: ControllerTestData) {
         initController(this, data);
     }
 }

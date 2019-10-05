@@ -1,6 +1,7 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager } from "../models";
 import { SessionProvider, Controller } from ".";
+import { ShieldTestData, initShield } from "../test_helpers/init_shield";
 
 export abstract class Shield implements Controller {
     workerName: string;
@@ -19,8 +20,8 @@ export abstract class Shield implements Controller {
 
     }
 
-    // initialize(data?: ShieldTestData) {
-    //     return initShield(this, data);
-    // }
+    initialize(data?: ShieldTestData) {
+        return initShield(this, data);
+    }
 }
 

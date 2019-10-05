@@ -2,6 +2,7 @@ import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager, FileManager } from "../models";
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
+import { GuardTestData, initGuard } from "../test_helpers/init_guard";
 
 export abstract class Guard implements Controller {
     request: HttpRequest;
@@ -19,7 +20,7 @@ export abstract class Guard implements Controller {
 
     }
 
-    // initialize(data?: GuardTestData) {
-    //     return initGuard(this, data);
-    // }
+    initialize(data?: GuardTestData) {
+        return initGuard(this, data);
+    }
 }
