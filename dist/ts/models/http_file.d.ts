@@ -16,9 +16,9 @@ export declare class HttpFile {
     /**
      * the HTTP headers that were sent along with this file
      */
-    headers: IncomingHttpHeaders;
+    headers?: IncomingHttpHeaders;
     /**
      * size of the file in bytes
      */
-    size: number;
+    size?: number;
 }
