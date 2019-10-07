@@ -1,7 +1,8 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager } from "../models";
-import { SessionProvider, Controller } from ".";
-import { WallTestData, initWall } from "../test_helpers/init_wall";
+import {  Controller } from "./controller";
+import { SessionProvider } from "./session_provider";
+import { WallTestData, initWall } from "../test_helpers";
 
 
 export abstract class Wall implements Controller {

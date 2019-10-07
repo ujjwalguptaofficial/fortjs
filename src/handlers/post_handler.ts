@@ -12,7 +12,7 @@ import { Global } from "../global";
 
 export class PostHandler extends ControllerResultHandler {
     protected body: any;
-    protected file: FileManager = new FileManager();
+    protected file: FileManager;
 
     private getPostRawData_(): Promise<string> {
         const body = [];
@@ -62,9 +62,10 @@ export class PostHandler extends ControllerResultHandler {
         if (contentType === MIME_TYPE.FormMultiPart) {
             const result = await this.parseMultiPartData_();
             postData = result.field;
-            this.file.files = result.file as any;
+            this.file = new FileManager(result.file);
         }
         else {
+            this.file = new FileManager({});
             const bodyDataAsString = await this.getPostRawData_();
             switch (contentType) {
                 case MIME_TYPE.Json:

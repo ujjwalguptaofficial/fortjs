@@ -1,4 +1,5 @@
 import { HttpRequest } from "./http_request";
+import { HttpFile } from "../models";
 export declare type ControllerTestData = {
     request?: HttpRequest;
     query?: {
@@ -15,5 +16,8 @@ export declare type ControllerTestData = {
     };
     data?: {
         [key: string]: any;
+    };
+    file?: {
+        [fieldName: string]: HttpFile;
     };
 };

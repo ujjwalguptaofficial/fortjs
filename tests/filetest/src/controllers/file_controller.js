@@ -15,6 +15,7 @@ import {
 import * as Path from "path";
 
 export class FileController extends Controller {
+
     @DefaultWorker()
     async default(@Assign('Welcome to FortJs') title) {
         try {
@@ -34,9 +35,14 @@ export class FileController extends Controller {
     async getScripts() {
         // check for file exist when there is no upload
         // Note :- do not remove this
-        const isFileExist = this.file.isExist('jsstore');
-        const filePath = Path.join(__dirname, "../static/scripts/", `${this.param.file}.js`);
-        return fileResult(filePath);
+        try {
+            const isFileExist = this.file.isExist('jsstore');
+            const filePath = Path.join(__dirname, "../static/scripts/", `${this.param.file}.js`);
+            return fileResult(filePath);
+        } catch (ex) {
+            console.error(ex);
+        }
+
     }
 
     @Worker([HTTP_METHOD.Post])

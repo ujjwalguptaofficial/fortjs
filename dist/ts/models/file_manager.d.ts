@@ -1,6 +1,7 @@
 import { HttpFile } from "./http_file";
 export declare class FileManager {
     private files_;
+    constructor(value: any);
     /**
      * get total no of files
      *
@@ -8,7 +9,7 @@ export declare class FileManager {
      * @memberof FileManager
      */
     readonly count: number;
-    files: HttpFile[];
+    readonly files: HttpFile[];
     /**
      * check for existance of file
      *

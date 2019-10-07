@@ -3,7 +3,11 @@ import * as Fs from "fs-extra";
 
 export class FileManager {
 
-    private files_: { [fieldName: string]: HttpFile } = {};
+    private files_: { [fieldName: string]: HttpFile };
+
+    constructor(value) {
+        this.files_ = value as any;
+    }
 
     /**
      * get total no of files
@@ -20,10 +24,6 @@ export class FileManager {
         return Object.keys(this.files_).map(fileId => {
             return this.files_[fileId];
         });
-    }
-
-    set files(value) {
-        this.files_ = value as any;
     }
 
     /**

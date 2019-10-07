@@ -2,7 +2,8 @@ import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager, FileManager } from "../models";
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
-import { GuardTestData, initGuard } from "../test_helpers/init_guard";
+import { GuardTestData, initGuard } from "../test_helpers";
+
 
 export abstract class Guard implements Controller {
     request: HttpRequest;

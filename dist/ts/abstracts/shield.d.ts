@@ -1,7 +1,7 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager } from "../models";
 import { SessionProvider, Controller } from ".";
-import { ShieldTestData } from "../test_helpers/init_shield";
+import { ShieldTestData } from "../test_helpers";
 export declare abstract class Shield implements Controller {
     workerName: string;
     request: HttpRequest;

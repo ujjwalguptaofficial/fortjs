@@ -1,4 +1,5 @@
 import { HttpRequest } from "./http_request";
+import { HttpFile } from "../models";
 
 export type ControllerTestData = {
     request?: HttpRequest;
@@ -7,4 +8,5 @@ export type ControllerTestData = {
     cookieValue?: { [key: string]: string };
     param?: { [key: string]: string };
     data?: { [key: string]: any };
+    file?: { [fieldName: string]: HttpFile }
 };

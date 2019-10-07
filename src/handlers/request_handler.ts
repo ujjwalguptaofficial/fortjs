@@ -4,7 +4,7 @@ import { Controller } from "../abstracts";
 import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
 import { Global } from "../global";
 import { parseCookie, parseAndMatchRoute } from "../helpers";
-import { CookieManager } from "../models";
+import { CookieManager, FileManager } from "../models";
 import { GenericSessionProvider, GenericGuard } from "../generics";
 import { RouteMatch, HttpResult, HttpRequest, HttpResponse } from "../types";
 import { HTTP_METHOD } from "../enums";
@@ -204,6 +204,7 @@ export class RequestHandler extends PostHandler {
     async handlePostData() {
         if (this.request.method === HTTP_METHOD.Get) {
             this.body = {};
+            this.file = new FileManager({});
         }
         else if (Global.shouldParsePost === true) {
             this.body = await this.parsePostData();

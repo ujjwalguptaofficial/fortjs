@@ -23,6 +23,6 @@ export const initController = (controllerInstance: Controller, data?: Controller
     controllerInstance.session = session;
     controllerInstance.param = data.param || {};
     controllerInstance.data = data.data || {};
-    controllerInstance.file = new FileManager();
+    controllerInstance.file = new FileManager(data.file || {});
     return controllerInstance;
 };
