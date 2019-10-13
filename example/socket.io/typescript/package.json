@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/ujjwalguptaofficial/fortjs-typescript-starter#readme",
   "dependencies": {
-    "fortjs": "^1.7.2",
+    "fortjs": "^1.8.1",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
