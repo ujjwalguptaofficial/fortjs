@@ -33,8 +33,8 @@ export class RequestHandler extends PostHandler {
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
-    private executeWallIncoming_(): Promise<HttpResult | null> {
-        return promise(async (res, rej) => {
+    private executeWallIncoming_(): Promise<boolean> {
+        return promise(async (res) => {
             let index = 0;
             const wallLength = Global.walls.length;
             const executeWallIncomingByIndex = async () => {
@@ -56,14 +56,16 @@ export class RequestHandler extends PostHandler {
                             executeWallIncomingByIndex();
                         }
                         else {
-                            res(result);
+                            res(false);
+                            this.onTerminationFromWall(result);
                         }
                     } catch (ex) {
-                        rej(ex);
+                        this.onErrorOccured(ex);
+                        res(false);
                     }
                 }
                 else {
-                    res();
+                    res(true);
                 }
             };
             executeWallIncomingByIndex();
@@ -225,32 +227,28 @@ export class RequestHandler extends PostHandler {
     }
 
     private async execute_() {
-        // there are many methods being called here, which has chances of throwing error
-        // so using global level try block
         const urlDetail = url.parse(this.request.url, true);
         this.query_ = urlDetail.query;
-        const isParsedSuccessfully = this.parseCookieFromRequest_();
-        if (isParsedSuccessfully) {
-            try {
-                const responseByWall = await this.executeWallIncoming_();
-                if (responseByWall == null) {
-                    const pathUrl = urlDetail.pathname;
-                    const requestMethod = this.request.method as HTTP_METHOD;
+        let shouldExecuteNextProcess = this.parseCookieFromRequest_();
+        if (shouldExecuteNextProcess === true) {
+            shouldExecuteNextProcess = await this.executeWallIncoming_();
+            if (shouldExecuteNextProcess === true) {
+                const pathUrl = urlDetail.pathname;
+                const requestMethod = this.request.method as HTTP_METHOD;
+                try {
                     this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-                    if (this.routeMatchInfo_ == null) { // no route matched
-                        // it may be a file or folder then
-                        this.handleFileRequest(pathUrl);
-                    }
-                    else {
-                        this.onRouteMatched_();
-                    }
+                }
+                catch (ex) {
+                    shouldExecuteNextProcess = false;
+                    this.onErrorOccured(ex);
+                }
+                if (shouldExecuteNextProcess === true && this.routeMatchInfo_ == null) { // no route matched
+                    // it may be a file or folder then
+                    this.handleFileRequest(pathUrl);
                 }
                 else {
-                    this.onTerminationFromWall(responseByWall);
+                    this.onRouteMatched_();
                 }
-            }
-            catch (ex) {
-                this.onErrorOccured(ex);
             }
         }
     }

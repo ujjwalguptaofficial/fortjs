@@ -5,23 +5,23 @@ let {
 
 describe("wall test", () => {
     it("/blocked by wall using get", (done) => {
-        const body = {
+        const query = {
             blockByWall: true
         }
-        request.get('/default/getdata').query(body).end((err, res) => {
+        request.get('/default/getdata').query(query).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res).to.have.header('custom-header-from-outgoing-wall', null);
             expect(res.text).to.be.equal('blocked by wall');
+            expect(res).to.have.header('custom-header-from-outgoing-wall', null);
             done();
         })
     })
 
     it("/blocked by wall using header", (done) => {
-        const body = {
+        const header = {
             blockByWall: 'true'
         }
-        request.post('/home/getdata').set(body).end((err, res) => {
+        request.post('/home/getdata').set(header).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('custom-header-from-outgoing-wall', null);

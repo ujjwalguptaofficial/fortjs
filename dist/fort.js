@@ -2300,7 +2300,7 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.executeWallIncoming_ = function () {
         var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res, rej) { return __awaiter(_this, void 0, void 0, function () {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) { return __awaiter(_this, void 0, void 0, function () {
             var index, wallLength, executeWallIncomingByIndex;
             var _this = this;
             return __generator(this, function (_a) {
@@ -2333,16 +2333,18 @@ var RequestHandler = /** @class */ (function (_super) {
                                     executeWallIncomingByIndex();
                                 }
                                 else {
-                                    res(result);
+                                    res(false);
+                                    this.onTerminationFromWall(result);
                                 }
                                 return [3 /*break*/, 4];
                             case 3:
                                 ex_1 = _a.sent();
-                                rej(ex_1);
+                                this.onErrorOccured(ex_1);
+                                res(false);
                                 return [3 /*break*/, 4];
                             case 4: return [3 /*break*/, 6];
                             case 5:
-                                res();
+                                res(true);
                                 _a.label = 6;
                             case 6: return [2 /*return*/];
                         }
@@ -2545,25 +2547,28 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.execute_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, isParsedSuccessfully, responseByWall, pathUrl, requestMethod, ex_5;
+            var urlDetail, shouldExecuteNextProcess, pathUrl, requestMethod;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         this.query_ = urlDetail.query;
-                        isParsedSuccessfully = this.parseCookieFromRequest_();
-                        if (!isParsedSuccessfully) return [3 /*break*/, 4];
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        shouldExecuteNextProcess = this.parseCookieFromRequest_();
+                        if (!(shouldExecuteNextProcess === true)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.executeWallIncoming_()];
-                    case 2:
-                        responseByWall = _a.sent();
-                        if (responseByWall == null) {
+                    case 1:
+                        shouldExecuteNextProcess = _a.sent();
+                        if (shouldExecuteNextProcess === true) {
                             pathUrl = urlDetail.pathname;
                             requestMethod = this.request.method;
-                            this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
-                            if (this.routeMatchInfo_ == null) { // no route matched
+                            try {
+                                this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
+                            }
+                            catch (ex) {
+                                shouldExecuteNextProcess = false;
+                                this.onErrorOccured(ex);
+                            }
+                            if (shouldExecuteNextProcess === true && this.routeMatchInfo_ == null) { // no route matched
                                 // it may be a file or folder then
                                 this.handleFileRequest(pathUrl);
                             }
@@ -2571,15 +2576,8 @@ var RequestHandler = /** @class */ (function (_super) {
                                 this.onRouteMatched_();
                             }
                         }
-                        else {
-                            this.onTerminationFromWall(responseByWall);
-                        }
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_5 = _a.sent();
-                        this.onErrorOccured(ex_5);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
+                        _a.label = 2;
+                    case 2: return [2 /*return*/];
                 }
             });
         });
