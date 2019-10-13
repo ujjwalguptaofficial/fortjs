@@ -2401,7 +2401,7 @@ var RequestHandler = /** @class */ (function (_super) {
                                 executeShieldByIndex();
                             }
                             else {
-                                res(true);
+                                res(false);
                                 this.onResultFromController(result);
                             }
                             return [3 /*break*/, 4];
@@ -2423,21 +2423,72 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
         var _this = this;
-        return Promise.all(guards.map(function (guard) {
-            var constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(guard.name);
-            var guardObj = new (guard.bind.apply(guard, [void 0].concat(constructorArgsValues)))();
-            guardObj.body = _this.body;
-            guardObj.cookie = _this.cookieManager;
-            guardObj.query = _this.query_;
-            guardObj.session = _this.session_;
-            guardObj.request = _this.request;
-            guardObj.response = _this.response;
-            guardObj.data = _this.data_;
-            guardObj.file = _this.file;
-            guardObj.param = _this.routeMatchInfo_.params;
-            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(guard.name, 'check');
-            return guardObj.check.apply(guardObj, methodArgsValues);
-        }));
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) {
+            var index = 0;
+            var shieldLength = guards.length;
+            var executeGuardByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
+                var guard, constructorArgsValues, guardObj, methodArgsValues, result, ex_3;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(shieldLength > index)) return [3 /*break*/, 5];
+                            guard = guards[index++];
+                            constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(guard.name);
+                            guardObj = new (guard.bind.apply(guard, [void 0].concat(constructorArgsValues)))();
+                            guardObj.body = this.body;
+                            guardObj.cookie = this.cookieManager;
+                            guardObj.query = this.query_;
+                            guardObj.session = this.session_;
+                            guardObj.request = this.request;
+                            guardObj.response = this.response;
+                            guardObj.data = this.data_;
+                            guardObj.file = this.file;
+                            guardObj.param = this.routeMatchInfo_.params;
+                            methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(guard.name, 'check');
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, guardObj.check.apply(guardObj, methodArgsValues)];
+                        case 2:
+                            result = _a.sent();
+                            if (result == null) {
+                                executeGuardByIndex();
+                            }
+                            else {
+                                res(false);
+                                this.onResultFromController(result);
+                            }
+                            return [3 /*break*/, 4];
+                        case 3:
+                            ex_3 = _a.sent();
+                            this.onErrorOccured(ex_3);
+                            res(false);
+                            return [3 /*break*/, 4];
+                        case 4: return [3 /*break*/, 6];
+                        case 5:
+                            res(true);
+                            _a.label = 6;
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            }); };
+            executeGuardByIndex();
+        });
+        // return Promise.all(guards.map(guard => {
+        //     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
+        //     const guardObj = new guard(...constructorArgsValues);
+        //     guardObj.body = this.body;
+        //     guardObj.cookie = this.cookieManager;
+        //     guardObj.query = this.query_;
+        //     guardObj.session = this.session_;
+        //     guardObj.request = this.request as HttpRequest;
+        //     guardObj.response = this.response as HttpResponse;
+        //     guardObj.data = this.data_;
+        //     guardObj.file = this.file;
+        //     guardObj.param = this.routeMatchInfo_.params;
+        //     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
+        //     return guardObj.check(...methodArgsValues);
+        // }));
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {
         if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
@@ -2459,7 +2510,7 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.onRouteMatched_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var actionInfo, shouldExecuteNextComponent, ex_3, guardsCheckResult, ex_4, responseByGuard;
+            var actionInfo, shouldExecuteNextComponent, ex_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2471,11 +2522,11 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
                         }
-                        return [3 /*break*/, 11];
+                        return [3 /*break*/, 8];
                     case 1: return [4 /*yield*/, this.executeShieldsProtection_()];
                     case 2:
                         shouldExecuteNextComponent = _a.sent();
-                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 11];
+                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 8];
                         _a.label = 3;
                     case 3:
                         _a.trys.push([3, 5, , 6]);
@@ -2484,32 +2535,17 @@ var RequestHandler = /** @class */ (function (_super) {
                         _a.sent();
                         return [3 /*break*/, 6];
                     case 5:
-                        ex_3 = _a.sent();
-                        this.onBadRequest(ex_3);
-                        return [2 /*return*/];
-                    case 6:
-                        guardsCheckResult = void 0;
-                        _a.label = 7;
-                    case 7:
-                        _a.trys.push([7, 9, , 10]);
-                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 8:
-                        guardsCheckResult = _a.sent();
-                        return [3 /*break*/, 10];
-                    case 9:
                         ex_4 = _a.sent();
-                        this.onErrorOccured(ex_4);
+                        this.onBadRequest(ex_4);
                         return [2 /*return*/];
-                    case 10:
-                        responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
-                        if (responseByGuard == null) {
+                    case 6: return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
+                    case 7:
+                        shouldExecuteNextComponent = _a.sent();
+                        if (shouldExecuteNextComponent === true) {
                             this.runController_();
                         }
-                        else {
-                            this.onResultFromController(responseByGuard);
-                        }
-                        _a.label = 11;
-                    case 11: return [2 /*return*/];
+                        _a.label = 8;
+                    case 8: return [2 /*return*/];
                 }
             });
         });

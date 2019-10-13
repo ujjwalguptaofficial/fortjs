@@ -112,7 +112,7 @@ export class RequestHandler extends PostHandler {
                             executeShieldByIndex();
                         }
                         else {
-                            res(true);
+                            res(false);
                             this.onResultFromController(result);
                         }
                     } catch (ex) {
@@ -128,22 +128,60 @@ export class RequestHandler extends PostHandler {
         });
     }
 
-    private executeGuardsCheck_(guards: Array<typeof GenericGuard>) {
-        return Promise.all(guards.map(guard => {
-            const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
-            const guardObj = new guard(...constructorArgsValues);
-            guardObj.body = this.body;
-            guardObj.cookie = this.cookieManager;
-            guardObj.query = this.query_;
-            guardObj.session = this.session_;
-            guardObj.request = this.request as HttpRequest;
-            guardObj.response = this.response as HttpResponse;
-            guardObj.data = this.data_;
-            guardObj.file = this.file;
-            guardObj.param = this.routeMatchInfo_.params;
-            const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
-            return guardObj.check(...methodArgsValues);
-        }));
+    private executeGuardsCheck_(guards: Array<typeof GenericGuard>): Promise<boolean> {
+        return promise((res) => {
+            let index = 0;
+            const shieldLength = guards.length;
+            const executeGuardByIndex = async () => {
+                if (shieldLength > index) {
+                    const guard = guards[index++];
+                    const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
+                    const guardObj = new guard(...constructorArgsValues);
+                    guardObj.body = this.body;
+                    guardObj.cookie = this.cookieManager;
+                    guardObj.query = this.query_;
+                    guardObj.session = this.session_;
+                    guardObj.request = this.request as HttpRequest;
+                    guardObj.response = this.response as HttpResponse;
+                    guardObj.data = this.data_;
+                    guardObj.file = this.file;
+                    guardObj.param = this.routeMatchInfo_.params;
+                    const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
+                    try {
+                        const result = await guardObj.check(...methodArgsValues);
+                        if (result == null) {
+                            executeGuardByIndex();
+                        }
+                        else {
+                            res(false);
+                            this.onResultFromController(result);
+                        }
+                    } catch (ex) {
+                        this.onErrorOccured(ex);
+                        res(false);
+                    }
+                }
+                else {
+                    res(true);
+                }
+            };
+            executeGuardByIndex();
+        });
+        // return Promise.all(guards.map(guard => {
+        //     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
+        //     const guardObj = new guard(...constructorArgsValues);
+        //     guardObj.body = this.body;
+        //     guardObj.cookie = this.cookieManager;
+        //     guardObj.query = this.query_;
+        //     guardObj.session = this.session_;
+        //     guardObj.request = this.request as HttpRequest;
+        //     guardObj.response = this.response as HttpResponse;
+        //     guardObj.data = this.data_;
+        //     guardObj.file = this.file;
+        //     guardObj.param = this.routeMatchInfo_.params;
+        //     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
+        //     return guardObj.check(...methodArgsValues);
+        // }));
     }
 
     private parseCookieFromRequest_() {
@@ -177,7 +215,7 @@ export class RequestHandler extends PostHandler {
             }
         }
         else {
-            const shouldExecuteNextComponent = await this.executeShieldsProtection_();
+            let shouldExecuteNextComponent = await this.executeShieldsProtection_();
             if (shouldExecuteNextComponent === true) {
                 try {
                     await this.handlePostData();
@@ -186,20 +224,10 @@ export class RequestHandler extends PostHandler {
                     this.onBadRequest(ex);
                     return;
                 }
-                let guardsCheckResult;
-                try {
-                    guardsCheckResult = await this.executeGuardsCheck_(actionInfo.guards);
-                }
-                catch (ex) {
-                    this.onErrorOccured(ex);
-                    return;
-                }
-                const responseByGuard = guardsCheckResult.find(qry => qry != null);
-                if (responseByGuard == null) {
+
+                shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
+                if (shouldExecuteNextComponent === true) {
                     this.runController_();
-                }
-                else {
-                    this.onResultFromController(responseByGuard);
                 }
             }
         }
