@@ -9,6 +9,7 @@ export const createApp = async () => {
             path: path.join(__dirname, "../static")
         }]
     });
+    process.env.APP_URL = "http://localhost:4000";
     return app;
 };
 if (process.env.NODE_ENV !== "test") {

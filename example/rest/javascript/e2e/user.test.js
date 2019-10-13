@@ -1,20 +1,23 @@
 import axios from "axios";
 import { createApp } from "../index";
 
-const instance = axios.create({
-    baseURL: 'http://localhost:4000/user',
-    timeout: 1000
-});
+
 
 describe('/user', () => {
 
     let app;
+    let httpRequest;
     beforeAll(async () => {
         app = await createApp();
+        httpRequest = axios.create({
+            baseURL: process.env.APP_URL + "/user",
+            timeout: 1000
+        });
     });
 
+
     it('/get all users', async () => {
-        const response = await instance.get('/', {
+        const response = await httpRequest.get('/', {
             headers: {
                 accept: 'application/json'
             }
@@ -27,7 +30,7 @@ describe('/user', () => {
     });
 
     it('/get single user', async () => {
-        const response = await instance.get('/1', {
+        const response = await httpRequest.get('/1', {
             headers: {
                 accept: 'application/json'
             }
@@ -47,7 +50,7 @@ describe('/user', () => {
             "gender": "male",
             "address": "sadfsgbhfgtbrg"
         };
-        const response = await instance.post('/', user, {
+        const response = await httpRequest.post('/', user, {
             headers: {
                 accept: 'application/json'
             }
@@ -67,7 +70,7 @@ describe('/user', () => {
             "address": "sadfsgbhfgtbrg",
             "id": 2
         };
-        const response = await instance.put('/', user, {
+        const response = await httpRequest.put('/', user, {
             headers: {
                 accept: '*/*'
             }
@@ -85,7 +88,7 @@ describe('/user', () => {
             "address": "sadfsgbhfgtbrg",
             "id": 2
         };
-        const response = await instance.get('/2', {
+        const response = await httpRequest.get('/2', {
             headers: {
                 accept: 'application/json'
             }
@@ -99,7 +102,7 @@ describe('/user', () => {
 
     it('/remove user', async () => {
 
-        const response = await instance.delete('/2', {
+        const response = await httpRequest.delete('/2', {
             headers: {
                 accept: '*/*'
             }
@@ -110,7 +113,7 @@ describe('/user', () => {
 
     it('/get deleted user or not existing user', async () => {
         try {
-            const response = await instance.get('/2', {
+            const response = await httpRequest.get('/2', {
                 headers: {
                     accept: '*/*'
                 }
