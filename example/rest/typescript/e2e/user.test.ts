@@ -10,7 +10,7 @@ describe('/user', () => {
 
     let app: Fort;
     beforeAll(async () => {
-        app = await createApp() as any;
+        app = await createApp();
     });
 
     it('/get all users', async () => {

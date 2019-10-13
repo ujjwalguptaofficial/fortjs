@@ -64,7 +64,7 @@ export class UserController extends Controller {
             return textResult("user deleted");
         }
         else {
-            return textResult("invalid user");
+            return textResult("invalid user id", 404);
         }
 
     }
