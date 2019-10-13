@@ -3,7 +3,7 @@ import * as url from 'url';
 import { Controller } from "../abstracts";
 import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
 import { Global } from "../global";
-import { parseCookie, parseAndMatchRoute } from "../helpers";
+import { parseCookie, parseAndMatchRoute, promise } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericSessionProvider, GenericGuard } from "../generics";
 import { RouteMatch, HttpResult, HttpRequest, HttpResponse } from "../types";
@@ -33,20 +33,41 @@ export class RequestHandler extends PostHandler {
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
-    private executeWallIncoming_() {
-        return Promise.all(Global.walls.map((wall) => {
-            const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
-            const wallObj = new wall(...constructorArgsValues);
-            wallObj.cookie = this.cookieManager;
-            wallObj.session = this.session_;
-            wallObj.request = this.request as HttpRequest;
-            wallObj.response = this.response as HttpResponse;
-            wallObj.data = this.data_;
-            wallObj.query = this.query_;
-            this.wallInstances.push(wallObj);
-            const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
-            return wallObj.onIncoming(...methodArgsValues);
-        }));
+    private executeWallIncoming_(): Promise<HttpResult | null> {
+        return promise(async (res, rej) => {
+            let index = 0;
+            const wallLength = Global.walls.length;
+            const executeWallIncomingByIndex = async () => {
+                if (wallLength > index) {
+                    const wall = Global.walls[index++];
+                    const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
+                    const wallObj = new wall(...constructorArgsValues);
+                    wallObj.cookie = this.cookieManager;
+                    wallObj.session = this.session_;
+                    wallObj.request = this.request as HttpRequest;
+                    wallObj.response = this.response as HttpResponse;
+                    wallObj.data = this.data_;
+                    wallObj.query = this.query_;
+                    this.wallInstances.push(wallObj);
+                    const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
+                    try {
+                        const result = await wallObj.onIncoming(...methodArgsValues);
+                        if (result == null) {
+                            executeWallIncomingByIndex();
+                        }
+                        else {
+                            res(result);
+                        }
+                    } catch (ex) {
+                        rej(ex);
+                    }
+                }
+                else {
+                    res();
+                }
+            };
+            executeWallIncomingByIndex();
+        });
     }
 
     private runController_() {
@@ -178,8 +199,7 @@ export class RequestHandler extends PostHandler {
             const urlDetail = url.parse(this.request.url, true);
             this.query_ = urlDetail.query;
             this.parseCookieFromRequest_();
-            const wallProtectionResult = await this.executeWallIncoming_();
-            const responseByWall: HttpResult = wallProtectionResult.find(qry => qry != null);
+            const responseByWall = await this.executeWallIncoming_();
             if (responseByWall == null) {
                 const pathUrl = urlDetail.pathname;
                 const requestMethod = this.request.method as HTTP_METHOD;
