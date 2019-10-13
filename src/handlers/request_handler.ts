@@ -167,27 +167,18 @@ export class RequestHandler extends PostHandler {
             };
             executeGuardByIndex();
         });
-        // return Promise.all(guards.map(guard => {
-        //     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
-        //     const guardObj = new guard(...constructorArgsValues);
-        //     guardObj.body = this.body;
-        //     guardObj.cookie = this.cookieManager;
-        //     guardObj.query = this.query_;
-        //     guardObj.session = this.session_;
-        //     guardObj.request = this.request as HttpRequest;
-        //     guardObj.response = this.response as HttpResponse;
-        //     guardObj.data = this.data_;
-        //     guardObj.file = this.file;
-        //     guardObj.param = this.routeMatchInfo_.params;
-        //     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
-        //     return guardObj.check(...methodArgsValues);
-        // }));
     }
 
     private parseCookieFromRequest_() {
         if (Global.shouldParseCookie === true) {
             const rawCookie = (this.request.headers[__Cookie] || this.request.headers["cookie"]) as string;
-            const parsedCookies = parseCookie(rawCookie);
+            let parsedCookies;
+            try {
+                parsedCookies = parseCookie(rawCookie);
+            } catch (ex) {
+                this.onErrorOccured(ex);
+                return false;
+            }
             this.session_ = new Global.sessionProvider();
             this.cookieManager = new CookieManager(parsedCookies);
             this.session_.sessionId = parsedCookies[Global.appSessionIdentifier];
@@ -196,6 +187,7 @@ export class RequestHandler extends PostHandler {
         else {
             this.cookieManager = new CookieManager({});
         }
+        return true;
     }
 
     private setPreHeader_() {
@@ -224,7 +216,6 @@ export class RequestHandler extends PostHandler {
                     this.onBadRequest(ex);
                     return;
                 }
-
                 shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
                 if (shouldExecuteNextComponent === true) {
                     this.runController_();
@@ -236,29 +227,31 @@ export class RequestHandler extends PostHandler {
     private async execute_() {
         // there are many methods being called here, which has chances of throwing error
         // so using global level try block
-        try {
-            const urlDetail = url.parse(this.request.url, true);
-            this.query_ = urlDetail.query;
-            this.parseCookieFromRequest_();
-            const responseByWall = await this.executeWallIncoming_();
-            if (responseByWall == null) {
-                const pathUrl = urlDetail.pathname;
-                const requestMethod = this.request.method as HTTP_METHOD;
-                this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-                if (this.routeMatchInfo_ == null) { // no route matched
-                    // it may be a file or folder then
-                    this.handleFileRequest(pathUrl);
+        const urlDetail = url.parse(this.request.url, true);
+        this.query_ = urlDetail.query;
+        const isParsedSuccessfully = this.parseCookieFromRequest_();
+        if (isParsedSuccessfully) {
+            try {
+                const responseByWall = await this.executeWallIncoming_();
+                if (responseByWall == null) {
+                    const pathUrl = urlDetail.pathname;
+                    const requestMethod = this.request.method as HTTP_METHOD;
+                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
+                    if (this.routeMatchInfo_ == null) { // no route matched
+                        // it may be a file or folder then
+                        this.handleFileRequest(pathUrl);
+                    }
+                    else {
+                        this.onRouteMatched_();
+                    }
                 }
                 else {
-                    this.onRouteMatched_();
+                    this.onTerminationFromWall(responseByWall);
                 }
             }
-            else {
-                this.onTerminationFromWall(responseByWall);
+            catch (ex) {
+                this.onErrorOccured(ex);
             }
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
         }
     }
 

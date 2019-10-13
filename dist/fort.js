@@ -2474,26 +2474,18 @@ var RequestHandler = /** @class */ (function (_super) {
             }); };
             executeGuardByIndex();
         });
-        // return Promise.all(guards.map(guard => {
-        //     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
-        //     const guardObj = new guard(...constructorArgsValues);
-        //     guardObj.body = this.body;
-        //     guardObj.cookie = this.cookieManager;
-        //     guardObj.query = this.query_;
-        //     guardObj.session = this.session_;
-        //     guardObj.request = this.request as HttpRequest;
-        //     guardObj.response = this.response as HttpResponse;
-        //     guardObj.data = this.data_;
-        //     guardObj.file = this.file;
-        //     guardObj.param = this.routeMatchInfo_.params;
-        //     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
-        //     return guardObj.check(...methodArgsValues);
-        // }));
     };
     RequestHandler.prototype.parseCookieFromRequest_ = function () {
         if (_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParseCookie === true) {
             var rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
-            var parsedCookies = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
+            var parsedCookies = void 0;
+            try {
+                parsedCookies = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
+            }
+            catch (ex) {
+                this.onErrorOccured(ex);
+                return false;
+            }
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
             this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
             this.session_.sessionId = parsedCookies[_global__WEBPACK_IMPORTED_MODULE_2__["Global"].appSessionIdentifier];
@@ -2502,6 +2494,7 @@ var RequestHandler = /** @class */ (function (_super) {
         else {
             this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"]({});
         }
+        return true;
     };
     RequestHandler.prototype.setPreHeader_ = function () {
         this.response.setHeader('X-Powered-By', _global__WEBPACK_IMPORTED_MODULE_2__["Global"].appName);
@@ -2552,16 +2545,19 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.execute_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, responseByWall, pathUrl, requestMethod, ex_5;
+            var urlDetail, isParsedSuccessfully, responseByWall, pathUrl, requestMethod, ex_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
                         urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
                         this.query_ = urlDetail.query;
-                        this.parseCookieFromRequest_();
-                        return [4 /*yield*/, this.executeWallIncoming_()];
+                        isParsedSuccessfully = this.parseCookieFromRequest_();
+                        if (!isParsedSuccessfully) return [3 /*break*/, 4];
+                        _a.label = 1;
                     case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.executeWallIncoming_()];
+                    case 2:
                         responseByWall = _a.sent();
                         if (responseByWall == null) {
                             pathUrl = urlDetail.pathname;
@@ -2578,12 +2574,12 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onTerminationFromWall(responseByWall);
                         }
-                        return [3 /*break*/, 3];
-                    case 2:
+                        return [3 /*break*/, 4];
+                    case 3:
                         ex_5 = _a.sent();
                         this.onErrorOccured(ex_5);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
