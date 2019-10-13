@@ -88,20 +88,44 @@ export class RequestHandler extends PostHandler {
         ).catch(this.onErrorOccured.bind(this));
     }
 
-    private executeShieldsProtection_() {
-        return Promise.all(this.routeMatchInfo_.shields.map(shield => {
-            const constructorArgsValues = InjectorHandler.getConstructorValues(shield.name);
-            const shieldObj = new shield(...constructorArgsValues);
-            shieldObj.cookie = this.cookieManager;
-            shieldObj.query = this.query_;
-            shieldObj.session = this.session_;
-            shieldObj.request = this.request as HttpRequest;
-            shieldObj.response = this.response as HttpResponse;
-            shieldObj.data = this.data_;
-            shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
-            const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
-            return shieldObj.protect(...methodArgsValues);
-        }));
+    private executeShieldsProtection_(): Promise<boolean> {
+        return promise((res) => {
+            let index = 0;
+            const shieldLength = this.routeMatchInfo_.shields.length;
+            const executeShieldByIndex = async () => {
+                if (shieldLength > index) {
+                    const shield = this.routeMatchInfo_.shields[index++];
+                    const constructorArgsValues = InjectorHandler.getConstructorValues(shield.name);
+                    const shieldObj = new shield(...constructorArgsValues);
+                    shieldObj.cookie = this.cookieManager;
+                    shieldObj.query = this.query_;
+                    shieldObj.session = this.session_;
+                    shieldObj.request = this.request as HttpRequest;
+                    shieldObj.response = this.response as HttpResponse;
+                    shieldObj.data = this.data_;
+                    shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
+                    const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
+
+                    try {
+                        const result = await shieldObj.protect(...methodArgsValues);
+                        if (result == null) {
+                            executeShieldByIndex();
+                        }
+                        else {
+                            res(true);
+                            this.onResultFromController(result);
+                        }
+                    } catch (ex) {
+                        this.onErrorOccured(ex);
+                        res(false);
+                    }
+                }
+                else {
+                    res(true);
+                }
+            };
+            executeShieldByIndex();
+        });
     }
 
     private executeGuardsCheck_(guards: Array<typeof GenericGuard>) {
@@ -153,16 +177,8 @@ export class RequestHandler extends PostHandler {
             }
         }
         else {
-            let shieldProtectionResult;
-            try {
-                shieldProtectionResult = await this.executeShieldsProtection_();
-            }
-            catch (ex) {
-                this.onErrorOccured(ex);
-                return;
-            }
-            const responseByShield = shieldProtectionResult.find(qry => qry != null);
-            if (responseByShield == null) {
+            const shouldExecuteNextComponent = await this.executeShieldsProtection_();
+            if (shouldExecuteNextComponent === true) {
                 try {
                     await this.handlePostData();
                 }
@@ -185,9 +201,6 @@ export class RequestHandler extends PostHandler {
                 else {
                     this.onResultFromController(responseByGuard);
                 }
-            }
-            else {
-                this.onResultFromController(responseByShield);
             }
         }
     }

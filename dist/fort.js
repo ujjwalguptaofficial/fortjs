@@ -2371,19 +2371,55 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;
-        return Promise.all(this.routeMatchInfo_.shields.map(function (shield) {
-            var constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(shield.name);
-            var shieldObj = new (shield.bind.apply(shield, [void 0].concat(constructorArgsValues)))();
-            shieldObj.cookie = _this.cookieManager;
-            shieldObj.query = _this.query_;
-            shieldObj.session = _this.session_;
-            shieldObj.request = _this.request;
-            shieldObj.response = _this.response;
-            shieldObj.data = _this.data_;
-            shieldObj.workerName = _this.routeMatchInfo_.workerInfo.workerName;
-            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(shield.name, 'protect');
-            return shieldObj.protect.apply(shieldObj, methodArgsValues);
-        }));
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) {
+            var index = 0;
+            var shieldLength = _this.routeMatchInfo_.shields.length;
+            var executeShieldByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
+                var shield, constructorArgsValues, shieldObj, methodArgsValues, result, ex_2;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(shieldLength > index)) return [3 /*break*/, 5];
+                            shield = this.routeMatchInfo_.shields[index++];
+                            constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(shield.name);
+                            shieldObj = new (shield.bind.apply(shield, [void 0].concat(constructorArgsValues)))();
+                            shieldObj.cookie = this.cookieManager;
+                            shieldObj.query = this.query_;
+                            shieldObj.session = this.session_;
+                            shieldObj.request = this.request;
+                            shieldObj.response = this.response;
+                            shieldObj.data = this.data_;
+                            shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
+                            methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(shield.name, 'protect');
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, shieldObj.protect.apply(shieldObj, methodArgsValues)];
+                        case 2:
+                            result = _a.sent();
+                            if (result == null) {
+                                executeShieldByIndex();
+                            }
+                            else {
+                                res(true);
+                                this.onResultFromController(result);
+                            }
+                            return [3 /*break*/, 4];
+                        case 3:
+                            ex_2 = _a.sent();
+                            this.onErrorOccured(ex_2);
+                            res(false);
+                            return [3 /*break*/, 4];
+                        case 4: return [3 /*break*/, 6];
+                        case 5:
+                            res(true);
+                            _a.label = 6;
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            }); };
+            executeShieldByIndex();
+        });
     };
     RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
         var _this = this;
@@ -2423,7 +2459,7 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.onRouteMatched_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var actionInfo, shieldProtectionResult, ex_2, responseByShield, ex_3, guardsCheckResult, ex_4, responseByGuard;
+            var actionInfo, shouldExecuteNextComponent, ex_3, guardsCheckResult, ex_4, responseByGuard;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2435,48 +2471,36 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
                         }
-                        return [3 /*break*/, 15];
-                    case 1:
-                        shieldProtectionResult = void 0;
-                        _a.label = 2;
+                        return [3 /*break*/, 11];
+                    case 1: return [4 /*yield*/, this.executeShieldsProtection_()];
                     case 2:
-                        _a.trys.push([2, 4, , 5]);
-                        return [4 /*yield*/, this.executeShieldsProtection_()];
+                        shouldExecuteNextComponent = _a.sent();
+                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 11];
+                        _a.label = 3;
                     case 3:
-                        shieldProtectionResult = _a.sent();
-                        return [3 /*break*/, 5];
-                    case 4:
-                        ex_2 = _a.sent();
-                        this.onErrorOccured(ex_2);
-                        return [2 /*return*/];
-                    case 5:
-                        responseByShield = shieldProtectionResult.find(function (qry) { return qry != null; });
-                        if (!(responseByShield == null)) return [3 /*break*/, 14];
-                        _a.label = 6;
-                    case 6:
-                        _a.trys.push([6, 8, , 9]);
+                        _a.trys.push([3, 5, , 6]);
                         return [4 /*yield*/, this.handlePostData()];
-                    case 7:
+                    case 4:
                         _a.sent();
-                        return [3 /*break*/, 9];
-                    case 8:
+                        return [3 /*break*/, 6];
+                    case 5:
                         ex_3 = _a.sent();
                         this.onBadRequest(ex_3);
                         return [2 /*return*/];
-                    case 9:
+                    case 6:
                         guardsCheckResult = void 0;
-                        _a.label = 10;
-                    case 10:
-                        _a.trys.push([10, 12, , 13]);
+                        _a.label = 7;
+                    case 7:
+                        _a.trys.push([7, 9, , 10]);
                         return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 11:
+                    case 8:
                         guardsCheckResult = _a.sent();
-                        return [3 /*break*/, 13];
-                    case 12:
+                        return [3 /*break*/, 10];
+                    case 9:
                         ex_4 = _a.sent();
                         this.onErrorOccured(ex_4);
                         return [2 /*return*/];
-                    case 13:
+                    case 10:
                         responseByGuard = guardsCheckResult.find(function (qry) { return qry != null; });
                         if (responseByGuard == null) {
                             this.runController_();
@@ -2484,11 +2508,8 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onResultFromController(responseByGuard);
                         }
-                        return [3 /*break*/, 15];
-                    case 14:
-                        this.onResultFromController(responseByShield);
-                        _a.label = 15;
-                    case 15: return [2 /*return*/];
+                        _a.label = 11;
+                    case 11: return [2 /*return*/];
                 }
             });
         });
