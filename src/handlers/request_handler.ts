@@ -6,10 +6,9 @@ import { Global } from "../global";
 import { parseCookie, parseAndMatchRoute, promise } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericSessionProvider, GenericGuard } from "../generics";
-import { RouteMatch, HttpResult, HttpRequest, HttpResponse } from "../types";
+import { RouteMatch, HttpRequest, HttpResponse } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
-import { RouteHandler } from "./route_handler";
 import { InjectorHandler } from "./injector_handler";
 
 
@@ -34,7 +33,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private executeWallIncoming_(): Promise<boolean> {
-        return promise(async (res) => {
+        return promise((res) => {
             let index = 0;
             const wallLength = Global.walls.length;
             const executeWallIncomingByIndex = async () => {
@@ -182,9 +181,8 @@ export class RequestHandler extends PostHandler {
                 return false;
             }
             this.session_ = new Global.sessionProvider();
-            this.cookieManager = new CookieManager(parsedCookies);
+            this.session_.cookie = this.cookieManager = new CookieManager(parsedCookies);
             this.session_.sessionId = parsedCookies[Global.appSessionIdentifier];
-            this.session_.cookie = this.cookieManager;
         }
         else {
             this.cookieManager = new CookieManager({});
@@ -211,16 +209,12 @@ export class RequestHandler extends PostHandler {
         else {
             let shouldExecuteNextComponent = await this.executeShieldsProtection_();
             if (shouldExecuteNextComponent === true) {
-                try {
-                    await this.handlePostData();
-                }
-                catch (ex) {
-                    this.onBadRequest(ex);
-                    return;
-                }
-                shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
+                shouldExecuteNextComponent = await this.handlePostData();
                 if (shouldExecuteNextComponent === true) {
-                    this.runController_();
+                    shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
+                    if (shouldExecuteNextComponent === true) {
+                        this.runController_();
+                    }
                 }
             }
         }
@@ -239,10 +233,10 @@ export class RequestHandler extends PostHandler {
                     this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
                 }
                 catch (ex) {
-                    shouldExecuteNextProcess = false;
                     this.onErrorOccured(ex);
+                    return;
                 }
-                if (shouldExecuteNextProcess === true && this.routeMatchInfo_ == null) { // no route matched
+                if (this.routeMatchInfo_ == null) { // no route matched
                     // it may be a file or folder then
                     this.handleFileRequest(pathUrl);
                 }
@@ -259,8 +253,14 @@ export class RequestHandler extends PostHandler {
             this.file = new FileManager({});
         }
         else if (Global.shouldParsePost === true) {
-            this.body = await this.parsePostData();
+            try {
+                this.body = await this.parsePostData();
+            } catch (ex) {
+                this.onBadRequest(ex);
+                return false;
+            }
         }
+        return true;
     }
 
     async handle() {

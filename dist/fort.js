@@ -2300,60 +2300,55 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.executeWallIncoming_ = function () {
         var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) { return __awaiter(_this, void 0, void 0, function () {
-            var index, wallLength, executeWallIncomingByIndex;
-            var _this = this;
-            return __generator(this, function (_a) {
-                index = 0;
-                wallLength = _global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.length;
-                executeWallIncomingByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
-                    var wall, constructorArgsValues, wallObj, methodArgsValues, result, ex_1;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                if (!(wallLength > index)) return [3 /*break*/, 5];
-                                wall = _global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls[index++];
-                                constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(wall.name);
-                                wallObj = new (wall.bind.apply(wall, [void 0].concat(constructorArgsValues)))();
-                                wallObj.cookie = this.cookieManager;
-                                wallObj.session = this.session_;
-                                wallObj.request = this.request;
-                                wallObj.response = this.response;
-                                wallObj.data = this.data_;
-                                wallObj.query = this.query_;
-                                this.wallInstances.push(wallObj);
-                                methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(wall.name, 'onIncoming');
-                                _a.label = 1;
-                            case 1:
-                                _a.trys.push([1, 3, , 4]);
-                                return [4 /*yield*/, wallObj.onIncoming.apply(wallObj, methodArgsValues)];
-                            case 2:
-                                result = _a.sent();
-                                if (result == null) {
-                                    executeWallIncomingByIndex();
-                                }
-                                else {
-                                    res(false);
-                                    this.onTerminationFromWall(result);
-                                }
-                                return [3 /*break*/, 4];
-                            case 3:
-                                ex_1 = _a.sent();
-                                this.onErrorOccured(ex_1);
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) {
+            var index = 0;
+            var wallLength = _global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls.length;
+            var executeWallIncomingByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
+                var wall, constructorArgsValues, wallObj, methodArgsValues, result, ex_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!(wallLength > index)) return [3 /*break*/, 5];
+                            wall = _global__WEBPACK_IMPORTED_MODULE_2__["Global"].walls[index++];
+                            constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(wall.name);
+                            wallObj = new (wall.bind.apply(wall, [void 0].concat(constructorArgsValues)))();
+                            wallObj.cookie = this.cookieManager;
+                            wallObj.session = this.session_;
+                            wallObj.request = this.request;
+                            wallObj.response = this.response;
+                            wallObj.data = this.data_;
+                            wallObj.query = this.query_;
+                            this.wallInstances.push(wallObj);
+                            methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(wall.name, 'onIncoming');
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, wallObj.onIncoming.apply(wallObj, methodArgsValues)];
+                        case 2:
+                            result = _a.sent();
+                            if (result == null) {
+                                executeWallIncomingByIndex();
+                            }
+                            else {
                                 res(false);
-                                return [3 /*break*/, 4];
-                            case 4: return [3 /*break*/, 6];
-                            case 5:
-                                res(true);
-                                _a.label = 6;
-                            case 6: return [2 /*return*/];
-                        }
-                    });
-                }); };
-                executeWallIncomingByIndex();
-                return [2 /*return*/];
-            });
-        }); });
+                                this.onTerminationFromWall(result);
+                            }
+                            return [3 /*break*/, 4];
+                        case 3:
+                            ex_1 = _a.sent();
+                            this.onErrorOccured(ex_1);
+                            res(false);
+                            return [3 /*break*/, 4];
+                        case 4: return [3 /*break*/, 6];
+                        case 5:
+                            res(true);
+                            _a.label = 6;
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            }); };
+            executeWallIncomingByIndex();
+        });
     };
     RequestHandler.prototype.runController_ = function () {
         var _a;
@@ -2489,9 +2484,8 @@ var RequestHandler = /** @class */ (function (_super) {
                 return false;
             }
             this.session_ = new _global__WEBPACK_IMPORTED_MODULE_2__["Global"].sessionProvider();
-            this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
+            this.session_.cookie = this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"](parsedCookies);
             this.session_.sessionId = parsedCookies[_global__WEBPACK_IMPORTED_MODULE_2__["Global"].appSessionIdentifier];
-            this.session_.cookie = this.cookieManager;
         }
         else {
             this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"]({});
@@ -2505,7 +2499,7 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.onRouteMatched_ = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var actionInfo, shouldExecuteNextComponent, ex_4;
+            var actionInfo, shouldExecuteNextComponent;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -2517,30 +2511,23 @@ var RequestHandler = /** @class */ (function (_super) {
                         else {
                             this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
                         }
-                        return [3 /*break*/, 8];
+                        return [3 /*break*/, 5];
                     case 1: return [4 /*yield*/, this.executeShieldsProtection_()];
                     case 2:
                         shouldExecuteNextComponent = _a.sent();
-                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 8];
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
+                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 5];
                         return [4 /*yield*/, this.handlePostData()];
+                    case 3:
+                        shouldExecuteNextComponent = _a.sent();
+                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
                     case 4:
-                        _a.sent();
-                        return [3 /*break*/, 6];
-                    case 5:
-                        ex_4 = _a.sent();
-                        this.onBadRequest(ex_4);
-                        return [2 /*return*/];
-                    case 6: return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 7:
                         shouldExecuteNextComponent = _a.sent();
                         if (shouldExecuteNextComponent === true) {
                             this.runController_();
                         }
-                        _a.label = 8;
-                    case 8: return [2 /*return*/];
+                        _a.label = 5;
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -2565,10 +2552,10 @@ var RequestHandler = /** @class */ (function (_super) {
                                 this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
                             }
                             catch (ex) {
-                                shouldExecuteNextProcess = false;
                                 this.onErrorOccured(ex);
+                                return [2 /*return*/];
                             }
-                            if (shouldExecuteNextProcess === true && this.routeMatchInfo_ == null) { // no route matched
+                            if (this.routeMatchInfo_ == null) { // no route matched
                                 // it may be a file or folder then
                                 this.handleFileRequest(pathUrl);
                             }
@@ -2584,22 +2571,29 @@ var RequestHandler = /** @class */ (function (_super) {
     };
     RequestHandler.prototype.handlePostData = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a;
+            var _a, ex_4;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!(this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
                         this.body = {};
                         this.file = new _models__WEBPACK_IMPORTED_MODULE_4__["FileManager"]({});
-                        return [3 /*break*/, 3];
+                        return [3 /*break*/, 5];
                     case 1:
-                        if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 3];
+                        if (!(_global__WEBPACK_IMPORTED_MODULE_2__["Global"].shouldParsePost === true)) return [3 /*break*/, 5];
+                        _b.label = 2;
+                    case 2:
+                        _b.trys.push([2, 4, , 5]);
                         _a = this;
                         return [4 /*yield*/, this.parsePostData()];
-                    case 2:
+                    case 3:
                         _a.body = _b.sent();
-                        _b.label = 3;
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 4:
+                        ex_4 = _b.sent();
+                        this.onBadRequest(ex_4);
+                        return [2 /*return*/, false];
+                    case 5: return [2 /*return*/, true];
                 }
             });
         });
