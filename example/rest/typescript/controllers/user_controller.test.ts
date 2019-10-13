@@ -7,7 +7,7 @@ describe('UserController', () => {
     let app: Fort;
     let controller: UserController;
     beforeAll(async () => {
-        app = await createApp() as any;
+        app = await createApp();
         controller = new UserController(new UserService());
     });
 
@@ -102,7 +102,7 @@ describe('UserController', () => {
                 id: '2'
             }
         });
-       
+
         let expectedResult = textResult("user deleted");
         let result = await controller.removeUser();
         expect(result).toEqual(expectedResult);

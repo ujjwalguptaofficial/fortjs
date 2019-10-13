@@ -32,7 +32,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "fortjs": "^1.7.2",
+    "fortjs": "^1.8.1",
     "validator": "^11.1.0"
   },
   "project": {

@@ -12,8 +12,8 @@ describe('DefaultController', () => {
         const expectedResult = await viewResult('default/index.html', {
             title: 'FortJs'
         });
-        const indexMethodOutput = await new DefaultController().index('FortJs');
-        expect(indexMethodOutput).toEqual(expectedResult);
+        const result = await new DefaultController().index('FortJs');
+        expect(result).toEqual(expectedResult);
     });
 
     afterAll(() => {

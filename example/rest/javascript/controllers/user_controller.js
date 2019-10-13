@@ -21,7 +21,6 @@ export class UserController extends Controller {
 
     constructor(@Singleton(UserService) service) {
         super();
-        console.log('service', service);
         this.service = service;
     }
 
@@ -61,7 +60,7 @@ export class UserController extends Controller {
         const userId = Number(this.param.id);
         const user = this.service.getUser(userId);
         if (user == null) {
-            return textResult("invalid id");
+            return textResult("invalid user id", 404);
         }
         return jsonResult(user);
 
@@ -77,7 +76,7 @@ export class UserController extends Controller {
             this.service.removeUser(userId);
             return textResult("user deleted");
         } else {
-            return textResult("invalid user");
+            return textResult("invalid user id", 404);
         }
 
     }
