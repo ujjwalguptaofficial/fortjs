@@ -1,22 +1,9 @@
-import {
-    Controller,
-    textResult,
-    DefaultWorker,
-    jsonResult,
-    Worker,
-    Route,
-    HTTP_STATUS_CODE,
-    HTTP_METHOD,
-    Guards,
-    Singleton
-} from 'fortjs';
-import {
-    UserService
-} from '../services/user_service';
-import {
-    ModelUserGuard
-} from '../guards/model_user_guard';
+import { Controller, textResult, DefaultWorker, jsonResult, Worker, Route, HTTP_STATUS_CODE, HTTP_METHOD, Guards, Singleton, Shield, Shields } from 'fortjs';
+import { UserService } from '../services/user_service';
+import { ModelUserGuard } from '../guards/model_user_guard';
+import { AuthenticationShield } from '../shields/authentication_shield';
 
+@Shields([AuthenticationShield])
 export class UserController extends Controller {
 
     constructor(@Singleton(UserService) service) {
