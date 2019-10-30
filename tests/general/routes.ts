@@ -5,6 +5,7 @@ import { CookieController } from "./controllers/cookie_controller";
 import { SessionController } from "./controllers/session_controller";
 import { ParentRoute } from "fortjs";
 import { DefaultController } from "./controllers/default_controller";
+import { InjectionController } from "./controllers/injection_controller";
 
 export const routes: ParentRoute[] = [{
     controller: DefaultController,
@@ -24,4 +25,7 @@ export const routes: ParentRoute[] = [{
 }, {
     controller: SessionController,
     path: "/session"
+}, {
+    controller: InjectionController,
+    path: "/injection"
 }];

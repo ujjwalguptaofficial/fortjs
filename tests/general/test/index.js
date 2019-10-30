@@ -20,7 +20,7 @@ require('./file_test');
 require('./random');
 require('./user');
 require('./session');
-
+require('./injection');
 require('./wall');
 
 // process.exit(0);

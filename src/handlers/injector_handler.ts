@@ -17,9 +17,17 @@ const singletons: {
 export class InjectorHandler {
 
     static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
-        if (shouldFindIndex === true && injectorValues.indexOf(paramValue) < 0) {
-            paramValue = injectorValues.push(paramValue) - 1;
+
+        if (shouldFindIndex === true) {
+            const paramValueIndex = injectorValues.indexOf(paramValue);
+            if (paramValueIndex < 0) {
+                paramValue = injectorValues.push(paramValue) - 1;
+            }
+            else {
+                paramValue = paramValueIndex;
+            }
         }
+        
 
         const savedValue = injectorStoreInfos.find(x => x.className === className);
         const value: InjectorStoreInfo = {

@@ -121,6 +121,5 @@ export class HomeController extends Controller {
         @Singleton(EmployeeService) employeeService) {
         return jsonResult([...studentService.getAll(), ...employeeService.getAll(),
         ...userService.getUsers()]);
-
     }
 }

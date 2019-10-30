@@ -256,4 +256,29 @@ describe("/home", () => {
             done();
         });
     });
+
+    it('/getAllFromServices', (done) => {
+        request.get('/home/getAllFromServices').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const data = [{
+                id: 1,
+                name: 'ujjwal',
+                type: 'student'
+            }, {
+                id: 1,
+                name: 'ujjwal',
+                type: 'employee'
+            }, {
+                id: 1,
+                name: 'ujjwal',
+                address: 'bhubaneswar india',
+                emailId: 'ujjwal@mg.com',
+                gender: 'male',
+                password: 'admin'
+            }]
+            expect(res.body).to.be.eql(data);
+            done();
+        });
+    });
 });

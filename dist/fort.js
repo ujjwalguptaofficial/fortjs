@@ -1982,8 +1982,14 @@ var InjectorHandler = /** @class */ (function () {
     InjectorHandler.addWorkerValue = function (className, methodName, paramIndex, paramValue, shouldFindIndex) {
         var _a;
         if (shouldFindIndex === void 0) { shouldFindIndex = true; }
-        if (shouldFindIndex === true && injectorValues.indexOf(paramValue) < 0) {
-            paramValue = injectorValues.push(paramValue) - 1;
+        if (shouldFindIndex === true) {
+            var paramValueIndex = injectorValues.indexOf(paramValue);
+            if (paramValueIndex < 0) {
+                paramValue = injectorValues.push(paramValue) - 1;
+            }
+            else {
+                paramValue = paramValueIndex;
+            }
         }
         var savedValue = injectorStoreInfos.find(function (x) { return x.className === className; });
         var value = {
