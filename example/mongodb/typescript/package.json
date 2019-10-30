@@ -24,7 +24,7 @@
   "dependencies": {
     "class-validator": "^0.9.1",
     "fortjs": "^1.8.1",
-    "mongoose": "^5.5.2"
+    "mongoose": "^5.7.5"
   },
   "devDependencies": {
     "@types/mongoose": "^5.3.26",
