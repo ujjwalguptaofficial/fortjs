@@ -2,6 +2,9 @@ import { Fort, textResult } from "fortjs";
 import { initServer } from "../index";
 import { MySingleton } from "../extra/singleton";
 import { HomeController } from "./home_controller";
+import { UserService } from "../services/user_service";
+import { StudentService } from "../services/student_service";
+import { EmployeeService } from "../services/employee_service";
 
 describe('HomeController', () => {
     let app: Fort;
@@ -9,7 +12,7 @@ describe('HomeController', () => {
     const singleton = new MySingleton();
     beforeAll(async () => {
         app = await initServer();
-        controller = new HomeController(singleton);
+        controller = new HomeController(new UserService(), new StudentService(), new EmployeeService());
         controller.initialize();
     });
 

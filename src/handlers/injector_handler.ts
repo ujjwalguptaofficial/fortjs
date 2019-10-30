@@ -1,42 +1,45 @@
 import { __Constructor } from "../constant";
 
-type InjectorValue = {
+type InjectorStoreInfo = {
     className: string;
     methods: {
         [methodName: string]: any[]
     }
 };
-const injectorValues: InjectorValue[] = [];
-const injectorValuesStore: any[] = [];
+// this stores information of injector values that are available per class & worker
+const injectorStoreInfos: InjectorStoreInfo[] = [];
+// this stores injector values
+const injectorValues: any[] = [];
+// this stores the singletons name & their respective index in injector values
 const singletons: {
     [className: string]: number
 } = {};
 export class InjectorHandler {
 
     static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
-        if (shouldFindIndex === true && injectorValuesStore.indexOf(paramValue) < 0) {
-            paramValue = injectorValuesStore.push(paramValue) - 1;
+        if (shouldFindIndex === true && injectorValues.indexOf(paramValue) < 0) {
+            paramValue = injectorValues.push(paramValue) - 1;
         }
 
-        const savedValue = injectorValues.find(x => x.className === className);
-        const value: InjectorValue = {
+        const savedValue = injectorStoreInfos.find(x => x.className === className);
+        const value: InjectorStoreInfo = {
             className: className,
             methods: {
-                [methodName]: [paramValue]
+                [methodName]: []
             }
         };
         if (savedValue == null) {
-            injectorValues.push(value);
+            value.methods[methodName][paramIndex] = paramValue;
+            injectorStoreInfos.push(value);
         }
         else {
-            const savedMethod = savedValue.methods[methodName];
-            if (savedMethod == null) {
-                savedValue.methods[methodName] = [paramValue];
+            // const savedMethod = savedValue.methods[methodName];
+            if (savedValue.methods[methodName] == null) {
+                savedValue.methods[methodName] = [];
             }
-            else {
-                savedValue.methods[methodName].splice(paramIndex, 0, paramValue);
-            }
+            savedValue.methods[methodName][paramIndex] = paramValue;
         }
+
         return paramValue;
     }
 
@@ -45,12 +48,12 @@ export class InjectorHandler {
     }
 
     static getMethodValues(className: string, methodName: string) {
-        const savedValue = injectorValues.find(qry => qry.className === className);
+        const savedValue = injectorStoreInfos.find(qry => qry.className === className);
         if (savedValue != null) {
             const methodArgs = savedValue.methods[methodName];
             if (methodArgs != null) {
-                return methodArgs.map(val => {
-                    return injectorValuesStore[val];
+                return methodArgs.map(injectorValueIndex => {
+                    return injectorValues[injectorValueIndex];
                 });
             }
         }

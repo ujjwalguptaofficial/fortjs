@@ -211,4 +211,49 @@ describe("/home", () => {
             done();
         })
     })
+
+    it('/getUsers', (done) => {
+        request.get('/home/getUsers').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const user = [{
+                id: 1,
+                name: 'ujjwal',
+                address: 'bhubaneswar india',
+                emailId: 'ujjwal@mg.com',
+                gender: 'male',
+                password: 'admin'
+            }]
+            expect(res.body).to.be.eql(user);
+            done();
+        });
+    });
+
+    it('/getStudents', (done) => {
+        request.get('/home/getStudents').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const data = [{
+                id: 1,
+                name: 'ujjwal',
+                type: 'student'
+            }]
+            expect(res.body).to.be.eql(data);
+            done();
+        });
+    });
+
+    it('/getEmployees', (done) => {
+        request.get('/home/getEmployees').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const data = [{
+                id: 1,
+                name: 'ujjwal',
+                type: 'employee'
+            }]
+            expect(res.body).to.be.eql(data);
+            done();
+        });
+    });
 });

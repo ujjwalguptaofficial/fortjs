@@ -1,8 +1,24 @@
 import { Controller, viewResult, Worker, HTTP_METHOD, Route, jsonResult, htmlResult, textResult, DefaultWorker, redirectResult, Singleton } from "fortjs";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
+import { StudentService } from "../services/student_service";
+import { EmployeeService } from "../services/employee_service";
 
 export class HomeController extends Controller {
+
+    userService: UserService;
+    studentService: StudentService;
+    employeeService: EmployeeService;
+
+    constructor(@Singleton(UserService) userService,
+        @Singleton(StudentService) studentService,
+        @Singleton(EmployeeService) employeeService) {
+
+        super();
+        this.userService = userService;
+        this.studentService = studentService;
+        this.employeeService = employeeService;
+    }
 
     @Worker([HTTP_METHOD.Post])
     async login() {
@@ -82,5 +98,29 @@ export class HomeController extends Controller {
     @Worker()
     async getEnv() {
         return jsonResult(process.env);
+    }
+
+    @Worker()
+    async getUsers() {
+        return jsonResult(this.userService.getUsers());
+    }
+
+    @Worker()
+    async getStudents() {
+        return jsonResult(this.studentService.getAll());
+    }
+
+    @Worker()
+    async getEmployees() {
+        return jsonResult(this.employeeService.getAll());
+    }
+
+    @Worker()
+    async getAllFromServices(@Singleton(UserService) userService,
+        @Singleton(StudentService) studentService,
+        @Singleton(EmployeeService) employeeService) {
+        return jsonResult([...studentService.getAll(), ...employeeService.getAll(),
+        ...userService.getUsers()]);
+
     }
 }
