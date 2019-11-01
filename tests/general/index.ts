@@ -26,7 +26,6 @@ export const initServer = async () => {
 
 if (process.env.NODE_ENV !== "test") {
     initServer().then((app) => {
-      
         app.logger.debug("server started at port: 8080");
         app.logger.debug("environment is :" + process.env.NODE_ENV);
     }).catch(err => {
