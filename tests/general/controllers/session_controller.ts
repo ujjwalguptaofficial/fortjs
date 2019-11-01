@@ -12,10 +12,10 @@ export class SessionController extends Controller {
     @Worker()
     async get() {
         const key = this.query.key;
-        console.log("key", key);
+        this.logger.debug("key", key);
         if (await this.session.isExist(key)) {
             const valueFromSession = await this.session.get(key);
-            console.log("value from session", valueFromSession);
+            this.logger.debug("value from session", valueFromSession);
             return textResult(valueFromSession.toString());
         }
         else {

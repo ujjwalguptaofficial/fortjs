@@ -4526,7 +4526,15 @@ var Fort = /** @class */ (function () {
         _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].errorHandler = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.errorHandler) ? ___WEBPACK_IMPORTED_MODULE_3__["ErrorHandler"] : this.errorHandler;
         _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].xmlParser = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.xmlParser) ? _generics__WEBPACK_IMPORTED_MODULE_8__["GenericXmlParser"] : this.xmlParser;
         _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewPath = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(option.viewPath) ? "views" : option.viewPath;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.logger) ? new _logger__WEBPACK_IMPORTED_MODULE_10__["Logger"]() : new this.logger();
+        if (this.logger) {
+            if (typeof this.logger === 'function') {
+                this.logger = new this.logger();
+            }
+        }
+        else {
+            this.logger = new _logger__WEBPACK_IMPORTED_MODULE_10__["Logger"]();
+        }
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger = this.logger;
     };
     Fort.prototype.create = function (option) {
         var _this = this;
@@ -4692,12 +4700,33 @@ __webpack_require__.r(__webpack_exports__);
 var Logger = /** @class */ (function () {
     function Logger() {
     }
+    Logger.prototype.info = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.debug(args);
+    };
+    Logger.prototype.error = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.debug(args);
+    };
+    Logger.prototype.log = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        this.debug(args);
+    };
     Logger.prototype.debug = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        console.log(args[0]);
+        console.log.apply(console, args);
     };
     return Logger;
 }());

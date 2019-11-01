@@ -1,8 +1,14 @@
 export class Logger {
-    info?(...args): void;
-    error?(...args): void;
-    log?(...args): void;
-    debug?(...args): void {
-        console.log(args[0]);
+    info?(...args) {
+        this.debug(args);
+    }
+    error?(...args) {
+        this.debug(args);
+    }
+    log?(...args) {
+        this.debug(args);
+    }
+    debug?(...args) {
+        console.log(...args);
     }
 }

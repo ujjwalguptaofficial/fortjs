@@ -14,7 +14,7 @@ import { Logger } from "./logger";
 
 export class Fort {
 
-    logger: typeof Logger;
+    logger: Logger;
     routes: ParentRoute[] = [];
     walls: Array<typeof Wall> = [];
     httpServer: http.Server;
@@ -72,7 +72,15 @@ export class Fort {
         FortGlobal.errorHandler = isNull(this.errorHandler) ? ErrorHandler : this.errorHandler;
         FortGlobal.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
         FortGlobal.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
-        FortGlobal.logger = isNull(this.logger) ? new Logger() : new this.logger();
+        if (this.logger) {
+            if (typeof this.logger === 'function') {
+                this.logger = new (this as any).logger();
+            }
+        }
+        else {
+            this.logger = new Logger();
+        }
+        FortGlobal.logger = this.logger;
     }
 
     create(option?: AppOption): Promise<void> {
