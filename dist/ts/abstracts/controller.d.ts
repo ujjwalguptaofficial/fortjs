@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponse, ControllerTestData } from "../types";
-import { CookieManager, FileManager } from "../models";
+import { CookieManager, FileManager, Logger } from "../models";
 import { SessionProvider } from ".";
 export declare abstract class Controller {
     request: HttpRequest;
@@ -19,6 +19,7 @@ export declare abstract class Controller {
         [key: string]: any;
     };
     file?: FileManager;
+    readonly logger: Logger;
     constructor(...args: any[]);
     initialize(data?: ControllerTestData): void;
 }

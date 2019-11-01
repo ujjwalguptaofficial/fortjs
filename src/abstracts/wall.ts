@@ -1,9 +1,9 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
-import { CookieManager } from "../models";
-import {  Controller } from "./controller";
+import { CookieManager, Logger } from "../models";
+import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { WallTestData, initWall } from "../test_helpers";
-
+import { FortGlobal } from "../fort_global";
 
 export abstract class Wall implements Controller {
     request: HttpRequest;
@@ -13,6 +13,10 @@ export abstract class Wall implements Controller {
     cookie: CookieManager;
 
     data: { [key: string]: any };
+
+    get logger(): Logger {
+        return FortGlobal.logger;
+    }
 
     abstract onIncoming(...args): Promise<HttpResult>;
     async onOutgoing(...args) {

@@ -1,7 +1,7 @@
 import { ParentRoute, AppOption, EtagOption } from "../types";
 import { Wall, ViewEngine, SessionProvider, XmlParser } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
-import { Global } from "../global";
+import { FortGlobal } from "../fort_global";
 import { MemorySessionProvider, MustacheViewEngine } from "../extra";
 import { ErrorHandler } from ".";
 import { __AppName } from "../constant";
@@ -10,8 +10,11 @@ import { ETag_Type, ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash } from "../helpers";
 import { GenericSessionProvider, GenericXmlParser, GenericController } from "../generics";
 import { isNull, isNullOrEmpty, isArray } from "../utils";
+import { Logger } from "./logger";
 
 export class Fort {
+
+    logger: typeof Logger;
     routes: ParentRoute[] = [];
     walls: Array<typeof Wall> = [];
     httpServer: http.Server;
@@ -51,24 +54,25 @@ export class Fort {
             type: ETag_Type.Weak
         } as EtagOption;
 
-        Global.port = option.port == null ? 4000 : option.port;
-        Global.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
-        Global.shouldParsePost = isNull(option.shouldParsePost) ? true : option.shouldParsePost;
-        Global.sessionTimeOut = isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        Global.folders = option.folders == null ? [] : option.folders;
-        if (isArray(Global.folders) === false) {
+        FortGlobal.port = option.port == null ? 4000 : option.port;
+        FortGlobal.shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
+        FortGlobal.shouldParsePost = isNull(option.shouldParsePost) ? true : option.shouldParsePost;
+        FortGlobal.sessionTimeOut = isNull(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
+        FortGlobal.folders = option.folders == null ? [] : option.folders;
+        if (isArray(FortGlobal.folders) === false) {
             throw new Error(`Option folders should be an array`);
         }
-        Global.appName = isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
-        Global.appSessionIdentifier = `${Global.appName}_session_id`;
-        Global.eTag = isNull(option.eTag) ? defaultEtagConfig : option.eTag;
-        Global.walls = this.walls as any;
-        Global.viewEngine = isNull(this.viewEngine) ? new MustacheViewEngine() : new (this.viewEngine as any)();
-        Global.sessionProvider = isNull(this.sessionProvider) ? MemorySessionProvider as any :
+        FortGlobal.appName = isNullOrEmpty(option.appName) === true ? __AppName : option.appName;
+        FortGlobal.appSessionIdentifier = `${FortGlobal.appName}_session_id`;
+        FortGlobal.eTag = isNull(option.eTag) ? defaultEtagConfig : option.eTag;
+        FortGlobal.walls = this.walls as any;
+        FortGlobal.viewEngine = isNull(this.viewEngine) ? new MustacheViewEngine() : new (this.viewEngine as any)();
+        FortGlobal.sessionProvider = isNull(this.sessionProvider) ? MemorySessionProvider as any :
             this.sessionProvider as typeof GenericSessionProvider;
-        Global.errorHandler = isNull(this.errorHandler) ? ErrorHandler : this.errorHandler;
-        Global.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
-        Global.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
+        FortGlobal.errorHandler = isNull(this.errorHandler) ? ErrorHandler : this.errorHandler;
+        FortGlobal.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
+        FortGlobal.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
+        FortGlobal.logger = isNull(this.logger) ? new Logger() : new this.logger();
     }
 
     create(option?: AppOption): Promise<void> {
@@ -115,7 +119,7 @@ export class Fort {
                 new RequestHandler(request, response).handle();
             }).once("error", (err) => {
                 if ((err as any).code === 'EADDRINUSE') {
-                    const error = new LogHelper(ERROR_TYPE.PortInUse, Global.port).get();
+                    const error = new LogHelper(ERROR_TYPE.PortInUse, FortGlobal.port).get();
                     rej(error);
                 }
                 else {
@@ -123,7 +127,7 @@ export class Fort {
                 }
             }).once('listening', () => {
                 res();
-            }).listen(Global.port);
+            }).listen(FortGlobal.port);
         });
     }
 

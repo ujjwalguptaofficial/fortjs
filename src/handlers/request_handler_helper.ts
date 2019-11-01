@@ -1,7 +1,7 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
 import * as http from "http";
 import { __ContentType } from "../constant";
-import { Global } from "../global";
+import { FortGlobal } from "../fort_global";
 import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
@@ -62,7 +62,7 @@ export class RequestHandlerHelper {
         let errMessage;
         try {
             await this.runWallOutgoing();
-            errMessage = await new Global.errorHandler().onBadRequest(error);
+            errMessage = await new FortGlobal.errorHandler().onBadRequest(error);
         }
         catch (ex) {
             return this.onErrorOccured(ex);
@@ -75,7 +75,7 @@ export class RequestHandlerHelper {
         let errMessage;
         try {
             await this.runWallOutgoing();
-            errMessage = await new Global.errorHandler().onForbiddenRequest();
+            errMessage = await new FortGlobal.errorHandler().onForbiddenRequest();
         }
         catch (ex) {
             return this.onErrorOccured(ex);
@@ -88,7 +88,7 @@ export class RequestHandlerHelper {
         let errMessage;
         try {
             await this.runWallOutgoing();
-            errMessage = await new Global.errorHandler().onNotAcceptableRequest();
+            errMessage = await new FortGlobal.errorHandler().onNotAcceptableRequest();
         }
         catch (ex) {
             return this.onErrorOccured(ex);
@@ -101,7 +101,7 @@ export class RequestHandlerHelper {
         let errMessage;
         try {
             await this.runWallOutgoing();
-            errMessage = await new Global.errorHandler().onNotFound(this.request.url);
+            errMessage = await new FortGlobal.errorHandler().onNotFound(this.request.url);
         }
         catch (ex) {
             return this.onErrorOccured(ex);
@@ -114,7 +114,7 @@ export class RequestHandlerHelper {
         let errMessage;
         try {
             await this.runWallOutgoing();
-            errMessage = await new Global.errorHandler().onMethodNotAllowed();
+            errMessage = await new FortGlobal.errorHandler().onMethodNotAllowed();
         }
         catch (ex) {
             return this.onErrorOccured(ex);
@@ -133,7 +133,7 @@ export class RequestHandlerHelper {
         let errMessage;
         try {
             await this.runWallOutgoing();
-            errMessage = await new Global.errorHandler().onServerError(error);
+            errMessage = await new FortGlobal.errorHandler().onServerError(error);
         }
         catch (ex) {
             this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });

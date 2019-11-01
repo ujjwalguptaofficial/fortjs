@@ -1,5 +1,5 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, ETag_Type } from "../enums";
-import { Global } from "../global";
+import { FortGlobal } from "../fort_global";
 import * as path from "path";
 import { __ContentType } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
@@ -69,7 +69,7 @@ export class FileHandler extends RequestHandlerHelper {
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
         const fileInfo = this.getFileInfoFromUrl_(urlPath);
         const getAbsPath = function () {
-            const folder = Global.folders.find(qry => qry.alias === fileInfo.folder);
+            const folder = FortGlobal.folders.find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
                 return path.join(folder.path, fileInfo.file);
             }
@@ -141,7 +141,7 @@ export class FileHandler extends RequestHandlerHelper {
             if (negotiateMimeType != null) {
                 const lastModified = fileInfo.mtime.toUTCString();
                 const eTagValue = etag(fileInfo, {
-                    weak: Global.eTag.type === ETag_Type.Weak
+                    weak: FortGlobal.eTag.type === ETag_Type.Weak
                 });
                 if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
                     this.response.statusCode = HTTP_STATUS_CODE.NotModified;

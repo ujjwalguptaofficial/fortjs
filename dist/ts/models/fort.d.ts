@@ -3,7 +3,9 @@ import { ParentRoute, AppOption } from "../types";
 import { Wall, ViewEngine, SessionProvider, XmlParser } from "../abstracts";
 import { ErrorHandler } from ".";
 import * as http from "http";
+import { Logger } from "./logger";
 export declare class Fort {
+    logger: typeof Logger;
     routes: ParentRoute[];
     walls: Array<typeof Wall>;
     httpServer: http.Server;

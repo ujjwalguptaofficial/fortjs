@@ -1,8 +1,8 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
-import { CookieManager } from "../models";
+import { CookieManager, Logger } from "../models";
 import { SessionProvider, Controller } from ".";
 import { ShieldTestData, initShield } from "../test_helpers";
-
+import { FortGlobal } from "../fort_global";
 
 export abstract class Shield implements Controller {
     workerName: string;
@@ -14,6 +14,10 @@ export abstract class Shield implements Controller {
     cookie: CookieManager;
 
     data: { [key: string]: any };
+
+    get logger(): Logger {
+        return FortGlobal.logger;
+    }
 
     abstract protect(...args): Promise<HttpResult>;
 

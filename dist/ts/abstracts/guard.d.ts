@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
-import { CookieManager, FileManager } from "../models";
+import { CookieManager, FileManager, Logger } from "../models";
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { GuardTestData } from "../test_helpers";
@@ -22,6 +22,7 @@ export declare abstract class Guard implements Controller {
     };
     file: FileManager;
     abstract check(...args: any[]): Promise<HttpResult>;
+    readonly logger: Logger;
     constructor(...args: any[]);
     initialize(data?: GuardTestData): Controller;
 }

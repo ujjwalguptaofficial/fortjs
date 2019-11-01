@@ -1,10 +1,10 @@
 import * as http from "http";
-import { ErrorHandler } from "./models";
+import { ErrorHandler, Logger } from "./models";
 import { ViewEngine, XmlParser } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall } from "./generics";
 
-export class Global {
+export class FortGlobal {
     static request: http.IncomingMessage;
     static response: http.ServerResponse;
     static port: number;
@@ -25,4 +25,6 @@ export class Global {
     static folders?: FolderMap[];
     static appSessionIdentifier: string;
     static xmlParser: typeof XmlParser;
+
+    static logger: Logger;
 }

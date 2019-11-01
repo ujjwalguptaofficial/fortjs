@@ -7,7 +7,7 @@ import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
 import { MultiPartParseResult } from "../types";
 import { FileManager } from "../models";
-import { Global } from "../global";
+import { FortGlobal } from "../fort_global";
 
 
 export class PostHandler extends ControllerResultHandler {
@@ -77,7 +77,7 @@ export class PostHandler extends ControllerResultHandler {
                 case MIME_TYPE.FormUrlEncoded:
                     postData = QueryString.parse(bodyDataAsString); break;
                 case MIME_TYPE.Xml:
-                    postData = new (Global as any).xmlParser().parse(bodyDataAsString);
+                    postData = new (FortGlobal as any).xmlParser().parse(bodyDataAsString);
                     break;
                 default:
                     postData = {};

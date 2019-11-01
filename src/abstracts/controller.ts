@@ -1,7 +1,8 @@
 import { HttpRequest, HttpResponse, ControllerTestData } from "../types";
-import { CookieManager, FileManager } from "../models";
+import { CookieManager, FileManager, Logger } from "../models";
 import { SessionProvider } from ".";
 import { initController } from "../test_helpers";
+import { FortGlobal } from "../fort_global";
 
 
 export abstract class Controller {
@@ -15,6 +16,9 @@ export abstract class Controller {
     data: { [key: string]: any };
 
     file?: FileManager;
+    get logger(): Logger {
+        return FortGlobal.logger;
+    }
 
     constructor(...args) {
 

@@ -1,9 +1,9 @@
 import { HttpRequest, HttpResponse, HttpResult } from "../types";
-import { CookieManager, FileManager } from "../models";
+import { CookieManager, FileManager, Logger } from "../models";
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { GuardTestData, initGuard } from "../test_helpers";
-
+import { FortGlobal } from "../fort_global";
 
 export abstract class Guard implements Controller {
     request: HttpRequest;
@@ -16,6 +16,10 @@ export abstract class Guard implements Controller {
     data: { [key: string]: any };
     file: FileManager;
     abstract check(...args): Promise<HttpResult>;
+
+    get logger(): Logger {
+        return FortGlobal.logger;
+    }
 
     constructor(...args) {
 

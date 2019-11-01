@@ -2,7 +2,7 @@ import * as http from "http";
 import * as url from 'url';
 import { Controller } from "../abstracts";
 import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
-import { Global } from "../global";
+import { FortGlobal } from "../fort_global";
 import { parseCookie, parseAndMatchRoute, promise } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericSessionProvider, GenericGuard } from "../generics";
@@ -35,10 +35,10 @@ export class RequestHandler extends PostHandler {
     private executeWallIncoming_(): Promise<boolean> {
         return promise((res) => {
             let index = 0;
-            const wallLength = Global.walls.length;
+            const wallLength = FortGlobal.walls.length;
             const executeWallIncomingByIndex = async () => {
                 if (wallLength > index) {
-                    const wall = Global.walls[index++];
+                    const wall = FortGlobal.walls[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
                     const wallObj = new wall(...constructorArgsValues);
                     wallObj.cookie = this.cookieManager;
@@ -47,6 +47,7 @@ export class RequestHandler extends PostHandler {
                     wallObj.response = this.response as HttpResponse;
                     wallObj.data = this.data_;
                     wallObj.query = this.query_;
+                    
                     this.wallInstances.push(wallObj);
                     const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
                     try {
@@ -105,6 +106,7 @@ export class RequestHandler extends PostHandler {
                     shieldObj.response = this.response as HttpResponse;
                     shieldObj.data = this.data_;
                     shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
+                
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
 
                     try {
@@ -147,6 +149,7 @@ export class RequestHandler extends PostHandler {
                     guardObj.data = this.data_;
                     guardObj.file = this.file;
                     guardObj.param = this.routeMatchInfo_.params;
+    
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
                     try {
                         const result = await guardObj.check(...methodArgsValues);
@@ -171,7 +174,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private parseCookieFromRequest_() {
-        if (Global.shouldParseCookie === true) {
+        if (FortGlobal.shouldParseCookie === true) {
             const rawCookie = (this.request.headers[__Cookie] || this.request.headers["cookie"]) as string;
             let parsedCookies;
             try {
@@ -180,9 +183,9 @@ export class RequestHandler extends PostHandler {
                 this.onErrorOccured(ex);
                 return false;
             }
-            this.session_ = new Global.sessionProvider();
+            this.session_ = new FortGlobal.sessionProvider();
             this.session_.cookie = this.cookieManager = new CookieManager(parsedCookies);
-            this.session_.sessionId = parsedCookies[Global.appSessionIdentifier];
+            this.session_.sessionId = parsedCookies[FortGlobal.appSessionIdentifier];
         }
         else {
             this.cookieManager = new CookieManager({});
@@ -191,7 +194,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private setPreHeader_() {
-        this.response.setHeader('X-Powered-By', Global.appName);
+        this.response.setHeader('X-Powered-By', FortGlobal.appName);
         this.response.setHeader('Vary', 'Accept-Encoding');
         this.response.sendDate = true;
     }
@@ -252,7 +255,7 @@ export class RequestHandler extends PostHandler {
             this.body = {};
             this.file = new FileManager({});
         }
-        else if (Global.shouldParsePost === true) {
+        else if (FortGlobal.shouldParsePost === true) {
             try {
                 this.body = await this.parsePostData();
             } catch (ex) {

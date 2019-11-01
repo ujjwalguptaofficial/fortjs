@@ -1,6 +1,6 @@
 import { CookieManager } from "../models";
 import * as getUniqId from "uniqid";
-import { Global } from "../global";
+import { FortGlobal } from "../fort_global";
 import { SessionValue } from "../types";
 
 export abstract class SessionProvider {
@@ -21,17 +21,17 @@ export abstract class SessionProvider {
         const now = new Date();
         this.sessionId = getUniqId();
         this.cookie.addCookie({
-            name: Global.appSessionIdentifier,
+            name: FortGlobal.appSessionIdentifier,
             value: this.sessionId,
             httpOnly: true,
             path: "/",
-            expires: new Date(now.setMinutes(now.getMinutes() + Global.sessionTimeOut)),
-            maxAge: Global.sessionTimeOut * 60
+            expires: new Date(now.setMinutes(now.getMinutes() + FortGlobal.sessionTimeOut)),
+            maxAge: FortGlobal.sessionTimeOut * 60
         });
     }
 
     protected destroySession() {
-        const cookie = this.cookie.getCookie(Global.appSessionIdentifier);
+        const cookie = this.cookie.getCookie(FortGlobal.appSessionIdentifier);
         cookie.httpOnly = true;
         cookie.path = "/";
         this.cookie.removeCookie(cookie);

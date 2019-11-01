@@ -1,4 +1,4 @@
-import { Global } from "./global";
+import { FortGlobal } from "./fort_global";
 /* tslint:disable */
 export const __ContentType = "Content-Type";
 export const __AppName = "fort";
