@@ -34,7 +34,7 @@ export class RequestLogger extends Wall {
     }
 
     async onOutgoing(@Assign('on outgoing called') value: string) {
-        // console.log('executing request logger');
+        this.logger.log('executing request logger');
         this.response.setHeader('Custom-Header-From-Outgoing-Wall', '*');
         this.response.setHeader('injection-result', this.injectionValue + ` ${value}`);
     }

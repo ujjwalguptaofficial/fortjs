@@ -14,7 +14,7 @@ export class AuthenticationShield extends Shield {
         }
         return new Promise((resolve, reject) => {
             this.data.authenticationShieldCounter = ++counter;
-            // console.log('data', this.data);
+            this.logger.debug('data', this.data);
             const query = this.query;
             const data = this.data;
             if (this.request.headers['throwexceptionbyshield'] != null) {

@@ -11,7 +11,7 @@ export class ModelUserGuard extends Guard {
 
     async check(@Assign('injection ok in guard') value: string) {
         // throw new Error("thrown by guard");
-        // console.log("data", this.data);
+        console.log("data", this.data);
         if (this.query.guard_injection_test != null) {
             return textResult(`${this.constructorValue} ${value}`, 200);
         }
