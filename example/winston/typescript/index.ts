@@ -8,7 +8,7 @@ app.create({
         path: path.join(__dirname, "../static")
     }]
 }).then(() => {
-    console.log("Your fort is located at address - localhost:4000");
+    app.logger.debug("Your fort is located at address - localhost:4000");
 }).catch(err => {
     console.error(err);
 })

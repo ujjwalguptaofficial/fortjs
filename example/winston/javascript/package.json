@@ -27,7 +27,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "fortjs": "^1.6.1",
+    "fortjs": "^1.9.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0"
   },
