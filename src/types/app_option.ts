@@ -64,7 +64,7 @@ export type AppOption = {
 
     /**
      * Views folder location. By default it is - views.
-     * If you are changing the value, you need to change the value of copyWebpackPlugin in webpack config.
+     * 
      *
      * @type {string}
      */

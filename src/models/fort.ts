@@ -4,13 +4,14 @@ import { RouteHandler, RequestHandler } from "../handlers";
 import { FortGlobal } from "../fort_global";
 import { MemorySessionProvider, MustacheViewEngine } from "../extra";
 import { ErrorHandler } from ".";
-import { __AppName } from "../constant";
+import { __AppName, __CurrentPath } from "../constant";
 import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash } from "../helpers";
 import { GenericSessionProvider, GenericXmlParser, GenericController } from "../generics";
 import { isNull, isNullOrEmpty, isArray } from "../utils";
 import { Logger } from "./logger";
+import * as path from "path";
 
 export class Fort {
 
@@ -71,7 +72,7 @@ export class Fort {
             this.sessionProvider as typeof GenericSessionProvider;
         FortGlobal.errorHandler = isNull(this.errorHandler) ? ErrorHandler : this.errorHandler;
         FortGlobal.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
-        FortGlobal.viewPath = isNull(option.viewPath) ? "views" : option.viewPath;
+        FortGlobal.viewPath = isNull(option.viewPath) ? path.join(__CurrentPath, "views") : option.viewPath;
         if (this.logger) {
             if (typeof this.logger === 'function') {
                 this.logger = new (this as any).logger();

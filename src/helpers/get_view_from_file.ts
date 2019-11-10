@@ -8,8 +8,8 @@ const viewCache = {
 
 };
 export const getViewFromFile = async function (fileLocation: string): Promise<string> {
-    const readView = function () {
-        const pathOfView = path.join(__CurrentPath, `${FortGlobal.viewPath}/${fileLocation}`);
+    const readView = () => {
+        const pathOfView = path.join(FortGlobal.viewPath, fileLocation);
         return readFile(pathOfView, {
             encoding: 'utf8'
         });
