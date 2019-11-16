@@ -37,3 +37,9 @@ You are very welcome to contribute, please see contributing guidelines - [[Contr
 ## Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. For sponsoring, contact author of this project.
+
+## Features to add
+
+* Multiple format result from custom error handler
+* Retrieve dependency injection value from anywhere like in service
+* call components from any components
