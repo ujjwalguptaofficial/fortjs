@@ -42,4 +42,5 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 
 * Multiple format result from custom error handler
 * Retrieve dependency injection value from anywhere like in service
-* call components from any components
+* call another components from any type of components
+* Absolute route
