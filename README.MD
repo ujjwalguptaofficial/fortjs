@@ -8,7 +8,7 @@
 
 # Overview
 
-Fort based MVC web framework for nodejs targeting good code structures & modularity.
+Component based MVC web framework for nodejs targeting good code structures & modularity.
 
 # Why fortjs
 
