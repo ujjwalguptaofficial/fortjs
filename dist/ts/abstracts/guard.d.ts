@@ -21,7 +21,7 @@ export declare abstract class Guard implements Controller {
         [key: string]: any;
     };
     file: FileManager;
-    abstract check(...args: any[]): Promise<HttpResult>;
+    abstract check(...args: any[]): Promise<HttpResult | void>;
     readonly logger: Logger;
     constructor(...args: any[]);
     initialize(data?: GuardTestData): Controller;

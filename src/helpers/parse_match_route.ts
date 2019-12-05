@@ -14,7 +14,8 @@ const checkRouteInWorkerForDefaultRoute = (route: RouteInfo, httpMethod: HTTP_ME
 
     const regex1 = /{(.*)}(?!.)/;
     const regex2 = /{(.*)}\.(\w+)(?!.)/;
-    route.workers.every(routeActionInfo => {
+    Object.keys(route.workers).every(workerName => {
+        const routeActionInfo = route.workers[workerName];
         const patternSplit = routeActionInfo.pattern.split("/");
         if (urlPartLength === patternSplit.length) {
             let isMatched = true;
@@ -71,16 +72,17 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     const urlPartLength = urlParts.length;
     if (urlPartLength === 2) { // url does not have action path
         const pattern = `/${route.path}/`;
-        route.workers.every(action => {
-            if (action.pattern === pattern) {
-                if (action.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.workerInfo = action;
+        Object.keys(route.workers).every(workerName => {
+            const worker = route.workers[workerName];
+            if (worker.pattern === pattern) {
+                if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
+                    matchedRoute.workerInfo = worker;
                     matchedRoute.params = {};
                     matchedRoute.shields = route.shields;
                     return false;
                 }
                 else {
-                    matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...action.methodsAllowed];
+                    matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
                 }
             }
             return true;
@@ -89,8 +91,9 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     else {
         const regex1 = /{(.*)}(?!.)/;
         const regex2 = /{(.*)}\.(\w+)(?!.)/;
-        route.workers.every(routeActionInfo => {
-            const patternSplit = routeActionInfo.pattern.split("/");
+        Object.keys(route.workers).every(workerName => {
+            const worker = route.workers[workerName];
+            const patternSplit = worker.pattern.split("/");
             if (urlPartLength === patternSplit.length) {
                 let isMatched = true;
                 const params = {};
@@ -117,14 +120,14 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
                     return true;
                 });
                 if (isMatched === true) {
-                    if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
-                        matchedRoute.workerInfo = routeActionInfo;
+                    if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
+                        matchedRoute.workerInfo = worker;
                         matchedRoute.params = params;
                         matchedRoute.shields = route.shields;
                         return false;
                     }
                     else {
-                        matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...routeActionInfo.methodsAllowed];
+                        matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
                     }
                 }
             }

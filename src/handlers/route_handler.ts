@@ -18,7 +18,7 @@ export class RouteHandler {
         const route = routerCollection.find(x => x.controllerName === value.controller.name);
         if (route == null) {
             routerCollection.push({
-                workers: [],
+                workers: {},
                 controller: value.controller as any,
                 controllerName: value.controller.name,
                 path: value.path,
@@ -30,17 +30,18 @@ export class RouteHandler {
             route.controller = value.controller as any;
             route.path = value.path;
             // change pattern value since we have controller name now.
-            route.workers.forEach(actionInfo => {
+            for (const workerName in route.workers) {
+                const actionInfo = route.workers[workerName];
                 actionInfo.pattern = getActionPattern(value, actionInfo.pattern);
-            });
+            }
         }
-    }  
+    }
 
     static addShields(shields: Array<typeof GenericShield>, className: string) {
         const index = routerCollection.findIndex(x => x.controllerName === className);
         if (index < 0) {
             routerCollection.push({
-                workers: [],
+                workers: {},
                 controller: null,
                 controllerName: className,
                 shields: shields,
@@ -53,11 +54,14 @@ export class RouteHandler {
         }
     }
 
-    static addWorker(newAction: WorkerInfo, className: string) {
+    static addWorker(newWorker: WorkerInfo, className: string) {
+        const workerName = newWorker.workerName;
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({
-                workers: [newAction],
+                workers: {
+                    [workerName]: newWorker
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -66,30 +70,32 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = router.workers.find(val => val.workerName === newAction.workerName);
+            const savedAction = router.workers[workerName];
             if (savedAction == null) {
-                newAction.pattern = getActionPattern(router, newAction.pattern);
-                router.workers.push(newAction);
+                newWorker.pattern = getActionPattern(router, newWorker.pattern);
+                router.workers[workerName] = newWorker;
             }
             else {
-                savedAction.methodsAllowed = newAction.methodsAllowed;
+                savedAction.methodsAllowed = newWorker.methodsAllowed;
                 savedAction.pattern = router.path == null ? savedAction.pattern : `/${router.path}${savedAction.pattern}`;
             }
         }
     }
 
-    static addGuards(guards: Array<typeof GenericGuard>, className: string, actionName: string) {
+    static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
         const index = routerCollection.findIndex(x => x.controllerName === className);
-        const pattern = actionName.toLowerCase();
+        const pattern = workerName.toLowerCase();
         if (index < 0) {
             routerCollection.push({
-                workers: [{
-                    workerName: actionName,
-                    guards: guards,
-                    methodsAllowed: null,
-                    pattern: pattern,
-                    values: []
-                }],
+                workers: {
+                    [workerName]: {
+                        workerName: workerName,
+                        guards: guards,
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: []
+                    }
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -98,15 +104,15 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = routerCollection[index].workers.find(val => val.workerName === actionName);
+            const savedAction = routerCollection[index].workers[workerName];
             if (savedAction == null) {
-                routerCollection[index].workers.push({
-                    workerName: actionName,
+                routerCollection[index].workers[workerName] = {
+                    workerName: workerName,
                     guards: guards,
                     methodsAllowed: null,
                     pattern: pattern,
                     values: []
-                });
+                };
             }
             else {
                 savedAction.guards = guards;
@@ -114,17 +120,19 @@ export class RouteHandler {
         }
     }
 
-    static addPattern(pattern: string, className: string, actionName: string) {
+    static addPattern(pattern: string, className: string, workerName: string) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
             routerCollection.push({
-                workers: [{
-                    workerName: actionName,
-                    guards: [],
-                    methodsAllowed: null,
-                    pattern: pattern,
-                    values: []
-                }],
+                workers: {
+                    [workerName]: {
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: []
+                    }
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -133,16 +141,16 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = router.workers.find(val => val.workerName === actionName);
+            const savedAction = router.workers[workerName];
             pattern = getActionPattern(router, pattern);
             if (savedAction == null) {
-                router.workers.push({
-                    workerName: actionName,
+                router.workers[workerName] = {
+                    workerName: workerName,
                     guards: [],
                     methodsAllowed: null,
                     pattern: pattern,
                     values: []
-                });
+                };
             }
             else {
                 savedAction.pattern = pattern;

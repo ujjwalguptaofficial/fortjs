@@ -5,7 +5,9 @@ export type RouteInfo = {
     controller: typeof GenericController;
     controllerName: string;
     path: string;
-    workers: WorkerInfo[];
+    workers: {
+        [workerName: string]: WorkerInfo
+    };
     shields: Array<typeof GenericShield>;
     values: any[];
 };
