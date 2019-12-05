@@ -18,7 +18,7 @@ export abstract class Wall implements Controller {
         return FortGlobal.logger;
     }
 
-    abstract onIncoming(...args): Promise<HttpResult>;
+    abstract onIncoming(...args): Promise<HttpResult | void>;
     async onOutgoing(...args) {
         return null;
     }

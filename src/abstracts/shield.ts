@@ -19,7 +19,7 @@ export abstract class Shield implements Controller {
         return FortGlobal.logger;
     }
 
-    abstract protect(...args): Promise<HttpResult>;
+    abstract protect(...args): Promise<HttpResult | void>;
 
     constructor(...args) {
 
