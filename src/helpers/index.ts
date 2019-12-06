@@ -17,3 +17,4 @@ export * from './json_helper';
 export * from './remove_last_slash';
 export * from './remove_first_slash';
 export * from './reverse_loop';
+export * from './compar_expected_and_remove_unnecessary';

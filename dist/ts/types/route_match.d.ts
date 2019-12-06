@@ -7,4 +7,5 @@ export declare type RouteMatch = {
     params: any;
     shields: Array<typeof GenericShield>;
     allowedHttpMethod: HTTP_METHOD[];
+    controllerName: string;
 };

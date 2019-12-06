@@ -3,13 +3,14 @@ import * as url from 'url';
 import { Controller } from "../abstracts";
 import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
 import { FortGlobal } from "../fort_global";
-import { parseCookie, parseAndMatchRoute, promise } from "../helpers";
+import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericSessionProvider, GenericGuard } from "../generics";
 import { RouteMatch, HttpRequest, HttpResponse } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
 import { InjectorHandler } from "./injector_handler";
+import { RouteHandler } from "./route_handler";
 
 
 export class RequestHandler extends PostHandler {
@@ -47,7 +48,7 @@ export class RequestHandler extends PostHandler {
                     wallObj.response = this.response as HttpResponse;
                     wallObj.data = this.data_;
                     wallObj.query = this.query_;
-                    
+
                     this.wallInstances.push(wallObj);
                     const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
                     try {
@@ -106,7 +107,7 @@ export class RequestHandler extends PostHandler {
                     shieldObj.response = this.response as HttpResponse;
                     shieldObj.data = this.data_;
                     shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
-                
+
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
 
                     try {
@@ -149,7 +150,7 @@ export class RequestHandler extends PostHandler {
                     guardObj.data = this.data_;
                     guardObj.file = this.file;
                     guardObj.param = this.routeMatchInfo_.params;
-    
+
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
                     try {
                         const result = await guardObj.check(...methodArgsValues);
@@ -199,6 +200,20 @@ export class RequestHandler extends PostHandler {
         this.response.sendDate = true;
     }
 
+    private checkExpectedQuery_() {
+        const expectedQuery = RouteHandler.getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
+        if (expectedQuery != null) {
+            this.query_ = compareExpectedAndRemoveUnnecessary(expectedQuery, this.query_);
+        }
+    }
+
+    private checkExpectedBody_() {
+        const expectedBody = RouteHandler.getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
+        if (expectedBody != null) {
+            this.body = compareExpectedAndRemoveUnnecessary(expectedBody, this.body);
+        }
+    }
+
     private async onRouteMatched_() {
         const actionInfo = this.routeMatchInfo_.workerInfo;
         if (actionInfo == null) {
@@ -210,10 +225,12 @@ export class RequestHandler extends PostHandler {
             }
         }
         else {
+            this.checkExpectedQuery_();
             let shouldExecuteNextComponent = await this.executeShieldsProtection_();
             if (shouldExecuteNextComponent === true) {
                 shouldExecuteNextComponent = await this.handlePostData();
                 if (shouldExecuteNextComponent === true) {
+                    this.checkExpectedBody_();
                     shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
                     if (shouldExecuteNextComponent === true) {
                         this.runController_();

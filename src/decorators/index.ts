@@ -5,3 +5,5 @@ export * from './route';
 export * from './default_worker';
 export * from './assign';
 export * from './singleton';
+export * from './expect_body';
+export * from './expect_query';

@@ -8,7 +8,7 @@ import { FortGlobal } from "../fort_global";
 export abstract class Controller {
     request: HttpRequest;
     response: HttpResponse;
-    query: { [key: string]: string };
+    query: { [key: string]: any };
     body?: { [key: string]: any };
     session: SessionProvider;
     cookie: CookieManager;

@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.9.3 - 05/12/2019
+ * @license :fortjs - V1.9.3 - 06/12/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -502,6 +502,50 @@ var DefaultWorker = function (allowedMethods) {
 
 /***/ }),
 
+/***/ "./src/decorators/expect_body.ts":
+/*!***************************************!*\
+  !*** ./src/decorators/expect_body.ts ***!
+  \***************************************/
+/*! exports provided: ExpectBody */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExpectBody", function() { return ExpectBody; });
+/* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+
+function ExpectBody(value) {
+    return function (target, methodName, descriptor) {
+        var className = target.name || target.constructor.name;
+        _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("body", className, methodName, value);
+    };
+}
+
+
+/***/ }),
+
+/***/ "./src/decorators/expect_query.ts":
+/*!****************************************!*\
+  !*** ./src/decorators/expect_query.ts ***!
+  \****************************************/
+/*! exports provided: ExpectQuery */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExpectQuery", function() { return ExpectQuery; });
+/* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+
+function ExpectQuery(value) {
+    return function (target, methodName, descriptor) {
+        var className = target.name || target.constructor.name;
+        _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("query", className, methodName, value);
+    };
+}
+
+
+/***/ }),
+
 /***/ "./src/decorators/guards.ts":
 /*!**********************************!*\
   !*** ./src/decorators/guards.ts ***!
@@ -529,7 +573,7 @@ var Guards = function (value) {
 /*!*********************************!*\
   !*** ./src/decorators/index.ts ***!
   \*********************************/
-/*! exports provided: Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton */
+/*! exports provided: Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, ExpectBody, ExpectQuery */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -554,6 +598,14 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _singleton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./singleton */ "./src/decorators/singleton.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Singleton", function() { return _singleton__WEBPACK_IMPORTED_MODULE_6__["Singleton"]; });
+
+/* harmony import */ var _expect_body__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./expect_body */ "./src/decorators/expect_body.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ExpectBody", function() { return _expect_body__WEBPACK_IMPORTED_MODULE_7__["ExpectBody"]; });
+
+/* harmony import */ var _expect_query__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./expect_query */ "./src/decorators/expect_query.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ExpectQuery", function() { return _expect_query__WEBPACK_IMPORTED_MODULE_8__["ExpectQuery"]; });
+
+
 
 
 
@@ -2272,6 +2324,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 /* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
 /* harmony import */ var _injector_handler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./injector_handler */ "./src/handlers/injector_handler.ts");
+/* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./route_handler */ "./src/handlers/route_handler.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -2320,6 +2373,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 
 
 
@@ -2541,6 +2595,18 @@ var RequestHandler = /** @class */ (function (_super) {
         this.response.setHeader('Vary', 'Accept-Encoding');
         this.response.sendDate = true;
     };
+    RequestHandler.prototype.checkExpectedQuery_ = function () {
+        var expectedQuery = _route_handler__WEBPACK_IMPORTED_MODULE_8__["RouteHandler"].getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
+        if (expectedQuery != null) {
+            this.query_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["compareExpectedAndRemoveUnnecessary"])(expectedQuery, this.query_);
+        }
+    };
+    RequestHandler.prototype.checkExpectedBody_ = function () {
+        var expectedBody = _route_handler__WEBPACK_IMPORTED_MODULE_8__["RouteHandler"].getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
+        if (expectedBody != null) {
+            this.body = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["compareExpectedAndRemoveUnnecessary"])(expectedBody, this.body);
+        }
+    };
     RequestHandler.prototype.onRouteMatched_ = function () {
         return __awaiter(this, void 0, void 0, function () {
             var actionInfo, shouldExecuteNextComponent;
@@ -2556,7 +2622,9 @@ var RequestHandler = /** @class */ (function (_super) {
                             this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
                         }
                         return [3 /*break*/, 5];
-                    case 1: return [4 /*yield*/, this.executeShieldsProtection_()];
+                    case 1:
+                        this.checkExpectedQuery_();
+                        return [4 /*yield*/, this.executeShieldsProtection_()];
                     case 2:
                         shouldExecuteNextComponent = _a.sent();
                         if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 5];
@@ -2564,6 +2632,7 @@ var RequestHandler = /** @class */ (function (_super) {
                     case 3:
                         shouldExecuteNextComponent = _a.sent();
                         if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 5];
+                        this.checkExpectedBody_();
                         return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
                     case 4:
                         shouldExecuteNextComponent = _a.sent();
@@ -3114,9 +3183,90 @@ var RouteHandler = /** @class */ (function () {
             }
         }
     };
+    RouteHandler.addExpected = function (type, className, workerName, expectedValue) {
+        var _a;
+        var isQuery = type === 'query';
+        var pattern = workerName.toLowerCase();
+        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        var worker = {
+            workerName: workerName,
+            guards: [],
+            methodsAllowed: null,
+            pattern: pattern,
+            values: [],
+            expectedQuery: isQuery ? expectedValue : null,
+            expectedBody: isQuery ? null : expectedValue
+        };
+        if (router == null) {
+            routerCollection.push({
+                workers: (_a = {},
+                    _a[workerName] = worker,
+                    _a),
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            var savedAction = router.workers[workerName];
+            if (savedAction == null) {
+                router.workers[workerName] = worker;
+            }
+            else {
+                savedAction.expectedQuery = worker.expectedQuery;
+                savedAction.expectedBody = worker.expectedBody;
+            }
+        }
+    };
+    RouteHandler.getExpectedQuery = function (controllerName, workerName) {
+        return routerCollection.find(function (q) { return q.controllerName === controllerName; }).workers[workerName].expectedQuery;
+    };
+    RouteHandler.getExpectedBody = function (controllerName, workerName) {
+        return routerCollection.find(function (q) { return q.controllerName === controllerName; }).workers[workerName].expectedBody;
+    };
     return RouteHandler;
 }());
 
+
+
+/***/ }),
+
+/***/ "./src/helpers/compar_expected_and_remove_unnecessary.ts":
+/*!***************************************************************!*\
+  !*** ./src/helpers/compar_expected_and_remove_unnecessary.ts ***!
+  \***************************************************************/
+/*! exports provided: compareExpectedAndRemoveUnnecessary */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compareExpectedAndRemoveUnnecessary", function() { return compareExpectedAndRemoveUnnecessary; });
+/* harmony import */ var _get_data_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./get_data_type */ "./src/helpers/get_data_type.ts");
+/* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
+
+
+var compareExpectedAndRemoveUnnecessary = function (expected, actual) {
+    var result = {};
+    // if (actual == null) {
+    //     return result;
+    // }
+    for (var prop in expected) {
+        var type = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(expected[prop]);
+        var value = void 0;
+        switch (type) {
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Number:
+                value = Number(actual[prop]);
+                break;
+            default:
+                value = actual[prop];
+        }
+        result[prop] = value;
+    }
+    console.log('result', result);
+    return result;
+};
 
 
 /***/ }),
@@ -3397,7 +3547,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3458,6 +3608,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _reverse_loop__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./reverse_loop */ "./src/helpers/reverse_loop.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return _reverse_loop__WEBPACK_IMPORTED_MODULE_18__["reverseLoop"]; });
+
+/* harmony import */ var _compar_expected_and_remove_unnecessary__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./compar_expected_and_remove_unnecessary */ "./src/helpers/compar_expected_and_remove_unnecessary.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "compareExpectedAndRemoveUnnecessary", function() { return _compar_expected_and_remove_unnecessary__WEBPACK_IMPORTED_MODULE_19__["compareExpectedAndRemoveUnnecessary"]; });
+
 
 
 
@@ -3685,6 +3839,7 @@ var checkRouteInWorkerForDefaultRoute = function (route, httpMethod, urlParts) {
         allowedHttpMethod: []
     };
     matchedRoute.controller = route.controller;
+    matchedRoute.controllerName = route.controllerName;
     var urlPartLength = urlParts.length;
     var regex1 = /{(.*)}(?!.)/;
     var regex2 = /{(.*)}\.(\w+)(?!.)/;
@@ -3740,6 +3895,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
         allowedHttpMethod: []
     };
     matchedRoute.controller = route.controller;
+    matchedRoute.controllerName = route.controllerName;
     var urlPartLength = urlParts.length;
     if (urlPartLength === 2) { // url does not have action path
         var pattern_1 = "/" + route.path + "/";
@@ -4123,7 +4279,7 @@ var XmlHelper = /** @class */ (function () {
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, MustacheViewEngine, MemorySessionProvider */
+/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, ExpectBody, ExpectQuery, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary, MustacheViewEngine, MemorySessionProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4175,6 +4331,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Singleton", function() { return _decorators__WEBPACK_IMPORTED_MODULE_2__["Singleton"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ExpectBody", function() { return _decorators__WEBPACK_IMPORTED_MODULE_2__["ExpectBody"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ExpectQuery", function() { return _decorators__WEBPACK_IMPORTED_MODULE_2__["ExpectQuery"]; });
+
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./enums */ "./src/enums/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MIME_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"]; });
 
@@ -4224,6 +4384,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlash", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["removeFirstSlash"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["reverseLoop"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "compareExpectedAndRemoveUnnecessary", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["compareExpectedAndRemoveUnnecessary"]; });
 
 /* harmony import */ var _extra__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./extra */ "./src/extra/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MustacheViewEngine", function() { return _extra__WEBPACK_IMPORTED_MODULE_5__["MustacheViewEngine"]; });

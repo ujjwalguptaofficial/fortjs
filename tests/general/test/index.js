@@ -21,8 +21,8 @@ require('./random');
 require('./user');
 require('./session');
 require('./injection');
+require('./expect');
 require('./wall');
-
 // process.exit(0);
 
 

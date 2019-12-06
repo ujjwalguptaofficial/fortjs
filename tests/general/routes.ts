@@ -6,6 +6,7 @@ import { SessionController } from "./controllers/session_controller";
 import { ParentRoute } from "fortjs";
 import { DefaultController } from "./controllers/default_controller";
 import { InjectionController } from "./controllers/injection_controller";
+import { ExpectController } from "./controllers/expect_controller";
 
 export const routes: ParentRoute[] = [{
     controller: DefaultController,
@@ -28,4 +29,7 @@ export const routes: ParentRoute[] = [{
 }, {
     controller: InjectionController,
     path: "/injection"
+}, {
+    controller: ExpectController,
+    path: "/expect"
 }];

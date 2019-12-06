@@ -10,6 +10,7 @@ const checkRouteInWorkerForDefaultRoute = (route: RouteInfo, httpMethod: HTTP_ME
         allowedHttpMethod: []
     } as RouteMatch;
     matchedRoute.controller = route.controller;
+    matchedRoute.controllerName = route.controllerName;
     const urlPartLength = urlParts.length;
 
     const regex1 = /{(.*)}(?!.)/;
@@ -69,6 +70,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
         allowedHttpMethod: []
     } as RouteMatch;
     matchedRoute.controller = route.controller;
+    matchedRoute.controllerName = route.controllerName;
     const urlPartLength = urlParts.length;
     if (urlPartLength === 2) { // url does not have action path
         const pattern = `/${route.path}/`;

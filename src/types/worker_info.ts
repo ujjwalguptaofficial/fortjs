@@ -7,4 +7,6 @@ export type WorkerInfo = {
     guards: Array<typeof GenericGuard>;
     pattern: string;
     values: any[];
+    expectedQuery?: any;
+    expectedBody?: any;
 };

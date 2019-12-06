@@ -157,4 +157,50 @@ export class RouteHandler {
             }
         }
     }
+
+    static addExpected(type: string, className: string, workerName: string, expectedValue: any) {
+        const isQuery = type === 'query';
+        const pattern = workerName.toLowerCase();
+        const router = routerCollection.find(x => x.controllerName === className);
+        const worker = {
+            workerName: workerName,
+            guards: [],
+            methodsAllowed: null,
+            pattern: pattern,
+            values: [],
+            expectedQuery: isQuery ? expectedValue : null,
+            expectedBody: isQuery ? null : expectedValue
+        };
+        if (router == null) {
+            routerCollection.push({
+                workers: {
+                    [workerName]: worker
+                },
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            const savedAction = router.workers[workerName];
+            if (savedAction == null) {
+                router.workers[workerName] = worker;
+            }
+            else {
+                savedAction.expectedQuery = worker.expectedQuery;
+                savedAction.expectedBody = worker.expectedBody;
+            }
+        }
+    }
+
+    static getExpectedQuery(controllerName: string, workerName: string) {
+        return routerCollection.find(q => q.controllerName === controllerName).workers[workerName].expectedQuery;
+    }
+
+    static getExpectedBody(controllerName: string, workerName: string) {
+        return routerCollection.find(q => q.controllerName === controllerName).workers[workerName].expectedBody;
+    }
+
 }
