@@ -3,6 +3,7 @@ import { GenericShield, GenericGuard } from "../generics";
 import { isNull } from "../utils";
 import { RouteInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
+import { getDataType } from "../helpers";
 
 const routerCollection: {
     [controllerName: string]: RouteInfo
@@ -183,6 +184,12 @@ export class RouteHandler {
     }
 
     static addExpected(type: string, className: string, workerName: string, expectedValue: any) {
+
+        for (const prop in expectedValue) {
+            const propValue = expectedValue[prop];
+            expectedValue[prop] = getDataType(propValue);
+        }
+
         const isQuery = type === 'query';
         const pattern = workerName.toLowerCase();
         const router = routerCollection[className];

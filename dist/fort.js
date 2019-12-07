@@ -3073,6 +3073,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteHandler", function() { return RouteHandler; });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models */ "./src/models/index.ts");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+
 
 
 var routerCollection = {};
@@ -3254,6 +3256,10 @@ var RouteHandler = /** @class */ (function () {
     };
     RouteHandler.addExpected = function (type, className, workerName, expectedValue) {
         var _a;
+        for (var prop in expectedValue) {
+            var propValue = expectedValue[prop];
+            expectedValue[prop] = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getDataType"])(propValue);
+        }
         var isQuery = type === 'query';
         var pattern = workerName.toLowerCase();
         var router = routerCollection[className];
@@ -3319,8 +3325,7 @@ __webpack_require__.r(__webpack_exports__);
 var compareExpectedAndRemoveUnnecessary = function (expected, actual, isQuery) {
     var result = {};
     for (var prop in expected) {
-        var expectedType = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(expected[prop]);
-        if (isQuery === true && expectedType === _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Number) {
+        if (isQuery === true && expected[prop] === _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Number) {
             result[prop] = Number(actual[prop]);
             if (isNaN(result[prop]) === true) {
                 return null;
@@ -3329,7 +3334,7 @@ var compareExpectedAndRemoveUnnecessary = function (expected, actual, isQuery) {
         else {
             result[prop] = actual[prop];
         }
-        if (expectedType !== Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(result[prop])) {
+        if (expected[prop] !== Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(result[prop])) {
             return null;
         }
     }
