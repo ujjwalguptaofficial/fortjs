@@ -17,6 +17,5 @@ export const compareExpectedAndRemoveUnnecessary = (expected, actual) => {
         }
         result[prop] = value;
     }
-    console.log('result', result);
     return result;
 };

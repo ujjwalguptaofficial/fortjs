@@ -7,7 +7,7 @@ export declare abstract class Guard implements Controller {
     request: HttpRequest;
     response: HttpResponse;
     query: {
-        [key: string]: string;
+        [key: string]: any;
     };
     body: {
         [key: string]: any;

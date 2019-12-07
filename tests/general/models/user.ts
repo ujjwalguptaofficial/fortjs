@@ -1,29 +1,30 @@
 import { Length, Contains, IsIn, IsEmail } from "class-validator";
 
 export class User {
-    id?: number;
+    id?= 0;
 
     @Length(5)
-    password?: string;
+    password?= "";
 
     @Length(5)
-    name: string;
+    name = "";
 
     @IsIn(["male", "female"])
-    gender: string;
+    gender = "";
 
     @Length(10, 100)
-    address: string;
+    address = "";
 
     @IsEmail()
-    emailId: string;
+    emailId = "";
 
-    constructor(user: any) {
+    init?(user: any) {
         this.id = Number(user.id);
         this.name = user.name;
         this.gender = user.gender;
         this.address = user.address;
         this.emailId = user.emailId;
         this.password = user.password;
+        return this;
     }
 }

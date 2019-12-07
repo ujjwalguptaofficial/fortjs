@@ -8,7 +8,7 @@ export abstract class Shield implements Controller {
     workerName: string;
     request: HttpRequest;
     response: HttpResponse;
-    query: { [key: string]: string };
+    query: { [key: string]: any };
 
     session: SessionProvider;
     cookie: CookieManager;

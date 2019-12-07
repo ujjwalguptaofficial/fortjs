@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.9.3 - 06/12/2019
+ * @license :fortjs - V1.9.3 - 07/12/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -513,11 +513,28 @@ var DefaultWorker = function (allowedMethods) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExpectBody", function() { return ExpectBody; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
+
+
 
 function ExpectBody(value) {
     return function (target, methodName, descriptor) {
-        var className = target.name || target.constructor.name;
-        _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("body", className, methodName, value);
+        var className = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(target);
+        var type = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getDataType"])(value);
+        switch (type) {
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_2__["DATA_TYPE"].Function:
+                var valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(value);
+                if (valueClassName != null) {
+                    value = new value();
+                }
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_2__["DATA_TYPE"].Object:
+                value = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["removeMethodAndNullFromObject"])(value);
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("body", className, methodName, value);
+                break;
+            default:
+                throw new Error("expected body should be always an object but found " + type);
+        }
     };
 }
 
@@ -535,11 +552,28 @@ function ExpectBody(value) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExpectQuery", function() { return ExpectQuery; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
+/* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+
+
 
 function ExpectQuery(value) {
     return function (target, methodName, descriptor) {
-        var className = target.name || target.constructor.name;
-        _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("query", className, methodName, value);
+        var className = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(target);
+        var type = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getDataType"])(value);
+        switch (type) {
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Function:
+                var valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(value);
+                if (valueClassName != null) {
+                    value = new value();
+                }
+            case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Object:
+                value = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["removeMethodAndNullFromObject"])(value);
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("query", className, methodName, value);
+                break;
+            default:
+                throw new Error("expected query should be always an object but found " + type);
+        }
     };
 }
 
@@ -3264,7 +3298,6 @@ var compareExpectedAndRemoveUnnecessary = function (expected, actual) {
         }
         result[prop] = value;
     }
-    console.log('result', result);
     return result;
 };
 
@@ -3316,6 +3349,23 @@ var fileResult = function (filePath) {
             filePath: filePath
         }
     };
+};
+
+
+/***/ }),
+
+/***/ "./src/helpers/get_class_name.ts":
+/*!***************************************!*\
+  !*** ./src/helpers/get_class_name.ts ***!
+  \***************************************/
+/*! exports provided: getClassName */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getClassName", function() { return getClassName; });
+var getClassName = function (target) {
+    return target.name || (target.constructor && target.constructor.name);
 };
 
 
@@ -3547,7 +3597,7 @@ var htmlResult = function (html, statusCode) {
 /*!******************************!*\
   !*** ./src/helpers/index.ts ***!
   \******************************/
-/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary */
+/*! exports provided: jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary, getDataType, getClassName, removeMethodAndNullFromObject */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3611,6 +3661,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _compar_expected_and_remove_unnecessary__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./compar_expected_and_remove_unnecessary */ "./src/helpers/compar_expected_and_remove_unnecessary.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "compareExpectedAndRemoveUnnecessary", function() { return _compar_expected_and_remove_unnecessary__WEBPACK_IMPORTED_MODULE_19__["compareExpectedAndRemoveUnnecessary"]; });
+
+/* harmony import */ var _get_data_type__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./get_data_type */ "./src/helpers/get_data_type.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDataType", function() { return _get_data_type__WEBPACK_IMPORTED_MODULE_20__["getDataType"]; });
+
+/* harmony import */ var _get_class_name__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./get_class_name */ "./src/helpers/get_class_name.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getClassName", function() { return _get_class_name__WEBPACK_IMPORTED_MODULE_21__["getClassName"]; });
+
+/* harmony import */ var _remove_method_and_null_from_object__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./remove_method_and_null_from_object */ "./src/helpers/remove_method_and_null_from_object.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeMethodAndNullFromObject", function() { return _remove_method_and_null_from_object__WEBPACK_IMPORTED_MODULE_22__["removeMethodAndNullFromObject"]; });
+
+
+
 
 
 
@@ -4071,6 +4133,34 @@ var removeLastSlash = function (url) {
 
 /***/ }),
 
+/***/ "./src/helpers/remove_method_and_null_from_object.ts":
+/*!***********************************************************!*\
+  !*** ./src/helpers/remove_method_and_null_from_object.ts ***!
+  \***********************************************************/
+/*! exports provided: removeMethodAndNullFromObject */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeMethodAndNullFromObject", function() { return removeMethodAndNullFromObject; });
+/* harmony import */ var _get_data_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./get_data_type */ "./src/helpers/get_data_type.ts");
+/* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
+
+
+var removeMethodAndNullFromObject = function (value) {
+    var outputValue = {};
+    for (var prop in value) {
+        var type = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(value[prop]);
+        if (!(value[prop] == null || type === _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Function)) {
+            outputValue[prop] = value[prop];
+        }
+    }
+    return outputValue;
+};
+
+
+/***/ }),
+
 /***/ "./src/helpers/render_view.ts":
 /*!************************************!*\
   !*** ./src/helpers/render_view.ts ***!
@@ -4279,7 +4369,7 @@ var XmlHelper = /** @class */ (function () {
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, ExpectBody, ExpectQuery, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary, MustacheViewEngine, MemorySessionProvider */
+/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, ExpectBody, ExpectQuery, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary, getDataType, getClassName, removeMethodAndNullFromObject, MustacheViewEngine, MemorySessionProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4386,6 +4476,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["reverseLoop"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "compareExpectedAndRemoveUnnecessary", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["compareExpectedAndRemoveUnnecessary"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDataType", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["getDataType"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getClassName", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["getClassName"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeMethodAndNullFromObject", function() { return _helpers__WEBPACK_IMPORTED_MODULE_4__["removeMethodAndNullFromObject"]; });
 
 /* harmony import */ var _extra__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./extra */ "./src/extra/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MustacheViewEngine", function() { return _extra__WEBPACK_IMPORTED_MODULE_5__["MustacheViewEngine"]; });

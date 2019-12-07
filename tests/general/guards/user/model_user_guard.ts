@@ -21,7 +21,7 @@ export class ModelUserGuard extends Guard {
         const params = this.param;
         const query = this.query;
         const data = this.data;
-        const user: User = new User(this.body);
+        const user: User = new User().init(this.body);
         const errors = await validate('User', user);
         if (errors.length === 0) {
             // pass this to method, so that they dont need to parse again
