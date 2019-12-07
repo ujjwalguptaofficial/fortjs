@@ -2,7 +2,11 @@ import { WorkerInfo, ParentRoute } from "../types";
 import { GenericShield, GenericGuard } from "../generics";
 import { RouteInfo } from "../models";
 export declare class RouteHandler {
-    static readonly routerCollection: RouteInfo[];
+    static readonly routerCollection: {
+        [controllerName: string]: RouteInfo;
+    };
+    static readonly routesAsArray: RouteInfo[];
+    static findControllerFromPath(path: string): RouteInfo;
     static addToRouterCollection(value: ParentRoute): void;
     static addShields(shields: Array<typeof GenericShield>, className: string): void;
     static addWorker(newWorker: WorkerInfo, className: string): void;

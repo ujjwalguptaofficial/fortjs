@@ -150,10 +150,10 @@ export const parseAndMatchRoute = (url: string, httpMethod: HTTP_METHOD) => {
 
     const urlParts = url.split("/");
     const firstPart = urlParts[1];
-    let route = RouteHandler.routerCollection.find(qry => qry.path === firstPart);
+    let route = RouteHandler.findControllerFromPath(firstPart);
 
     if (route == null) {
-        route = RouteHandler.routerCollection.find(qry => qry.path === "*");
+        route = RouteHandler.findControllerFromPath("*");
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);
     }
     else {

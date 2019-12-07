@@ -4,12 +4,14 @@ import { isNull } from "../utils";
 import { RouteInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
 
-const routerCollection: RouteInfo[] = [];
+const routerCollection: {
+    [controllerName: string]: RouteInfo
+} = {};
 
 const pushRouterIntoCollection = (route: IRouteInfo) => {
     const routeObj = new RouteInfo();
     routeObj.init(route);
-    routerCollection.push(route as any);
+    routerCollection[route.controllerName] = routeObj;
 };
 
 const getActionPattern = (parentRoute: ParentRoute, pattern: string) => {
@@ -22,8 +24,22 @@ export class RouteHandler {
         return routerCollection;
     }
 
+    static get routesAsArray() {
+        return Object.keys(routerCollection).map(workerName => {
+            return routerCollection[workerName];
+        });
+    }
+
+    static findControllerFromPath(path: string) {
+        for (const controllerName in routerCollection) {
+            if (routerCollection[controllerName].path === path) {
+                return routerCollection[controllerName];
+            }
+        }
+    }
+
     static addToRouterCollection(value: ParentRoute) {
-        const route = routerCollection.find(x => x.controllerName === value.controller.name);
+        const route = routerCollection[value.controller.name];
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
@@ -46,8 +62,8 @@ export class RouteHandler {
     }
 
     static addShields(shields: Array<typeof GenericShield>, className: string) {
-        const index = routerCollection.findIndex(x => x.controllerName === className);
-        if (index < 0) {
+        const route = routerCollection[className];
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
                 controller: null,
@@ -58,14 +74,14 @@ export class RouteHandler {
             });
         }
         else {
-            routerCollection[index].shields = shields;
+            route.shields = shields;
         }
     }
 
     static addWorker(newWorker: WorkerInfo, className: string) {
         const workerName = newWorker.workerName;
-        const router = routerCollection.find(x => x.controllerName === className);
-        if (router == null) {
+        const route = routerCollection[className];
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: {
                     [workerName]: newWorker
@@ -78,22 +94,22 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = router.workers[workerName];
+            const savedAction = route.workers[workerName];
             if (savedAction == null) {
-                newWorker.pattern = getActionPattern(router, newWorker.pattern);
-                router.workers[workerName] = newWorker;
+                newWorker.pattern = getActionPattern(route, newWorker.pattern);
+                route.workers[workerName] = newWorker;
             }
             else {
                 savedAction.methodsAllowed = newWorker.methodsAllowed;
-                savedAction.pattern = router.path == null ? savedAction.pattern : `/${router.path}${savedAction.pattern}`;
+                savedAction.pattern = route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
         }
     }
 
     static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
-        const index = routerCollection.findIndex(x => x.controllerName === className);
+        const route = routerCollection[className];
         const pattern = workerName.toLowerCase();
-        if (index < 0) {
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: {
                     [workerName]: {
@@ -112,9 +128,9 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = routerCollection[index].workers[workerName];
+            const savedAction = route.workers[workerName];
             if (savedAction == null) {
-                routerCollection[index].workers[workerName] = {
+                route.workers[workerName] = {
                     workerName: workerName,
                     guards: guards,
                     methodsAllowed: null,
@@ -129,8 +145,8 @@ export class RouteHandler {
     }
 
     static addPattern(pattern: string, className: string, workerName: string) {
-        const router = routerCollection.find(x => x.controllerName === className);
-        if (router == null) {
+        const route = routerCollection[className];
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: {
                     [workerName]: {
@@ -149,10 +165,10 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = router.workers[workerName];
-            pattern = getActionPattern(router, pattern);
+            const savedAction = route.workers[workerName];
+            pattern = getActionPattern(route, pattern);
             if (savedAction == null) {
-                router.workers[workerName] = {
+                route.workers[workerName] = {
                     workerName: workerName,
                     guards: [],
                     methodsAllowed: null,
@@ -169,7 +185,7 @@ export class RouteHandler {
     static addExpected(type: string, className: string, workerName: string, expectedValue: any) {
         const isQuery = type === 'query';
         const pattern = workerName.toLowerCase();
-        const router = routerCollection.find(x => x.controllerName === className);
+        const router = routerCollection[className];
         const worker = {
             workerName: workerName,
             guards: [],
@@ -204,11 +220,11 @@ export class RouteHandler {
     }
 
     static getExpectedQuery(controllerName: string, workerName: string) {
-        return routerCollection.find(q => q.controllerName === controllerName).workers[workerName].expectedQuery;
+        return routerCollection[controllerName].workers[workerName].expectedQuery;
     }
 
     static getExpectedBody(controllerName: string, workerName: string) {
-        return routerCollection.find(q => q.controllerName === controllerName).workers[workerName].expectedBody;
+        return routerCollection[controllerName].workers[workerName].expectedBody;
     }
 
 }

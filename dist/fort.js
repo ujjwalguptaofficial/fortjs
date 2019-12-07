@@ -3063,11 +3063,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models */ "./src/models/index.ts");
 
 
-var routerCollection = [];
+var routerCollection = {};
 var pushRouterIntoCollection = function (route) {
     var routeObj = new _models__WEBPACK_IMPORTED_MODULE_1__["RouteInfo"]();
     routeObj.init(route);
-    routerCollection.push(route);
+    routerCollection[route.controllerName] = routeObj;
 };
 var getActionPattern = function (parentRoute, pattern) {
     return (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNull"])(parentRoute.path) || parentRoute.path === "*") ? pattern : "/" + parentRoute.path + pattern;
@@ -3082,8 +3082,24 @@ var RouteHandler = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(RouteHandler, "routesAsArray", {
+        get: function () {
+            return Object.keys(routerCollection).map(function (workerName) {
+                return routerCollection[workerName];
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouteHandler.findControllerFromPath = function (path) {
+        for (var controllerName in routerCollection) {
+            if (routerCollection[controllerName].path === path) {
+                return routerCollection[controllerName];
+            }
+        }
+    };
     RouteHandler.addToRouterCollection = function (value) {
-        var route = routerCollection.find(function (x) { return x.controllerName === value.controller.name; });
+        var route = routerCollection[value.controller.name];
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
@@ -3105,8 +3121,8 @@ var RouteHandler = /** @class */ (function () {
         }
     };
     RouteHandler.addShields = function (shields, className) {
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
-        if (index < 0) {
+        var route = routerCollection[className];
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
                 controller: null,
@@ -3117,14 +3133,14 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            routerCollection[index].shields = shields;
+            route.shields = shields;
         }
     };
     RouteHandler.addWorker = function (newWorker, className) {
         var _a;
         var workerName = newWorker.workerName;
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        if (router == null) {
+        var route = routerCollection[className];
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = newWorker,
@@ -3137,22 +3153,22 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.workers[workerName];
+            var savedAction = route.workers[workerName];
             if (savedAction == null) {
-                newWorker.pattern = getActionPattern(router, newWorker.pattern);
-                router.workers[workerName] = newWorker;
+                newWorker.pattern = getActionPattern(route, newWorker.pattern);
+                route.workers[workerName] = newWorker;
             }
             else {
                 savedAction.methodsAllowed = newWorker.methodsAllowed;
-                savedAction.pattern = router.path == null ? savedAction.pattern : "/" + router.path + savedAction.pattern;
+                savedAction.pattern = route.path == null ? savedAction.pattern : "/" + route.path + savedAction.pattern;
             }
         }
     };
     RouteHandler.addGuards = function (guards, className, workerName) {
         var _a;
-        var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
+        var route = routerCollection[className];
         var pattern = workerName.toLowerCase();
-        if (index < 0) {
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = {
@@ -3171,9 +3187,9 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = routerCollection[index].workers[workerName];
+            var savedAction = route.workers[workerName];
             if (savedAction == null) {
-                routerCollection[index].workers[workerName] = {
+                route.workers[workerName] = {
                     workerName: workerName,
                     guards: guards,
                     methodsAllowed: null,
@@ -3188,8 +3204,8 @@ var RouteHandler = /** @class */ (function () {
     };
     RouteHandler.addPattern = function (pattern, className, workerName) {
         var _a;
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
-        if (router == null) {
+        var route = routerCollection[className];
+        if (route == null) {
             pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = {
@@ -3208,10 +3224,10 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.workers[workerName];
-            pattern = getActionPattern(router, pattern);
+            var savedAction = route.workers[workerName];
+            pattern = getActionPattern(route, pattern);
             if (savedAction == null) {
-                router.workers[workerName] = {
+                route.workers[workerName] = {
                     workerName: workerName,
                     guards: [],
                     methodsAllowed: null,
@@ -3228,7 +3244,7 @@ var RouteHandler = /** @class */ (function () {
         var _a;
         var isQuery = type === 'query';
         var pattern = workerName.toLowerCase();
-        var router = routerCollection.find(function (x) { return x.controllerName === className; });
+        var router = routerCollection[className];
         var worker = {
             workerName: workerName,
             guards: [],
@@ -3262,10 +3278,10 @@ var RouteHandler = /** @class */ (function () {
         }
     };
     RouteHandler.getExpectedQuery = function (controllerName, workerName) {
-        return routerCollection.find(function (q) { return q.controllerName === controllerName; }).workers[workerName].expectedQuery;
+        return routerCollection[controllerName].workers[workerName].expectedQuery;
     };
     RouteHandler.getExpectedBody = function (controllerName, workerName) {
-        return routerCollection.find(function (q) { return q.controllerName === controllerName; }).workers[workerName].expectedBody;
+        return routerCollection[controllerName].workers[workerName].expectedBody;
     };
     return RouteHandler;
 }());
@@ -4041,9 +4057,9 @@ var parseAndMatchRoute = function (url, httpMethod) {
     }
     var urlParts = url.split("/");
     var firstPart = urlParts[1];
-    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === firstPart; });
+    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(firstPart);
     if (route == null) {
-        route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection.find(function (qry) { return qry.path === "*"; });
+        route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath("*");
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);
     }
     else {
@@ -5087,8 +5103,21 @@ __webpack_require__.r(__webpack_exports__);
 
 var Router = /** @class */ (function () {
     function Router() {
-        this.routes = _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection;
     }
+    Object.defineProperty(Router.prototype, "routes", {
+        get: function () {
+            return _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Router.prototype, "routesAsArray", {
+        get: function () {
+            return _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routesAsArray;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return Router;
 }());
 
