@@ -4,7 +4,6 @@ export * from './http_format_result';
 export * from './view_engine_data';
 export * from './http_request';
 export * from './http_response';
-export * from './route_info';
 export * from './parent_route';
 export * from "./session_value";
 export * from "./worker_info";

@@ -1,7 +1,7 @@
-import { WorkerInfo } from "./worker_info";
-import { GenericShield, GenericController } from "../generics";
+import { GenericController, GenericShield } from "../generics";
+import { WorkerInfo } from "../types";
 
-export type RouteInfo = {
+export interface IRouteInfo {
     controller: typeof GenericController;
     controllerName: string;
     path: string;
@@ -10,5 +10,4 @@ export type RouteInfo = {
     };
     shields: Array<typeof GenericShield>;
     values: any[];
-    
-};
+}

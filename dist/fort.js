@@ -3060,8 +3060,15 @@ var RequestHandlerHelper = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteHandler", function() { return RouteHandler; });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
+/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models */ "./src/models/index.ts");
+
 
 var routerCollection = [];
+var pushRouterIntoCollection = function (route) {
+    var routeObj = new _models__WEBPACK_IMPORTED_MODULE_1__["RouteInfo"]();
+    routeObj.init(route);
+    routerCollection.push(route);
+};
 var getActionPattern = function (parentRoute, pattern) {
     return (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNull"])(parentRoute.path) || parentRoute.path === "*") ? pattern : "/" + parentRoute.path + pattern;
 };
@@ -3078,7 +3085,7 @@ var RouteHandler = /** @class */ (function () {
     RouteHandler.addToRouterCollection = function (value) {
         var route = routerCollection.find(function (x) { return x.controllerName === value.controller.name; });
         if (route == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {},
                 controller: value.controller,
                 controllerName: value.controller.name,
@@ -3100,7 +3107,7 @@ var RouteHandler = /** @class */ (function () {
     RouteHandler.addShields = function (shields, className) {
         var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
         if (index < 0) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {},
                 controller: null,
                 controllerName: className,
@@ -3118,7 +3125,7 @@ var RouteHandler = /** @class */ (function () {
         var workerName = newWorker.workerName;
         var router = routerCollection.find(function (x) { return x.controllerName === className; });
         if (router == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = newWorker,
                     _a),
@@ -3146,7 +3153,7 @@ var RouteHandler = /** @class */ (function () {
         var index = routerCollection.findIndex(function (x) { return x.controllerName === className; });
         var pattern = workerName.toLowerCase();
         if (index < 0) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = {
                         workerName: workerName,
@@ -3183,7 +3190,7 @@ var RouteHandler = /** @class */ (function () {
         var _a;
         var router = routerCollection.find(function (x) { return x.controllerName === className; });
         if (router == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = {
                         workerName: workerName,
@@ -3232,7 +3239,7 @@ var RouteHandler = /** @class */ (function () {
             expectedBody: isQuery ? null : expectedValue
         };
         if (router == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: (_a = {},
                     _a[workerName] = worker,
                     _a),
@@ -4369,7 +4376,7 @@ var XmlHelper = /** @class */ (function () {
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, ExpectBody, ExpectQuery, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary, getDataType, getClassName, removeMethodAndNullFromObject, MustacheViewEngine, MemorySessionProvider */
+/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, RouteInfo, Controller, Shield, SessionProvider, Guard, ViewEngine, Wall, XmlParser, Worker, Shields, Guards, Route, DefaultWorker, Assign, Singleton, ExpectBody, ExpectQuery, MIME_TYPE, HTTP_METHOD, HTTP_STATUS_CODE, ETag_Type, ERROR_TYPE, jsonResult, textResult, htmlResult, renderView, downloadResult, fileResult, redirectResult, viewResult, getViewFromFile, promise, LogHelper, XmlHelper, getMimeTypeFromExtension, parseAndMatchRoute, parseCookie, JsonHelper, removeLastSlash, removeFirstSlash, reverseLoop, compareExpectedAndRemoveUnnecessary, getDataType, getClassName, removeMethodAndNullFromObject, MustacheViewEngine, MemorySessionProvider */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4390,6 +4397,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "HttpFile", function() { return _models__WEBPACK_IMPORTED_MODULE_0__["HttpFile"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Logger", function() { return _models__WEBPACK_IMPORTED_MODULE_0__["Logger"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RouteInfo", function() { return _models__WEBPACK_IMPORTED_MODULE_0__["RouteInfo"]; });
 
 /* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./abstracts */ "./src/abstracts/index.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Controller", function() { return _abstracts__WEBPACK_IMPORTED_MODULE_1__["Controller"]; });
@@ -4932,7 +4941,7 @@ var HttpFile = /** @class */ (function () {
 /*!*****************************!*\
   !*** ./src/models/index.ts ***!
   \*****************************/
-/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger */
+/*! exports provided: ErrorHandler, HttpCookie, Fort, Router, CookieManager, FileManager, HttpFile, Logger, RouteInfo */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4960,6 +4969,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./logger */ "./src/models/logger.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Logger", function() { return _logger__WEBPACK_IMPORTED_MODULE_7__["Logger"]; });
+
+/* harmony import */ var _route_info__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./route_info */ "./src/models/route_info.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RouteInfo", function() { return _route_info__WEBPACK_IMPORTED_MODULE_8__["RouteInfo"]; });
+
 
 
 
@@ -5015,6 +5028,45 @@ var Logger = /** @class */ (function () {
         console.log.apply(console, args);
     };
     return Logger;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/models/route_info.ts":
+/*!**********************************!*\
+  !*** ./src/models/route_info.ts ***!
+  \**********************************/
+/*! exports provided: RouteInfo */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteInfo", function() { return RouteInfo; });
+var RouteInfo = /** @class */ (function () {
+    function RouteInfo() {
+    }
+    Object.defineProperty(RouteInfo.prototype, "workersAsArray", {
+        get: function () {
+            var _this = this;
+            return Object.keys(this.workers).map(function (workerName) {
+                return _this.workers[workerName];
+                return _this.workers[workerName];
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouteInfo.prototype.init = function (value) {
+        this.controllerName = value.controllerName;
+        this.controller = value.controller;
+        this.path = value.path;
+        this.shields = value.shields;
+        this.values = value.values;
+        this.workers = value.workers;
+    };
+    return RouteInfo;
 }());
 
 

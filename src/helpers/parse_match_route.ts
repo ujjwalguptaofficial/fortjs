@@ -2,7 +2,7 @@ import { RouteHandler } from "../handlers/route_handler";
 import { RouteMatch } from "../types/route_match";
 import { HTTP_METHOD } from "../enums";
 import { removeLastSlash } from ".";
-import { RouteInfo } from "../types";
+import { RouteInfo } from "../models";
 
 const checkRouteInWorkerForDefaultRoute = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts: string[]) => {
 

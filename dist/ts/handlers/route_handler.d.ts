@@ -1,5 +1,6 @@
-import { RouteInfo, WorkerInfo, ParentRoute } from "../types";
+import { WorkerInfo, ParentRoute } from "../types";
 import { GenericShield, GenericGuard } from "../generics";
+import { RouteInfo } from "../models";
 export declare class RouteHandler {
     static readonly routerCollection: RouteInfo[];
     static addToRouterCollection(value: ParentRoute): void;

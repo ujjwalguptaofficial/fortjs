@@ -1,8 +1,16 @@
-import { RouteInfo, WorkerInfo, ParentRoute } from "../types";
+import { WorkerInfo, ParentRoute } from "../types";
 import { GenericShield, GenericGuard } from "../generics";
 import { isNull } from "../utils";
+import { RouteInfo } from "../models";
+import { IRouteInfo } from "../interfaces";
 
 const routerCollection: RouteInfo[] = [];
+
+const pushRouterIntoCollection = (route: IRouteInfo) => {
+    const routeObj = new RouteInfo();
+    routeObj.init(route);
+    routerCollection.push(route as any);
+};
 
 const getActionPattern = (parentRoute: ParentRoute, pattern: string) => {
     return (isNull(parentRoute.path) || parentRoute.path === "*") ? pattern : `/${parentRoute.path}${pattern}`;
@@ -17,7 +25,7 @@ export class RouteHandler {
     static addToRouterCollection(value: ParentRoute) {
         const route = routerCollection.find(x => x.controllerName === value.controller.name);
         if (route == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {},
                 controller: value.controller as any,
                 controllerName: value.controller.name,
@@ -40,7 +48,7 @@ export class RouteHandler {
     static addShields(shields: Array<typeof GenericShield>, className: string) {
         const index = routerCollection.findIndex(x => x.controllerName === className);
         if (index < 0) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {},
                 controller: null,
                 controllerName: className,
@@ -58,7 +66,7 @@ export class RouteHandler {
         const workerName = newWorker.workerName;
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {
                     [workerName]: newWorker
                 },
@@ -86,7 +94,7 @@ export class RouteHandler {
         const index = routerCollection.findIndex(x => x.controllerName === className);
         const pattern = workerName.toLowerCase();
         if (index < 0) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {
                     [workerName]: {
                         workerName: workerName,
@@ -123,7 +131,7 @@ export class RouteHandler {
     static addPattern(pattern: string, className: string, workerName: string) {
         const router = routerCollection.find(x => x.controllerName === className);
         if (router == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {
                     [workerName]: {
                         workerName: workerName,
@@ -172,7 +180,7 @@ export class RouteHandler {
             expectedBody: isQuery ? null : expectedValue
         };
         if (router == null) {
-            routerCollection.push({
+            pushRouterIntoCollection({
                 workers: {
                     [workerName]: worker
                 },
