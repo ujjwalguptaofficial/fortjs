@@ -1,21 +1,22 @@
 import { getDataType } from "./get_data_type";
 import { DATA_TYPE } from "../enums/data_type";
 
-export const compareExpectedAndRemoveUnnecessary = (expected, actual) => {
+export const compareExpectedAndRemoveUnnecessary = (expected, actual, isQuery) => {
     const result = {};
-    // if (actual == null) {
-    //     return result;
-    // }
     for (const prop in expected) {
-        const type = getDataType(expected[prop]);
-        let value;
-        switch (type) {
-            case DATA_TYPE.Number:
-                value = Number(actual[prop]); break;
-            default:
-                value = actual[prop];
+        const expectedType = getDataType(expected[prop]);
+        if (isQuery === true && expectedType === DATA_TYPE.Number) {
+            result[prop] = Number(actual[prop]);
+            if (isNaN(result[prop]) === true) {
+                return null;
+            }
         }
-        result[prop] = value;
+        else {
+            result[prop] = actual[prop];
+        }
+        if (expectedType !== getDataType(result[prop])) {
+            return null;
+        }
     }
     return result;
 };

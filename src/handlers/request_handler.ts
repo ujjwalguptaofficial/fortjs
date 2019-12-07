@@ -11,6 +11,7 @@ import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
 import { InjectorHandler } from "./injector_handler";
 import { RouteHandler } from "./route_handler";
+import { IException } from "../interfaces";
 
 
 export class RequestHandler extends PostHandler {
@@ -203,14 +204,14 @@ export class RequestHandler extends PostHandler {
     private checkExpectedQuery_() {
         const expectedQuery = RouteHandler.getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
         if (expectedQuery != null) {
-            this.query_ = compareExpectedAndRemoveUnnecessary(expectedQuery, this.query_);
+            this.query_ = compareExpectedAndRemoveUnnecessary(expectedQuery, this.query_, true);
         }
     }
 
     private checkExpectedBody_() {
         const expectedBody = RouteHandler.getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
         if (expectedBody != null) {
-            this.body = compareExpectedAndRemoveUnnecessary(expectedBody, this.body);
+            this.body = compareExpectedAndRemoveUnnecessary(expectedBody, this.body, false);
         }
     }
 
@@ -226,11 +227,23 @@ export class RequestHandler extends PostHandler {
         }
         else {
             this.checkExpectedQuery_();
+            if (this.query_ == null) {
+                this.onBadRequest({
+                    message: "Bad query string data - query string data does not match with expected value"
+                } as IException);
+                return;
+            }
             let shouldExecuteNextComponent = await this.executeShieldsProtection_();
             if (shouldExecuteNextComponent === true) {
                 shouldExecuteNextComponent = await this.handlePostData();
                 if (shouldExecuteNextComponent === true) {
                     this.checkExpectedBody_();
+                    if (this.body == null) {
+                        this.onBadRequest({
+                            message: "Bad body data - body data does not match with expected value"
+                        } as IException);
+                        return;
+                    }
                     shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
                     if (shouldExecuteNextComponent === true) {
                         this.runController_();
