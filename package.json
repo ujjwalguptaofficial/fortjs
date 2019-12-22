@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "description": "Component based MVC web framework for nodejs targeting good code structures & modularity.",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
@@ -21,9 +21,10 @@
     "lint": "tslint src/**/*.ts",
     "webpack": "webpack --config src/webpack.config.js",
     "build": "npm run lint && npm run webpack",
+    "build:prod": "NODE_ENV=production npm run build && npm pack",
     "buildpack": "npm run lint && npm run webpack && npm pack",
     "build:test": "npm run build && npm pack && npm run test",
-    "deploy": "NODE_ENV=production npm run build && npm run test",
+    "deploy": "npm run build:prod && npm run test",
     "test": "node test_runner.js"
   },
   "author": "Ujjwal Gupta",
