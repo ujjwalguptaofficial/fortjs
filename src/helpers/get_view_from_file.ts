@@ -20,7 +20,7 @@ export const getViewFromFile = async function <T>(fileLocation: string, mapView?
         return result as T | string;
     };
 
-    if (isEnvProduction()) {
+    if (FortGlobal.isProduction === true) {
         if (viewCache[fileLocation] == null) {
             viewCache[fileLocation] = await readView();
         }

@@ -301,14 +301,29 @@ var htmlResult = function (html, statusCode) {
 var FortGlobal = /** @class */ (function () {
     function FortGlobal() {
     }
+    Object.defineProperty(FortGlobal, "isDevelopment", {
+        get: function () {
+            return process.env.NODE_ENV === 'development';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FortGlobal, "isProduction", {
+        get: function () {
+            return process.env.NODE_ENV === "production";
+        },
+        enumerable: true,
+        configurable: true
+    });
     FortGlobal.walls = [];
     return FortGlobal;
 }());
 
 
 // CONCATENATED MODULE: ./src/helpers/is_env_dev.ts
+
 var isEnvDev = function () {
-    return process.env.NODE_ENV === 'development';
+    return FortGlobal.isDevelopment;
 };
 
 // CONCATENATED MODULE: ./src/helpers/log_helper.ts
@@ -474,11 +489,6 @@ var viewResult = function (viewName, model) { return __awaiter(view_result_this,
 // EXTERNAL MODULE: external "fs-extra"
 var external_fs_extra_ = __webpack_require__(1);
 
-// CONCATENATED MODULE: ./src/helpers/is_env_production.ts
-var isEnvProduction = function () {
-    return process.env.NODE_ENV === "production";
-};
-
 // EXTERNAL MODULE: external "path"
 var external_path_ = __webpack_require__(0);
 
@@ -521,7 +531,6 @@ var get_view_from_file_generator = (undefined && undefined.__generator) || funct
 
 
 
-
 var viewCache = {};
 var getViewFromFile = function (fileLocation, mapView) {
     return get_view_from_file_awaiter(this, void 0, void 0, function () {
@@ -548,7 +557,7 @@ var getViewFromFile = function (fileLocation, mapView) {
                             }
                         });
                     }); };
-                    if (!isEnvProduction()) return [3 /*break*/, 3];
+                    if (!(FortGlobal.isProduction === true)) return [3 /*break*/, 3];
                     if (!(viewCache[fileLocation] == null)) return [3 /*break*/, 2];
                     _a = viewCache;
                     _b = fileLocation;
@@ -1200,6 +1209,12 @@ var removeMethodAndNullFromObject = function (value) {
     return outputValue;
 };
 
+// CONCATENATED MODULE: ./src/helpers/is_env_production.ts
+
+var isEnvProduction = function () {
+    return FortGlobal.isProduction;
+};
+
 // CONCATENATED MODULE: ./src/helpers/index.ts
 
 
@@ -1810,7 +1825,7 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
             }
             var negotiateMimeType = _this.getContentTypeFromNegotiation(mimeType);
             if (negotiateMimeType != null) {
-                if (isEnvProduction()) {
+                if (FortGlobal.isProduction === true) {
                     var lastModified = fileInfo.mtime.toUTCString();
                     var eTagValue = external_etag_(fileInfo, {
                         weak: FortGlobal.eTag.type === ETag_Type.Weak

@@ -27,4 +27,12 @@ export class FortGlobal {
     static xmlParser: typeof XmlParser;
 
     static logger: Logger;
+
+    static get isDevelopment() {
+        return process.env.NODE_ENV === 'development';
+    }
+
+    static get isProduction() {
+        return process.env.NODE_ENV === "production";
+    }
 }

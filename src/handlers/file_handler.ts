@@ -139,7 +139,7 @@ export class FileHandler extends RequestHandlerHelper {
             }
             const negotiateMimeType = this.getContentTypeFromNegotiation(mimeType) as MIME_TYPE;
             if (negotiateMimeType != null) {
-                if (isEnvProduction()) {
+                if (FortGlobal.isProduction === true) {
                     const lastModified = fileInfo.mtime.toUTCString();
                     const eTagValue = etag(fileInfo, {
                         weak: FortGlobal.eTag.type === ETag_Type.Weak

@@ -1,3 +1,5 @@
+import { FortGlobal } from "../fort_global";
+
 export const isEnvProduction = () => {
-    return process.env.NODE_ENV === "production";
+    return FortGlobal.isProduction;
 };
