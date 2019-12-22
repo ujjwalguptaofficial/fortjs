@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "Component based MVC web framework for nodejs targeting good code structures & modularity.",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
