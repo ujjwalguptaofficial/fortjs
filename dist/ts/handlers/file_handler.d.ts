@@ -1,3 +1,4 @@
+import { MIME_TYPE } from "../enums";
 import { RequestHandlerHelper } from "./request_handler_helper";
 export declare class FileHandler extends RequestHandlerHelper {
     private getFileInfoFromUrl_;
@@ -18,5 +19,5 @@ export declare class FileHandler extends RequestHandlerHelper {
     private handleFileRequestForPath_;
     private isClientHasFreshFile_;
     private sendFile_;
-    sendFileAsResponse_(filePath: string): void;
+    sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE): void;
 }

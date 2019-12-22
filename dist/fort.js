@@ -1801,7 +1801,6 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
     FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
         var _this = this;
         this.runWallOutgoing().then(function () {
-            var _a;
             var mimeType;
             if (fileType[0] === '.') { // its extension
                 mimeType = getMimeTypeFromExtension(fileType);
@@ -1821,16 +1820,13 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
                         _this.response.end();
                     }
                     else {
-                        _this.response.writeHead(HTTP_STATUS_CODE.Ok, (_a = {},
-                            _a[__ContentType] = mimeType,
-                            _a['Etag'] = eTagValue,
-                            _a['Last-Modified'] = lastModified,
-                            _a));
-                        _this.sendFileAsResponse_(filePath);
+                        _this.response.setHeader('Etag', eTagValue);
+                        _this.response.setHeader('Last-Modified', lastModified);
+                        _this.sendFileAsResponse_(filePath, mimeType);
                     }
                 }
                 else {
-                    _this.sendFileAsResponse_(filePath);
+                    _this.sendFileAsResponse_(filePath, mimeType);
                 }
             }
             else {
@@ -1838,7 +1834,11 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
             }
         }).catch(this.onErrorOccured.bind(this));
     };
-    FileHandler.prototype.sendFileAsResponse_ = function (filePath) {
+    FileHandler.prototype.sendFileAsResponse_ = function (filePath, mimeType) {
+        var _a;
+        this.response.writeHead(HTTP_STATUS_CODE.Ok, (_a = {},
+            _a[__ContentType] = mimeType,
+            _a));
         var readStream = external_fs_["createReadStream"](filePath);
         // Handle non-existent file
         readStream.on('error', this.onErrorOccured.bind(this));

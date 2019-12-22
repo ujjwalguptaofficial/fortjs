@@ -149,16 +149,13 @@ export class FileHandler extends RequestHandlerHelper {
                         this.response.end();
                     }
                     else {
-                        this.response.writeHead(HTTP_STATUS_CODE.Ok, {
-                            [__ContentType]: mimeType,
-                            'Etag': eTagValue,
-                            'Last-Modified': lastModified
-                        });
-                        this.sendFileAsResponse_(filePath);
+                        this.response.setHeader('Etag', eTagValue);
+                        this.response.setHeader('Last-Modified', lastModified);
+                        this.sendFileAsResponse_(filePath, mimeType);
                     }
                 }
                 else {
-                    this.sendFileAsResponse_(filePath);
+                    this.sendFileAsResponse_(filePath, mimeType);
                 }
             }
             else {
@@ -167,7 +164,10 @@ export class FileHandler extends RequestHandlerHelper {
         }).catch(this.onErrorOccured.bind(this));
     }
 
-    sendFileAsResponse_(filePath: string) {
+    sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
+        this.response.writeHead(HTTP_STATUS_CODE.Ok, {
+            [__ContentType]: mimeType
+        });
         const readStream = Fs.createReadStream(filePath);
         // Handle non-existent file
         readStream.on('error', this.onErrorOccured.bind(this));
