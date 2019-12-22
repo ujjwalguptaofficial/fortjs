@@ -1,1 +1,1 @@
-export declare const getViewFromFile: <T>(fileLocation: string, mapView?: (viewData: string) => string) => Promise<string | T>;
+export declare const getViewFromFile: <T>(fileLocation: string, mapView?: (viewData: string) => any) => Promise<string | T>;
