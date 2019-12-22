@@ -18,4 +18,5 @@ export declare class FileHandler extends RequestHandlerHelper {
     private handleFileRequestForPath_;
     private isClientHasFreshFile_;
     private sendFile_;
+    sendFileAsResponse_(filePath: string): void;
 }

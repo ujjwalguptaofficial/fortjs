@@ -1225,6 +1225,7 @@ var removeMethodAndNullFromObject = function (value) {
 
 
 
+
 // CONCATENATED MODULE: ./src/models/error_handler.ts
 
 var error_handler_ErrorHandler = /** @class */ (function () {
@@ -1810,32 +1811,38 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
             }
             var negotiateMimeType = _this.getContentTypeFromNegotiation(mimeType);
             if (negotiateMimeType != null) {
-                var lastModified = fileInfo.mtime.toUTCString();
-                var eTagValue = external_etag_(fileInfo, {
-                    weak: FortGlobal.eTag.type === ETag_Type.Weak
-                });
-                if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                    _this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                    _this.response.end();
+                if (isEnvProduction()) {
+                    var lastModified = fileInfo.mtime.toUTCString();
+                    var eTagValue = external_etag_(fileInfo, {
+                        weak: FortGlobal.eTag.type === ETag_Type.Weak
+                    });
+                    if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                        _this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                        _this.response.end();
+                    }
+                    else {
+                        _this.response.writeHead(HTTP_STATUS_CODE.Ok, (_a = {},
+                            _a[__ContentType] = mimeType,
+                            _a['Etag'] = eTagValue,
+                            _a['Last-Modified'] = lastModified,
+                            _a));
+                        _this.sendFileAsResponse_(filePath);
+                    }
                 }
                 else {
-                    _this.response.writeHead(HTTP_STATUS_CODE.Ok, (_a = {},
-                        _a[__ContentType] = mimeType,
-                        _a['Etag'] = eTagValue,
-                        _a['Last-Modified'] = lastModified,
-                        _a));
-                    var readStream = external_fs_["createReadStream"](filePath);
-                    // Handle non-existent file
-                    readStream.on('error', _this.onErrorOccured.bind(_this));
-                    readStream.pipe(_this.response);
+                    _this.sendFileAsResponse_(filePath);
                 }
             }
             else {
                 _this.onNotAcceptableRequest();
             }
-        }).catch(function (ex) {
-            _this.onErrorOccured(ex);
-        });
+        }).catch(this.onErrorOccured.bind(this));
+    };
+    FileHandler.prototype.sendFileAsResponse_ = function (filePath) {
+        var readStream = external_fs_["createReadStream"](filePath);
+        // Handle non-existent file
+        readStream.on('error', this.onErrorOccured.bind(this));
+        readStream.pipe(this.response);
     };
     return FileHandler;
 }(request_handler_helper_RequestHandlerHelper));
@@ -3979,6 +3986,7 @@ function ExpectQuery(value) {
 /* concated harmony reexport getDataType */__webpack_require__.d(__webpack_exports__, "getDataType", function() { return getDataType; });
 /* concated harmony reexport getClassName */__webpack_require__.d(__webpack_exports__, "getClassName", function() { return getClassName; });
 /* concated harmony reexport removeMethodAndNullFromObject */__webpack_require__.d(__webpack_exports__, "removeMethodAndNullFromObject", function() { return removeMethodAndNullFromObject; });
+/* concated harmony reexport isEnvProduction */__webpack_require__.d(__webpack_exports__, "isEnvProduction", function() { return isEnvProduction; });
 /* concated harmony reexport MustacheViewEngine */__webpack_require__.d(__webpack_exports__, "MustacheViewEngine", function() { return mustache_view_engine_MustacheViewEngine; });
 /* concated harmony reexport MemorySessionProvider */__webpack_require__.d(__webpack_exports__, "MemorySessionProvider", function() { return MemorySessionProvider; });
 

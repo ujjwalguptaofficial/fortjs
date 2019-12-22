@@ -7,6 +7,7 @@ import { __CurrentPath } from "../constant";
 const viewCache = {
 
 };
+
 export const getViewFromFile = async function <T>(fileLocation: string, mapView?: (viewData: string) => any): Promise<T | string> {
     const readView = async () => {
         const pathOfView = path.join(FortGlobal.viewPath, fileLocation);

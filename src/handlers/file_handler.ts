@@ -4,7 +4,7 @@ import * as path from "path";
 import { __ContentType } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension, promise } from "../helpers";
+import { getMimeTypeFromExtension, promise, isEnvProduction } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
@@ -139,31 +139,38 @@ export class FileHandler extends RequestHandlerHelper {
             }
             const negotiateMimeType = this.getContentTypeFromNegotiation(mimeType) as MIME_TYPE;
             if (negotiateMimeType != null) {
-                const lastModified = fileInfo.mtime.toUTCString();
-                const eTagValue = etag(fileInfo, {
-                    weak: FortGlobal.eTag.type === ETag_Type.Weak
-                });
-                if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                    this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                    this.response.end();
+                if (isEnvProduction()) {
+                    const lastModified = fileInfo.mtime.toUTCString();
+                    const eTagValue = etag(fileInfo, {
+                        weak: FortGlobal.eTag.type === ETag_Type.Weak
+                    });
+                    if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                        this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                        this.response.end();
+                    }
+                    else {
+                        this.response.writeHead(HTTP_STATUS_CODE.Ok, {
+                            [__ContentType]: mimeType,
+                            'Etag': eTagValue,
+                            'Last-Modified': lastModified
+                        });
+                        this.sendFileAsResponse_(filePath);
+                    }
                 }
                 else {
-                    this.response.writeHead(HTTP_STATUS_CODE.Ok, {
-                        [__ContentType]: mimeType,
-                        'Etag': eTagValue,
-                        'Last-Modified': lastModified
-                    });
-                    const readStream = Fs.createReadStream(filePath);
-                    // Handle non-existent file
-                    readStream.on('error', this.onErrorOccured.bind(this));
-                    readStream.pipe(this.response);
+                    this.sendFileAsResponse_(filePath);
                 }
             }
             else {
                 this.onNotAcceptableRequest();
             }
-        }).catch(ex => {
-            this.onErrorOccured(ex);
-        });
+        }).catch(this.onErrorOccured.bind(this));
+    }
+
+    sendFileAsResponse_(filePath: string) {
+        const readStream = Fs.createReadStream(filePath);
+        // Handle non-existent file
+        readStream.on('error', this.onErrorOccured.bind(this));
+        readStream.pipe(this.response);
     }
 }
