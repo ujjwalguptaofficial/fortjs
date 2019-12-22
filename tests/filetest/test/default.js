@@ -7,7 +7,8 @@ let {
     forbiddenText,
     methodNotAllowedMsg,
     badRequestMsg,
-    removeSpaceAndNewLine
+    removeSpaceAndNewLine,
+    isProduction
 } = require('./common');
 
 describe("/default", () => {
@@ -38,6 +39,12 @@ describe("/default", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');
+            if (isProduction) {
+                expect(res).to.have.header('Etag');
+            }
+            else {
+                expect(res).to.not.have.header('Etag');
+            }
             expect(res.header['x-powered-by']).to.equal('MyFort');
             done();
         });

@@ -23,7 +23,7 @@
     "build": "npm run lint && npm run webpack",
     "buildpack": "npm run lint && npm run webpack && npm pack",
     "build:test": "npm run build && npm pack && npm run test",
-    "deploy": "NODE_ENV=production npm run build:test",
+    "deploy": "NODE_ENV=production npm run build && npm run test",
     "test": "node test_runner.js"
   },
   "author": "Ujjwal Gupta",
@@ -37,6 +37,7 @@
     "@types/multiparty": "0.0.31",
     "@types/negotiator": "^0.6.1",
     "@types/node": "^10.12.0",
+    "cross-env": "^6.0.3",
     "smart-banner-webpack-plugin": "^3.0.1",
     "ts-loader": "^5.3.3",
     "tslint": "^5.11.0",
