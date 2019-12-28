@@ -8,6 +8,7 @@ export declare class ControllerResultHandler extends FileHandler {
     private handleFormatResult_;
     private handleFileResult_;
     onTerminationFromWall(result: HttpResult | HttpFormatResult): void;
+    private isRedirectFalse_;
     private handleFinalResult_;
     onResultFromController(result: HttpResult | HttpFormatResult): Promise<void>;
 }

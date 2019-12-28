@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.10.4 - 22/12/2019
+ * @license :fortjs - V1.10.4 - 28/12/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1923,19 +1923,19 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ControllerResultHandler.prototype.getDataBasedOnMimeType_ = function (mimeType) {
+        var isObject = typeof this.controllerResult_.responseData === 'object';
         switch (mimeType) {
             case MIME_TYPE.Json:
             case MIME_TYPE.Text:
             case MIME_TYPE.Html:
-                if (typeof this.controllerResult_.responseData === 'object') {
+                if (isObject === true) {
                     return JSON.stringify(this.controllerResult_.responseData);
                 }
                 break;
             case MIME_TYPE.Xml:
-                if (typeof this.controllerResult_.responseData === 'object') {
+                if (isObject === true) {
                     return xml_helper_XmlHelper.fromJsToXml(this.controllerResult_.responseData);
                 }
-                break;
         }
         return this.controllerResult_.responseData;
     };
@@ -1980,6 +1980,9 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
     ControllerResultHandler.prototype.onTerminationFromWall = function (result) {
         this.handleFinalResult_(result);
     };
+    ControllerResultHandler.prototype.isRedirectFalse_ = function (value) {
+        return value == null || value === false;
+    };
     ControllerResultHandler.prototype.handleFinalResult_ = function (result) {
         var _this = this;
         result = result || textResult("");
@@ -1987,7 +1990,7 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
         this.cookieManager.responseCookie_.forEach(function (value) {
             _this.response.setHeader(__SetCookie, value);
         });
-        if (result.shouldRedirect == null || result.shouldRedirect === false) {
+        if (this.isRedirectFalse_(result.shouldRedirect)) {
             if (result.responseFormat == null) {
                 if (result.file == null) {
                     var contentType = result.contentType || MIME_TYPE.Text;
