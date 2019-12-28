@@ -257,7 +257,18 @@ var ERROR_TYPE;
     ERROR_TYPE["UndefinedViewEngine"] = "undefined_view_engine";
 })(ERROR_TYPE || (ERROR_TYPE = {}));
 
+// CONCATENATED MODULE: ./src/enums/data_type.ts
+var DATA_TYPE;
+(function (DATA_TYPE) {
+    DATA_TYPE["String"] = "string";
+    DATA_TYPE["Number"] = "number";
+    DATA_TYPE["Array"] = "array";
+    DATA_TYPE["Object"] = "object";
+    DATA_TYPE["Function"] = "function";
+})(DATA_TYPE || (DATA_TYPE = {}));
+
 // CONCATENATED MODULE: ./src/enums/index.ts
+
 
 
 
@@ -577,16 +588,6 @@ var getViewFromFile = function (fileLocation, mapView) {
 var promise = function (callBack) {
     return new Promise(callBack);
 };
-
-// CONCATENATED MODULE: ./src/enums/data_type.ts
-var DATA_TYPE;
-(function (DATA_TYPE) {
-    DATA_TYPE["String"] = "string";
-    DATA_TYPE["Number"] = "number";
-    DATA_TYPE["Array"] = "array";
-    DATA_TYPE["Object"] = "object";
-    DATA_TYPE["Function"] = "function";
-})(DATA_TYPE || (DATA_TYPE = {}));
 
 // CONCATENATED MODULE: ./src/helpers/get_data_type.ts
 
@@ -1215,7 +1216,33 @@ var isEnvProduction = function () {
     return FortGlobal.isProduction;
 };
 
+// CONCATENATED MODULE: ./src/helpers/get_result_based_on_mime.ts
+
+var getResultBasedOnMiMe;
+function setResultMapper(mapper) {
+    if (mapper) {
+        getResultBasedOnMiMe = function (type, result) {
+            return new mapper().map(type, result);
+        };
+    }
+    else {
+        getResultBasedOnMiMe = function (type, result) {
+            switch (type) {
+                case MIME_TYPE.Json:
+                case MIME_TYPE.Text:
+                case MIME_TYPE.Html:
+                case MIME_TYPE.Xml:
+                    if (typeof result === 'object' === true) {
+                        return JSON.stringify(result);
+                    }
+            }
+            return result;
+        };
+    }
+}
+
 // CONCATENATED MODULE: ./src/helpers/index.ts
+
 
 
 
@@ -1922,28 +1949,29 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
     function ControllerResultHandler() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ControllerResultHandler.prototype.getDataBasedOnMimeType_ = function (mimeType) {
-        var isObject = typeof this.controllerResult_.responseData === 'object';
-        switch (mimeType) {
-            case MIME_TYPE.Json:
-            case MIME_TYPE.Text:
-            case MIME_TYPE.Html:
-                if (isObject === true) {
-                    return JSON.stringify(this.controllerResult_.responseData);
-                }
-                break;
-            case MIME_TYPE.Xml:
-                if (isObject === true) {
-                    return xml_helper_XmlHelper.fromJsToXml(this.controllerResult_.responseData);
-                }
-        }
-        return this.controllerResult_.responseData;
-    };
+    // private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {
+    //     switch (mimeType) {
+    //         case MIME_TYPE.Json:
+    //         case MIME_TYPE.Text:
+    //         case MIME_TYPE.Html:
+    //         case MIME_TYPE.Xml:
+    //             if (typeof this.controllerResult_.responseData === 'object' === true) {
+    //                 return JSON.stringify(this.controllerResult_.responseData);
+    //             }
+    //         //     break;
+    //         // case MIME_TYPE.Xml:
+    //         //     if (isObject === true) {
+    //         //         return XmlHelper.fromJsToXml(this.controllerResult_.responseData);
+    //         //     }
+    //     }
+    //     return this.controllerResult_.responseData;
+    // }
     ControllerResultHandler.prototype.endResponse_ = function (negotiateMimeType) {
         var _a;
         var data;
         try {
-            data = this.getDataBasedOnMimeType_(negotiateMimeType);
+            // data = this.getDataBasedOnMimeType_(negotiateMimeType);
+            data = getResultBasedOnMiMe(negotiateMimeType, this.controllerResult_.responseData);
         }
         catch (ex) {
             this.onErrorOccured(ex);
@@ -3498,6 +3526,7 @@ var fort_Fort = /** @class */ (function () {
         FortGlobal.errorHandler = isNull(this.errorHandler) ? error_handler_ErrorHandler : this.errorHandler;
         FortGlobal.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
         FortGlobal.viewPath = isNull(option.viewPath) ? external_path_["join"](__CurrentPath, "views") : option.viewPath;
+        setResultMapper(this.resultMapper);
         if (this.logger) {
             if (typeof this.logger === 'function') {
                 this.logger = new this.logger();
@@ -3950,6 +3979,20 @@ function ExpectQuery(value) {
 
 
 
+// CONCATENATED MODULE: ./src/interfaces/result_mapper.ts
+var IResultMapper = /** @class */ (function () {
+    function IResultMapper() {
+    }
+    IResultMapper.prototype.map = function (type, result) {
+        return result;
+    };
+    return IResultMapper;
+}());
+
+
+// CONCATENATED MODULE: ./src/interfaces/index.ts
+
+
 // CONCATENATED MODULE: ./src/index.ts
 /* concated harmony reexport ErrorHandler */__webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return error_handler_ErrorHandler; });
 /* concated harmony reexport HttpCookie */__webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return HttpCookie; });
@@ -3981,6 +4024,7 @@ function ExpectQuery(value) {
 /* concated harmony reexport HTTP_STATUS_CODE */__webpack_require__.d(__webpack_exports__, "HTTP_STATUS_CODE", function() { return HTTP_STATUS_CODE; });
 /* concated harmony reexport ETag_Type */__webpack_require__.d(__webpack_exports__, "ETag_Type", function() { return ETag_Type; });
 /* concated harmony reexport ERROR_TYPE */__webpack_require__.d(__webpack_exports__, "ERROR_TYPE", function() { return ERROR_TYPE; });
+/* concated harmony reexport DATA_TYPE */__webpack_require__.d(__webpack_exports__, "DATA_TYPE", function() { return DATA_TYPE; });
 /* concated harmony reexport jsonResult */__webpack_require__.d(__webpack_exports__, "jsonResult", function() { return jsonResult; });
 /* concated harmony reexport textResult */__webpack_require__.d(__webpack_exports__, "textResult", function() { return textResult; });
 /* concated harmony reexport htmlResult */__webpack_require__.d(__webpack_exports__, "htmlResult", function() { return htmlResult; });
@@ -4005,8 +4049,12 @@ function ExpectQuery(value) {
 /* concated harmony reexport getClassName */__webpack_require__.d(__webpack_exports__, "getClassName", function() { return getClassName; });
 /* concated harmony reexport removeMethodAndNullFromObject */__webpack_require__.d(__webpack_exports__, "removeMethodAndNullFromObject", function() { return removeMethodAndNullFromObject; });
 /* concated harmony reexport isEnvProduction */__webpack_require__.d(__webpack_exports__, "isEnvProduction", function() { return isEnvProduction; });
+/* concated harmony reexport getResultBasedOnMiMe */__webpack_require__.d(__webpack_exports__, "getResultBasedOnMiMe", function() { return getResultBasedOnMiMe; });
+/* concated harmony reexport setResultMapper */__webpack_require__.d(__webpack_exports__, "setResultMapper", function() { return setResultMapper; });
 /* concated harmony reexport MustacheViewEngine */__webpack_require__.d(__webpack_exports__, "MustacheViewEngine", function() { return mustache_view_engine_MustacheViewEngine; });
 /* concated harmony reexport MemorySessionProvider */__webpack_require__.d(__webpack_exports__, "MemorySessionProvider", function() { return MemorySessionProvider; });
+/* concated harmony reexport IResultMapper */__webpack_require__.d(__webpack_exports__, "IResultMapper", function() { return IResultMapper; });
+
 
 
 

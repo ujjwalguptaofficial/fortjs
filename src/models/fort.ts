@@ -7,11 +7,12 @@ import { ErrorHandler } from ".";
 import { __AppName, __CurrentPath } from "../constant";
 import * as http from "http";
 import { ETag_Type, ERROR_TYPE } from "../enums";
-import { LogHelper, promise, removeLastSlash, removeFirstSlash } from "../helpers";
+import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
 import { GenericSessionProvider, GenericXmlParser, GenericController } from "../generics";
 import { isNull, isNullOrEmpty, isArray } from "../utils";
 import { Logger } from "./logger";
 import * as path from "path";
+import { IResultMapper } from "../interfaces";
 
 export class Fort {
 
@@ -50,6 +51,8 @@ export class Fort {
      */
     xmlParser?: typeof XmlParser;
 
+    resultMapper?: typeof IResultMapper;
+
     private saveAppOption_(option: AppOption) {
         const defaultEtagConfig = {
             type: ETag_Type.Weak
@@ -73,6 +76,7 @@ export class Fort {
         FortGlobal.errorHandler = isNull(this.errorHandler) ? ErrorHandler : this.errorHandler;
         FortGlobal.xmlParser = isNull(this.xmlParser) ? GenericXmlParser : this.xmlParser;
         FortGlobal.viewPath = isNull(option.viewPath) ? path.join(__CurrentPath, "views") : option.viewPath;
+        setResultMapper(this.resultMapper);
         if (this.logger) {
             if (typeof this.logger === 'function') {
                 this.logger = new (this as any).logger();

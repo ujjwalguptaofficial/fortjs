@@ -1,12 +1,8 @@
-/// <reference types="node" />
-import * as http from "http";
 import { ErrorHandler, Logger } from "./models";
 import { ViewEngine, XmlParser } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall } from "./generics";
 export declare class FortGlobal {
-    static request: http.IncomingMessage;
-    static response: http.ServerResponse;
     static port: number;
     static viewPath: string;
     static shouldParseCookie: boolean;

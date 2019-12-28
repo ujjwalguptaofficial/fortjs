@@ -4,6 +4,7 @@ import { Wall, ViewEngine, SessionProvider, XmlParser } from "../abstracts";
 import { ErrorHandler } from ".";
 import * as http from "http";
 import { Logger } from "./logger";
+import { IResultMapper } from "../interfaces";
 export declare class Fort {
     logger: Logger;
     routes: ParentRoute[];
@@ -35,6 +36,7 @@ export declare class Fort {
      * @memberof Fort
      */
     xmlParser?: typeof XmlParser;
+    resultMapper?: typeof IResultMapper;
     private saveAppOption_;
     create(option?: AppOption): Promise<void>;
     destroy(): Promise<void>;

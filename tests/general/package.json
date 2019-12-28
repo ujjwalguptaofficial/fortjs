@@ -27,6 +27,7 @@
     "copy-webpack-plugin": "^5.0.2",
     "eshtml": "^0.2.2",
     "form-data": "^2.3.3",
+    "jsontoxml": "^1.0.1",
     "mongodb": "^3.2.7",
     "webpack": "^4.23.1",
     "webpack-cli": "^3.1.2",
