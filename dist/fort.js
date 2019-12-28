@@ -1171,8 +1171,7 @@ var getResultBasedOnMiMe;
 function setResultMapper(mapper) {
     if (mapper) {
         getResultBasedOnMiMe = function (type, result, callBack) {
-            // callBack(type);
-            return new mapper().map(type, result);
+            return new mapper().map(type, result, callBack);
         };
     }
     else {
@@ -3917,9 +3916,6 @@ function ExpectQuery(value) {
 var IResultMapper = /** @class */ (function () {
     function IResultMapper() {
     }
-    IResultMapper.prototype.map = function (type, result) {
-        return result;
-    };
     return IResultMapper;
 }());
 
