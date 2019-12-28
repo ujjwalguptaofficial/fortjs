@@ -4,29 +4,11 @@ import { __SetCookie, __ContentType } from "../constant";
 import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
-import { XmlHelper, textResult, getResultBasedOnMiMe } from "../helpers";
+import { textResult, getResultBasedOnMiMe } from "../helpers";
 
 export class ControllerResultHandler extends FileHandler {
     private controllerResult_: HttpResult;
-
-    // private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {
-    //     switch (mimeType) {
-    //         case MIME_TYPE.Json:
-    //         case MIME_TYPE.Text:
-    //         case MIME_TYPE.Html:
-    //         case MIME_TYPE.Xml:
-    //             if (typeof this.controllerResult_.responseData === 'object' === true) {
-    //                 return JSON.stringify(this.controllerResult_.responseData);
-    //             }
-    //         //     break;
-    //         // case MIME_TYPE.Xml:
-    //         //     if (isObject === true) {
-    //         //         return XmlHelper.fromJsToXml(this.controllerResult_.responseData);
-    //         //     }
-    //     }
-    //     return this.controllerResult_.responseData;
-    // }
-
+    
     private endResponse_(negotiateMimeType: MIME_TYPE) {
         let data;
         try {

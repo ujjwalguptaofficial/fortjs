@@ -54,7 +54,6 @@
     "etag": "^1.8.1",
     "fresh": "^0.5.2",
     "fs-extra": "^8.1.0",
-    "jsontoxml": "^1.0.1",
     "multiparty": "^4.2.1",
     "mustache": "^3.0.1",
     "negotiator": "^0.6.2",

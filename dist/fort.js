@@ -87,7 +87,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -118,64 +118,58 @@ module.exports = require("fs");
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = require("jsontoxml");
+module.exports = require("url");
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("etag");
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("etag");
+module.exports = require("fresh");
 
 /***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
-module.exports = require("fresh");
+module.exports = require("content-type");
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("content-type");
+module.exports = require("querystring");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("querystring");
+module.exports = require("multiparty");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("multiparty");
+module.exports = require("mustache");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("mustache");
+module.exports = require("uniqid");
 
 /***/ }),
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = require("uniqid");
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
 module.exports = require("http");
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -588,65 +582,6 @@ var getViewFromFile = function (fileLocation, mapView) {
 var promise = function (callBack) {
     return new Promise(callBack);
 };
-
-// CONCATENATED MODULE: ./src/helpers/get_data_type.ts
-
-var getDataType = function (value) {
-    var type = typeof value;
-    switch (type) {
-        case 'object':
-            if (Array.isArray(value)) {
-                return DATA_TYPE.Array;
-            }
-        default:
-            return type;
-    }
-};
-
-// EXTERNAL MODULE: external "jsontoxml"
-var external_jsontoxml_ = __webpack_require__(4);
-
-// CONCATENATED MODULE: ./src/helpers/xml_helper.ts
-
-
-
-var xml_helper_XmlHelper = /** @class */ (function () {
-    function XmlHelper() {
-    }
-    XmlHelper.fromJsToXml = function (value) {
-        var addKeyToObjectIfNeeded = function (key, obj) {
-            var _a;
-            var type = getDataType(obj);
-            if (type === DATA_TYPE.Object) {
-                var keys = Object.keys(obj);
-                if (keys.length !== 1) {
-                    obj = (_a = {},
-                        _a[key] = obj,
-                        _a);
-                }
-            }
-            return obj;
-        };
-        var dataType = getDataType(value);
-        switch (dataType) {
-            case DATA_TYPE.Array:
-                value.forEach(function (val, index) {
-                    value[index] = addKeyToObjectIfNeeded("item", val);
-                });
-                value = {
-                    root: value
-                };
-                break;
-            case DATA_TYPE.Object:
-                value = addKeyToObjectIfNeeded("root", value);
-        }
-        return external_jsontoxml_(value, {
-            xmlHeader: true
-        });
-    };
-    return XmlHelper;
-}());
-
 
 // CONCATENATED MODULE: ./src/helpers/get_mime_type_from_extension.ts
 
@@ -1169,6 +1104,20 @@ var reverseLoop = function (values, cb) {
     }
 };
 
+// CONCATENATED MODULE: ./src/helpers/get_data_type.ts
+
+var getDataType = function (value) {
+    var type = typeof value;
+    switch (type) {
+        case 'object':
+            if (Array.isArray(value)) {
+                return DATA_TYPE.Array;
+            }
+        default:
+            return type;
+    }
+};
+
 // CONCATENATED MODULE: ./src/helpers/compar_expected_and_remove_unnecessary.ts
 
 
@@ -1267,7 +1216,6 @@ function setResultMapper(mapper) {
 
 
 
-
 // CONCATENATED MODULE: ./src/models/error_handler.ts
 
 var error_handler_ErrorHandler = /** @class */ (function () {
@@ -1339,7 +1287,7 @@ var HttpCookie = /** @class */ (function () {
 
 
 // EXTERNAL MODULE: external "url"
-var external_url_ = __webpack_require__(5);
+var external_url_ = __webpack_require__(4);
 
 // CONCATENATED MODULE: ./src/constant.ts
 /* tslint:disable */
@@ -1700,10 +1648,10 @@ var request_handler_helper_RequestHandlerHelper = /** @class */ (function () {
 var external_fs_ = __webpack_require__(3);
 
 // EXTERNAL MODULE: external "etag"
-var external_etag_ = __webpack_require__(6);
+var external_etag_ = __webpack_require__(5);
 
 // EXTERNAL MODULE: external "fresh"
-var external_fresh_ = __webpack_require__(7);
+var external_fresh_ = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./src/handlers/file_handler.ts
 var __extends = (undefined && undefined.__extends) || (function () {
@@ -1949,23 +1897,6 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
     function ControllerResultHandler() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    // private getDataBasedOnMimeType_(mimeType: MIME_TYPE) {
-    //     switch (mimeType) {
-    //         case MIME_TYPE.Json:
-    //         case MIME_TYPE.Text:
-    //         case MIME_TYPE.Html:
-    //         case MIME_TYPE.Xml:
-    //             if (typeof this.controllerResult_.responseData === 'object' === true) {
-    //                 return JSON.stringify(this.controllerResult_.responseData);
-    //             }
-    //         //     break;
-    //         // case MIME_TYPE.Xml:
-    //         //     if (isObject === true) {
-    //         //         return XmlHelper.fromJsToXml(this.controllerResult_.responseData);
-    //         //     }
-    //     }
-    //     return this.controllerResult_.responseData;
-    // }
     ControllerResultHandler.prototype.endResponse_ = function (negotiateMimeType) {
         var _a;
         var data;
@@ -2069,13 +2000,13 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
 
 
 // EXTERNAL MODULE: external "content-type"
-var external_content_type_ = __webpack_require__(8);
+var external_content_type_ = __webpack_require__(7);
 
 // EXTERNAL MODULE: external "querystring"
-var external_querystring_ = __webpack_require__(9);
+var external_querystring_ = __webpack_require__(8);
 
 // EXTERNAL MODULE: external "multiparty"
-var external_multiparty_ = __webpack_require__(10);
+var external_multiparty_ = __webpack_require__(9);
 
 // CONCATENATED MODULE: ./src/handlers/post_handler.ts
 var post_handler_extends = (undefined && undefined.__extends) || (function () {
@@ -2648,7 +2579,7 @@ var request_handler_RequestHandler = /** @class */ (function (_super) {
 
 
 // EXTERNAL MODULE: external "mustache"
-var external_mustache_ = __webpack_require__(11);
+var external_mustache_ = __webpack_require__(10);
 
 // CONCATENATED MODULE: ./src/extra/mustache_view_engine.ts
 var mustache_view_engine_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -2709,7 +2640,7 @@ var mustache_view_engine_MustacheViewEngine = /** @class */ (function () {
 
 
 // EXTERNAL MODULE: external "uniqid"
-var external_uniqid_ = __webpack_require__(12);
+var external_uniqid_ = __webpack_require__(11);
 
 // CONCATENATED MODULE: ./src/abstracts/session_provider.ts
 
@@ -2917,7 +2848,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
 
 
 // EXTERNAL MODULE: external "http"
-var external_http_ = __webpack_require__(13);
+var external_http_ = __webpack_require__(12);
 
 // CONCATENATED MODULE: ./src/test_helpers/http_response_stub.ts
 var HttpResponseStub = /** @class */ (function () {
@@ -4036,7 +3967,6 @@ var IResultMapper = /** @class */ (function () {
 /* concated harmony reexport getViewFromFile */__webpack_require__.d(__webpack_exports__, "getViewFromFile", function() { return getViewFromFile; });
 /* concated harmony reexport promise */__webpack_require__.d(__webpack_exports__, "promise", function() { return promise; });
 /* concated harmony reexport LogHelper */__webpack_require__.d(__webpack_exports__, "LogHelper", function() { return log_helper_LogHelper; });
-/* concated harmony reexport XmlHelper */__webpack_require__.d(__webpack_exports__, "XmlHelper", function() { return xml_helper_XmlHelper; });
 /* concated harmony reexport getMimeTypeFromExtension */__webpack_require__.d(__webpack_exports__, "getMimeTypeFromExtension", function() { return getMimeTypeFromExtension; });
 /* concated harmony reexport parseAndMatchRoute */__webpack_require__.d(__webpack_exports__, "parseAndMatchRoute", function() { return parseAndMatchRoute; });
 /* concated harmony reexport parseCookie */__webpack_require__.d(__webpack_exports__, "parseCookie", function() { return parseCookie; });

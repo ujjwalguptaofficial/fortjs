@@ -9,7 +9,6 @@ export * from './view_result';
 export * from './get_view_from_file';
 export * from "./promise";
 export * from './log_helper';
-export * from './xml_helper';
 export * from "./get_mime_type_from_extension";
 export * from "./parse_match_route";
 export * from "./parse_cookie";
