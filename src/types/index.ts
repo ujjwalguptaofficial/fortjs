@@ -13,3 +13,4 @@ export * from "./multi_part_parse_result";
 export * from "./file_result_info";
 export * from "./route_match";
 export * from './controller_test_data';
+export * from './view_read_option';

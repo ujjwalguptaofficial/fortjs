@@ -537,50 +537,62 @@ var get_view_from_file_generator = (undefined && undefined.__generator) || funct
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var get_view_from_file_this = undefined;
 
 
 
 var viewCache = {};
-var getViewFromFile = function (fileLocation, mapView) {
-    return get_view_from_file_awaiter(this, void 0, void 0, function () {
-        var readView, _a, _b;
-        var _this = this;
-        return get_view_from_file_generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    readView = function () { return get_view_from_file_awaiter(_this, void 0, void 0, function () {
-                        var pathOfView, result;
-                        return get_view_from_file_generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    pathOfView = external_path_["join"](FortGlobal.viewPath, fileLocation);
-                                    return [4 /*yield*/, Object(external_fs_extra_["readFile"])(pathOfView, {
-                                            encoding: 'utf8'
-                                        })];
-                                case 1:
-                                    result = _a.sent();
-                                    if (mapView != null) {
-                                        return [2 /*return*/, mapView(result)];
-                                    }
-                                    return [2 /*return*/, result];
-                            }
-                        });
-                    }); };
-                    if (!(FortGlobal.isProduction === true)) return [3 /*break*/, 3];
-                    if (!(viewCache[fileLocation] == null)) return [3 /*break*/, 2];
-                    _a = viewCache;
-                    _b = fileLocation;
-                    return [4 /*yield*/, readView()];
-                case 1:
-                    _a[_b] = _c.sent();
-                    _c.label = 2;
-                case 2: return [2 /*return*/, viewCache[fileLocation]];
-                case 3: return [4 /*yield*/, readView()];
-                case 4: return [2 /*return*/, _c.sent()];
-            }
-        });
+var getViewFromFile;
+var readView = function (option) { return get_view_from_file_awaiter(get_view_from_file_this, void 0, void 0, function () {
+    var pathOfView, result;
+    return get_view_from_file_generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                pathOfView = external_path_["join"](FortGlobal.viewPath, option.fileLocation);
+                return [4 /*yield*/, Object(external_fs_extra_["readFile"])(pathOfView, {
+                        encoding: 'utf8'
+                    })];
+            case 1:
+                result = _a.sent();
+                if (option.mapView != null) {
+                    return [2 /*return*/, option.mapView(result)];
+                }
+                return [2 /*return*/, result];
+        }
     });
-};
+}); };
+if (FortGlobal.isProduction === true) {
+    getViewFromFile = function (option) {
+        return get_view_from_file_awaiter(this, void 0, void 0, function () {
+            var _a, _b;
+            return get_view_from_file_generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!(viewCache[option.fileLocation] == null)) return [3 /*break*/, 2];
+                        _a = viewCache;
+                        _b = option.fileLocation;
+                        return [4 /*yield*/, readView(option)];
+                    case 1:
+                        _a[_b] = _c.sent();
+                        _c.label = 2;
+                    case 2: return [2 /*return*/, viewCache[option.fileLocation]];
+                }
+            });
+        });
+    };
+}
+else {
+    getViewFromFile = function (option) {
+        return get_view_from_file_awaiter(this, void 0, void 0, function () {
+            return get_view_from_file_generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, readView(option)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+}
 
 // CONCATENATED MODULE: ./src/helpers/promise.ts
 var promise = function (callBack) {
@@ -2626,7 +2638,9 @@ var mustache_view_engine_MustacheViewEngine = /** @class */ (function () {
             var viewData;
             return mustache_view_engine_generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, getViewFromFile(value.view)];
+                    case 0: return [4 /*yield*/, getViewFromFile({
+                            fileLocation: value.view
+                        })];
                     case 1:
                         viewData = _a.sent();
                         return [2 /*return*/, external_mustache_["render"](viewData, value.model)];

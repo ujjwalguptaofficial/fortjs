@@ -2,29 +2,34 @@ import { readFile } from "fs-extra";
 import * as path from "path";
 import { FortGlobal } from "../fort_global";
 import { __CurrentPath } from "../constant";
+import { ViewReadOption } from "../types";
 
 const viewCache = {
 
 };
 
-export const getViewFromFile = async function <T>(fileLocation: string, mapView?: (viewData: string) => any): Promise<T | string> {
-    const readView = async () => {
-        const pathOfView = path.join(FortGlobal.viewPath, fileLocation);
-        const result = await readFile(pathOfView, {
-            encoding: 'utf8'
-        });
-        if (mapView != null) {
-            return mapView(result);
-        }
-        return result as T | string;
-    };
+export let getViewFromFile: (option: ViewReadOption) => Promise<string | any>;
 
-    if (FortGlobal.isProduction === true) {
-        if (viewCache[fileLocation] == null) {
-            viewCache[fileLocation] = await readView();
-        }
-        return viewCache[fileLocation];
-
+const readView = async (option: ViewReadOption) => {
+    const pathOfView = path.join(FortGlobal.viewPath, option.fileLocation);
+    const result = await readFile(pathOfView, {
+        encoding: 'utf8'
+    });
+    if (option.mapView != null) {
+        return option.mapView(result);
     }
-    return await readView();
+    return result;
 };
+if (FortGlobal.isProduction === true) {
+    getViewFromFile = async function (option: ViewReadOption): Promise<string | any> {
+        if (viewCache[option.fileLocation] == null) {
+            viewCache[option.fileLocation] = await readView(option);
+        }
+        return viewCache[option.fileLocation];
+    };
+}
+else {
+    getViewFromFile = async function (option: ViewReadOption): Promise<string | any> {
+        return await readView(option);
+    };
+}
