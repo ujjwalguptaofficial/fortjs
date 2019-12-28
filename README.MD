@@ -12,19 +12,18 @@ Component based MVC web framework for nodejs targeting good code structures & mo
 
 # Why fortjs
 
-* No Callback - FortJs uses async await or promise.
-* Fun To Create - You are not creating an app but a fort. 
-* Readable Code - Code written for FortJs is more beautiful & readable.
-* Next Gen Javascript - Divide your app into classes, use arrow functions, decorators, async await etc.
-* Based On Architecture Fort - [Fort](https://github.com/ujjwalguptaofficial/fort) is an architecture on top of MVC.
+* Based on [Fort](https://github.com/ujjwalguptaofficial/fort) architecture.
+* MVC Framework and follows OOPS approach so everything is class and object.
+* Provides components - Wall, Shield and Guard. Components help modularize the application.
+* No callback, Uses ES6 async/await or promise for executing asychronous code.
+* Everything is configurable - you can configure your session store, view engine, websocket etc.
+* Dependency Injection.
+* Everything can be unit tested, so you can use a [TDD](https://guide.freecodecamp.org/agile/test-driven-development/) approach.
 * TypeScript Support - Fully supported for typescript users.
-* Dependency injection
-
-
 
 # Examples
 
-Check out examples in examples folder.
+Check out repo - https://github.com/ujjwalguptaofficial/fortjs-examples
 
 # Website
 
