@@ -64,11 +64,7 @@ export class ControllerResultHandler extends FileHandler {
     onTerminationFromWall(result: HttpResult | HttpFormatResult) {
         this.handleFinalResult_(result);
     }
-
-    private isRedirectFalse_(value) {
-        return value == null || value === false;
-    }
-
+    
     private handleFinalResult_(result: HttpResult | HttpFormatResult) {
         result = result || textResult("");
         this.controllerResult_ = result as HttpResult;
@@ -77,7 +73,10 @@ export class ControllerResultHandler extends FileHandler {
             this.response.setHeader(__SetCookie, value);
         });
 
-        if (this.isRedirectFalse_((result as HttpResult).shouldRedirect)) {
+        if ((result as HttpResult).shouldRedirect === true) {
+            this.handleRedirectResult_();
+        }
+        else {
             if ((result as HttpFormatResult).responseFormat == null) {
                 if ((result as HttpResult).file == null) {
                     const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
@@ -96,9 +95,6 @@ export class ControllerResultHandler extends FileHandler {
             else {
                 this.handleFormatResult_();
             }
-        }
-        else {
-            this.handleRedirectResult_();
         }
     }
 

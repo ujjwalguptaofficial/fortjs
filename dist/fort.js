@@ -1960,7 +1960,10 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
         this.cookieManager.responseCookie_.forEach(function (value) {
             _this.response.setHeader(__SetCookie, value);
         });
-        if (this.isRedirectFalse_(result.shouldRedirect)) {
+        if (result.shouldRedirect === true) {
+            this.handleRedirectResult_();
+        }
+        else {
             if (result.responseFormat == null) {
                 if (result.file == null) {
                     var contentType = result.contentType || MIME_TYPE.Text;
@@ -1979,9 +1982,6 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
             else {
                 this.handleFormatResult_();
             }
-        }
-        else {
-            this.handleRedirectResult_();
         }
     };
     ControllerResultHandler.prototype.onResultFromController = function (result) {
