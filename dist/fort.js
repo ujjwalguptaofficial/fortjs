@@ -1170,18 +1170,20 @@ var isEnvProduction = function () {
 var getResultBasedOnMiMe;
 function setResultMapper(mapper) {
     if (mapper) {
-        getResultBasedOnMiMe = function (type, result) {
+        getResultBasedOnMiMe = function (type, result, callBack) {
+            // callBack(type);
             return new mapper().map(type, result);
         };
     }
     else {
-        getResultBasedOnMiMe = function (type, result) {
+        getResultBasedOnMiMe = function (type, result, callBack) {
             switch (type) {
                 case MIME_TYPE.Json:
                 case MIME_TYPE.Text:
                 case MIME_TYPE.Html:
                 case MIME_TYPE.Xml:
                     if (typeof result === 'object' === true) {
+                        callBack(MIME_TYPE.Json);
                         return JSON.stringify(result);
                     }
             }
@@ -1901,8 +1903,9 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
         var _a;
         var data;
         try {
-            // data = this.getDataBasedOnMimeType_(negotiateMimeType);
-            data = getResultBasedOnMiMe(negotiateMimeType, this.controllerResult_.responseData);
+            data = getResultBasedOnMiMe(negotiateMimeType, this.controllerResult_.responseData, function (type) {
+                negotiateMimeType = type;
+            });
         }
         catch (ex) {
             this.onErrorOccured(ex);

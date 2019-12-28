@@ -8,12 +8,16 @@ import { textResult, getResultBasedOnMiMe } from "../helpers";
 
 export class ControllerResultHandler extends FileHandler {
     private controllerResult_: HttpResult;
-    
+
     private endResponse_(negotiateMimeType: MIME_TYPE) {
         let data;
         try {
-            // data = this.getDataBasedOnMimeType_(negotiateMimeType);
-            data = getResultBasedOnMiMe(negotiateMimeType, this.controllerResult_.responseData);
+            data = getResultBasedOnMiMe(negotiateMimeType,
+                this.controllerResult_.responseData
+                , (type: MIME_TYPE) => {
+                    negotiateMimeType = type;
+                }
+            );
         }
         catch (ex) {
             this.onErrorOccured(ex);
