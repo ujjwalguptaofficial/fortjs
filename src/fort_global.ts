@@ -3,6 +3,8 @@ import { ViewEngine, XmlParser } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall } from "./generics";
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === "production";
 export class FortGlobal {
     static port: number;
     static viewPath: string;
@@ -26,10 +28,10 @@ export class FortGlobal {
     static logger: Logger;
 
     static get isDevelopment() {
-        return process.env.NODE_ENV === 'development';
+        return isDevelopment;
     }
 
     static get isProduction() {
-        return process.env.NODE_ENV === "production";
+        return isProduction;
     }
 }

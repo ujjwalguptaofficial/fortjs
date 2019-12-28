@@ -303,19 +303,21 @@ var htmlResult = function (html, statusCode) {
 };
 
 // CONCATENATED MODULE: ./src/fort_global.ts
+var isDevelopment = process.env.NODE_ENV === 'development';
+var isProduction = process.env.NODE_ENV === "production";
 var FortGlobal = /** @class */ (function () {
     function FortGlobal() {
     }
     Object.defineProperty(FortGlobal, "isDevelopment", {
         get: function () {
-            return process.env.NODE_ENV === 'development';
+            return isDevelopment;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(FortGlobal, "isProduction", {
         get: function () {
-            return process.env.NODE_ENV === "production";
+            return isProduction;
         },
         enumerable: true,
         configurable: true
@@ -324,12 +326,6 @@ var FortGlobal = /** @class */ (function () {
     return FortGlobal;
 }());
 
-
-// CONCATENATED MODULE: ./src/helpers/is_env_dev.ts
-
-var isEnvDev = function () {
-    return FortGlobal.isDevelopment;
-};
 
 // CONCATENATED MODULE: ./src/helpers/log_helper.ts
 
@@ -387,18 +383,26 @@ var log_helper_LogHelper = /** @class */ (function () {
 
 
 
-
-var renderView = function (viewName, model) {
-    if (isEnvDev()) {
+var renderView;
+if (FortGlobal.isDevelopment === true) {
+    renderView = function (viewName, model) {
         if (FortGlobal.viewEngine == null) {
             new log_helper_LogHelper(ERROR_TYPE.UndefinedViewEngine).throw();
         }
-    }
-    return FortGlobal.viewEngine.render({
-        view: viewName,
-        model: model
-    });
-};
+        return FortGlobal.viewEngine.render({
+            view: viewName,
+            model: model
+        });
+    };
+}
+else {
+    renderView = function (viewName, model) {
+        return FortGlobal.viewEngine.render({
+            view: viewName,
+            model: model
+        });
+    };
+}
 
 // CONCATENATED MODULE: ./src/helpers/download_result.ts
 
@@ -1159,12 +1163,6 @@ var removeMethodAndNullFromObject = function (value) {
     return outputValue;
 };
 
-// CONCATENATED MODULE: ./src/helpers/is_env_production.ts
-
-var isEnvProduction = function () {
-    return FortGlobal.isProduction;
-};
-
 // CONCATENATED MODULE: ./src/helpers/get_result_based_on_mime.ts
 
 var getResultBasedOnMiMe;
@@ -1192,7 +1190,6 @@ function setResultMapper(mapper) {
 }
 
 // CONCATENATED MODULE: ./src/helpers/index.ts
-
 
 
 
@@ -3976,7 +3973,6 @@ function ExpectQuery(value) {
 /* concated harmony reexport getDataType */__webpack_require__.d(__webpack_exports__, "getDataType", function() { return getDataType; });
 /* concated harmony reexport getClassName */__webpack_require__.d(__webpack_exports__, "getClassName", function() { return getClassName; });
 /* concated harmony reexport removeMethodAndNullFromObject */__webpack_require__.d(__webpack_exports__, "removeMethodAndNullFromObject", function() { return removeMethodAndNullFromObject; });
-/* concated harmony reexport isEnvProduction */__webpack_require__.d(__webpack_exports__, "isEnvProduction", function() { return isEnvProduction; });
 /* concated harmony reexport getResultBasedOnMiMe */__webpack_require__.d(__webpack_exports__, "getResultBasedOnMiMe", function() { return getResultBasedOnMiMe; });
 /* concated harmony reexport setResultMapper */__webpack_require__.d(__webpack_exports__, "setResultMapper", function() { return setResultMapper; });
 /* concated harmony reexport MustacheViewEngine */__webpack_require__.d(__webpack_exports__, "MustacheViewEngine", function() { return mustache_view_engine_MustacheViewEngine; });

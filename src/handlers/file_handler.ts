@@ -4,7 +4,7 @@ import * as path from "path";
 import { __ContentType } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension, promise, isEnvProduction } from "../helpers";
+import { getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";

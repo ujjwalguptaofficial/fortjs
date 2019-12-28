@@ -1,5 +1,4 @@
 import { readFile } from "fs-extra";
-import { isEnvProduction } from "./is_env_production";
 import * as path from "path";
 import { FortGlobal } from "../fort_global";
 import { __CurrentPath } from "../constant";
