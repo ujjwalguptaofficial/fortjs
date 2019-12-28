@@ -1,9 +1,9 @@
-import { IResultMapper, MIME_TYPE } from "fortjs";
+import { ResultMapper, MIME_TYPE } from "fortjs";
 import { getDataType } from "fortjs";
 import { DATA_TYPE } from "fortjs";
 import jsontoxml from "jsontoxml";
 
-export class ResultMapper implements IResultMapper {
+export class CustomResultMapper extends ResultMapper {
     map(type: MIME_TYPE, result) {
         switch (type) {
             case MIME_TYPE.Json:

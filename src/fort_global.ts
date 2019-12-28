@@ -1,9 +1,7 @@
-import * as http from "http";
 import { ErrorHandler, Logger } from "./models";
 import { ViewEngine, XmlParser } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall } from "./generics";
-import { IResultMapper } from "./interfaces";
 
 export class FortGlobal {
     static port: number;

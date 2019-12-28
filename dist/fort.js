@@ -3096,7 +3096,16 @@ var XmlParser = /** @class */ (function () {
 }());
 
 
+// CONCATENATED MODULE: ./src/abstracts/result_mapper.ts
+var ResultMapper = /** @class */ (function () {
+    function ResultMapper() {
+    }
+    return ResultMapper;
+}());
+
+
 // CONCATENATED MODULE: ./src/abstracts/index.ts
+
 
 
 
@@ -3912,17 +3921,6 @@ function ExpectQuery(value) {
 
 
 
-// CONCATENATED MODULE: ./src/interfaces/result_mapper.ts
-var IResultMapper = /** @class */ (function () {
-    function IResultMapper() {
-    }
-    return IResultMapper;
-}());
-
-
-// CONCATENATED MODULE: ./src/interfaces/index.ts
-
-
 // CONCATENATED MODULE: ./src/index.ts
 /* concated harmony reexport ErrorHandler */__webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return error_handler_ErrorHandler; });
 /* concated harmony reexport HttpCookie */__webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return HttpCookie; });
@@ -3940,6 +3938,7 @@ var IResultMapper = /** @class */ (function () {
 /* concated harmony reexport ViewEngine */__webpack_require__.d(__webpack_exports__, "ViewEngine", function() { return ViewEngine; });
 /* concated harmony reexport Wall */__webpack_require__.d(__webpack_exports__, "Wall", function() { return wall_Wall; });
 /* concated harmony reexport XmlParser */__webpack_require__.d(__webpack_exports__, "XmlParser", function() { return XmlParser; });
+/* concated harmony reexport ResultMapper */__webpack_require__.d(__webpack_exports__, "ResultMapper", function() { return ResultMapper; });
 /* concated harmony reexport Worker */__webpack_require__.d(__webpack_exports__, "Worker", function() { return Worker; });
 /* concated harmony reexport Shields */__webpack_require__.d(__webpack_exports__, "Shields", function() { return Shields; });
 /* concated harmony reexport Guards */__webpack_require__.d(__webpack_exports__, "Guards", function() { return Guards; });
@@ -3982,8 +3981,6 @@ var IResultMapper = /** @class */ (function () {
 /* concated harmony reexport setResultMapper */__webpack_require__.d(__webpack_exports__, "setResultMapper", function() { return setResultMapper; });
 /* concated harmony reexport MustacheViewEngine */__webpack_require__.d(__webpack_exports__, "MustacheViewEngine", function() { return mustache_view_engine_MustacheViewEngine; });
 /* concated harmony reexport MemorySessionProvider */__webpack_require__.d(__webpack_exports__, "MemorySessionProvider", function() { return MemorySessionProvider; });
-/* concated harmony reexport IResultMapper */__webpack_require__.d(__webpack_exports__, "IResultMapper", function() { return IResultMapper; });
-
 
 
 

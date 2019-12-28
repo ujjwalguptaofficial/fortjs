@@ -1,9 +1,9 @@
 import { MIME_TYPE } from "../enums";
-import { IResultMapper } from "../interfaces";
+import { ResultMapper } from "../abstracts";
 
 export let getResultBasedOnMiMe: (type: MIME_TYPE, result, setMimeType?: (type) => void) => any;
 
-export function setResultMapper(mapper: typeof IResultMapper) {
+export function setResultMapper(mapper: typeof ResultMapper) {
     if (mapper) {
         getResultBasedOnMiMe = (type, result, callBack) => {
             return new (mapper as any)().map(type, result, callBack);

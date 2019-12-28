@@ -1,5 +1,5 @@
 import { ParentRoute, AppOption, EtagOption } from "../types";
-import { Wall, ViewEngine, SessionProvider, XmlParser } from "../abstracts";
+import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FortGlobal } from "../fort_global";
 import { MemorySessionProvider, MustacheViewEngine } from "../extra";
@@ -12,8 +12,7 @@ import { GenericSessionProvider, GenericXmlParser, GenericController } from "../
 import { isNull, isNullOrEmpty, isArray } from "../utils";
 import { Logger } from "./logger";
 import * as path from "path";
-import { IResultMapper } from "../interfaces";
-
+ 
 export class Fort {
 
     logger: Logger;
@@ -51,7 +50,7 @@ export class Fort {
      */
     xmlParser?: typeof XmlParser;
 
-    resultMapper?: typeof IResultMapper;
+    resultMapper?: typeof ResultMapper;
 
     private saveAppOption_(option: AppOption) {
         const defaultEtagConfig = {
