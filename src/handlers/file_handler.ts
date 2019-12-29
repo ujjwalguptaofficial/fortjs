@@ -137,34 +137,28 @@ export class FileHandler extends RequestHandlerHelper {
             else { // mime type
                 mimeType = fileType;
             }
-            const negotiateMimeType = this.getContentTypeFromNegotiation(mimeType) as MIME_TYPE;
-            if (negotiateMimeType != null) {
-                if (FortGlobal.isProduction === true) {
-                    const lastModified = fileInfo.mtime.toUTCString();
-                    const eTagValue = etag(fileInfo, {
-                        weak: FortGlobal.eTag.type === ETag_Type.Weak
-                    });
-                    if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                        this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                        this.response.end();
-                    }
-                    else {
-                        this.response.setHeader('Etag', eTagValue);
-                        this.response.setHeader('Last-Modified', lastModified);
-                        this.sendFileAsResponse_(filePath, mimeType);
-                    }
+            if (FortGlobal.isProduction === true) {
+                const lastModified = fileInfo.mtime.toUTCString();
+                const eTagValue = etag(fileInfo, {
+                    weak: FortGlobal.eTag.type === ETag_Type.Weak
+                });
+                if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                    this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                    this.response.end();
                 }
                 else {
+                    this.response.setHeader('Etag', eTagValue);
+                    this.response.setHeader('Last-Modified', lastModified);
                     this.sendFileAsResponse_(filePath, mimeType);
                 }
             }
             else {
-                this.onNotAcceptableRequest();
+                this.sendFileAsResponse_(filePath, mimeType);
             }
         }).catch(this.onErrorOccured.bind(this));
     }
 
-    sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
+    private sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
         this.response.writeHead(HTTP_STATUS_CODE.Ok, {
             [__ContentType]: mimeType
         });

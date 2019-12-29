@@ -1808,29 +1808,23 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
             else { // mime type
                 mimeType = fileType;
             }
-            var negotiateMimeType = _this.getContentTypeFromNegotiation(mimeType);
-            if (negotiateMimeType != null) {
-                if (FortGlobal.isProduction === true) {
-                    var lastModified = fileInfo.mtime.toUTCString();
-                    var eTagValue = external_etag_(fileInfo, {
-                        weak: FortGlobal.eTag.type === ETag_Type.Weak
-                    });
-                    if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                        _this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                        _this.response.end();
-                    }
-                    else {
-                        _this.response.setHeader('Etag', eTagValue);
-                        _this.response.setHeader('Last-Modified', lastModified);
-                        _this.sendFileAsResponse_(filePath, mimeType);
-                    }
+            if (FortGlobal.isProduction === true) {
+                var lastModified = fileInfo.mtime.toUTCString();
+                var eTagValue = external_etag_(fileInfo, {
+                    weak: FortGlobal.eTag.type === ETag_Type.Weak
+                });
+                if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                    _this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                    _this.response.end();
                 }
                 else {
+                    _this.response.setHeader('Etag', eTagValue);
+                    _this.response.setHeader('Last-Modified', lastModified);
                     _this.sendFileAsResponse_(filePath, mimeType);
                 }
             }
             else {
-                _this.onNotAcceptableRequest();
+                _this.sendFileAsResponse_(filePath, mimeType);
             }
         }).catch(this.onErrorOccured.bind(this));
     };
