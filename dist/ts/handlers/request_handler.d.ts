@@ -9,7 +9,7 @@ export declare class RequestHandler extends PostHandler {
     constructor(request: http.IncomingMessage, response: http.ServerResponse);
     private registerEvents_;
     private executeWallIncoming_;
-    private runController_;
+    runController_: any;
     private executeShieldsProtection_;
     private executeGuardsCheck_;
     private parseCookieFromRequest_;
@@ -20,4 +20,5 @@ export declare class RequestHandler extends PostHandler {
     private execute_;
     handlePostData(): Promise<boolean>;
     handle(): Promise<void>;
+    setControllerProps_(): any;
 }

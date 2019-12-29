@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.10.4 - 28/12/2019
+ * @license :fortjs - V1.10.4 - 29/12/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -1950,9 +1950,6 @@ var controller_result_handler_ControllerResultHandler = /** @class */ (function 
     ControllerResultHandler.prototype.onTerminationFromWall = function (result) {
         this.handleFinalResult_(result);
     };
-    ControllerResultHandler.prototype.isRedirectFalse_ = function (value) {
-        return value == null || value === false;
-    };
     ControllerResultHandler.prototype.handleFinalResult_ = function (result) {
         var _this = this;
         result = result || textResult("");
@@ -2292,22 +2289,6 @@ var request_handler_RequestHandler = /** @class */ (function (_super) {
             executeWallIncomingByIndex();
         });
     };
-    RequestHandler.prototype.runController_ = function () {
-        var _a;
-        var constructorValues = injector_handler_InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
-        var controllerObj = new ((_a = this.routeMatchInfo_.controller).bind.apply(_a, [void 0].concat(constructorValues)))();
-        controllerObj.request = this.request;
-        controllerObj.response = this.response;
-        controllerObj.query = this.query_;
-        controllerObj.body = this.body;
-        controllerObj.session = this.session_;
-        controllerObj.cookie = this.cookieManager;
-        controllerObj.param = this.routeMatchInfo_.params;
-        controllerObj.data = this.data_;
-        controllerObj.file = this.file;
-        var methodArgsValues = injector_handler_InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
-        controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, methodArgsValues).then(this.onResultFromController.bind(this)).catch(this.onErrorOccured.bind(this));
-    };
     RequestHandler.prototype.executeShieldsProtection_ = function () {
         var _this = this;
         return promise(function (res) {
@@ -2576,9 +2557,43 @@ var request_handler_RequestHandler = /** @class */ (function (_super) {
             });
         });
     };
+    RequestHandler.prototype.setControllerProps_ = function () {
+        var _a;
+        var constructorValues = injector_handler_InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
+        var controllerObj = new ((_a = this.routeMatchInfo_.controller).bind.apply(_a, [void 0].concat(constructorValues)))();
+        controllerObj.request = this.request;
+        controllerObj.response = this.response;
+        controllerObj.query = this.query_;
+        controllerObj.body = this.body;
+        controllerObj.session = this.session_;
+        controllerObj.cookie = this.cookieManager;
+        controllerObj.param = this.routeMatchInfo_.params;
+        controllerObj.data = this.data_;
+        controllerObj.file = this.file;
+        var methodArgsValues = injector_handler_InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        return controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, methodArgsValues);
+    };
     return RequestHandler;
 }(post_handler_PostHandler));
 
+if (FortGlobal.isProduction) {
+    request_handler_RequestHandler.prototype.runController_ = function () {
+        this.setControllerProps_().then(this.onResultFromController.bind(this)).catch(this.onErrorOccured.bind(this));
+    };
+}
+else {
+    request_handler_RequestHandler.prototype.runController_ = function () {
+        var result = this.setControllerProps_();
+        if (Promise.resolve(result) !== result) {
+            this.onErrorOccured({
+                message: "Wrong implementation - worker does not return promise"
+            });
+        }
+        else {
+            result.then(this.onResultFromController.bind(this)).catch(this.onErrorOccured.bind(this));
+        }
+    };
+}
 
 // CONCATENATED MODULE: ./src/handlers/index.ts
 

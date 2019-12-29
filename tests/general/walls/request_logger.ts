@@ -20,7 +20,10 @@ export class RequestLogger extends Wall {
         this.injectionValue = `${this.injectionValue} ${value}`;
         this.response.setHeader('Custom-Header-From-Incoming-Wall', '1');
         this.data.ip = this.getIP(this.request);
-        this.data.reqCount = ++reqCount;
+        if (this.query.doNotCount !== 'true') {
+            this.data.reqCount = ++reqCount;
+        }
+
         // console.log("reqcount", this.data.reqCount);
         // console.log("body", this.body);
         // console.log("query", this.query);

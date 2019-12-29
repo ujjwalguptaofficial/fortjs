@@ -7,7 +7,8 @@ let {
     forbiddenText,
     methodNotAllowedMsg,
     badRequestMsg,
-    removeSpaceAndNewLine
+    removeSpaceAndNewLine,
+    isProduction
 } = require('./common');
 
 const cookie = require('cookie');
@@ -97,5 +98,20 @@ describe("/default", () => {
             expect(res.text).to.be.equal(value);
             done();
         })
+    })
+
+    it('/workerWithoutPromise', (done) => {
+        console.log('isProduction', isProduction)
+        if (isProduction) {
+            done();
+        }
+        else {
+            request.get('/workerWithoutPromise?doNotCount=true').type("application/json").end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(500);
+                expect(res.text).to.contains('message : Wrong implementation - worker does not return promise')
+                done();
+            })
+        }
     })
 });

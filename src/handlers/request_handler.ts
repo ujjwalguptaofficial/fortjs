@@ -74,23 +74,7 @@ export class RequestHandler extends PostHandler {
         });
     }
 
-    private runController_() {
-        const constructorValues = InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
-        const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
-        controllerObj.request = this.request as HttpRequest;
-        controllerObj.response = this.response;
-        controllerObj.query = this.query_;
-        controllerObj.body = this.body;
-        controllerObj.session = this.session_;
-        controllerObj.cookie = this.cookieManager;
-        controllerObj.param = this.routeMatchInfo_.params;
-        controllerObj.data = this.data_;
-        controllerObj.file = this.file;
-        const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
-        controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues).then(
-            this.onResultFromController.bind(this)
-        ).catch(this.onErrorOccured.bind(this));
-    }
+    runController_;
 
     private executeShieldsProtection_(): Promise<boolean> {
         return promise((res) => {
@@ -300,4 +284,42 @@ export class RequestHandler extends PostHandler {
         this.setPreHeader_();
         this.execute_();
     }
+
+    setControllerProps_() {
+        const constructorValues = InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
+        const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
+        controllerObj.request = this.request as HttpRequest;
+        controllerObj.response = this.response;
+        controllerObj.query = this.query_;
+        controllerObj.body = this.body;
+        controllerObj.session = this.session_;
+        controllerObj.cookie = this.cookieManager;
+        controllerObj.param = this.routeMatchInfo_.params;
+        controllerObj.data = this.data_;
+        controllerObj.file = this.file;
+        const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        return controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues);
+    }
+}
+if (FortGlobal.isProduction) {
+    RequestHandler.prototype.runController_ = function () {
+        this.setControllerProps_().then(
+            this.onResultFromController.bind(this)
+        ).catch(this.onErrorOccured.bind(this));
+    };
+}
+else {
+    RequestHandler.prototype.runController_ = function () {
+        const result = this.setControllerProps_();
+        if (Promise.resolve(result) !== result) {
+            this.onErrorOccured({
+                message: "Wrong implementation - worker does not return promise"
+            } as IException);
+        }
+        else {
+            result.then(
+                this.onResultFromController.bind(this)
+            ).catch(this.onErrorOccured.bind(this));
+        }
+    };
 }

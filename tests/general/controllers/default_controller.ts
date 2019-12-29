@@ -53,4 +53,10 @@ export class DefaultController extends Controller {
             }
         ]);
     }
+
+    @Worker()
+    workerWithoutPromise() {
+        console.error('query', this.query);
+        return textResult("I am a worker without promise");
+    }
 }
