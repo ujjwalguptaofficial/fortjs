@@ -1788,45 +1788,13 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
             else {
                 _this.onNotFound();
             }
-        }).catch(function (ex) {
-            _this.onErrorOccured(ex);
-        });
+        }).catch(this.onErrorOccured.bind(this));
     };
     FileHandler.prototype.isClientHasFreshFile_ = function (lastModified, etagValue) {
         return external_fresh_(this.request.headers, {
             'etag': etagValue,
             'last-modified': lastModified
         });
-    };
-    FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
-        var _this = this;
-        this.runWallOutgoing().then(function () {
-            var mimeType;
-            if (fileType[0] === '.') { // its extension
-                mimeType = getMimeTypeFromExtension(fileType);
-            }
-            else { // mime type
-                mimeType = fileType;
-            }
-            if (FortGlobal.isProduction === true) {
-                var lastModified = fileInfo.mtime.toUTCString();
-                var eTagValue = external_etag_(fileInfo, {
-                    weak: FortGlobal.eTag.type === ETag_Type.Weak
-                });
-                if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                    _this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                    _this.response.end();
-                }
-                else {
-                    _this.response.setHeader('Etag', eTagValue);
-                    _this.response.setHeader('Last-Modified', lastModified);
-                    _this.sendFileAsResponse_(filePath, mimeType);
-                }
-            }
-            else {
-                _this.sendFileAsResponse_(filePath, mimeType);
-            }
-        }).catch(this.onErrorOccured.bind(this));
     };
     FileHandler.prototype.sendFileAsResponse_ = function (filePath, mimeType) {
         var _a;
@@ -1838,9 +1806,41 @@ var file_handler_FileHandler = /** @class */ (function (_super) {
         readStream.on('error', this.onErrorOccured.bind(this));
         readStream.pipe(this.response);
     };
+    FileHandler.prototype.getMimeTypeFromFileType_ = function (fileType) {
+        return fileType[0] === '.' ? getMimeTypeFromExtension(fileType) :
+            fileType;
+    };
     return FileHandler;
 }(request_handler_helper_RequestHandlerHelper));
 
+if (FortGlobal.isProduction) {
+    file_handler_FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
+        var _this = this;
+        this.runWallOutgoing().then(function () {
+            var lastModified = fileInfo.mtime.toUTCString();
+            var eTagValue = external_etag_(fileInfo, {
+                weak: FortGlobal.eTag.type === ETag_Type.Weak
+            });
+            if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                _this.response.statusCode = HTTP_STATUS_CODE.NotModified;
+                _this.response.end();
+            }
+            else {
+                _this.response.setHeader('Etag', eTagValue);
+                _this.response.setHeader('Last-Modified', lastModified);
+                _this.sendFileAsResponse_(filePath, _this.getMimeTypeFromFileType_(fileType));
+            }
+        }).catch(this.onErrorOccured.bind(this));
+    };
+}
+else {
+    file_handler_FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
+        var _this = this;
+        this.runWallOutgoing().then(function () {
+            _this.sendFileAsResponse_(filePath, _this.getMimeTypeFromFileType_(fileType));
+        }).catch(this.onErrorOccured.bind(this));
+    };
+}
 
 // CONCATENATED MODULE: ./src/handlers/controller_result_handler.ts
 var controller_result_handler_extends = (undefined && undefined.__extends) || (function () {

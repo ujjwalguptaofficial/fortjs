@@ -1,4 +1,6 @@
+/// <reference types="node" />
 import { RequestHandlerHelper } from "./request_handler_helper";
+import * as Fs from "fs";
 export declare class FileHandler extends RequestHandlerHelper {
     private getFileInfoFromUrl_;
     private getFileStats_;
@@ -17,6 +19,7 @@ export declare class FileHandler extends RequestHandlerHelper {
      */
     private handleFileRequestForPath_;
     private isClientHasFreshFile_;
-    private sendFile_;
     private sendFileAsResponse_;
+    private getMimeTypeFromFileType_;
+    sendFile_: (filePath: string, fileType: string, fileInfo: Fs.Stats) => any;
 }
