@@ -384,11 +384,8 @@ var log_helper_LogHelper = /** @class */ (function () {
 
 
 var renderView;
-if (FortGlobal.isDevelopment === true) {
+if (FortGlobal.isProduction === true) {
     renderView = function (viewName, model) {
-        if (FortGlobal.viewEngine == null) {
-            new log_helper_LogHelper(ERROR_TYPE.UndefinedViewEngine).throw();
-        }
         return FortGlobal.viewEngine.render({
             view: viewName,
             model: model
@@ -397,6 +394,9 @@ if (FortGlobal.isDevelopment === true) {
 }
 else {
     renderView = function (viewName, model) {
+        if (FortGlobal.viewEngine == null) {
+            new log_helper_LogHelper(ERROR_TYPE.UndefinedViewEngine).throw();
+        }
         return FortGlobal.viewEngine.render({
             view: viewName,
             model: model
