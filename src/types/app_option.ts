@@ -32,14 +32,6 @@ export type AppOption = {
     sessionTimeOut?: number;
 
     /**
-     * path to be used when url is root.
-     *
-     * @type {string}
-     * @memberof IAppOption
-     */
-    defaultPath?: string;
-
-    /**
      * name of application - default is fort. Visible in header and cookie.
      * Change the name if you dont want to let users know the framework name.
      *

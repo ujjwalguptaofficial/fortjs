@@ -8,7 +8,7 @@ const contentsPath = Path.join(__dirname, "../contents");
 export const initServer = async () => {
     const app = new App();
     await app.create({
-        defaultPath: "/default",
+        // defaultPath: "/default",
         port: 8080,
         folders: [{
             alias: "/contents",
