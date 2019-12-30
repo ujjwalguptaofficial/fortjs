@@ -7,7 +7,9 @@ export declare abstract class SessionProvider {
     abstract isExist(key: string): Promise<boolean>;
     abstract getAll(): Promise<SessionValue[]>;
     abstract set(key: string, val: any): Promise<void>;
-    abstract setMany(values: SessionValue[]): Promise<void[]>;
+    abstract setMany(values: {
+        [key: string]: any;
+    }): Promise<void[]>;
     abstract remove(key: string): Promise<void>;
     abstract clear(): Promise<void>;
     protected createSession(): void;

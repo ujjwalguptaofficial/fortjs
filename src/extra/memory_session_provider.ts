@@ -63,10 +63,10 @@ export class MemorySessionProvider extends SessionProvider {
         }
     }
 
-    setMany(values: SessionValue[]) {
+    setMany(values: { [key: string]: any }) {
         return Promise.all(
-            values.map(async (value) => {
-                return await this.set(value.key, value.value);
+            Object.keys(values).map((key) => {
+                return this.set(key, values[key]);
             })
         );
     }
@@ -86,6 +86,6 @@ export class MemorySessionProvider extends SessionProvider {
             sessionValues.splice(index, 1);
         }
         // expire cookie in browser
-        this.destroySession();
+        await this.destroySession();
     }
 }

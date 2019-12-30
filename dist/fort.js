@@ -2825,14 +2825,9 @@ var MemorySessionProvider = /** @class */ (function (_super) {
     };
     MemorySessionProvider.prototype.setMany = function (values) {
         var _this = this;
-        return Promise.all(values.map(function (value) { return memory_session_provider_awaiter(_this, void 0, void 0, function () {
-            return memory_session_provider_generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.set(value.key, value.value)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); }));
+        return Promise.all(Object.keys(values).map(function (key) {
+            return _this.set(key, values[key]);
+        }));
     };
     MemorySessionProvider.prototype.remove = function (key) {
         return memory_session_provider_awaiter(this, void 0, void 0, function () {
@@ -2853,13 +2848,19 @@ var MemorySessionProvider = /** @class */ (function (_super) {
             var index;
             var _this = this;
             return memory_session_provider_generator(this, function (_a) {
-                index = sessionValues.findIndex(function (q) { return q.identifier === _this.sessionId; });
-                if (index >= 0) {
-                    sessionValues.splice(index, 1);
+                switch (_a.label) {
+                    case 0:
+                        index = sessionValues.findIndex(function (q) { return q.identifier === _this.sessionId; });
+                        if (index >= 0) {
+                            sessionValues.splice(index, 1);
+                        }
+                        // expire cookie in browser
+                        return [4 /*yield*/, this.destroySession()];
+                    case 1:
+                        // expire cookie in browser
+                        _a.sent();
+                        return [2 /*return*/];
                 }
-                // expire cookie in browser
-                this.destroySession();
-                return [2 /*return*/];
             });
         });
     };

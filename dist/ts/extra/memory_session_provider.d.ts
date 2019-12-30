@@ -5,7 +5,9 @@ export declare class MemorySessionProvider extends SessionProvider {
     isExist(key: string): Promise<boolean>;
     getAll(): Promise<SessionValue[]>;
     set(key: string, val: any): Promise<void>;
-    setMany(values: SessionValue[]): Promise<void[]>;
+    setMany(values: {
+        [key: string]: any;
+    }): Promise<void[]>;
     remove(key: string): Promise<void>;
     clear(): Promise<void>;
 }
