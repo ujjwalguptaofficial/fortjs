@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.11.0 - 29/12/2019
+ * @license :fortjs - V1.11.0 - 30/12/2019
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2019 @Ujjwal Gupta; Licensed MIT
  */
@@ -2756,7 +2756,9 @@ var MemorySessionProvider = /** @class */ (function (_super) {
                 savedSession = sessionValues.find(function (q) { return q.identifier === _this.sessionId; });
                 if (savedSession != null) {
                     session = savedSession.datas.find(function (qry) { return qry.key === key; });
-                    return [2 /*return*/, session.value];
+                    if (session != null) {
+                        return [2 /*return*/, session.value];
+                    }
                 }
                 return [2 /*return*/, null];
             });

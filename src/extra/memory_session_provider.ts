@@ -16,7 +16,7 @@ export class MemorySessionProvider extends SessionProvider {
         const savedSession = sessionValues.find(q => q.identifier === this.sessionId);
         if (savedSession != null) {
             const session = savedSession.datas.find(qry => qry.key === key);
-            return session.value;
+            if (session != null) { return session.value; }
         }
         return null;
     }
