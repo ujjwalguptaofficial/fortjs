@@ -8,6 +8,17 @@ const cookie = require('cookie');
 
 describe("/session", () => {
 
+    it("/getAll", (done) => {
+        request.get('/session/getAll').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body.value).to.be.deep.equal({
+            });
+            done();
+        })
+    })
+
     it("/exist", (done) => {
         request.get('/session/exist?key=id').end((err, res) => {
             expect(err).to.be.null;
@@ -173,13 +184,6 @@ describe("/session", () => {
                 "ujjwal": "gupta"
             });
             done();
-            // request.get('/session/get?key=ujjwal').end((err, res) => {
-            //     expect(err).to.be.null;
-            //     expect(res).to.have.status(200);
-            //     expect(res).to.have.header('content-type', 'application/json');
-            //     expect(res.body).to.be.deep.equal({ value: 'gupta' });
-            //     done();
-            // })
         })
     })
 

@@ -1,7 +1,4 @@
-
 import { SessionProvider } from "../abstracts/session_provider";
-import { SessionValue } from "../types/session_value";
-
 
 const sessionValues: { [identifier: string]: any } = {};
 
@@ -9,25 +6,17 @@ export class MemorySessionProvider extends SessionProvider {
 
     async get(key: string) {
         const savedSession = sessionValues[this.sessionId];
-        if (savedSession != null) {
-            return savedSession[key];
-        }
-        return null;
+        return savedSession != null ? savedSession[key] : null;
     }
 
     async isExist(key: string) {
         const savedValue = sessionValues[this.sessionId];
-        if (savedValue == null) {
-            return false;
-        }
-        else {
-            return savedValue[key] != null;
-        }
+        return savedValue == null ? false : savedValue[key] != null;
     }
 
     async getAll() {
         const savedValue = sessionValues[this.sessionId];
-        return savedValue == null ? [] : savedValue;
+        return savedValue == null ? {} : savedValue;
     }
 
     async set(key: string, val: any) {
@@ -60,7 +49,6 @@ export class MemorySessionProvider extends SessionProvider {
 
     async clear() {
         // remove session values
-        const savedValue = sessionValues[this.sessionId];
         delete sessionValues[this.sessionId];
         // expire cookie in browser
         await this.destroySession();

@@ -1081,10 +1081,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
             var savedSession;
             return __generator(this, function (_a) {
                 savedSession = sessionValues[this.sessionId];
-                if (savedSession != null) {
-                    return [2 /*return*/, savedSession[key]];
-                }
-                return [2 /*return*/, null];
+                return [2 /*return*/, savedSession != null ? savedSession[key] : null];
             });
         });
     };
@@ -1093,13 +1090,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
             var savedValue;
             return __generator(this, function (_a) {
                 savedValue = sessionValues[this.sessionId];
-                if (savedValue == null) {
-                    return [2 /*return*/, false];
-                }
-                else {
-                    return [2 /*return*/, savedValue[key] != null];
-                }
-                return [2 /*return*/];
+                return [2 /*return*/, savedValue == null ? false : savedValue[key] != null];
             });
         });
     };
@@ -1108,7 +1099,7 @@ var MemorySessionProvider = /** @class */ (function (_super) {
             var savedValue;
             return __generator(this, function (_a) {
                 savedValue = sessionValues[this.sessionId];
-                return [2 /*return*/, savedValue == null ? [] : savedValue];
+                return [2 /*return*/, savedValue == null ? {} : savedValue];
             });
         });
     };
@@ -1150,11 +1141,10 @@ var MemorySessionProvider = /** @class */ (function (_super) {
     };
     MemorySessionProvider.prototype.clear = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var savedValue;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        savedValue = sessionValues[this.sessionId];
+                        // remove session values
                         delete sessionValues[this.sessionId];
                         // expire cookie in browser
                         return [4 /*yield*/, this.destroySession()];
