@@ -60,4 +60,18 @@ export class SessionController extends Controller {
         await this.session.remove(key);
         return textResult("removed");
     }
+
+    @Worker()
+    async clear() {
+        await this.session.clear();
+        return textResult("cleared");
+    }
+
+    @Worker()
+    async getAll() {
+        const valueFromSession = await this.session.getAll();
+        return jsonResult({
+            value: valueFromSession
+        });
+    }
 }

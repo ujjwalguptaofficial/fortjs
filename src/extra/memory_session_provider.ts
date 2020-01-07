@@ -3,52 +3,43 @@ import { SessionProvider } from "../abstracts/session_provider";
 import { SessionValue } from "../types/session_value";
 
 
-interface ISessionValueFormat {
-    identifier: string;
-    datas: { [key: string]: any };
-}
-
-const sessionValues: ISessionValueFormat[] = [];
+const sessionValues: { [identifier: string]: any } = {};
 
 export class MemorySessionProvider extends SessionProvider {
 
     async get(key: string) {
-        console.log('key', key, 'session Values', sessionValues);
-        const savedSession = sessionValues.find(q => q.identifier === this.sessionId);
+        const savedSession = sessionValues[this.sessionId];
         if (savedSession != null) {
-            return savedSession.datas[key];
+            return savedSession[key];
         }
         return null;
     }
 
     async isExist(key: string) {
-        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        const savedValue = sessionValues[this.sessionId];
         if (savedValue == null) {
             return false;
         }
         else {
-            return savedValue.datas[key] != null;
+            return savedValue[key] != null;
         }
     }
 
     async getAll() {
-        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
-        return savedValue == null ? [] : savedValue.datas;
+        const savedValue = sessionValues[this.sessionId];
+        return savedValue == null ? [] : savedValue;
     }
 
     async set(key: string, val: any) {
-        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        const savedValue = sessionValues[this.sessionId];
         if (savedValue == null) {
             this.createSession();
-            sessionValues.push({
-                identifier: this.sessionId,
-                datas: {
-                    [key]: val
-                }
-            });
+            sessionValues[this.sessionId] = {
+                [key]: val
+            };
         }
         else {
-            savedValue.datas[key] = val;
+            savedValue[key] = val;
         }
     }
 
@@ -61,18 +52,16 @@ export class MemorySessionProvider extends SessionProvider {
     }
 
     async remove(key: string) {
-        const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
+        const savedValue = sessionValues[this.sessionId];
         if (savedValue != null) {
-            savedValue.datas[key] = null;
+            savedValue[key] = null;
         }
     }
 
     async clear() {
         // remove session values
-        const index = sessionValues.findIndex(q => q.identifier === this.sessionId);
-        if (index >= 0) {
-            sessionValues.splice(index, 1);
-        }
+        const savedValue = sessionValues[this.sessionId];
+        delete sessionValues[this.sessionId];
         // expire cookie in browser
         await this.destroySession();
     }

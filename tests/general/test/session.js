@@ -41,6 +41,19 @@ describe("/session", () => {
         })
     })
 
+    it("/session/add", (done) => {
+        const payload = {
+            key: "hello",
+            value: "world"
+        }
+        request.post('/session/add').send(payload).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.eql("saved");
+            done();
+        })
+    })
+
     it("/exist", (done) => {
         request.get('/session/exist?key=id').end((err, res) => {
             expect(err).to.be.null;
@@ -124,6 +137,16 @@ describe("/session", () => {
         })
     })
 
+    it("/get for key which is not deleted", (done) => {
+        request.get('/session/get?key=hello').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body).to.be.deep.equal({ value: 'world' });
+            done();
+        })
+    })
+
     it("/session/add-many", (done) => {
         const payload = {
             key1: "hello",
@@ -139,19 +162,49 @@ describe("/session", () => {
         })
     })
 
-    it("/get", (done) => {
+    it("/getAll", (done) => {
+        request.get('/session/getAll').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body.value).to.be.deep.equal({
+                "hello": "world",
+                "id": null,
+                "ujjwal": "gupta"
+            });
+            done();
+            // request.get('/session/get?key=ujjwal').end((err, res) => {
+            //     expect(err).to.be.null;
+            //     expect(res).to.have.status(200);
+            //     expect(res).to.have.header('content-type', 'application/json');
+            //     expect(res.body).to.be.deep.equal({ value: 'gupta' });
+            //     done();
+            // })
+        })
+    })
+
+    it("/clear", (done) => {
+        request.del('/session/clear').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.an("string").equal("cleared")
+            done();
+        })
+    })
+
+    it("/get after clearing", (done) => {
         request.get('/session/get?key=hello').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'application/json');
-            expect(res.body).to.be.deep.equal({ value: 'world' });
+            expect(res.body).to.be.deep.equal({ value: null });
 
 
             request.get('/session/get?key=ujjwal').end((err, res) => {
                 expect(err).to.be.null;
                 expect(res).to.have.status(200);
                 expect(res).to.have.header('content-type', 'application/json');
-                expect(res.body).to.be.deep.equal({ value: 'gupta' });
+                expect(res.body).to.be.deep.equal({ value: null });
                 done();
             })
         })
