@@ -11,11 +11,12 @@
   },
   "displayName": "FortJs",
   "keywords": [
+    "component based",
+    "MVC",
     "node",
     "framework",
     "typescript",
-    "es6",
-    "full stack"
+    "es6"
   ],
   "scripts": {
     "lint": "tslint src/**/*.ts",
