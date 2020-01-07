@@ -96,7 +96,7 @@ describe("/session", () => {
 
 
     it("/remove", (done) => {
-        request.del('/session/remove').end((err, res) => {
+        request.del('/session/remove?key=id').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.text).to.be.an("string").equal("removed")
@@ -155,6 +155,5 @@ describe("/session", () => {
                 done();
             })
         })
-
     })
 });

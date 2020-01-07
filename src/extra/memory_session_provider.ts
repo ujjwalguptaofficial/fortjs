@@ -5,7 +5,7 @@ import { SessionValue } from "../types/session_value";
 
 interface ISessionValueFormat {
     identifier: string;
-    datas: SessionValue[];
+    datas: { [key: string]: any };
 }
 
 const sessionValues: ISessionValueFormat[] = [];
@@ -13,10 +13,10 @@ const sessionValues: ISessionValueFormat[] = [];
 export class MemorySessionProvider extends SessionProvider {
 
     async get(key: string) {
+        console.log('key', key, 'session Values', sessionValues);
         const savedSession = sessionValues.find(q => q.identifier === this.sessionId);
         if (savedSession != null) {
-            const session = savedSession.datas.find(qry => qry.key === key);
-            if (session != null) { return session.value; }
+            return savedSession.datas[key];
         }
         return null;
     }
@@ -27,8 +27,7 @@ export class MemorySessionProvider extends SessionProvider {
             return false;
         }
         else {
-            const index = savedValue.datas.findIndex(qry => qry.key === key);
-            return index >= 0;
+            return savedValue.datas[key] != null;
         }
     }
 
@@ -43,23 +42,13 @@ export class MemorySessionProvider extends SessionProvider {
             this.createSession();
             sessionValues.push({
                 identifier: this.sessionId,
-                datas: [{
-                    key: key,
-                    value: val
-                }]
+                datas: {
+                    [key]: val
+                }
             });
         }
         else {
-            const savedSessionData = savedValue.datas.find(q => q.key === key);
-            if (savedSessionData == null) {
-                savedValue.datas.push({
-                    key: key,
-                    value: val
-                });
-            }
-            else {
-                savedSessionData.value = val;
-            }
+            savedValue.datas[key] = val;
         }
     }
 
@@ -74,8 +63,7 @@ export class MemorySessionProvider extends SessionProvider {
     async remove(key: string) {
         const savedValue = sessionValues.find(q => q.identifier === this.sessionId);
         if (savedValue != null) {
-            const index = savedValue.datas.findIndex(q => q.key === key);
-            savedValue.datas.splice(index, 1);
+            savedValue.datas[key] = null;
         }
     }
 
