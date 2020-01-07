@@ -8,7 +8,9 @@ import {
 export const routes = [{
     path: "/*",
     controller: DefaultController
-}, {
+}, 
+{
     path: "/user",
     controller: UserController
-}]
+}
+]

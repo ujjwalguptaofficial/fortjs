@@ -80,6 +80,7 @@ export class RouteHandler {
     }
 
     static addWorker(newWorker: WorkerInfo, className: string) {
+
         const workerName = newWorker.workerName;
         const route = routerCollection[className];
         if (route == null) {
@@ -102,12 +103,14 @@ export class RouteHandler {
             }
             else {
                 savedAction.methodsAllowed = newWorker.methodsAllowed;
-                savedAction.pattern = route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
+                savedAction.pattern = getActionPattern(route, savedAction.pattern);
+                // route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
         }
     }
 
     static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
+
         const route = routerCollection[className];
         const pattern = workerName.toLowerCase();
         if (route == null) {
