@@ -48,13 +48,15 @@ export class RouteHandler {
         }
     }
 
-    static get defaultRoute() {
+    static getDefaultRoute() {
         for (const controllerName in routerCollection) {
             if (routerCollection[controllerName].path === '/*') {
                 return routerCollection[controllerName];
             }
         }
     }
+
+    static defaultRoute: RouteInfo;
 
     static addToRouterCollection(value: ParentRoute) {
         const route = routerCollection[value.controller.name];

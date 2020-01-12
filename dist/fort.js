@@ -3145,17 +3145,13 @@ var RouteHandler = /** @class */ (function () {
                 return state_1.value;
         }
     };
-    Object.defineProperty(RouteHandler, "defaultRoute", {
-        get: function () {
-            for (var controllerName in routerCollection) {
-                if (routerCollection[controllerName].path === '/*') {
-                    return routerCollection[controllerName];
-                }
+    RouteHandler.getDefaultRoute = function () {
+        for (var controllerName in routerCollection) {
+            if (routerCollection[controllerName].path === '/*') {
+                return routerCollection[controllerName];
             }
-        },
-        enumerable: true,
-        configurable: true
-    });
+        }
+    };
     RouteHandler.addToRouterCollection = function (value) {
         var route = routerCollection[value.controller.name];
         if (route == null) {
@@ -4875,10 +4871,10 @@ var Fort = /** @class */ (function () {
         this.routes.forEach(function (route) {
             // route.path = removeFirstSlash(route.path);
             route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["removeLastSlash"])(route.path);
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
             if (route.path === "/*") {
                 isDefaultRouteExist = true;
             }
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
         });
         if (isDefaultRouteExist === false) {
             _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection({
@@ -4909,6 +4905,8 @@ var Fort = /** @class */ (function () {
                     rej(err);
                 }
             }).once('listening', function () {
+                // set default route
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute = _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].getDefaultRoute();
                 res();
             }).listen(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port);
         });

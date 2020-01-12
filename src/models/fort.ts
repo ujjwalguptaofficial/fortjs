@@ -12,7 +12,7 @@ import { GenericSessionProvider, GenericXmlParser, GenericController } from "../
 import { isNull, isNullOrEmpty, isArray } from "../utils";
 import { Logger } from "./logger";
 import * as path from "path";
- 
+
 export class Fort {
 
     logger: Logger;
@@ -102,10 +102,10 @@ export class Fort {
         this.routes.forEach(route => {
             // route.path = removeFirstSlash(route.path);
             route.path = removeLastSlash(route.path);
+            RouteHandler.addToRouterCollection(route);
             if (route.path === "/*") {
                 isDefaultRouteExist = true;
             }
-            RouteHandler.addToRouterCollection(route);
         });
         if (isDefaultRouteExist === false) {
             RouteHandler.addToRouterCollection({
@@ -113,6 +113,7 @@ export class Fort {
                 path: "/*"
             });
         }
+
         if (option.folders != null) {
             // remove / from files routes
             option.folders.forEach(folder => {
@@ -138,6 +139,8 @@ export class Fort {
                     rej(err);
                 }
             }).once('listening', () => {
+                // set default route
+                RouteHandler.defaultRoute = RouteHandler.getDefaultRoute();
                 res();
             }).listen(FortGlobal.port);
         });
