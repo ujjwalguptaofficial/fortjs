@@ -72,25 +72,6 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     matchedRoute.controller = route.controller;
     matchedRoute.controllerName = route.controllerName;
     const urlPartLength = urlParts.length;
-    // if (urlPartLength === 2) { // url does not have action path
-    //     const pattern = `${route.path}/`;
-    //     Object.keys(route.workers).every(workerName => {
-    //         const worker = route.workers[workerName];
-    //         if (worker.pattern === pattern) {
-    //             if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
-    //                 matchedRoute.workerInfo = worker;
-    //                 matchedRoute.params = {};
-    //                 matchedRoute.shields = route.shields;
-    //                 return false;
-    //             }
-    //             else {
-    //                 matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
-    //             }
-    //         }
-    //         return true;
-    //     });
-    // }
-    // else {
     const regex1 = /{(.*)}(?!.)/;
     const regex2 = /{(.*)}\.(\w+)(?!.)/;
     Object.keys(route.workers).every(workerName => {
@@ -137,7 +118,6 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
         }
         return true;
     });
-    // }
     if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
@@ -146,15 +126,9 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
 };
 
 export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {
-    // if (url !== "/") {
     url = removeLastSlash(url);
-    // }
-
     const urlParts = url.split("/");
-    const firstPart = urlParts[1];
     let route = RouteHandler.findControllerFromPath(urlParts);
-    //RouteHandler.findControllerFromPath(firstPart);
-
     if (route == null) {
         route = RouteHandler.defaultRoute;
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);

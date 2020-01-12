@@ -3127,12 +3127,6 @@ var RouteHandler = /** @class */ (function () {
     });
     RouteHandler.findControllerFromPath = function (urlParts) {
         var _loop_1 = function (controllerName) {
-            // if (routerCollection[controllerName].path === path) {
-            //     return routerCollection[controllerName];
-            // }
-            // const urlPartLength = urlParts.length;
-            // const regex1 = /{(.*)}(?!.)/;
-            // const regex2 = /{(.*)}\.(\w+)(?!.)/;
             var isMatched = false;
             var controller = routerCollection[controllerName];
             var patternSplit = controller.path.split("/");
@@ -4068,25 +4062,6 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
     matchedRoute.controller = route.controller;
     matchedRoute.controllerName = route.controllerName;
     var urlPartLength = urlParts.length;
-    // if (urlPartLength === 2) { // url does not have action path
-    //     const pattern = `${route.path}/`;
-    //     Object.keys(route.workers).every(workerName => {
-    //         const worker = route.workers[workerName];
-    //         if (worker.pattern === pattern) {
-    //             if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
-    //                 matchedRoute.workerInfo = worker;
-    //                 matchedRoute.params = {};
-    //                 matchedRoute.shields = route.shields;
-    //                 return false;
-    //             }
-    //             else {
-    //                 matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
-    //             }
-    //         }
-    //         return true;
-    //     });
-    // }
-    // else {
     var regex1 = /{(.*)}(?!.)/;
     var regex2 = /{(.*)}\.(\w+)(?!.)/;
     Object.keys(route.workers).every(function (workerName) {
@@ -4133,20 +4108,15 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
         }
         return true;
     });
-    // }
     if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     return matchedRoute;
 };
 function parseAndMatchRoute(url, httpMethod) {
-    // if (url !== "/") {
     url = Object(___WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(url);
-    // }
     var urlParts = url.split("/");
-    var firstPart = urlParts[1];
     var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(urlParts);
-    //RouteHandler.findControllerFromPath(firstPart);
     if (route == null) {
         route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute;
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);

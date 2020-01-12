@@ -33,12 +33,6 @@ export class RouteHandler {
 
     static findControllerFromPath(urlParts: string[]) {
         for (const controllerName in routerCollection) {
-            // if (routerCollection[controllerName].path === path) {
-            //     return routerCollection[controllerName];
-            // }
-            // const urlPartLength = urlParts.length;
-            // const regex1 = /{(.*)}(?!.)/;
-            // const regex2 = /{(.*)}\.(\w+)(?!.)/;
             let isMatched = false;
             const controller = routerCollection[controllerName];
             const patternSplit = controller.path.split("/");
@@ -51,42 +45,6 @@ export class RouteHandler {
             if (isMatched) {
                 return controller;
             }
-            // urlParts.every((urlPart, i) => {
-            //     if (urlPart !== patternSplit[i]) {
-            //         const regMatch1 = patternSplit[i].match(regex1);
-            //         const regMatch2 = patternSplit[i].match(regex2);
-            //         if (regMatch1 != null) {
-            //             params[regMatch1[1]] = urlPart;
-            //         }
-            //         else if (regMatch2 != null) {
-            //             const splitByDot = urlPart.split(".");
-            //             if (splitByDot[1] === regMatch2[2]) {
-            //                 params[regMatch2[1]] = splitByDot[0];
-            //             }
-            //             else {
-            //                 isMatched = false;
-            //                 return false;
-            //             }
-            //         }
-            //         else {
-            //             isMatched = false;
-            //             return false;
-            //         }
-            //     }
-            //     return true;
-            // });
-            // if (isMatched === true) {
-            //     if (controller.methodsAllowed.indexOf(httpMethod) >= 0) {
-            //         matchedRoute.workerInfo = controller;
-            //         matchedRoute.params = params;
-            //         matchedRoute.shields = route.shields;
-            //         return false;
-            //     }
-            //     else {
-            //         matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...controller.methodsAllowed];
-            //     }
-            // }
-            // return true;
         }
     }
 
