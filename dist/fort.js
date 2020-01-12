@@ -3994,105 +3994,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! . */ "./src/helpers/index.ts");
 
 
-var checkRouteInWorkerForDefaultRoute = function (route, httpMethod, urlParts) {
+var regex1 = /{(.*)}(?!.)/;
+var regex2 = /{(.*)}\.(\w+)(?!.)/;
+var checkRouteInWorker = function (route, httpMethod, urlParts) {
     var matchedRoute = {
-        allowedHttpMethod: []
+        allowedHttpMethod: [],
+        controller: route.controller,
+        controllerName: route.controllerName
     };
-    matchedRoute.controller = route.controller;
-    matchedRoute.controllerName = route.controllerName;
     var urlPartLength = urlParts.length;
-    var regex1 = /{(.*)}(?!.)/;
-    var regex2 = /{(.*)}\.(\w+)(?!.)/;
     Object.keys(route.workers).every(function (workerName) {
-        var routeActionInfo = route.workers[workerName];
-        var patternSplit = routeActionInfo.pattern.split("/");
+        var worker = route.workers[workerName];
+        var patternSplit = worker.pattern.split("/");
         if (urlPartLength === patternSplit.length) {
             var isMatched_1 = true;
             var params_1 = {};
             urlParts.every(function (urlPart, i) {
-                var regMatch1 = patternSplit[i].match(regex1);
-                var regMatch2 = patternSplit[i].match(regex2);
-                if (regMatch1 != null) {
-                    params_1[regMatch1[1]] = urlPart;
-                }
-                else if (regMatch2 != null) {
-                    var splitByDot = urlPart.split(".");
-                    if (splitByDot[1] === regMatch2[2]) {
-                        params_1[regMatch2[1]] = splitByDot[0];
+                if (urlPart !== patternSplit[i]) {
+                    var regMatch1 = patternSplit[i].match(regex1);
+                    var regMatch2 = patternSplit[i].match(regex2);
+                    if (regMatch1 != null) {
+                        params_1[regMatch1[1]] = urlPart;
+                    }
+                    else if (regMatch2 != null) {
+                        var splitByDot = urlPart.split(".");
+                        if (splitByDot[1] === regMatch2[2]) {
+                            params_1[regMatch2[1]] = splitByDot[0];
+                        }
+                        else {
+                            isMatched_1 = false;
+                            return false;
+                        }
                     }
                     else {
                         isMatched_1 = false;
                         return false;
                     }
                 }
-                else if (urlPart !== patternSplit[i]) {
-                    isMatched_1 = false;
-                    return false;
-                }
                 return true;
             });
             if (isMatched_1 === true) {
-                if (routeActionInfo.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.workerInfo = routeActionInfo;
-                    matchedRoute.params = params_1;
-                    matchedRoute.shields = route.shields;
-                    return false;
-                }
-                else {
-                    matchedRoute.allowedHttpMethod = matchedRoute.allowedHttpMethod.concat(routeActionInfo.methodsAllowed);
-                }
-            }
-        }
-        return true;
-    });
-    if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
-        return null;
-    }
-    return matchedRoute;
-};
-var checkRouteInWorker = function (route, httpMethod, urlParts) {
-    var matchedRoute = {
-        allowedHttpMethod: []
-    };
-    matchedRoute.controller = route.controller;
-    matchedRoute.controllerName = route.controllerName;
-    var urlPartLength = urlParts.length;
-    var regex1 = /{(.*)}(?!.)/;
-    var regex2 = /{(.*)}\.(\w+)(?!.)/;
-    Object.keys(route.workers).every(function (workerName) {
-        var worker = route.workers[workerName];
-        var patternSplit = worker.pattern.split("/");
-        if (urlPartLength === patternSplit.length) {
-            var isMatched_2 = true;
-            var params_2 = {};
-            urlParts.every(function (urlPart, i) {
-                if (urlPart !== patternSplit[i]) {
-                    var regMatch1 = patternSplit[i].match(regex1);
-                    var regMatch2 = patternSplit[i].match(regex2);
-                    if (regMatch1 != null) {
-                        params_2[regMatch1[1]] = urlPart;
-                    }
-                    else if (regMatch2 != null) {
-                        var splitByDot = urlPart.split(".");
-                        if (splitByDot[1] === regMatch2[2]) {
-                            params_2[regMatch2[1]] = splitByDot[0];
-                        }
-                        else {
-                            isMatched_2 = false;
-                            return false;
-                        }
-                    }
-                    else {
-                        isMatched_2 = false;
-                        return false;
-                    }
-                }
-                return true;
-            });
-            if (isMatched_2 === true) {
                 if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
                     matchedRoute.workerInfo = worker;
-                    matchedRoute.params = params_2;
+                    matchedRoute.params = params_1;
                     matchedRoute.shields = route.shields;
                     return false;
                 }
@@ -4113,8 +4057,7 @@ function parseAndMatchRoute(url, httpMethod) {
     var urlParts = url.split("/");
     var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(urlParts);
     if (route == null) {
-        route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute;
-        return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);
+        return checkRouteInWorker(_handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute, httpMethod, urlParts);
     }
     else {
         return checkRouteInWorker(route, httpMethod, urlParts);
