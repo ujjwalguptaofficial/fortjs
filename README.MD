@@ -2,7 +2,7 @@
  <img width="200px" src="logos/width_400.png"/>
 </p>
 
-Component based MVC web framework for nodejs targeting good code structures & modularity.
+Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting good code structures & modularity.
 
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![Build Status](https://travis-ci.org/ujjwalguptaofficial/fortjs.svg?branch=master)](https://travis-ci.org/ujjwalguptaofficial/fortjs)
