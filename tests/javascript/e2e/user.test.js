@@ -10,7 +10,7 @@ describe('/user', () => {
     beforeAll(async () => {
         app = await createApp();
         httpRequest = axios.create({
-            baseURL: process.env.APP_URL + "/user",
+            baseURL: process.env.APP_URL + "/api/v1/user",
             timeout: 1000
         });
     });

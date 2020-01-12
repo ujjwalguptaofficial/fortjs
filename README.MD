@@ -1,14 +1,12 @@
-<p align="center">
-<img  src="logos/width_400.png">
+<p style="margin-left:20px;">
+<span style="font-size:100px">FortJs</span> <img src="logos/width_400.png" style="margin-left:20px;width:200px;height:auto;"/>
 </p>
+
+Component based MVC web framework for nodejs targeting good code structures & modularity.
 
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![Build Status](https://travis-ci.org/ujjwalguptaofficial/fortjs.svg?branch=master)](https://travis-ci.org/ujjwalguptaofficial/fortjs)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
-
-# Overview
-
-Component based MVC web framework for nodejs targeting good code structures & modularity.
 
 # Why fortjs
 
@@ -37,7 +35,7 @@ You are very welcome to contribute, please see contributing guidelines - [[Contr
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. For sponsoring, contact author of this project.
 
-## Features to add
+## TODO 
 
 * Multiple format result from custom error handler
 * Retrieve dependency injection value from anywhere like in service

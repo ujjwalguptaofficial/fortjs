@@ -10,7 +10,7 @@ export const routes = [{
     controller: DefaultController
 }, 
 {
-    path: "/user",
+    path: "/api/v1/user",
     controller: UserController
 }
 ]
