@@ -39,6 +39,14 @@ export class RouteHandler {
         }
     }
 
+    static get defaultRoute() {
+        for (const controllerName in routerCollection) {
+            if (routerCollection[controllerName].path === '*') {
+                return routerCollection[controllerName];
+            }
+        }
+    }
+
     static addToRouterCollection(value: ParentRoute) {
         const route = routerCollection[value.controller.name];
         if (route == null) {
