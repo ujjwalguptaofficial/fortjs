@@ -4003,7 +4003,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
         controllerName: route.controllerName
     };
     var urlPartLength = urlParts.length;
-    Object.keys(route.workers).every(function (workerName) {
+    var _loop_1 = function (workerName) {
         var worker = route.workers[workerName];
         var patternSplit = worker.pattern.split("/");
         if (urlPartLength === patternSplit.length) {
@@ -4023,30 +4023,32 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
                         }
                         else {
                             isMatched_1 = false;
-                            return false;
                         }
                     }
                     else {
                         isMatched_1 = false;
-                        return false;
                     }
                 }
-                return true;
+                return isMatched_1;
             });
             if (isMatched_1 === true) {
                 if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
                     matchedRoute.workerInfo = worker;
                     matchedRoute.params = params_1;
                     matchedRoute.shields = route.shields;
-                    return false;
+                    return "break";
                 }
                 else {
                     matchedRoute.allowedHttpMethod = matchedRoute.allowedHttpMethod.concat(worker.methodsAllowed);
                 }
             }
         }
-        return true;
-    });
+    };
+    for (var workerName in route.workers) {
+        var state_1 = _loop_1(workerName);
+        if (state_1 === "break")
+            break;
+    }
     if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }

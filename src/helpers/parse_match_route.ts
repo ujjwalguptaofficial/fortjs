@@ -13,10 +13,9 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
         controller: route.controller,
         controllerName: route.controllerName
     } as RouteMatch;
-    
+
     const urlPartLength = urlParts.length;
-  
-    Object.keys(route.workers).every(workerName => {
+    for (const workerName in route.workers) {
         const worker = route.workers[workerName];
         const patternSplit = worker.pattern.split("/");
         if (urlPartLength === patternSplit.length) {
@@ -36,30 +35,27 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
                         }
                         else {
                             isMatched = false;
-                            return false;
                         }
                     }
                     else {
                         isMatched = false;
-                        return false;
                     }
                 }
-                return true;
+                return isMatched;
             });
             if (isMatched === true) {
                 if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
                     matchedRoute.workerInfo = worker;
                     matchedRoute.params = params;
                     matchedRoute.shields = route.shields;
-                    return false;
+                    break;
                 }
                 else {
                     matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
                 }
             }
         }
-        return true;
-    });
+    }
     if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
