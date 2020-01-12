@@ -22,6 +22,7 @@ require('./user');
 require('./session');
 require('./injection');
 require('./expect');
+require('./routes');
 require('./wall');
 // process.exit(0);
 

@@ -699,7 +699,7 @@ var Route = function (format) {
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
         // remove / from route
-        if (format != null && format !== '/') {
+        if (format != null) {
             format = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(format);
         }
         _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addPattern(format, className, methodName);
@@ -3104,7 +3104,7 @@ var pushRouterIntoCollection = function (route) {
     routerCollection[route.controllerName] = routeObj;
 };
 var getActionPattern = function (parentRoute, pattern) {
-    return (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNull"])(parentRoute.path) || parentRoute.path === "*") ? pattern : "/" + parentRoute.path + pattern;
+    return (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNull"])(parentRoute.path) || parentRoute.path === "/*") ? pattern : "" + parentRoute.path + pattern;
 };
 var RouteHandler = /** @class */ (function () {
     function RouteHandler() {
@@ -3125,17 +3125,36 @@ var RouteHandler = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    RouteHandler.findControllerFromPath = function (path) {
-        for (var controllerName in routerCollection) {
-            if (routerCollection[controllerName].path === path) {
-                return routerCollection[controllerName];
+    RouteHandler.findControllerFromPath = function (urlParts) {
+        var _loop_1 = function (controllerName) {
+            // if (routerCollection[controllerName].path === path) {
+            //     return routerCollection[controllerName];
+            // }
+            // const urlPartLength = urlParts.length;
+            // const regex1 = /{(.*)}(?!.)/;
+            // const regex2 = /{(.*)}\.(\w+)(?!.)/;
+            var isMatched = false;
+            var controller = routerCollection[controllerName];
+            var patternSplit = controller.path.split("/");
+            // const params = {};
+            patternSplit.every(function (patternPart, i) {
+                isMatched = patternPart === urlParts[i];
+                return isMatched;
+            });
+            if (isMatched) {
+                return { value: controller };
             }
+        };
+        for (var controllerName in routerCollection) {
+            var state_1 = _loop_1(controllerName);
+            if (typeof state_1 === "object")
+                return state_1.value;
         }
     };
     Object.defineProperty(RouteHandler, "defaultRoute", {
         get: function () {
             for (var controllerName in routerCollection) {
-                if (routerCollection[controllerName].path === '*') {
+                if (routerCollection[controllerName].path === '/*') {
                     return routerCollection[controllerName];
                 }
             }
@@ -4049,14 +4068,61 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
     matchedRoute.controller = route.controller;
     matchedRoute.controllerName = route.controllerName;
     var urlPartLength = urlParts.length;
-    if (urlPartLength === 2) { // url does not have action path
-        var pattern_1 = "/" + route.path + "/";
-        Object.keys(route.workers).every(function (workerName) {
-            var worker = route.workers[workerName];
-            if (worker.pattern === pattern_1) {
+    // if (urlPartLength === 2) { // url does not have action path
+    //     const pattern = `${route.path}/`;
+    //     Object.keys(route.workers).every(workerName => {
+    //         const worker = route.workers[workerName];
+    //         if (worker.pattern === pattern) {
+    //             if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
+    //                 matchedRoute.workerInfo = worker;
+    //                 matchedRoute.params = {};
+    //                 matchedRoute.shields = route.shields;
+    //                 return false;
+    //             }
+    //             else {
+    //                 matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
+    //             }
+    //         }
+    //         return true;
+    //     });
+    // }
+    // else {
+    var regex1 = /{(.*)}(?!.)/;
+    var regex2 = /{(.*)}\.(\w+)(?!.)/;
+    Object.keys(route.workers).every(function (workerName) {
+        var worker = route.workers[workerName];
+        var patternSplit = worker.pattern.split("/");
+        if (urlPartLength === patternSplit.length) {
+            var isMatched_2 = true;
+            var params_2 = {};
+            urlParts.every(function (urlPart, i) {
+                if (urlPart !== patternSplit[i]) {
+                    var regMatch1 = patternSplit[i].match(regex1);
+                    var regMatch2 = patternSplit[i].match(regex2);
+                    if (regMatch1 != null) {
+                        params_2[regMatch1[1]] = urlPart;
+                    }
+                    else if (regMatch2 != null) {
+                        var splitByDot = urlPart.split(".");
+                        if (splitByDot[1] === regMatch2[2]) {
+                            params_2[regMatch2[1]] = splitByDot[0];
+                        }
+                        else {
+                            isMatched_2 = false;
+                            return false;
+                        }
+                    }
+                    else {
+                        isMatched_2 = false;
+                        return false;
+                    }
+                }
+                return true;
+            });
+            if (isMatched_2 === true) {
                 if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
                     matchedRoute.workerInfo = worker;
-                    matchedRoute.params = {};
+                    matchedRoute.params = params_2;
                     matchedRoute.shields = route.shields;
                     return false;
                 }
@@ -4064,69 +4130,23 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
                     matchedRoute.allowedHttpMethod = matchedRoute.allowedHttpMethod.concat(worker.methodsAllowed);
                 }
             }
-            return true;
-        });
-    }
-    else {
-        var regex1_1 = /{(.*)}(?!.)/;
-        var regex2_1 = /{(.*)}\.(\w+)(?!.)/;
-        Object.keys(route.workers).every(function (workerName) {
-            var worker = route.workers[workerName];
-            var patternSplit = worker.pattern.split("/");
-            if (urlPartLength === patternSplit.length) {
-                var isMatched_2 = true;
-                var params_2 = {};
-                urlParts.every(function (urlPart, i) {
-                    if (urlPart !== patternSplit[i]) {
-                        var regMatch1 = patternSplit[i].match(regex1_1);
-                        var regMatch2 = patternSplit[i].match(regex2_1);
-                        if (regMatch1 != null) {
-                            params_2[regMatch1[1]] = urlPart;
-                        }
-                        else if (regMatch2 != null) {
-                            var splitByDot = urlPart.split(".");
-                            if (splitByDot[1] === regMatch2[2]) {
-                                params_2[regMatch2[1]] = splitByDot[0];
-                            }
-                            else {
-                                isMatched_2 = false;
-                                return false;
-                            }
-                        }
-                        else {
-                            isMatched_2 = false;
-                            return false;
-                        }
-                    }
-                    return true;
-                });
-                if (isMatched_2 === true) {
-                    if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
-                        matchedRoute.workerInfo = worker;
-                        matchedRoute.params = params_2;
-                        matchedRoute.shields = route.shields;
-                        return false;
-                    }
-                    else {
-                        matchedRoute.allowedHttpMethod = matchedRoute.allowedHttpMethod.concat(worker.methodsAllowed);
-                    }
-                }
-            }
-            return true;
-        });
-    }
+        }
+        return true;
+    });
+    // }
     if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     return matchedRoute;
 };
-var parseAndMatchRoute = function (url, httpMethod) {
-    if (url !== "/") {
-        url = Object(___WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(url);
-    }
+function parseAndMatchRoute(url, httpMethod) {
+    // if (url !== "/") {
+    url = Object(___WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(url);
+    // }
     var urlParts = url.split("/");
     var firstPart = urlParts[1];
-    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(firstPart);
+    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(urlParts);
+    //RouteHandler.findControllerFromPath(firstPart);
     if (route == null) {
         route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute;
         return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);
@@ -4134,7 +4154,7 @@ var parseAndMatchRoute = function (url, httpMethod) {
     else {
         return checkRouteInWorker(route, httpMethod, urlParts);
     }
-};
+}
 
 
 /***/ }),
@@ -4883,9 +4903,9 @@ var Fort = /** @class */ (function () {
         var isDefaultRouteExist = false;
         // removing / from routes
         this.routes.forEach(function (route) {
-            route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["removeFirstSlash"])(route.path);
+            // route.path = removeFirstSlash(route.path);
             route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["removeLastSlash"])(route.path);
-            if (route.path === "*") {
+            if (route.path === "/*") {
                 isDefaultRouteExist = true;
             }
             _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
@@ -4893,7 +4913,7 @@ var Fort = /** @class */ (function () {
         if (isDefaultRouteExist === false) {
             _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection({
                 controller: _generics__WEBPACK_IMPORTED_MODULE_8__["GenericController"],
-                path: "*"
+                path: "/*"
             });
         }
         if (option.folders != null) {

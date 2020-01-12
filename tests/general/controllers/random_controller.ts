@@ -3,6 +3,7 @@ import * as path from "path";
 
 
 export class RandomController extends Controller {
+    
     @DefaultWorker()
     async format() {
         const result = {

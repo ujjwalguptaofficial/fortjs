@@ -100,9 +100,9 @@ export class Fort {
         let isDefaultRouteExist = false;
         // removing / from routes
         this.routes.forEach(route => {
-            route.path = removeFirstSlash(route.path);
+            // route.path = removeFirstSlash(route.path);
             route.path = removeLastSlash(route.path);
-            if (route.path === "*") {
+            if (route.path === "/*") {
                 isDefaultRouteExist = true;
             }
             RouteHandler.addToRouterCollection(route);
@@ -110,7 +110,7 @@ export class Fort {
         if (isDefaultRouteExist === false) {
             RouteHandler.addToRouterCollection({
                 controller: GenericController,
-                path: "*"
+                path: "/*"
             });
         }
         if (option.folders != null) {
