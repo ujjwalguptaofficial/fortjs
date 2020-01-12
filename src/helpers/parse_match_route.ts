@@ -67,10 +67,6 @@ export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {
     url = removeLastSlash(url);
     const urlParts = url.split("/");
     const route = RouteHandler.findControllerFromPath(urlParts);
-    if (route == null) {
-        return checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts);
-    }
-    else {
-        return checkRouteInWorker(route, httpMethod, urlParts);
-    }
+    return route == null ? checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts) :
+        checkRouteInWorker(route, httpMethod, urlParts);
 }

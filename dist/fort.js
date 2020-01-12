@@ -4058,12 +4058,14 @@ function parseAndMatchRoute(url, httpMethod) {
     url = Object(___WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(url);
     var urlParts = url.split("/");
     var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(urlParts);
-    if (route == null) {
-        return checkRouteInWorker(_handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute, httpMethod, urlParts);
-    }
-    else {
-        return checkRouteInWorker(route, httpMethod, urlParts);
-    }
+    return route == null ? checkRouteInWorker(_handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute, httpMethod, urlParts) :
+        checkRouteInWorker(route, httpMethod, urlParts);
+    // if (route == null) {
+    //     return
+    // }
+    // else {
+    //     return checkRouteInWorker(route, httpMethod, urlParts);
+    // }
 }
 
 
