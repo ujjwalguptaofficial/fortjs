@@ -33,16 +33,15 @@ export class RouteHandler {
 
     static findControllerFromPath(urlParts: string[]) {
         for (const controllerName in routerCollection) {
-            let isMatched = false;
+            let isMatched: boolean = false as any;
             const controller = routerCollection[controllerName];
             const patternSplit = controller.path.split("/");
 
-            // const params = {};
             patternSplit.every((patternPart, i) => {
                 isMatched = patternPart === urlParts[i];
                 return isMatched;
             });
-            if (isMatched) {
+            if (isMatched === true) {
                 return controller;
             }
         }

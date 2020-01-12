@@ -3130,12 +3130,11 @@ var RouteHandler = /** @class */ (function () {
             var isMatched = false;
             var controller = routerCollection[controllerName];
             var patternSplit = controller.path.split("/");
-            // const params = {};
             patternSplit.every(function (patternPart, i) {
                 isMatched = patternPart === urlParts[i];
                 return isMatched;
             });
-            if (isMatched) {
+            if (isMatched === true) {
                 return { value: controller };
             }
         };

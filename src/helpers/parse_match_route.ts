@@ -128,10 +128,9 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
 export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {
     url = removeLastSlash(url);
     const urlParts = url.split("/");
-    let route = RouteHandler.findControllerFromPath(urlParts);
+    const route = RouteHandler.findControllerFromPath(urlParts);
     if (route == null) {
-        route = RouteHandler.defaultRoute;
-        return checkRouteInWorkerForDefaultRoute(route, httpMethod, urlParts);
+        return checkRouteInWorkerForDefaultRoute(RouteHandler.defaultRoute, httpMethod, urlParts);
     }
     else {
         return checkRouteInWorker(route, httpMethod, urlParts);
