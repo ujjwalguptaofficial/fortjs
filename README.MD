@@ -1,5 +1,5 @@
-<p style="margin-left:20px;">
-<span class="fortjs-title">FortJs</span> <img class="fortjs-logo" src="logos/width_400.png"/>
+<p align="center">
+ <img width="200px" src="logos/width_400.png"/>
 </p>
 
 Component based MVC web framework for nodejs targeting good code structures & modularity.
@@ -42,13 +42,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 * call another components from any type of components
 * Absolute route
 * Create a parser helper to parse body, query as an object using model
-
-<style>
-.fortjs-logo{
-    margin-left:20px;width:200px;height:auto;
-}
-
-.fortjs-title{
-    font-size:100px;
-}
-</style>
