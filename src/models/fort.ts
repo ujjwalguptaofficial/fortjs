@@ -104,10 +104,12 @@ export class Fort {
             route.path = removeLastSlash(route.path);
             RouteHandler.addToRouterCollection(route);
             if (route.path === "/*") {
+                RouteHandler.defaultRouteControllerName = route.controller.name;
                 isDefaultRouteExist = true;
             }
         });
         if (isDefaultRouteExist === false) {
+            RouteHandler.defaultRouteControllerName = GenericController.name;
             RouteHandler.addToRouterCollection({
                 controller: GenericController,
                 path: "/*"
@@ -140,7 +142,7 @@ export class Fort {
                 }
             }).once('listening', () => {
                 // set default route
-                RouteHandler.defaultRoute = RouteHandler.getDefaultRoute();
+                // RouteHandler.defaultRouteControllerName = RouteHandler.getDefaultRoute();
                 res();
             }).listen(FortGlobal.port);
         });
