@@ -1,13 +1,11 @@
-<p align="center">
- <img width="200px" src="logos/width_400.png"/>
-</p>
 
-Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting good code structures & modularity.
-
+<span style="font-size:100px">FortJs</span> <img width="200px" src="logos/width_400.png"/>
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![Build Status](https://travis-ci.org/ujjwalguptaofficial/fortjs.svg?branch=master)](https://travis-ci.org/ujjwalguptaofficial/fortjs)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
 
+
+Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting good code structures & modularity.
 # Why fortjs
 
 * Based on [Fort](https://github.com/ujjwalguptaofficial/fort) architecture.
