@@ -136,9 +136,7 @@ export class RequestHandlerHelper {
             errMessage = await new FortGlobal.errorHandler().onServerError(error);
         }
         catch (ex) {
-            this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
-            this.response.end(JsonHelper.stringify(ex));
-            return;
+            errMessage = JsonHelper.stringify(ex);
         }
         this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
         this.response.end(errMessage);

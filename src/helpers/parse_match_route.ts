@@ -22,6 +22,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
             let isMatched = true;
             const params = {};
             urlParts.every((urlPart, i) => {
+                // if not equal then check for regex match
                 if (urlPart !== patternSplit[i]) {
                     const regMatch1 = patternSplit[i].match(regex1);
                     const regMatch2 = patternSplit[i].match(regex2);
@@ -41,6 +42,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
                         isMatched = false;
                     }
                 }
+                // means its direct match
                 return isMatched;
             });
             if (isMatched === true) {
