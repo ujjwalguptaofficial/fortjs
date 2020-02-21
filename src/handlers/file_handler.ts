@@ -52,7 +52,7 @@ export class FileHandler extends RequestHandlerHelper {
         this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
-                    this.handleFileRequestForPath_(absolutePath);
+                    this.handleFileRequestForFolderPath_(absolutePath);
                 }
                 else {
                     this.sendFile_(absolutePath, fileType, fileInfo);
@@ -105,7 +105,7 @@ export class FileHandler extends RequestHandlerHelper {
      * @returns
      * @memberof FileHandler
      */
-    private handleFileRequestForPath_(absolutePath: string) {
+    private handleFileRequestForFolderPath_(absolutePath: string) {
         absolutePath = path.join(absolutePath, "index.html");
         this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
@@ -132,7 +132,9 @@ export class FileHandler extends RequestHandlerHelper {
         const readStream = Fs.createReadStream(filePath);
         // Handle non-existent file
         readStream.on('error', this.onErrorOccured.bind(this));
-        readStream.pipe(this.response);
+        readStream.on('open', () => {
+            readStream.pipe(this.response);
+        });
     }
 
     private getMimeTypeFromFileType_(fileType: string) {

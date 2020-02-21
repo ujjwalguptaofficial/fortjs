@@ -22,6 +22,11 @@ export class DefaultController extends Controller {
     }
 
     @Worker()
+    async index1(@Assign('Ujjwal') firstName: string, @Assign('Gupta') lastName: string) {
+        return textResult(firstName + lastName)
+    }
+
+    @Worker()
     async setSingletonValue() {
         this.singleton.props = this.query.value;
     }

@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.13.0 - 22/01/2020
+ * @license :fortjs - V1.13.0 - 21/02/2020
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2020 @Ujjwal Gupta; Licensed MIT
  */
@@ -1923,7 +1923,7 @@ var FileHandler = /** @class */ (function (_super) {
         this.getFileStats_(absolutePath).then(function (fileInfo) {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
-                    _this.handleFileRequestForPath_(absolutePath);
+                    _this.handleFileRequestForFolderPath_(absolutePath);
                 }
                 else {
                     _this.sendFile_(absolutePath, fileType, fileInfo);
@@ -1973,7 +1973,7 @@ var FileHandler = /** @class */ (function (_super) {
      * @returns
      * @memberof FileHandler
      */
-    FileHandler.prototype.handleFileRequestForPath_ = function (absolutePath) {
+    FileHandler.prototype.handleFileRequestForFolderPath_ = function (absolutePath) {
         var _this = this;
         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](absolutePath, "index.html");
         this.getFileStats_(absolutePath).then(function (fileInfo) {
@@ -1993,6 +1993,7 @@ var FileHandler = /** @class */ (function (_super) {
         });
     };
     FileHandler.prototype.sendFileAsResponse_ = function (filePath, mimeType) {
+        var _this = this;
         var _a;
         this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
             _a[_constant__WEBPACK_IMPORTED_MODULE_3__["__ContentType"]] = mimeType,
@@ -2000,7 +2001,9 @@ var FileHandler = /** @class */ (function (_super) {
         var readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](filePath);
         // Handle non-existent file
         readStream.on('error', this.onErrorOccured.bind(this));
-        readStream.pipe(this.response);
+        readStream.on('open', function () {
+            readStream.pipe(_this.response);
+        });
     };
     FileHandler.prototype.getMimeTypeFromFileType_ = function (fileType) {
         return fileType[0] === '.' ? Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType) :
@@ -3019,32 +3022,31 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.onErrorOccured = function (error) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b, errMessage, ex_6;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _a, errMessage, ex_6;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if (typeof error === 'string') {
                             error = {
                                 message: error
                             };
                         }
-                        _c.label = 1;
+                        _b.label = 1;
                     case 1:
-                        _c.trys.push([1, 4, , 5]);
+                        _b.trys.push([1, 4, , 5]);
                         return [4 /*yield*/, this.runWallOutgoing()];
                     case 2:
-                        _c.sent();
+                        _b.sent();
                         return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onServerError(error)];
                     case 3:
-                        errMessage = _c.sent();
+                        errMessage = _b.sent();
                         return [3 /*break*/, 5];
                     case 4:
-                        ex_6 = _c.sent();
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(_helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex_6));
-                        return [2 /*return*/];
+                        ex_6 = _b.sent();
+                        errMessage = _helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex_6);
+                        return [3 /*break*/, 5];
                     case 5:
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_b = {}, _b[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _b));
+                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
                         this.response.end(errMessage);
                         return [2 /*return*/];
                 }
@@ -4010,6 +4012,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
             var isMatched_1 = true;
             var params_1 = {};
             urlParts.every(function (urlPart, i) {
+                // if not equal then check for regex match
                 if (urlPart !== patternSplit[i]) {
                     var regMatch1 = patternSplit[i].match(regex1);
                     var regMatch2 = patternSplit[i].match(regex2);
@@ -4029,6 +4032,7 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
                         isMatched_1 = false;
                     }
                 }
+                // means its direct match
                 return isMatched_1;
             });
             if (isMatched_1 === true) {

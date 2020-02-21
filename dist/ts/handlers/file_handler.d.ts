@@ -17,7 +17,7 @@ export declare class FileHandler extends RequestHandlerHelper {
      * @returns
      * @memberof FileHandler
      */
-    private handleFileRequestForPath_;
+    private handleFileRequestForFolderPath_;
     private isClientHasFreshFile_;
     private sendFileAsResponse_;
     private getMimeTypeFromFileType_;

@@ -27,6 +27,18 @@ describe("/default", () => {
         })
     })
 
+    it('index1 - multiple assign', (done) => {
+        request.get('/index1').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            // due to content negotiation content type is text/plain
+            expect(res).to.have.header('content-type', 'text/plain');
+            expect(res.header['x-powered-by']).to.equal('fort');
+            expect(res.text).to.be.equal('UjjwalGupta');
+            done();
+        })
+    })
+
     it('default path with browserAccept', (done) => {
         request.get('/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
