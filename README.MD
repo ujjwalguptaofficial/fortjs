@@ -7,6 +7,7 @@ Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![Build Status](https://travis-ci.org/ujjwalguptaofficial/fortjs.svg?branch=master)](https://travis-ci.org/ujjwalguptaofficial/fortjs)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
+[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](http://fortjs.info/)
 
 # Why fortjs
 

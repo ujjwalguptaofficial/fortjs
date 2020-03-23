@@ -51,6 +51,6 @@ export class MemorySessionProvider extends SessionProvider {
         // remove session values
         delete sessionValues[this.sessionId];
         // expire cookie in browser
-        await this.destroySession();
+        this.destroySession();
     }
 }
