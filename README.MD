@@ -44,3 +44,4 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 * Absolute route
 * Create a parser helper to parse body, query as an object using model
 * Render view from absolute location
+* Return empty data when http header is option
