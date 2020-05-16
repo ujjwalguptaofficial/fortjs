@@ -54,7 +54,7 @@ export class ControllerResultHandler extends FileHandler {
         if (result.file.shouldDownload === true) {
             const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
             this.response.setHeader(
-                "Content-Disposition",
+                "content-disposition",
                 `attachment;filename=${fileName}${parsedPath.ext}`
             );
         }
