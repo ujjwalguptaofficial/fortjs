@@ -17,6 +17,7 @@ export class App extends Fort {
         super();
         this.routes = routes;
         this.viewEngine = FortViewEngine;
+        this.httpServer = require("http").createServer(this.onNewRequest).listen(4000);
     }
 }
 
