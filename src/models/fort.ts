@@ -129,10 +129,11 @@ export class Fort {
         }
 
         this.saveAppOption_(option);
+        if (this.httpServer != null) {
+            return;
+        }
         return promise((res, rej) => {
-            this.httpServer = http.createServer((request, response) => {
-                new RequestHandler(request, response).handle();
-            }).once("error", (err) => {
+            this.httpServer = http.createServer(this.onNewRequest).once("error", (err) => {
                 if ((err as any).code === 'EADDRINUSE') {
                     const error = new LogHelper(ERROR_TYPE.PortInUse, FortGlobal.port).get();
                     rej(error);
@@ -146,6 +147,10 @@ export class Fort {
                 res();
             }).listen(FortGlobal.port);
         });
+    }
+
+    onNewRequest(request, response) {
+        new RequestHandler(request, response).handle();
     }
 
     destroy(): Promise<void> {

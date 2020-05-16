@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.13.0 - 21/02/2020
+ * @license :fortjs - V1.13.0 - 16/05/2020
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2020 @Ujjwal Gupta; Licensed MIT
  */
@@ -1142,17 +1142,11 @@ var MemorySessionProvider = /** @class */ (function (_super) {
     MemorySessionProvider.prototype.clear = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        // remove session values
-                        delete sessionValues[this.sessionId];
-                        // expire cookie in browser
-                        return [4 /*yield*/, this.destroySession()];
-                    case 1:
-                        // expire cookie in browser
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                // remove session values
+                delete sessionValues[this.sessionId];
+                // expire cookie in browser
+                this.destroySession();
+                return [2 /*return*/];
             });
         });
     };
@@ -1769,7 +1763,7 @@ var ControllerResultHandler = /** @class */ (function (_super) {
         var parsedPath = path__WEBPACK_IMPORTED_MODULE_3__["parse"](result.file.filePath);
         if (result.file.shouldDownload === true) {
             var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-            this.response.setHeader("Content-Disposition", "attachment;filename=" + fileName + parsedPath.ext);
+            this.response.setHeader("content-disposition", "attachment;filename=" + fileName + parsedPath.ext);
         }
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     };
@@ -4839,10 +4833,11 @@ var Fort = /** @class */ (function () {
             });
         }
         this.saveAppOption_(option);
+        if (this.httpServer != null) {
+            return;
+        }
         return Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["promise"])(function (res, rej) {
-            _this.httpServer = http__WEBPACK_IMPORTED_MODULE_5__["createServer"](function (request, response) {
-                new _handlers__WEBPACK_IMPORTED_MODULE_0__["RequestHandler"](request, response).handle();
-            }).once("error", function (err) {
+            _this.httpServer = http__WEBPACK_IMPORTED_MODULE_5__["createServer"](_this.onNewRequest).once("error", function (err) {
                 if (err.code === 'EADDRINUSE') {
                     var error = new _helpers__WEBPACK_IMPORTED_MODULE_7__["LogHelper"](_enums__WEBPACK_IMPORTED_MODULE_6__["ERROR_TYPE"].PortInUse, _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port).get();
                     rej(error);
@@ -4856,6 +4851,9 @@ var Fort = /** @class */ (function () {
                 res();
             }).listen(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port);
         });
+    };
+    Fort.prototype.onNewRequest = function (request, response) {
+        new _handlers__WEBPACK_IMPORTED_MODULE_0__["RequestHandler"](request, response).handle();
     };
     Fort.prototype.destroy = function () {
         var _this = this;

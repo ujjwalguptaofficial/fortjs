@@ -38,5 +38,6 @@ export declare class Fort {
     resultMapper?: typeof ResultMapper;
     private saveAppOption_;
     create(option?: AppOption): Promise<void>;
+    onNewRequest(request: any, response: any): void;
     destroy(): Promise<void>;
 }
