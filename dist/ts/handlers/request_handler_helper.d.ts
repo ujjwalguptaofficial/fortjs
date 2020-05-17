@@ -21,4 +21,8 @@ export declare class RequestHandlerHelper {
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]): Promise<void>;
     protected onErrorOccured(error: any): Promise<void>;
     protected onRequestOptions(allowedMethods: HTTP_METHOD[]): Promise<void>;
+    private onResultFromError;
+    private returnResultFromError_;
+    protected handleFormatResult_(shouldSendFirstMatch?: boolean): void;
+    protected endResponse_(negotiateMimeType: MIME_TYPE): void;
 }

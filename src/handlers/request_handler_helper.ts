@@ -1,12 +1,12 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
 import * as http from "http";
-import { __ContentType } from "../constant";
+import { __ContentType, __SetCookie } from "../constant";
 import { FortGlobal } from "../fort_global";
 import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
-import { JsonHelper, reverseLoop } from "../helpers";
+import { JsonHelper, reverseLoop, textResult, getResultBasedOnMiMe } from "../helpers";
 import { isNull } from "../utils";
 import { InjectorHandler } from "./injector_handler";
 import { HttpResult, HttpFormatResult } from "../types";
@@ -63,16 +63,14 @@ export class RequestHandlerHelper {
     }
 
     protected async onBadRequest(error) {
-        let errMessage;
         try {
-            await this.runWallOutgoing();
-            errMessage = await new FortGlobal.errorHandler().onBadRequest(error);
+            this.onResultFromError(
+                await new FortGlobal.errorHandler().onBadRequest(error));
+
         }
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.response.writeHead(HTTP_STATUS_CODE.BadRequest, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(errMessage);
     }
 
     protected async onForbiddenRequest() {
@@ -157,4 +155,74 @@ export class RequestHandlerHelper {
         this.response.writeHead(HTTP_STATUS_CODE.Ok, { [__ContentType]: MIME_TYPE.Html });
         this.response.end("");
     }
+
+    private async  onResultFromError(result: HttpResult | HttpFormatResult) {
+        this.controllerResult_ = result;
+        try {
+            await this.runWallOutgoing();
+        } catch (ex) {
+            this.onErrorOccured(ex);
+            return;
+        }
+        this.returnResultFromError_();
+    }
+
+    private returnResultFromError_() {
+        const result = this.controllerResult_;
+        ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
+            this.response.setHeader(__SetCookie, value);
+        });
+
+        if ((result as HttpFormatResult).responseFormat == null) {
+            const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
+            const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+            if (negotiateMimeType != null) {
+                this.endResponse_(negotiateMimeType);
+            }
+            else {
+                this.onNotAcceptableRequest();
+            }
+        }
+        else {
+            this.handleFormatResult_(true);
+        }
+    }
+
+    protected handleFormatResult_(shouldSendFirstMatch = false) {
+        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat) as MIME_TYPE[]);
+        let key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
+        if (key != null) {
+            (this.controllerResult_ as HttpResult).responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
+            this.endResponse_(negotiateMimeType);
+        }
+        else if (shouldSendFirstMatch === true) {
+            key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat)[0];
+            (this.controllerResult_ as HttpResult).responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
+            this.endResponse_(negotiateMimeType);
+        }
+        else {
+            this.onNotAcceptableRequest();
+        }
+    }
+
+    protected endResponse_(negotiateMimeType: MIME_TYPE) {
+        let data;
+        try {
+            data = getResultBasedOnMiMe(negotiateMimeType,
+                (this.controllerResult_ as HttpResult).responseData
+                , (type: MIME_TYPE) => {
+                    negotiateMimeType = type;
+                }
+            );
+        }
+        catch (ex) {
+            this.onErrorOccured(ex);
+            return;
+        }
+
+        this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
+            { [__ContentType]: negotiateMimeType });
+        this.response.end(data);
+    }
+
 }

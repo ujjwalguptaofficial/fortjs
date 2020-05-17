@@ -47,7 +47,7 @@ describe("/expect", () => {
     })
 
     it('convert post with less data', (done) => {
-        request.post('/expect/convert').send({ id: 0, extra: "" }).end((err, res) => {
+        request.post('/expect/convert').send({ id: 0, extra: "" }).accept("text/html").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('content-type', 'text/html');

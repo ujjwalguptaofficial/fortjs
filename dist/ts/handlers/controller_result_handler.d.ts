@@ -1,9 +1,7 @@
 import { HttpResult, HttpFormatResult } from "../types";
 import { FileHandler } from "./file_handler";
 export declare class ControllerResultHandler extends FileHandler {
-    private endResponse_;
     private handleRedirectResult_;
-    private handleFormatResult_;
     private handleFileResult_;
     onTerminationFromWall(result: HttpResult | HttpFormatResult): void;
     private handleFinalResult_;

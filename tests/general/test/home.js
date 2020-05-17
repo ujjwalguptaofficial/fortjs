@@ -71,13 +71,15 @@ describe("/home", () => {
     })
 
     it('/post with no body', (done) => {
-        request.post('/home/post').type("application/json").end((err, res) => {
+        request.post('/home/post').type("application/json").accept("text/html").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('content-type', 'text/html');
             expect(res.text).to.contains("message : Post data is invalid");
             done();
         })
+
+        
     })
 
     it('/post with empty body', (done) => {

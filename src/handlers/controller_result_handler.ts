@@ -9,25 +9,7 @@ import { textResult, getResultBasedOnMiMe } from "../helpers";
 export class ControllerResultHandler extends FileHandler {
 
 
-    private endResponse_(negotiateMimeType: MIME_TYPE) {
-        let data;
-        try {
-            data = getResultBasedOnMiMe(negotiateMimeType,
-                (this.controllerResult_ as HttpResult).responseData
-                , (type: MIME_TYPE) => {
-                    negotiateMimeType = type;
-                }
-            );
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
-            return;
-        }
-
-        this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
-            { [__ContentType]: negotiateMimeType });
-        this.response.end(data);
-    }
+    
 
     private handleRedirectResult_() {
         // this.response.setHeader('Location', this.controllerResult_.responseData);
@@ -36,17 +18,7 @@ export class ControllerResultHandler extends FileHandler {
         this.response.end();
     }
 
-    private handleFormatResult_() {
-        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat) as MIME_TYPE[]);
-        const key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
-        if (key != null) {
-            (this.controllerResult_ as HttpResult).responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
-            this.endResponse_(negotiateMimeType);
-        }
-        else {
-            this.onNotAcceptableRequest();
-        }
-    }
+    
 
     private handleFileResult_() {
         const result = this.controllerResult_ as HttpResult;
