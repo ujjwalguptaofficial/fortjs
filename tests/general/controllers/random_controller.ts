@@ -3,7 +3,7 @@ import * as path from "path";
 
 
 export class RandomController extends Controller {
-    
+
     @DefaultWorker()
     async format() {
         const result = {
@@ -61,5 +61,11 @@ export class RandomController extends Controller {
     @Worker()
     async null() {
 
+    }
+
+    @Worker()
+    @Route("/status-override")
+    async statusCodeOverrideTestUsingWall() {
+        return textResult("ok", 202);
     }
 }

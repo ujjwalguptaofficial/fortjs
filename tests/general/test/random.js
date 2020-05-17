@@ -117,4 +117,14 @@ describe("/random", () => {
             done();
         })
     })
+
+    it("/status-override using wall", (done) => {
+        request.get('/random/status-override').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'text/plain');
+            expect(res.text).to.be.equal("overrided");
+            done();
+        })
+    })
 })

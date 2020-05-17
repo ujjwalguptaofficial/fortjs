@@ -2854,6 +2854,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var RequestHandlerHelper = /** @class */ (function () {
     function RequestHandlerHelper() {
         this.wallInstances = [];
+        this.controllerResult_ = {};
     }
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
         var _this = this;

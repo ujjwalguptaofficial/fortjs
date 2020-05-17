@@ -19,7 +19,7 @@ export class RequestHandlerHelper {
 
     protected wallInstances: Wall[] = [];
 
-    protected controllerResult_: HttpResult | HttpFormatResult;
+    protected controllerResult_: HttpResult | HttpFormatResult = {} as any;
 
     protected runWallOutgoing() {
         const outgoingResults: Array<Promise<any>> = [];
