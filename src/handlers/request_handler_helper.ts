@@ -63,27 +63,24 @@ export class RequestHandlerHelper {
     }
 
     protected async onBadRequest(error) {
+        let message;
         try {
-            this.onResultFromError(
-                await new FortGlobal.errorHandler().onBadRequest(error));
-
+            message = await new FortGlobal.errorHandler().onBadRequest(error);
         }
         catch (ex) {
             return this.onErrorOccured(ex);
         }
+        this.onResultFromError(message);
     }
 
     protected async onForbiddenRequest() {
-        let errMessage;
+        let message;
         try {
-            await this.runWallOutgoing();
-            errMessage = await new FortGlobal.errorHandler().onForbiddenRequest();
+            message = await new FortGlobal.errorHandler().onForbiddenRequest();
         }
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.response.writeHead(HTTP_STATUS_CODE.Forbidden, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(errMessage);
     }
 
     protected async onNotAcceptableRequest() {

@@ -32,11 +32,8 @@ export class ErrorHandler {
         return htmlResult(errMessage, HTTP_STATUS_CODE.BadRequest);
     }
 
-    onForbiddenRequest(): Promise<string> {
-        return promise<string>((resolve, reject) => {
-            const errMessage = `<h1>Forbidden</h1>`;
-            resolve(errMessage);
-        });
+    async  onForbiddenRequest(): Promise<HttpResult | HttpFormatResult> {
+        return htmlResult(`<h1>Forbidden</h1>`);
     }
 
     onNotAcceptableRequest(): Promise<string> {

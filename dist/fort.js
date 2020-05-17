@@ -2870,45 +2870,40 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.onBadRequest = function (error) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, ex_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var message, ex_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        _a = this.onResultFromError;
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onBadRequest(error)];
                     case 1:
-                        _a.apply(this, [_b.sent()]);
+                        message = _a.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        ex_1 = _b.sent();
+                        ex_1 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_1)];
-                    case 3: return [2 /*return*/];
+                    case 3:
+                        this.onResultFromError(message);
+                        return [2 /*return*/];
                 }
             });
         });
     };
     RequestHandlerHelper.prototype.onForbiddenRequest = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, ex_2;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var message, ex_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 1:
-                        _b.sent();
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onForbiddenRequest()];
+                    case 1:
+                        message = _a.sent();
+                        return [3 /*break*/, 3];
                     case 2:
-                        errMessage = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_2 = _b.sent();
+                        ex_2 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_2)];
-                    case 4:
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Forbidden, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
-                        return [2 /*return*/];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -4706,9 +4701,10 @@ var ErrorHandler = /** @class */ (function () {
         });
     };
     ErrorHandler.prototype.onForbiddenRequest = function () {
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
-            var errMessage = "<h1>Forbidden</h1>";
-            resolve(errMessage);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>Forbidden</h1>")];
+            });
         });
     };
     ErrorHandler.prototype.onNotAcceptableRequest = function () {
