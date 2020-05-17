@@ -1,7 +1,7 @@
 import { IException } from "../interfaces";
 import { HttpResult, HttpFormatResult } from "../types";
 export declare class ErrorHandler {
-    onServerError(ex: IException): Promise<string>;
+    onServerError(ex: IException): Promise<HttpResult | HttpFormatResult>;
     onBadRequest(ex: IException): Promise<HttpResult | HttpFormatResult>;
     onForbiddenRequest(): Promise<HttpResult | HttpFormatResult>;
     onNotAcceptableRequest(): Promise<HttpResult | HttpFormatResult>;

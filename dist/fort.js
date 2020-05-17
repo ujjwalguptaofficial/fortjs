@@ -2882,7 +2882,7 @@ var RequestHandlerHelper = /** @class */ (function () {
                         ex_1 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_1)];
                     case 3:
-                        this.onResultFromError(message);
+                        this.onResultFromError_(message);
                         return [2 /*return*/];
                 }
             });
@@ -2903,7 +2903,7 @@ var RequestHandlerHelper = /** @class */ (function () {
                         ex_2 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_2)];
                     case 3:
-                        this.onResultFromError(message);
+                        this.onResultFromError_(message);
                         return [2 /*return*/];
                 }
             });
@@ -2924,7 +2924,7 @@ var RequestHandlerHelper = /** @class */ (function () {
                         ex_3 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_3)];
                     case 3:
-                        this.onResultFromError(errMessage);
+                        this.onResultFromError_(errMessage);
                         return [2 /*return*/];
                 }
             });
@@ -2945,7 +2945,7 @@ var RequestHandlerHelper = /** @class */ (function () {
                         ex_4 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_4)];
                     case 3:
-                        this.onResultFromError(response);
+                        this.onResultFromError_(response);
                         return [2 /*return*/];
                 }
             });
@@ -2967,40 +2967,42 @@ var RequestHandlerHelper = /** @class */ (function () {
                         return [2 /*return*/, this.onErrorOccured(ex_5)];
                     case 3:
                         this.response.setHeader("Allow", allowedMethods.join(","));
-                        this.onResultFromError(response);
+                        this.onResultFromError_(response);
                         return [2 /*return*/];
                 }
             });
         });
     };
+    // it won't execute wallOutgoing as if there is some issue in wallOutgoing
+    // then it would become an infinite loop
+    // treat it as someone comes to your fort & they start doing things 
+    // which was not supposed to be done
+    // then you don't follow regular rules but just throw them from anywhere
     RequestHandlerHelper.prototype.onErrorOccured = function (error) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, ex_6;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var response, ex_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         if (typeof error === 'string') {
                             error = {
                                 message: error
                             };
                         }
-                        _b.label = 1;
+                        _a.label = 1;
                     case 1:
-                        _b.trys.push([1, 4, , 5]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 2:
-                        _b.sent();
+                        _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onServerError(error)];
+                    case 2:
+                        response = _a.sent();
+                        return [3 /*break*/, 4];
                     case 3:
-                        errMessage = _b.sent();
-                        return [3 /*break*/, 5];
+                        ex_6 = _a.sent();
+                        response = _helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex_6);
+                        return [3 /*break*/, 4];
                     case 4:
-                        ex_6 = _b.sent();
-                        errMessage = _helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex_6);
-                        return [3 /*break*/, 5];
-                    case 5:
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].InternalServerError, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
+                        this.controllerResult = response;
+                        this.returnResultFromError_();
                         return [2 /*return*/];
                 }
             });
@@ -3010,12 +3012,12 @@ var RequestHandlerHelper = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 this.response.setHeader("Allow", allowedMethods.join(","));
-                this.onResultFromError(Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])(""));
+                this.onResultFromError_(Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])(""));
                 return [2 /*return*/];
             });
         });
     };
-    RequestHandlerHelper.prototype.onResultFromError = function (result) {
+    RequestHandlerHelper.prototype.onResultFromError_ = function (result) {
         return __awaiter(this, void 0, void 0, function () {
             var ex_7;
             return __generator(this, function (_a) {
@@ -4646,15 +4648,18 @@ var ErrorHandler = /** @class */ (function () {
     function ErrorHandler() {
     }
     ErrorHandler.prototype.onServerError = function (ex) {
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
-            var errMessage = "<h1>internal server error</h1>\n            <h3>message : " + ex.message + "</h3>";
-            if (ex.stack) {
-                errMessage += "<p><b>stacktrace:</b> " + ex.stack + "</p>";
-            }
-            if (ex.type) {
-                errMessage += "<p><b>type:</b> " + ex.type + "</p>";
-            }
-            resolve(errMessage);
+        return __awaiter(this, void 0, void 0, function () {
+            var errMessage;
+            return __generator(this, function (_a) {
+                errMessage = "<h1>internal server error</h1>\n            <h3>message : " + ex.message + "</h3>";
+                if (ex.stack) {
+                    errMessage += "<p><b>stacktrace:</b> " + ex.stack + "</p>";
+                }
+                if (ex.type) {
+                    errMessage += "<p><b>type:</b> " + ex.type + "</p>";
+                }
+                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(errMessage, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].InternalServerError)];
+            });
         });
     };
     ErrorHandler.prototype.onBadRequest = function (ex) {

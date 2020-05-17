@@ -69,7 +69,7 @@ export class RequestHandlerHelper {
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.onResultFromError(message);
+        this.onResultFromError_(message);
     }
 
     protected async onForbiddenRequest() {
@@ -80,7 +80,7 @@ export class RequestHandlerHelper {
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.onResultFromError(message);
+        this.onResultFromError_(message);
     }
 
     protected async onNotAcceptableRequest() {
@@ -91,7 +91,7 @@ export class RequestHandlerHelper {
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.onResultFromError(errMessage);
+        this.onResultFromError_(errMessage);
     }
 
     protected async onNotFound() {
@@ -102,7 +102,7 @@ export class RequestHandlerHelper {
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.onResultFromError(response);
+        this.onResultFromError_(response);
     }
 
     protected async onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
@@ -114,33 +114,37 @@ export class RequestHandlerHelper {
             return this.onErrorOccured(ex);
         }
         this.response.setHeader("Allow", allowedMethods.join(","));
-        this.onResultFromError(response);
+        this.onResultFromError_(response);
     }
 
+    // it won't execute wallOutgoing as if there is some issue in wallOutgoing
+    // then it would become an infinite loop
+    // treat it as someone comes to your fort & they start doing things 
+    // which was not supposed to be done
+    // then you don't follow regular rules but just throw them from anywhere
     protected async onErrorOccured(error) {
         if (typeof error === 'string') {
             error = {
                 message: error
             } as IException;
         }
-        let errMessage;
+        let response;
         try {
-            await this.runWallOutgoing();
-            errMessage = await new FortGlobal.errorHandler().onServerError(error);
+            response = await new FortGlobal.errorHandler().onServerError(error);
         }
         catch (ex) {
-            errMessage = JsonHelper.stringify(ex);
+            response = JsonHelper.stringify(ex);
         }
-        this.response.writeHead(HTTP_STATUS_CODE.InternalServerError, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(errMessage);
+        this.controllerResult = response;
+        this.returnResultFromError_();
     }
 
     protected async onRequestOptions(allowedMethods: HTTP_METHOD[]) {
         this.response.setHeader("Allow", allowedMethods.join(","));
-        this.onResultFromError(textResult(""));
+        this.onResultFromError_(textResult(""));
     }
 
-    private async  onResultFromError(result: HttpResult | HttpFormatResult) {
+    private async  onResultFromError_(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
         try {
             await this.runWallOutgoing();

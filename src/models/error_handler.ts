@@ -4,18 +4,16 @@ import { HttpResult, HttpFormatResult } from "../types";
 import { HTTP_STATUS_CODE } from "../enums";
 
 export class ErrorHandler {
-    onServerError(ex: IException): Promise<string> {
-        return promise<string>((resolve, reject) => {
-            let errMessage = `<h1>internal server error</h1>
+    async  onServerError(ex: IException): Promise<HttpResult | HttpFormatResult> {
+        let errMessage = `<h1>internal server error</h1>
             <h3>message : ${ex.message}</h3>`;
-            if (ex.stack) {
-                errMessage += `<p><b>stacktrace:</b> ${ex.stack}</p>`;
-            }
-            if (ex.type) {
-                errMessage += `<p><b>type:</b> ${ex.type}</p>`;
-            }
-            resolve(errMessage);
-        });
+        if (ex.stack) {
+            errMessage += `<p><b>stacktrace:</b> ${ex.stack}</p>`;
+        }
+        if (ex.type) {
+            errMessage += `<p><b>type:</b> ${ex.type}</p>`;
+        }
+        return htmlResult(errMessage, HTTP_STATUS_CODE.InternalServerError);
     }
 
     async onBadRequest(ex: IException): Promise<HttpResult | HttpFormatResult> {
