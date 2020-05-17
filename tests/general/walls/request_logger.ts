@@ -42,8 +42,9 @@ export class RequestLogger extends Wall {
         this.response.setHeader('injection-result', this.injectionValue + ` ${value}`);
 
         if (result.statusCode === 202) {
-            result.statusCode = 200;
-            result.responseData = "overrided";
+            // result.statusCode = 200;
+            // result.responseData = "overrided";
+            Object.assign(result,textResult("overrided"))
         }
     }
 }
