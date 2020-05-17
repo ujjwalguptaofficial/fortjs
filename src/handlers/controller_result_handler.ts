@@ -4,7 +4,7 @@ import { __SetCookie, __ContentType } from "../constant";
 import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
-import { textResult, getResultBasedOnMiMe } from "../helpers";
+import { textResult } from "../helpers";
 
 export class ControllerResultHandler extends FileHandler {
 

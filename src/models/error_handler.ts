@@ -33,14 +33,11 @@ export class ErrorHandler {
     }
 
     async  onForbiddenRequest(): Promise<HttpResult | HttpFormatResult> {
-        return htmlResult(`<h1>Forbidden</h1>`);
+        return htmlResult(`<h1>Forbidden</h1>`, HTTP_STATUS_CODE.Forbidden);
     }
 
-    onNotAcceptableRequest(): Promise<string> {
-        return promise<string>((resolve, reject) => {
-            const errMessage = `<h1>Not Acceptable</h1>`;
-            resolve(errMessage);
-        });
+    async  onNotAcceptableRequest(): Promise<HttpResult | HttpFormatResult> {
+        return htmlResult(`<h1>Not Acceptable</h1>`, HTTP_STATUS_CODE.NotAcceptable);
     }
 
     onMethodNotAllowed(): Promise<string> {

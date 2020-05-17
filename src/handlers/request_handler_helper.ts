@@ -80,19 +80,18 @@ export class RequestHandlerHelper {
         catch (ex) {
             return this.onErrorOccured(ex);
         }
+        this.onResultFromError(message);
     }
 
     protected async onNotAcceptableRequest() {
         let errMessage;
         try {
-            await this.runWallOutgoing();
             errMessage = await new FortGlobal.errorHandler().onNotAcceptableRequest();
         }
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.response.writeHead(HTTP_STATUS_CODE.NotAcceptable, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(errMessage);
+        this.onResultFromError(errMessage);
     }
 
     protected async onNotFound() {
@@ -176,7 +175,7 @@ export class RequestHandlerHelper {
                 this.endResponse_(negotiateMimeType);
             }
             else {
-                this.onNotAcceptableRequest();
+                this.endResponse_(contentType);
             }
         }
         else {
