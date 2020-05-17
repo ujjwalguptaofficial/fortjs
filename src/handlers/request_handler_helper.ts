@@ -95,30 +95,26 @@ export class RequestHandlerHelper {
     }
 
     protected async onNotFound() {
-        let errMessage;
+        let response;
         try {
-            await this.runWallOutgoing();
-            errMessage = await new FortGlobal.errorHandler().onNotFound(this.request.url);
+            response = await new FortGlobal.errorHandler().onNotFound(this.request.url);
         }
         catch (ex) {
             return this.onErrorOccured(ex);
         }
-        this.response.writeHead(HTTP_STATUS_CODE.NotFound, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(errMessage);
+        this.onResultFromError(response);
     }
 
     protected async onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
-        let errMessage;
+        let response;
         try {
-            await this.runWallOutgoing();
-            errMessage = await new FortGlobal.errorHandler().onMethodNotAllowed();
+            response = await new FortGlobal.errorHandler().onMethodNotAllowed();
         }
         catch (ex) {
             return this.onErrorOccured(ex);
         }
         this.response.setHeader("Allow", allowedMethods.join(","));
-        this.response.writeHead(HTTP_STATUS_CODE.MethodNotAllowed, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end(errMessage);
+        this.onResultFromError(response);
     }
 
     protected async onErrorOccured(error) {

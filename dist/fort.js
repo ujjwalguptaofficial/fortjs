@@ -2932,24 +2932,20 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.onNotFound = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, ex_4;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var response, ex_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 1:
-                        _b.sent();
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onNotFound(this.request.url)];
+                    case 1:
+                        response = _a.sent();
+                        return [3 /*break*/, 3];
                     case 2:
-                        errMessage = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_4 = _b.sent();
+                        ex_4 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_4)];
-                    case 4:
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotFound, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
+                    case 3:
+                        this.onResultFromError(response);
                         return [2 /*return*/];
                 }
             });
@@ -2957,25 +2953,21 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, errMessage, ex_5;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var response, ex_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
-                        _b.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 1:
-                        _b.sent();
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onMethodNotAllowed()];
+                    case 1:
+                        response = _a.sent();
+                        return [3 /*break*/, 3];
                     case 2:
-                        errMessage = _b.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_5 = _b.sent();
+                        ex_5 = _a.sent();
                         return [2 /*return*/, this.onErrorOccured(ex_5)];
-                    case 4:
+                    case 3:
                         this.response.setHeader("Allow", allowedMethods.join(","));
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].MethodNotAllowed, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end(errMessage);
+                        this.onResultFromError(response);
                         return [2 /*return*/];
                 }
             });
@@ -4712,15 +4704,17 @@ var ErrorHandler = /** @class */ (function () {
         });
     };
     ErrorHandler.prototype.onMethodNotAllowed = function () {
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
-            var errMessage = "<h1>Method Not allowed.</h1>";
-            resolve(errMessage);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>Method Not allowed.</h1>", _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].MethodNotAllowed)];
+            });
         });
     };
     ErrorHandler.prototype.onNotFound = function (url) {
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["promise"])(function (resolve, reject) {
-            var errMessage = "<h1>The requested resource " + url + " was not found.</h1>";
-            resolve(errMessage);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>The requested resource " + url + " was not found.</h1>", _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].NotFound)];
+            });
         });
     };
     return ErrorHandler;

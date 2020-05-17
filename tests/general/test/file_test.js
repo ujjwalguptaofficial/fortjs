@@ -68,7 +68,7 @@ describe("/file test", () => {
     });
 
     it('invalid file', (done) => {
-        request.get('/fc.txt').end((err, res) => {
+        request.get('/fc.txt').accept("text/html").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(404);
             expect(res).to.have.header('content-type', 'text/html');

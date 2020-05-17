@@ -59,7 +59,7 @@ describe("/home", () => {
     })
 
     it('/text + http: post', (done) => {
-        request.post('/home/text').end((err, res) => {
+        request.post('/home/text').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(405);
             expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
@@ -79,7 +79,7 @@ describe("/home", () => {
             done();
         })
 
-        
+
     })
 
     it('/post with empty body', (done) => {
@@ -119,7 +119,7 @@ describe("/home", () => {
     });
 
     it('/post + http: get', (done) => {
-        request.get('/home/post').end((err, res) => {
+        request.get('/home/post').accept("text/html").end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(405);
             expect(res).to.have.header('content-type', 'text/html');

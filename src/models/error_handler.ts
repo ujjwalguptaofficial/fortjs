@@ -40,17 +40,11 @@ export class ErrorHandler {
         return htmlResult(`<h1>Not Acceptable</h1>`, HTTP_STATUS_CODE.NotAcceptable);
     }
 
-    onMethodNotAllowed(): Promise<string> {
-        return promise<string>((resolve, reject) => {
-            const errMessage = `<h1>Method Not allowed.</h1>`;
-            resolve(errMessage);
-        });
+    async onMethodNotAllowed(): Promise<HttpResult | HttpFormatResult> {
+        return htmlResult(`<h1>Method Not allowed.</h1>`, HTTP_STATUS_CODE.MethodNotAllowed);
     }
 
-    onNotFound(url: string): Promise<string> {
-        return promise<string>((resolve, reject) => {
-            const errMessage = `<h1>The requested resource ${url} was not found.</h1>`;
-            resolve(errMessage);
-        });
+    async onNotFound(url: string): Promise<HttpResult | HttpFormatResult> {
+        return htmlResult(`<h1>The requested resource ${url} was not found.</h1>`, HTTP_STATUS_CODE.NotFound);
     }
 }

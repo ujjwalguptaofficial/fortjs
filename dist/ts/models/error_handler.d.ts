@@ -5,6 +5,6 @@ export declare class ErrorHandler {
     onBadRequest(ex: IException): Promise<HttpResult | HttpFormatResult>;
     onForbiddenRequest(): Promise<HttpResult | HttpFormatResult>;
     onNotAcceptableRequest(): Promise<HttpResult | HttpFormatResult>;
-    onMethodNotAllowed(): Promise<string>;
-    onNotFound(url: string): Promise<string>;
+    onMethodNotAllowed(): Promise<HttpResult | HttpFormatResult>;
+    onNotFound(url: string): Promise<HttpResult | HttpFormatResult>;
 }
