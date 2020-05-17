@@ -7,7 +7,6 @@ import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
 import { JsonHelper, reverseLoop, textResult, getResultBasedOnMiMe } from "../helpers";
-import { isNull } from "../utils";
 import { InjectorHandler } from "./injector_handler";
 import { HttpResult, HttpFormatResult } from "../types";
 
@@ -19,14 +18,14 @@ export class RequestHandlerHelper {
 
     protected wallInstances: Wall[] = [];
 
-    protected controllerResult_: HttpResult | HttpFormatResult = {} as any;
+    protected controllerResult: HttpResult | HttpFormatResult = {} as any;
 
     protected runWallOutgoing() {
         const outgoingResults: Array<Promise<any>> = [];
         reverseLoop(this.wallInstances, (value: Wall) => {
             const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing');
             methodArgsValues.shift();
-            outgoingResults.push(value.onOutgoing(this.controllerResult_, ...methodArgsValues));
+            outgoingResults.push(value.onOutgoing(this.controllerResult, ...methodArgsValues));
         });
         return Promise.all(outgoingResults);
     }
@@ -154,7 +153,7 @@ export class RequestHandlerHelper {
     }
 
     private async  onResultFromError(result: HttpResult | HttpFormatResult) {
-        this.controllerResult_ = result;
+        this.controllerResult = result;
         try {
             await this.runWallOutgoing();
         } catch (ex) {
@@ -165,7 +164,7 @@ export class RequestHandlerHelper {
     }
 
     private returnResultFromError_() {
-        const result = this.controllerResult_;
+        const result = this.controllerResult;
         ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
             this.response.setHeader(__SetCookie, value);
         });
@@ -186,15 +185,15 @@ export class RequestHandlerHelper {
     }
 
     protected handleFormatResult_(shouldSendFirstMatch = false) {
-        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat) as MIME_TYPE[]);
-        let key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
+        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult as HttpFormatResult).responseFormat) as MIME_TYPE[]);
+        let key = Object.keys((this.controllerResult as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
         if (key != null) {
-            (this.controllerResult_ as HttpResult).responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
+            (this.controllerResult as HttpResult).responseData = (this.controllerResult as HttpFormatResult).responseFormat[key]();
             this.endResponse_(negotiateMimeType);
         }
         else if (shouldSendFirstMatch === true) {
-            key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat)[0];
-            (this.controllerResult_ as HttpResult).responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
+            key = Object.keys((this.controllerResult as HttpFormatResult).responseFormat)[0];
+            (this.controllerResult as HttpResult).responseData = (this.controllerResult as HttpFormatResult).responseFormat[key]();
             this.endResponse_(negotiateMimeType);
         }
         else {
@@ -206,7 +205,7 @@ export class RequestHandlerHelper {
         let data;
         try {
             data = getResultBasedOnMiMe(negotiateMimeType,
-                (this.controllerResult_ as HttpResult).responseData
+                (this.controllerResult as HttpResult).responseData
                 , (type: MIME_TYPE) => {
                     negotiateMimeType = type;
                 }
@@ -217,7 +216,7 @@ export class RequestHandlerHelper {
             return;
         }
 
-        this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
+        this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [__ContentType]: negotiateMimeType });
         this.response.end(data);
     }

@@ -1728,12 +1728,11 @@ var ControllerResultHandler = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ControllerResultHandler.prototype.handleRedirectResult_ = function () {
-        // this.response.setHeader('Location', this.controllerResult_.responseData);
-        this.response.writeHead(this.controllerResult_.statusCode || _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult_.responseData });
+        this.response.writeHead(this.controllerResult.statusCode || _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult.responseData });
         this.response.end();
     };
     ControllerResultHandler.prototype.handleFileResult_ = function () {
-        var result = this.controllerResult_;
+        var result = this.controllerResult;
         var parsedPath = path__WEBPACK_IMPORTED_MODULE_3__["parse"](result.file.filePath);
         if (result.file.shouldDownload === true) {
             var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
@@ -1742,12 +1741,12 @@ var ControllerResultHandler = /** @class */ (function (_super) {
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     };
     ControllerResultHandler.prototype.onTerminationFromWall = function (result) {
-        this.controllerResult_ = result;
+        this.controllerResult = result;
         this.handleFinalResult_();
     };
     ControllerResultHandler.prototype.handleFinalResult_ = function () {
         var _this = this;
-        var result = this.controllerResult_;
+        var result = this.controllerResult;
         this.cookieManager.responseCookie_.forEach(function (value) {
             _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
         });
@@ -1781,7 +1780,7 @@ var ControllerResultHandler = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.controllerResult_ = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
+                        this.controllerResult = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -2828,7 +2827,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 var RequestHandlerHelper = /** @class */ (function () {
     function RequestHandlerHelper() {
         this.wallInstances = [];
-        this.controllerResult_ = {};
+        this.controllerResult = {};
     }
     RequestHandlerHelper.prototype.runWallOutgoing = function () {
         var _this = this;
@@ -2836,7 +2835,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["reverseLoop"])(this.wallInstances, function (value) {
             var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_5__["InjectorHandler"].getMethodValues(value.constructor.name, 'onOutgoing');
             methodArgsValues.shift();
-            outgoingResults.push(value.onOutgoing.apply(value, [_this.controllerResult_].concat(methodArgsValues)));
+            outgoingResults.push(value.onOutgoing.apply(value, [_this.controllerResult].concat(methodArgsValues)));
         });
         return Promise.all(outgoingResults);
     };
@@ -3046,7 +3045,7 @@ var RequestHandlerHelper = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.controllerResult_ = result;
+                        this.controllerResult = result;
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -3067,7 +3066,7 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.returnResultFromError_ = function () {
         var _this = this;
-        var result = this.controllerResult_;
+        var result = this.controllerResult;
         this.cookieManager.responseCookie_.forEach(function (value) {
             _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_1__["__SetCookie"], value);
         });
@@ -3087,15 +3086,15 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.handleFormatResult_ = function (shouldSendFirstMatch) {
         if (shouldSendFirstMatch === void 0) { shouldSendFirstMatch = false; }
-        var negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult_.responseFormat));
-        var key = Object.keys(this.controllerResult_.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
+        var negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult.responseFormat));
+        var key = Object.keys(this.controllerResult.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
         if (key != null) {
-            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
+            this.controllerResult.responseData = this.controllerResult.responseFormat[key]();
             this.endResponse_(negotiateMimeType);
         }
         else if (shouldSendFirstMatch === true) {
-            key = Object.keys(this.controllerResult_.responseFormat)[0];
-            this.controllerResult_.responseData = this.controllerResult_.responseFormat[key]();
+            key = Object.keys(this.controllerResult.responseFormat)[0];
+            this.controllerResult.responseData = this.controllerResult.responseFormat[key]();
             this.endResponse_(negotiateMimeType);
         }
         else {
@@ -3106,7 +3105,7 @@ var RequestHandlerHelper = /** @class */ (function () {
         var _a;
         var data;
         try {
-            data = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["getResultBasedOnMiMe"])(negotiateMimeType, this.controllerResult_.responseData, function (type) {
+            data = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["getResultBasedOnMiMe"])(negotiateMimeType, this.controllerResult.responseData, function (type) {
                 negotiateMimeType = type;
             });
         }
@@ -3114,7 +3113,7 @@ var RequestHandlerHelper = /** @class */ (function () {
             this.onErrorOccured(ex);
             return;
         }
-        this.response.writeHead(this.controllerResult_.statusCode || _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = negotiateMimeType, _a));
+        this.response.writeHead(this.controllerResult.statusCode || _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = negotiateMimeType, _a));
         this.response.end(data);
     };
     return RequestHandlerHelper;

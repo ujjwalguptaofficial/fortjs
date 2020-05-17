@@ -8,20 +8,14 @@ import { textResult, getResultBasedOnMiMe } from "../helpers";
 
 export class ControllerResultHandler extends FileHandler {
 
-
-    
-
     private handleRedirectResult_() {
-        // this.response.setHeader('Location', this.controllerResult_.responseData);
-        this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
-            { 'Location': (this.controllerResult_ as HttpResult).responseData });
+        this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
+            { 'Location': (this.controllerResult as HttpResult).responseData });
         this.response.end();
     }
 
-    
-
     private handleFileResult_() {
-        const result = this.controllerResult_ as HttpResult;
+        const result = this.controllerResult as HttpResult;
         const parsedPath = path.parse(result.file.filePath);
         if (result.file.shouldDownload === true) {
             const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
@@ -34,12 +28,12 @@ export class ControllerResultHandler extends FileHandler {
     }
 
     onTerminationFromWall(result: HttpResult | HttpFormatResult) {
-        this.controllerResult_ = result;
+        this.controllerResult = result;
         this.handleFinalResult_();
     }
 
     private handleFinalResult_() {
-        const result = this.controllerResult_;
+        const result = this.controllerResult;
         ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
             this.response.setHeader(__SetCookie, value);
         });
@@ -69,9 +63,8 @@ export class ControllerResultHandler extends FileHandler {
         }
     }
 
-
     async  onResultFromController(result: HttpResult | HttpFormatResult) {
-        this.controllerResult_ = result || textResult("");
+        this.controllerResult = result || textResult("");
         try {
             await this.runWallOutgoing();
         } catch (ex) {
