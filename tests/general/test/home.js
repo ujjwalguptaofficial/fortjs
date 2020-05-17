@@ -130,7 +130,7 @@ describe("/home", () => {
     })
 
     it('/post + http method: option', (done) => {
-        request.options('/home/post').end((err, res) => {
+        request.options('/home/post').accept("text/html").end((err, res) => {
             console.log(res.header);
             expect(err).to.be.null;
             expect(res).to.have.status(200);

@@ -3008,30 +3008,16 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.onRequestOptions = function (allowedMethods) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, ex_7;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 1:
-                        _b.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_7 = _b.sent();
-                        return [2 /*return*/, this.onErrorOccured(ex_7)];
-                    case 3:
-                        this.response.setHeader("Allow", allowedMethods.join(","));
-                        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html, _a));
-                        this.response.end("");
-                        return [2 /*return*/];
-                }
+            return __generator(this, function (_a) {
+                this.response.setHeader("Allow", allowedMethods.join(","));
+                this.onResultFromError(Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])(""));
+                return [2 /*return*/];
             });
         });
     };
     RequestHandlerHelper.prototype.onResultFromError = function (result) {
         return __awaiter(this, void 0, void 0, function () {
-            var ex_8;
+            var ex_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -3044,8 +3030,8 @@ var RequestHandlerHelper = /** @class */ (function () {
                         _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        ex_8 = _a.sent();
-                        this.onErrorOccured(ex_8);
+                        ex_7 = _a.sent();
+                        this.onErrorOccured(ex_7);
                         return [2 /*return*/];
                     case 4:
                         this.returnResultFromError_();

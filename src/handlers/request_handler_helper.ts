@@ -136,15 +136,8 @@ export class RequestHandlerHelper {
     }
 
     protected async onRequestOptions(allowedMethods: HTTP_METHOD[]) {
-        try {
-            await this.runWallOutgoing();
-        }
-        catch (ex) {
-            return this.onErrorOccured(ex);
-        }
         this.response.setHeader("Allow", allowedMethods.join(","));
-        this.response.writeHead(HTTP_STATUS_CODE.Ok, { [__ContentType]: MIME_TYPE.Html });
-        this.response.end("");
+        this.onResultFromError(textResult(""));
     }
 
     private async  onResultFromError(result: HttpResult | HttpFormatResult) {
