@@ -9,6 +9,7 @@ import { IException } from "../interfaces";
 import { JsonHelper, reverseLoop } from "../helpers";
 import { isNull } from "../utils";
 import { InjectorHandler } from "./injector_handler";
+import { HttpResult, HttpFormatResult } from "../types";
 
 
 export class RequestHandlerHelper {
@@ -18,11 +19,14 @@ export class RequestHandlerHelper {
 
     protected wallInstances: Wall[] = [];
 
+    protected controllerResult_: HttpResult | HttpFormatResult;
+
     protected runWallOutgoing() {
         const outgoingResults: Array<Promise<any>> = [];
         reverseLoop(this.wallInstances, (value: Wall) => {
             const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing');
-            outgoingResults.push(value.onOutgoing(methodArgsValues));
+            methodArgsValues.shift();
+            outgoingResults.push(value.onOutgoing(this.controllerResult_, ...methodArgsValues));
         });
         return Promise.all(outgoingResults);
     }

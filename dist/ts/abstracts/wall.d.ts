@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse, HttpResult } from "../types";
+import { HttpRequest, HttpResponse, HttpResult, HttpFormatResult } from "../types";
 import { CookieManager, Logger } from "../models";
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
@@ -16,7 +16,7 @@ export declare abstract class Wall implements Controller {
     };
     readonly logger: Logger;
     abstract onIncoming(...args: any[]): Promise<HttpResult | void>;
-    onOutgoing(...args: any[]): Promise<any>;
+    onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args: any[]): Promise<any>;
     constructor(...args: any[]);
     initialize(data?: WallTestData): Controller;
 }

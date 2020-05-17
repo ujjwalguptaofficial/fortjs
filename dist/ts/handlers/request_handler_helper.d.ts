@@ -3,11 +3,13 @@ import { MIME_TYPE, HTTP_METHOD } from "../enums";
 import * as http from "http";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
+import { HttpResult, HttpFormatResult } from "../types";
 export declare class RequestHandlerHelper {
     protected cookieManager: CookieManager;
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
     protected wallInstances: Wall[];
+    protected controllerResult_: HttpResult | HttpFormatResult;
     protected runWallOutgoing(): Promise<any[]>;
     protected getContentTypeFromNegotiation(type: MIME_TYPE): MIME_TYPE;
     protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]): MIME_TYPE;

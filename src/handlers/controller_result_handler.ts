@@ -7,13 +7,13 @@ import * as path from 'path';
 import { textResult, getResultBasedOnMiMe } from "../helpers";
 
 export class ControllerResultHandler extends FileHandler {
-    private controllerResult_: HttpResult;
+
 
     private endResponse_(negotiateMimeType: MIME_TYPE) {
         let data;
         try {
             data = getResultBasedOnMiMe(negotiateMimeType,
-                this.controllerResult_.responseData
+                (this.controllerResult_ as HttpResult).responseData
                 , (type: MIME_TYPE) => {
                     negotiateMimeType = type;
                 }
@@ -30,9 +30,9 @@ export class ControllerResultHandler extends FileHandler {
     }
 
     private handleRedirectResult_() {
-        this.response.setHeader('Location', this.controllerResult_.responseData);
+        // this.response.setHeader('Location', this.controllerResult_.responseData);
         this.response.writeHead(this.controllerResult_.statusCode || HTTP_STATUS_CODE.Ok,
-            { 'Location': this.controllerResult_.responseData });
+            { 'Location': (this.controllerResult_ as HttpResult).responseData });
         this.response.end();
     }
 
@@ -40,7 +40,7 @@ export class ControllerResultHandler extends FileHandler {
         const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat) as MIME_TYPE[]);
         const key = Object.keys((this.controllerResult_ as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
         if (key != null) {
-            this.controllerResult_.responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
+            (this.controllerResult_ as HttpResult).responseData = (this.controllerResult_ as HttpFormatResult).responseFormat[key]();
             this.endResponse_(negotiateMimeType);
         }
         else {
@@ -49,7 +49,7 @@ export class ControllerResultHandler extends FileHandler {
     }
 
     private handleFileResult_() {
-        const result = this.controllerResult_;
+        const result = this.controllerResult_ as HttpResult;
         const parsedPath = path.parse(result.file.filePath);
         if (result.file.shouldDownload === true) {
             const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
@@ -62,13 +62,12 @@ export class ControllerResultHandler extends FileHandler {
     }
 
     onTerminationFromWall(result: HttpResult | HttpFormatResult) {
-        this.handleFinalResult_(result);
+        this.controllerResult_ = result;
+        this.handleFinalResult_();
     }
 
-    private handleFinalResult_(result: HttpResult | HttpFormatResult) {
-        result = result || textResult("");
-        this.controllerResult_ = result as HttpResult;
-
+    private handleFinalResult_() {
+        const result = this.controllerResult_;
         ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
             this.response.setHeader(__SetCookie, value);
         });
@@ -98,14 +97,15 @@ export class ControllerResultHandler extends FileHandler {
         }
     }
 
-    
+
     async  onResultFromController(result: HttpResult | HttpFormatResult) {
+        this.controllerResult_ = result || textResult("");
         try {
             await this.runWallOutgoing();
         } catch (ex) {
             this.onErrorOccured(ex);
             return;
         }
-        this.handleFinalResult_(result);
+        this.handleFinalResult_();
     }
 }

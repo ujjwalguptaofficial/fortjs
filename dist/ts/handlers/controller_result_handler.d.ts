@@ -1,7 +1,6 @@
 import { HttpResult, HttpFormatResult } from "../types";
 import { FileHandler } from "./file_handler";
 export declare class ControllerResultHandler extends FileHandler {
-    private controllerResult_;
     private endResponse_;
     private handleRedirectResult_;
     private handleFormatResult_;

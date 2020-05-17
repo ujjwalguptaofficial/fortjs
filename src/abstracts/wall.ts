@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse, HttpResult } from "../types";
+import { HttpRequest, HttpResponse, HttpResult, HttpFormatResult } from "../types";
 import { CookieManager, Logger } from "../models";
 import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
@@ -19,7 +19,8 @@ export abstract class Wall implements Controller {
     }
 
     abstract onIncoming(...args): Promise<HttpResult | void>;
-    async onOutgoing(...args) {
+
+    async onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args) {
         return null;
     }
 
