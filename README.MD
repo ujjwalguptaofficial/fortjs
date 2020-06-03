@@ -38,10 +38,17 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 
 ## TODO 
 
-* Multiple format result from custom error handler
 * Retrieve dependency injection value from anywhere like in service
 * call another components from any type of components
 * Absolute route
 * Create a parser helper to parse body, query as an object using model
 * Render view from absolute location
 * Return empty data when http header is option
+
+## 2.0 feature
+
+* Take Http request method in worker as arguments without array - @Worker("POST","GET")
+* Take Guards as arguments without array - @Guards(UserGuard)
+* Take Shields as arguments without array - @Shields(AuthenticationShield)
+* Use single Instance of fort similar to Shivneri for bootstrap process
+* Any others - feel free to add/ Send PR.
