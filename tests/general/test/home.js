@@ -131,7 +131,6 @@ describe("/home", () => {
 
     it('/post + http method: option', (done) => {
         request.options('/home/post').accept("text/html").end((err, res) => {
-            console.log(res.header);
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');
@@ -226,6 +225,16 @@ describe("/home", () => {
                 password: 'admin'
             }]
             expect(res.body).to.be.eql(user);
+            done();
+        });
+    });
+
+    it('/getUsers with http method option', (done) => {
+        request.options('/home/getUsers').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.eql({});
+            expect(res.text).to.be.eql("");
             done();
         });
     });
