@@ -3,6 +3,7 @@ import { CookieManager, FileManager, Logger } from "../models";
 import { SessionProvider } from ".";
 import { initController } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
+import { ComponentOption } from "./component_option";
 
 
 export abstract class Controller {
@@ -14,6 +15,10 @@ export abstract class Controller {
     cookie: CookieManager;
     param?: { [key: string]: string };
     data: { [key: string]: any };
+
+    get option(): ComponentOption {
+        return FortGlobal.componentOption;
+    }
 
     file?: FileManager;
     get logger(): Logger {

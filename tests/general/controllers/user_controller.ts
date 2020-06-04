@@ -41,7 +41,7 @@ export class UserController extends Controller {
             }
             else {
                 const user = this.service.getUser(userId);
-                if (user == null) {
+                if (this.option.isNull(user)) {
                     return textResult("invalid id");
                 }
                 return jsonResult(user);
@@ -115,7 +115,7 @@ export class UserController extends Controller {
 
     @Worker()
     @Route('/allow/me')
-    async allowMe(){
+    async allowMe() {
         return textResult("i am allowed");
     }
 }

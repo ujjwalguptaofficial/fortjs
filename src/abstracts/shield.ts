@@ -3,6 +3,7 @@ import { CookieManager, Logger } from "../models";
 import { SessionProvider, Controller } from ".";
 import { ShieldTestData, initShield } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
+import { ComponentOption } from "./component_option";
 
 export abstract class Shield implements Controller {
     workerName: string;
@@ -17,6 +18,10 @@ export abstract class Shield implements Controller {
 
     get logger(): Logger {
         return FortGlobal.logger;
+    }
+
+    get option(): ComponentOption {
+        return FortGlobal.componentOption;
     }
 
     abstract protect(...args): Promise<HttpResult | void>;

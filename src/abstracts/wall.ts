@@ -4,6 +4,7 @@ import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { WallTestData, initWall } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
+import { ComponentOption } from "./component_option";
 
 export abstract class Wall implements Controller {
     request: HttpRequest;
@@ -16,6 +17,10 @@ export abstract class Wall implements Controller {
 
     get logger(): Logger {
         return FortGlobal.logger;
+    }
+
+    get option(): ComponentOption {
+        return FortGlobal.componentOption;
     }
 
     abstract onIncoming(...args): Promise<HttpResult | void>;

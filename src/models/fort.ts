@@ -12,6 +12,7 @@ import { GenericSessionProvider, GenericXmlParser, GenericController } from "../
 import { isNull, isNullOrEmpty, isArray } from "../utils";
 import { Logger } from "./logger";
 import * as path from "path";
+import { ComponentOption } from "../abstracts/component_option";
 
 export class Fort {
 
@@ -52,6 +53,8 @@ export class Fort {
 
     resultMapper?: typeof ResultMapper;
 
+    componentOption?: typeof ComponentOption;
+
     private saveAppOption_(option: AppOption) {
         const defaultEtagConfig = {
             type: ETag_Type.Weak
@@ -85,6 +88,7 @@ export class Fort {
             this.logger = new Logger();
         }
         FortGlobal.logger = this.logger;
+        FortGlobal.componentOption = this.componentOption ? new this.componentOption() : new ComponentOption();
     }
 
     create(option?: AppOption): Promise<void> {

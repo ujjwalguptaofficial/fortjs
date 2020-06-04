@@ -2,6 +2,7 @@ import { ErrorHandler, Logger } from "./models";
 import { ViewEngine, XmlParser } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall } from "./generics";
+import { ComponentOption } from "./abstracts/component_option";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -34,4 +35,9 @@ export class FortGlobal {
     static get isProduction() {
         return isProduction;
     }
+
+    static componentOption: ComponentOption;
+
+
+
 }

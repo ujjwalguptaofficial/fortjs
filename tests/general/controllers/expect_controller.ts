@@ -9,7 +9,7 @@ export class ExpectController extends Controller {
     async normalExpectConvert() {
         const queryLength = Object.keys(this.query).length;
         const output = queryLength === 2 ? "ok" : "not_ok";
-        if (this.query.id === 0 && this.query.name === "") {
+        if (this.query.id === 0 && this.option.isEmpty(this.query.name)) {
             return textResult(output);
         }
         return textResult("", 400);
@@ -22,7 +22,7 @@ export class ExpectController extends Controller {
     async normalExpectConvertBody() {
         const queryLength = Object.keys(this.body).length;
         const output = queryLength === 2 ? "ok" : "not_ok";
-        if (this.body.id === 0 && this.body.name === "") {
+        if (this.body.id === 0 && this.option.isNullOrEmpty(this.body.name)) {
             return textResult(output);
         }
         return textResult("", 400);
