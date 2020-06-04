@@ -16,7 +16,7 @@ export abstract class Controller {
     param?: { [key: string]: string };
     data: { [key: string]: any };
 
-    get option(): ComponentOption {
+    get option() {
         return FortGlobal.componentOption;
     }
 

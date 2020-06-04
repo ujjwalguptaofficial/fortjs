@@ -22,7 +22,7 @@ export abstract class Guard implements Controller {
         return FortGlobal.logger;
     }
 
-    get option(): ComponentOption {
+    get option() {
         return FortGlobal.componentOption;
     }
 

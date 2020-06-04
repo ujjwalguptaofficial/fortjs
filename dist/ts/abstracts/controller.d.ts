@@ -1,7 +1,6 @@
 import { HttpRequest, HttpResponse, ControllerTestData } from "../types";
 import { CookieManager, FileManager, Logger } from "../models";
 import { SessionProvider } from ".";
-import { ComponentOption } from "./component_option";
 export declare abstract class Controller {
     request: HttpRequest;
     response: HttpResponse;
@@ -19,7 +18,7 @@ export declare abstract class Controller {
     data: {
         [key: string]: any;
     };
-    readonly option: ComponentOption;
+    readonly option: any;
     file?: FileManager;
     readonly logger: Logger;
     constructor(...args: any[]);

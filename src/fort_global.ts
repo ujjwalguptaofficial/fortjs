@@ -36,8 +36,6 @@ export class FortGlobal {
         return isProduction;
     }
 
-    static componentOption: ComponentOption;
-
-
+    static componentOption;
 
 }

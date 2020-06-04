@@ -2,7 +2,6 @@ import { ErrorHandler, Logger } from "./models";
 import { ViewEngine, XmlParser } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall } from "./generics";
-import { ComponentOption } from "./abstracts/component_option";
 export declare class FortGlobal {
     static port: number;
     static viewPath: string;
@@ -22,5 +21,5 @@ export declare class FortGlobal {
     static logger: Logger;
     static readonly isDevelopment: boolean;
     static readonly isProduction: boolean;
-    static componentOption: ComponentOption;
+    static componentOption: any;
 }
