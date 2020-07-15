@@ -34,7 +34,7 @@ export const getMimeTypeFromExtension = (ext: string): MIME_TYPE => {
             return MIME_TYPE.Swf;
         case ".avi":
             return MIME_TYPE.Avi;
-        case ".Svg":
+        case ".svg":
             return MIME_TYPE.Svg;
         case ".pdf":
             return MIME_TYPE.Pdf;
