@@ -7,6 +7,7 @@ export declare class RouteHandler {
     };
     static readonly routesAsArray: RouteInfo[];
     static findControllerFromPath(urlParts: string[]): RouteInfo;
+    static getControllerFromName(name: string): RouteInfo;
     static readonly defaultRoute: RouteInfo;
     static defaultRouteControllerName: string;
     static addToRouterCollection(value: ParentRoute): void;

@@ -40,8 +40,6 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 
 * Retrieve dependency injection value from anywhere like in service
 * call another components from any type of components
-* Absolute route
-* Create a parser helper to parse body, query as an object using model
 
 
 ## 2.0 feature
@@ -50,4 +48,5 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 * Take Guards as arguments without array - @Guards(UserGuard)
 * Take Shields as arguments without array - @Shields(AuthenticationShield)
 * Use single Instance of fort similar to Shivneri for bootstrap process
+* Absolute route
 * Any others - feel free to add/ Send PR.

@@ -7,3 +7,4 @@ export * from "./file_manager";
 export * from "./http_file";
 export * from "./logger";
 export * from './route_info';
+export * from "./components";

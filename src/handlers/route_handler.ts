@@ -47,6 +47,10 @@ export class RouteHandler {
         }
     }
 
+    static getControllerFromName(name: string) {
+        return routerCollection[name];
+    }
+
     static get defaultRoute() {
         return routerCollection[RouteHandler.defaultRouteControllerName];
     }

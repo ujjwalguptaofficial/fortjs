@@ -3,8 +3,6 @@ import { CookieManager, FileManager, Logger } from "../models";
 import { SessionProvider } from ".";
 import { initController } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
-import { ComponentOption } from "./component_option";
-
 
 export abstract class Controller {
     request: HttpRequest;
@@ -32,4 +30,6 @@ export abstract class Controller {
     initialize(data?: ControllerTestData) {
         initController(this, data);
     }
+
+
 }

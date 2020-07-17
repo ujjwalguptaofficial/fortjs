@@ -1,5 +1,4 @@
-import { Controller, Worker, Router, textResult, jsonResult, DefaultWorker } from "fortjs";
-
+import { Controller, Components, Worker, Router, textResult, jsonResult, DefaultWorker } from "fortjs";
 
 export class Routes extends Router {
 
@@ -18,6 +17,9 @@ export class RouteController extends Controller {
         return textResult("some method");
     }
 
-
-
+    @Worker()
+    async sendNotification() {
+        // console.log(Components.controllers.)
+        return Components.controllers.executeMethod('WebPushController', 'sendNotification');
+    }
 }
