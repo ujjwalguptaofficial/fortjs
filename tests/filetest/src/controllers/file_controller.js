@@ -45,7 +45,7 @@ export class FileController extends Controller {
 
     }
 
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     @Route("/upload")
     async uploadFile() {
         const pathToSave = Path.join(__dirname, "../upload.png");
@@ -68,7 +68,7 @@ export class FileController extends Controller {
         return jsonResult(result);
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route("/upload")
     async getUploadForm() {
         return htmlResult(`<html><head></head><body>\
@@ -80,7 +80,7 @@ export class FileController extends Controller {
      </body></html>`);
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     async getCookie() {
 
         const result = textResult(this.cookie.getCookie('hello'));
