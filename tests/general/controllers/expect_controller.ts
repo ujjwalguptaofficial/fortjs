@@ -5,7 +5,7 @@ export class ExpectController extends Controller {
 
     @Route('/convert')
     @ExpectQuery({ id: 0, name: "" })
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     async normalExpectConvert() {
         const queryLength = Object.keys(this.query).length;
         const output = queryLength === 2 ? "ok" : "not_ok";
@@ -18,7 +18,7 @@ export class ExpectController extends Controller {
 
     @Route('/convert')
     @ExpectBody({ id: 0, name: "" })
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     async normalExpectConvertBody() {
         const queryLength = Object.keys(this.body).length;
         const output = queryLength === 2 ? "ok" : "not_ok";
@@ -30,7 +30,7 @@ export class ExpectController extends Controller {
 
     @Route('/model')
     @ExpectBody(User)
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     async modelTest() {
         const queryLength = Object.keys(this.body).length;
         const expectedUser = {
@@ -51,7 +51,7 @@ export class ExpectController extends Controller {
 
     @Route('/model')
     @ExpectQuery(User)
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     async modelTestForQuery() {
         const queryLength = Object.keys(this.query).length;
         const expectedUser = {

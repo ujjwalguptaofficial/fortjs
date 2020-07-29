@@ -36,11 +36,6 @@ You are very welcome to contribute, please see contributing guidelines - [[Contr
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. For sponsoring, contact author of this project.
 
-## TODO 
-
-* Retrieve dependency injection value from anywhere like in service
-* call another components from any type of components
-
 
 ## 2.0 feature
 
@@ -49,4 +44,5 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 * Take Shields as arguments without array - @Shields(AuthenticationShield)
 * Use single Instance of fort similar to Shivneri for bootstrap process
 * Absolute route
+* Retrieve dependency injection value from anywhere like in service
 * Any others - feel free to add/ Send PR.

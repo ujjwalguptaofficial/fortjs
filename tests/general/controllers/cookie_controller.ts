@@ -1,7 +1,7 @@
 import { Controller, HttpCookie, Worker, HTTP_METHOD, textResult, jsonResult, Route, HttpResult, HTTP_STATUS_CODE } from "fortjs";
 
 export class CookieController extends Controller {
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     @Route('/{cookieName}')
     async setCookie() {
         const cookieName = this.param.cookieName;
@@ -12,9 +12,9 @@ export class CookieController extends Controller {
         return jsonResult(cookie);
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route('/{cookieName}')
-    async  getCookie() {
+    async getCookie() {
         const cookieName = this.param.cookieName;
         if (this.cookie.isExist(cookieName)) {
             const cookie = this.cookie.getCookie(cookieName);
@@ -27,7 +27,7 @@ export class CookieController extends Controller {
     }
 
 
-    @Worker([HTTP_METHOD.Put])
+    @Worker(HTTP_METHOD.Put)
     @Route('/{cookieName}')
     async updateCookie() {
         const cookieName = this.param.cookieName;
@@ -39,7 +39,7 @@ export class CookieController extends Controller {
         return jsonResult(cookie);
     }
 
-    @Worker([HTTP_METHOD.Delete])
+    @Worker(HTTP_METHOD.Delete)
     @Route('/{cookieName}')
     async removeCookie() {
         const cookieName = this.param.cookieName;

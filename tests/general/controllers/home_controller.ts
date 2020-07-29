@@ -20,7 +20,7 @@ export class HomeController extends Controller {
         this.employeeService = employeeService;
     }
 
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     async login() {
         const emailId = this.body.emailId;
         const pwd = this.body.password;
@@ -43,14 +43,14 @@ export class HomeController extends Controller {
         }
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route("/login")
     async getloginForm() {
         const result = viewResult("default/login_form.html");
         return result;
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     text() {
         return new Promise((resolve, reject) => {
             resolve(textResult("text"));
@@ -71,7 +71,7 @@ export class HomeController extends Controller {
         });
     }
 
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     post() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));

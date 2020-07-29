@@ -36,7 +36,7 @@ export class DefaultController extends Controller {
         return textResult(obj.props);
     }
 
-    @Worker([HTTP_METHOD.Get, HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Get, HTTP_METHOD.Post)
     @Route("/friends")
     async getFriends() {
         const friends = ["mohan", "sohan"];
@@ -45,7 +45,7 @@ export class DefaultController extends Controller {
         });
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route('/get-mongo')
     async getMongoEquivalentData() {
         return jsonResult([

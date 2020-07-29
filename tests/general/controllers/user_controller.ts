@@ -6,7 +6,7 @@ import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
 
-@Shields([AuthenticationShield])
+@Shields(AuthenticationShield)
 export class UserController extends Controller {
     service: UserService;
 
@@ -15,7 +15,7 @@ export class UserController extends Controller {
         this.service = service;
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route("/")
     default(@Assign('user default action') message: string) {
         return new Promise((resolve, reject) => {
@@ -23,7 +23,7 @@ export class UserController extends Controller {
         });
     }
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route("/{id}")
     async getUser() {
         try {
@@ -54,8 +54,8 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker([HTTP_METHOD.Post])
-    @Guards([ModelUserGuard])
+    @Worker(HTTP_METHOD.Post)
+    @Guards(ModelUserGuard)
     @Route("/")
     async addUser() {
         try {
@@ -67,7 +67,7 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker([HTTP_METHOD.Delete])
+    @Worker(HTTP_METHOD.Delete)
     @Route("/{id}")
     async removeUser() {
         try {
@@ -87,8 +87,8 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker([HTTP_METHOD.Put])
-    @Guards([ModelUserGuard])
+    @Worker(HTTP_METHOD.Put)
+    @Guards(ModelUserGuard)
     @Route("/")
     async updateUser() {
         try {

@@ -35,7 +35,7 @@ export class RandomController extends Controller {
     }
 
 
-    @Worker([HTTP_METHOD.Get])
+    @Worker(HTTP_METHOD.Get)
     @Route('/download')
     async download() {
         const pathLocation = path.join(__dirname, "../contents/index.html");
@@ -43,7 +43,7 @@ export class RandomController extends Controller {
     }
 
 
-    @Worker([HTTP_METHOD.Post])
+    @Worker(HTTP_METHOD.Post)
     @Route('/download')
     async downloadWithAlias() {
         const pathLocation = path.join(__dirname, "../contents/index.html");

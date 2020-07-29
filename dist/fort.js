@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.15.1 - 16/07/2020
+ * @license :fortjs - V1.15.1 - 29/07/2020
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2020 @Ujjwal Gupta; Licensed MIT
  */
@@ -585,18 +585,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var DefaultWorker = function (allowedMethods) {
+var DefaultWorker = function () {
+    var allowedMethods = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        allowedMethods[_i] = arguments[_i];
+    }
     return function (target, methodName, descriptor) {
-        var className = target.constructor.name;
-        var actionInfo = {
-            workerName: methodName,
-            methodsAllowed: allowedMethods == null ? [_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get] : allowedMethods,
-            guards: [],
-            pattern: "/",
-            values: []
-        };
-        // RouteHandler.addWorker(actionInfo, className);
-        Object(_worker__WEBPACK_IMPORTED_MODULE_2__["Worker"])(allowedMethods == null ? [_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get] : allowedMethods)(target, methodName, descriptor);
+        if (allowedMethods.length === 0) {
+            Object(_worker__WEBPACK_IMPORTED_MODULE_2__["Worker"])(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get)(target, methodName, descriptor);
+        }
+        else {
+            _worker__WEBPACK_IMPORTED_MODULE_2__["Worker"].apply(void 0, allowedMethods)(target, methodName, descriptor);
+        }
         Object(_route__WEBPACK_IMPORTED_MODULE_1__["Route"])("/")(target, methodName, descriptor);
     };
 };
@@ -695,7 +695,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
 
 // tslint:disable-next-line
-var Guards = function (value) {
+var Guards = function () {
+    var value = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        value[_i] = arguments[_i];
+    }
     return (function (target, methodName, descriptor) {
         var className = target.constructor.name;
         _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(value, className, methodName);
@@ -796,10 +800,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
 
 // tslint:disable-next-line
-var Shields = function (shieldsValue) {
+var Shields = function () {
+    var shields = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        shields[_i] = arguments[_i];
+    }
     return function (target) {
         var className = target.name;
-        _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addShields(shieldsValue, className);
+        _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addShields(shields, className);
     };
 };
 
@@ -849,13 +857,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var Worker = function (allowedMethods) {
+var Worker = function () {
+    var allowedMethods = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        allowedMethods[_i] = arguments[_i];
+    }
     return function (target, methodName, descriptor) {
         var className = target.constructor.name;
         var actionInfo = {
             workerName: methodName,
-            methodsAllowed: allowedMethods == null ? [
-                _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Delete, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Post, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Patch, _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Put
+            methodsAllowed: allowedMethods.length === 0 ? [
+                _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Delete,
+                _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get,
+                _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Post,
+                _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Patch,
+                _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Put
             ] : allowedMethods,
             guards: [],
             pattern: "/" + methodName.toLowerCase(),
