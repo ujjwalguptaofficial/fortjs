@@ -11,7 +11,7 @@ describe('HomeController', () => {
     let controller: HomeController;
     const singleton = new MySingleton();
     beforeAll(async () => {
-        app = await initServer();
+        await initServer();
         controller = new HomeController(new UserService(), new StudentService(), new EmployeeService());
         controller.initialize();
     });
@@ -43,6 +43,6 @@ describe('HomeController', () => {
     });
 
     afterAll(() => {
-        return app.destroy();
+        return Fort.destroy();
     });
 });

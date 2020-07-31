@@ -3,6 +3,7 @@ import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 import { StudentService } from "../services/student_service";
 import { EmployeeService } from "../services/employee_service";
+import { MyComponentOption } from "../extra/my_component_option";
 
 export class HomeController extends Controller {
 
@@ -27,7 +28,7 @@ export class HomeController extends Controller {
         if (emailId != null && pwd != null) {
             const userService = new UserService();
             const user = userService.getUserByEmail(emailId);
-            if (user != null && this.option.timingSafeEqual(user.password, pwd)) {
+            if (user != null && (this.option as MyComponentOption).timingSafeEqual(user.password, pwd)) {
                 this.session.set('userId', user.id);
                 this.session.set('emailId', emailId);
                 return textResult(`Authenticated`);

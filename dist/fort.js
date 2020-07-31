@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V1.15.1 - 29/07/2020
+ * @license :fortjs - V1.15.1 - 31/07/2020
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2020 @Ujjwal Gupta; Licensed MIT
  */
@@ -1332,6 +1332,21 @@ var MustacheViewEngine = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FortGlobal", function() { return FortGlobal; });
+/* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./models */ "./src/models/index.ts");
+/* harmony import */ var _generics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./generics */ "./src/generics/index.ts");
+/* harmony import */ var _abstracts_component_option__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./abstracts/component_option */ "./src/abstracts/component_option.ts");
+/* harmony import */ var _extra__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extra */ "./src/extra/index.ts");
+/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./constant */ "./src/constant.ts");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./enums */ "./src/enums/index.ts");
+
+
+
+
+
+
+
 var isDevelopment = process.env.NODE_ENV === 'development';
 var isProduction = process.env.NODE_ENV === "production";
 var FortGlobal = /** @class */ (function () {
@@ -1351,7 +1366,42 @@ var FortGlobal = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    FortGlobal.setDefault = function () {
+        if (FortGlobal.viewPath == null) {
+            FortGlobal.viewPath = path__WEBPACK_IMPORTED_MODULE_5__["join"](_constant__WEBPACK_IMPORTED_MODULE_4__["__CurrentPath"], "views");
+        }
+        if (FortGlobal.logger == null) {
+            FortGlobal.logger = FortGlobal.logger || new _models__WEBPACK_IMPORTED_MODULE_0__["Logger"]();
+        }
+        if (FortGlobal.sessionProvider == null) {
+            FortGlobal.sessionProvider = _extra__WEBPACK_IMPORTED_MODULE_3__["MemorySessionProvider"];
+        }
+        if (FortGlobal.xmlParser == null) {
+            FortGlobal.xmlParser = _generics__WEBPACK_IMPORTED_MODULE_1__["GenericXmlParser"];
+        }
+        if (FortGlobal.viewEngine == null) {
+            FortGlobal.viewEngine = new _extra__WEBPACK_IMPORTED_MODULE_3__["MustacheViewEngine"]();
+        }
+        if (FortGlobal.appName == null) {
+            FortGlobal.appName = _constant__WEBPACK_IMPORTED_MODULE_4__["__AppName"];
+        }
+        if (FortGlobal.eTag == null) {
+            FortGlobal.eTag = {
+                type: _enums__WEBPACK_IMPORTED_MODULE_6__["ETag_Type"].Weak
+            };
+        }
+        if (FortGlobal.errorHandler == null) {
+            FortGlobal.errorHandler = _models__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"];
+        }
+        FortGlobal.appSessionIdentifier = FortGlobal.appName + "_session_id";
+    };
+    FortGlobal.port = 4000;
+    FortGlobal.shouldParseCookie = true;
+    FortGlobal.shouldParsePost = true;
+    FortGlobal.sessionTimeOut = 60;
     FortGlobal.walls = [];
+    FortGlobal.folders = [];
+    FortGlobal.componentOption = new _abstracts_component_option__WEBPACK_IMPORTED_MODULE_2__["ComponentOption"]();
     return FortGlobal;
 }());
 
@@ -3171,16 +3221,9 @@ var RequestHandlerHelper = /** @class */ (function () {
     };
     RequestHandlerHelper.prototype.endResponse_ = function (negotiateMimeType) {
         var _a;
-        var data;
-        try {
-            data = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["getResultBasedOnMiMe"])(negotiateMimeType, this.controllerResult.responseData, function (type) {
-                negotiateMimeType = type;
-            });
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
-            return;
-        }
+        var data = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["getResultBasedOnMiMe"])(negotiateMimeType, this.controllerResult.responseData, function (type) {
+            negotiateMimeType = type;
+        });
         this.response.writeHead(this.controllerResult.statusCode || _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = negotiateMimeType, _a));
         this.response.end(data);
     };
@@ -3674,28 +3717,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setResultMapper", function() { return setResultMapper; });
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 
-var getResultBasedOnMiMe;
-function setResultMapper(mapper) {
-    if (mapper) {
-        getResultBasedOnMiMe = function (type, result, callBack) {
-            return new mapper().map(type, result, callBack);
-        };
-    }
-    else {
-        getResultBasedOnMiMe = function (type, result, callBack) {
-            switch (type) {
-                case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json:
-                case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text:
-                case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html:
-                case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xml:
-                    if (typeof result === 'object' === true) {
-                        callBack(_enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json);
-                        return JSON.stringify(result);
-                    }
+var getResultBasedOnMiMe = function (type, result, setMimeType) {
+    switch (type) {
+        case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json:
+        case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text:
+        case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html:
+        case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xml:
+            if (typeof result === 'object' === true) {
+                setMimeType(_enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json);
+                return JSON.stringify(result);
             }
-            return result;
-        };
     }
+    return result;
+};
+function setResultMapper(mapper) {
+    getResultBasedOnMiMe = function (type, result, callBack) {
+        return new mapper().map(type, result, callBack);
+    };
 }
 
 
@@ -4951,25 +4989,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Fort", function() { return Fort; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
 /* harmony import */ var _fort_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fort_global */ "./src/fort_global.ts");
-/* harmony import */ var _extra__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../extra */ "./src/extra/index.ts");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! . */ "./src/models/index.ts");
-/* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! http */ "http");
-/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-/* harmony import */ var _generics__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../generics */ "./src/generics/index.ts");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
-/* harmony import */ var _logger__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./logger */ "./src/models/logger.ts");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! path */ "path");
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _abstracts_component_option__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../abstracts/component_option */ "./src/abstracts/component_option.ts");
-
-
-
-
-
-
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! http */ "http");
+/* harmony import */ var http__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(http__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
+/* harmony import */ var _generics__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../generics */ "./src/generics/index.ts");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
 
 
 
@@ -4979,87 +5004,259 @@ __webpack_require__.r(__webpack_exports__);
 
 var Fort = /** @class */ (function () {
     function Fort() {
-        this.routes = [];
-        this.walls = [];
     }
-    Fort.prototype.saveAppOption_ = function (option) {
-        var defaultEtagConfig = {
-            type: _enums__WEBPACK_IMPORTED_MODULE_6__["ETag_Type"].Weak
-        };
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port = option.port == null ? 4000 : option.port;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParseCookie = option.shouldParseCookie == null ? true : option.shouldParseCookie;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParsePost = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(option.shouldParsePost) ? true : option.shouldParsePost;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionTimeOut = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(option.sessionTimeOut) ? 60 : option.sessionTimeOut;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders = option.folders == null ? [] : option.folders;
-        if (Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isArray"])(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders) === false) {
-            throw new Error("Option folders should be an array");
-        }
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appName = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNullOrEmpty"])(option.appName) === true ? _constant__WEBPACK_IMPORTED_MODULE_4__["__AppName"] : option.appName;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appSessionIdentifier = _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appName + "_session_id";
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].eTag = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(option.eTag) ? defaultEtagConfig : option.eTag;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].walls = this.walls;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewEngine = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.viewEngine) ? new _extra__WEBPACK_IMPORTED_MODULE_2__["MustacheViewEngine"]() : new this.viewEngine();
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionProvider = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.sessionProvider) ? _extra__WEBPACK_IMPORTED_MODULE_2__["MemorySessionProvider"] :
-            this.sessionProvider;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].errorHandler = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.errorHandler) ? ___WEBPACK_IMPORTED_MODULE_3__["ErrorHandler"] : this.errorHandler;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].xmlParser = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(this.xmlParser) ? _generics__WEBPACK_IMPORTED_MODULE_8__["GenericXmlParser"] : this.xmlParser;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewPath = Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNull"])(option.viewPath) ? path__WEBPACK_IMPORTED_MODULE_11__["join"](_constant__WEBPACK_IMPORTED_MODULE_4__["__CurrentPath"], "views") : option.viewPath;
-        Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["setResultMapper"])(this.resultMapper);
-        if (this.logger) {
-            if (typeof this.logger === 'function') {
-                this.logger = new this.logger();
+    Object.defineProperty(Fort, "logger", {
+        get: function () {
+            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
+        },
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger = typeof value === 'function' ? new this.value() :
+                value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "walls", {
+        set: function (walls) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].walls = walls;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "port", {
+        get: function () {
+            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port;
+        },
+        /**
+         * port at which app will listen, default - 4000
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "errorHandler", {
+        /**
+         * typeof ErrorHandler
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].errorHandler = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "routes", {
+        set: function (value) {
+            if (value == null) {
+                value = [];
             }
-        }
-        else {
-            this.logger = new _logger__WEBPACK_IMPORTED_MODULE_10__["Logger"]();
-        }
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger = this.logger;
-        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption = this.componentOption ? new this.componentOption() : new _abstracts_component_option__WEBPACK_IMPORTED_MODULE_12__["ComponentOption"]();
-    };
-    Fort.prototype.create = function (option) {
-        var _this = this;
-        if (option == null) {
-            option = {};
-        }
-        if (this.routes == null) {
-            this.routes = [];
-        }
-        var isDefaultRouteExist = false;
-        // removing / from routes
-        this.routes.forEach(function (route) {
-            // route.path = removeFirstSlash(route.path);
-            route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["removeLastSlash"])(route.path);
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
-            if (route.path === "/*") {
-                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = route.controller.name;
-                isDefaultRouteExist = true;
-            }
-        });
-        if (isDefaultRouteExist === false) {
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = _generics__WEBPACK_IMPORTED_MODULE_8__["GenericController"].name;
-            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection({
-                controller: _generics__WEBPACK_IMPORTED_MODULE_8__["GenericController"],
-                path: "/*"
-            });
-        }
-        if (option.folders != null) {
-            // remove / from files routes
-            option.folders.forEach(function (folder) {
-                var length = folder.alias.length;
-                if (length > 1) {
-                    folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["removeFirstSlash"])(folder.alias);
-                    folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["removeLastSlash"])(folder.alias);
+            var isDefaultRouteExist = false;
+            // removing / from routes
+            value.forEach(function (route) {
+                // route.path = removeFirstSlash(route.path);
+                route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeLastSlash"])(route.path);
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
+                if (route.path === "/*") {
+                    _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = route.controller.name;
+                    isDefaultRouteExist = true;
                 }
             });
-        }
-        this.saveAppOption_(option);
-        if (this.httpServer != null) {
+            if (isDefaultRouteExist === false) {
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = _generics__WEBPACK_IMPORTED_MODULE_5__["GenericController"].name;
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection({
+                    controller: _generics__WEBPACK_IMPORTED_MODULE_5__["GenericController"],
+                    path: "/*"
+                });
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "viewEngine", {
+        /**
+         * view engine use to render the view
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewEngine = new value();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "sessionProvider", {
+        /**
+         * sessionProvider class, default - MemorySessionProvider
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionProvider = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "resultMapper", {
+        set: function (value) {
+            Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["setResultMapper"])(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "xmlParser", {
+        /**
+         * XmlParser class - used to parse the xml
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (xmlParser) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].xmlParser = xmlParser;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "shouldParseCookie", {
+        /**
+         * Whether to parse cookie or not, default - true
+         * If false, then session wont work.
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParseCookie = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "shouldParsePost", {
+        /**
+         * Whether to parse the post data, default - true
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParsePost = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "sessionTimeOut", {
+        /**
+         * session timeout in minute - default is 60 minute
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionTimeOut = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "appName", {
+        /**
+         * name of application - default is fort. Visible in header and cookie.
+         * Change name if you dont want any one to know the framework name.
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appName = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "viewPath", {
+        /**
+         * Views folder location. By default it is - views.
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewPath = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "componentOption", {
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption = new value();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "httpServer", {
+        get: function () {
+            return Fort.instance.httpServer;
+        },
+        set: function (value) {
+            Fort.instance.httpServer = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "folders", {
+        /**
+         * folders which should be visible to requests. By default nothing is allowed.
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            value = value || [];
+            if (Object(_utils__WEBPACK_IMPORTED_MODULE_6__["isArray"])(value) === false) {
+                throw new Error("folders should be an array");
+            }
+            // remove / from files routes
+            value.forEach(function (folder) {
+                var length = folder.alias.length;
+                if (length > 1) {
+                    folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeFirstSlash"])(folder.alias);
+                    folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeLastSlash"])(folder.alias);
+                }
+            });
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Fort, "eTag", {
+        /**
+         * eTag Settings
+         *
+         * @static
+         * @memberof Fort
+         */
+        set: function (value) {
+            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].eTag = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Fort.create = function () {
+        var _this = this;
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].setDefault();
+        if (this.instance.httpServer != null) {
             return;
         }
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["promise"])(function (res, rej) {
-            _this.httpServer = http__WEBPACK_IMPORTED_MODULE_5__["createServer"](_this.onNewRequest).once("error", function (err) {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["promise"])(function (res, rej) {
+            _this.instance.httpServer = http__WEBPACK_IMPORTED_MODULE_2__["createServer"](Fort.onNewRequest).once("error", function (err) {
                 if (err.code === 'EADDRINUSE') {
-                    var error = new _helpers__WEBPACK_IMPORTED_MODULE_7__["LogHelper"](_enums__WEBPACK_IMPORTED_MODULE_6__["ERROR_TYPE"].PortInUse, _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port).get();
+                    var error = new _helpers__WEBPACK_IMPORTED_MODULE_4__["LogHelper"](_enums__WEBPACK_IMPORTED_MODULE_3__["ERROR_TYPE"].PortInUse, _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port).get();
                     rej(error);
                 }
                 else {
@@ -5072,15 +5269,16 @@ var Fort = /** @class */ (function () {
             }).listen(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port);
         });
     };
-    Fort.prototype.onNewRequest = function (request, response) {
+    Fort.onNewRequest = function (request, response) {
         new _handlers__WEBPACK_IMPORTED_MODULE_0__["RequestHandler"](request, response).handle();
     };
-    Fort.prototype.destroy = function () {
+    Fort.destroy = function () {
         var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_7__["promise"])(function (res, rej) {
-            _this.httpServer.close(res);
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["promise"])(function (res) {
+            _this.instance.httpServer.close(res);
         });
     };
+    Fort.instance = new Fort();
     return Fort;
 }());
 
@@ -5179,6 +5377,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// exports.default = Fort;
 
 
 /***/ }),

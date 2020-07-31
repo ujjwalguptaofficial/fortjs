@@ -2,6 +2,7 @@ import { HttpRequest, HttpResponse, HttpResult } from "../types";
 import { CookieManager, Logger } from "../models";
 import { SessionProvider, Controller } from ".";
 import { ShieldTestData } from "../test_helpers";
+import { ComponentOption } from "./component_option";
 export declare abstract class Shield implements Controller {
     workerName: string;
     request: HttpRequest;
@@ -15,7 +16,7 @@ export declare abstract class Shield implements Controller {
         [key: string]: any;
     };
     readonly logger: Logger;
-    readonly option: any;
+    readonly option: ComponentOption;
     abstract protect(...args: any[]): Promise<HttpResult | void>;
     constructor(...args: any[]);
     initialize(data?: ShieldTestData): ShieldTestData;

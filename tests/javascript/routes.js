@@ -8,7 +8,7 @@ import {
 export const routes = [{
     path: "/*",
     controller: DefaultController
-}, 
+},
 {
     path: "/api/v1/user",
     controller: UserController

@@ -4,11 +4,10 @@ import { initServer } from "../index";
 import { MySingleton } from "../extra/singleton";
 
 describe('DefaultController', () => {
-    let app: Fort;
     let controller: DefaultController;
     const singleton = new MySingleton();
     beforeAll(async () => {
-        app = await initServer();
+        await initServer();
         controller = new DefaultController(singleton);
         controller.initialize();
     });
@@ -45,6 +44,6 @@ describe('DefaultController', () => {
 
 
     afterAll(() => {
-        return app.destroy();
+        return Fort.destroy();
     });
 });

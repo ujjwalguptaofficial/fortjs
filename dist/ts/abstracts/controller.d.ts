@@ -18,7 +18,7 @@ export declare abstract class Controller {
     data: {
         [key: string]: any;
     };
-    readonly option: any;
+    readonly option: import("./component_option").ComponentOption;
     file?: FileManager;
     readonly logger: Logger;
     constructor(...args: any[]);

@@ -4,10 +4,9 @@ import { MySingleton } from "../extra/singleton";
 import { Wall1 } from "./wall1";
 
 describe('Wall1', () => {
-    let app: Fort;
     let wall: Wall1;
     beforeAll(async () => {
-        app = await initServer();
+        await initServer();
         wall = new Wall1();
         wall.initialize();
     });
@@ -25,6 +24,6 @@ describe('Wall1', () => {
     });
 
     afterAll(() => {
-        return app.destroy();
+        return Fort.destroy();
     });
 });

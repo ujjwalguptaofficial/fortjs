@@ -144,7 +144,7 @@ export class RequestHandlerHelper {
         this.onResultFromError_(textResult(""));
     }
 
-    private async  onResultFromError_(result: HttpResult | HttpFormatResult) {
+    private async onResultFromError_(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
         try {
             await this.runWallOutgoing();
@@ -194,19 +194,13 @@ export class RequestHandlerHelper {
     }
 
     protected endResponse_(negotiateMimeType: MIME_TYPE) {
-        let data;
-        try {
-            data = getResultBasedOnMiMe(negotiateMimeType,
-                (this.controllerResult as HttpResult).responseData
-                , (type: MIME_TYPE) => {
-                    negotiateMimeType = type;
-                }
-            );
-        }
-        catch (ex) {
-            this.onErrorOccured(ex);
-            return;
-        }
+
+        const data = getResultBasedOnMiMe(negotiateMimeType,
+            (this.controllerResult as HttpResult).responseData
+            , (type: MIME_TYPE) => {
+                negotiateMimeType = type;
+            }
+        );
 
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [__ContentType]: negotiateMimeType });

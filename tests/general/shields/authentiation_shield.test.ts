@@ -4,11 +4,10 @@ import { MySingleton } from "../extra/singleton";
 import { AuthenticationShield } from "./authentication_shield";
 
 describe('Authentication shield', () => {
-    let app: Fort;
     let shield: AuthenticationShield;
     const singleton = new MySingleton();
     beforeAll(async () => {
-        app = await initServer();
+        await initServer();
         shield = new AuthenticationShield('hi');
         shield.initialize();
     });
@@ -20,6 +19,6 @@ describe('Authentication shield', () => {
     });
 
     afterAll(() => {
-        return app.destroy();
+        return Fort.destroy();
     });
 });

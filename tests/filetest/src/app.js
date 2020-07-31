@@ -12,28 +12,24 @@ import * as path from "path";
 
 export * from './views/index';
 
-export class App extends Fort {
-    constructor() {
-        super();
-        this.routes = routes;
-        this.viewEngine = FortViewEngine;
-        this.httpServer = require("http").createServer(this.onNewRequest).listen(4000);
-    }
-}
+
+Fort.routes = routes;
+Fort.viewEngine = FortViewEngine;
+Fort.httpServer = require("http").createServer(Fort.onNewRequest).listen(4000);
+
 
 const staticPath = path.join(__dirname, "../static");
 
-new App().create({
-    //defaultPath: "default",
-    folders: [{
-        alias: "static",
-        path: staticPath
-    }, {
-        alias: "/",
-        path: staticPath
-    }],
-    appName: "MyFort",
-    shouldParseCookie: false
-});
+Fort.folders = [{
+    alias: "static",
+    path: staticPath
+}, {
+    alias: "/",
+    path: staticPath
+}];
+Fort.appName = "MyFort";
+Fort.shouldParseCookie = false
 
-console.log("Your fort is located at address - localhost:4000");
+Fort.create();
+
+Fort.logger.debug("Your fort is located at address - localhost:4000");
