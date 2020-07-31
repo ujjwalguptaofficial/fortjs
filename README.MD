@@ -39,7 +39,5 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 
 ## 2.0 feature
 
-* Use single Instance of fort similar to Shivneri for bootstrap process
 * Absolute route
 * Retrieve dependency injection value from anywhere like in service
-* Any others - feel free to add/ Send PR.

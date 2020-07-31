@@ -20,8 +20,8 @@ export declare class FortGlobal {
     static appSessionIdentifier: string;
     static xmlParser: typeof XmlParser;
     static logger: Logger;
-    static readonly isDevelopment: boolean;
-    static readonly isProduction: boolean;
+    static get isDevelopment(): boolean;
+    static get isProduction(): boolean;
     static componentOption: ComponentOption;
     static setDefault(): void;
 }

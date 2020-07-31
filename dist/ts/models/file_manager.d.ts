@@ -8,8 +8,8 @@ export declare class FileManager {
      * @returns - number
      * @memberof FileManager
      */
-    readonly count: number;
-    readonly files: HttpFile[];
+    get count(): number;
+    get files(): HttpFile[];
     /**
      * check for existance of file
      *

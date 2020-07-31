@@ -1,7 +1,7 @@
 import { RouteInfo } from "./route_info";
 export declare class Router {
-    readonly routes: {
+    get routes(): {
         [controllerName: string]: RouteInfo;
     };
-    readonly routesAsArray: RouteInfo[];
+    get routesAsArray(): RouteInfo[];
 }

@@ -15,8 +15,8 @@ export declare abstract class Wall implements Controller {
     data: {
         [key: string]: any;
     };
-    readonly logger: Logger;
-    readonly option: ComponentOption;
+    get logger(): Logger;
+    get option(): ComponentOption;
     abstract onIncoming(...args: any[]): Promise<HttpResult | void>;
     onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args: any[]): Promise<any>;
     constructor(...args: any[]);

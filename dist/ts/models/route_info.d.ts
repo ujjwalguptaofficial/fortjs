@@ -8,7 +8,7 @@ export declare class RouteInfo implements IRouteInfo {
     workers: {
         [workerName: string]: WorkerInfo;
     };
-    readonly workersAsArray: WorkerInfo[];
+    get workersAsArray(): WorkerInfo[];
     shields: Array<typeof GenericShield>;
     values: any[];
     init(value: IRouteInfo): void;

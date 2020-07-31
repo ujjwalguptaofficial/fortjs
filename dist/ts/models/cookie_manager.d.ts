@@ -33,7 +33,7 @@ export declare class CookieManager {
      * @readonly
      * @memberof CookieManager
      */
-    readonly cookieCollection: {
+    get cookieCollection(): {
         [key: string]: string;
     };
     /**

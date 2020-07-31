@@ -45,6 +45,8 @@
     "mocha": "^5.2.0",
     "nodemon-webpack-plugin": "^4.0.7",
     "request": "^2.88.0",
-    "ts-jest": "^24.1.0"
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^8.0.1",
+    "typescript": "^3.9.7"
   }
 }

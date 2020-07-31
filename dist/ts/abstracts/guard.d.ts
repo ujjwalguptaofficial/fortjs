@@ -23,8 +23,8 @@ export declare abstract class Guard implements Controller {
     };
     file: FileManager;
     abstract check(...args: any[]): Promise<HttpResult | void>;
-    readonly logger: Logger;
-    readonly option: ComponentOption;
+    get logger(): Logger;
+    get option(): ComponentOption;
     constructor(...args: any[]);
     initialize(data?: GuardTestData): Controller;
 }
