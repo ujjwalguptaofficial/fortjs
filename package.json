@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "1.15.1",
+  "version": "2.0.0",
   "description": "Component based MVC web framework for nodejs targeting good code structures & modularity.",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
@@ -41,14 +41,14 @@
     "@types/node": "^10.12.0",
     "cross-env": "^6.0.3",
     "smart-banner-webpack-plugin": "^3.0.1",
-    "ts-loader": "^5.4.5",
-    "tslint": "^5.20.1",
+    "ts-loader": "^8.0.1",
+    "tslint": "^6.1.2",
     "tslint-config-security": "^1.16.0",
     "typescript": "^3.9.7",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-merge": "^4.1.4",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^2.5.0"
   },
   "dependencies": {
     "content-type": "^1.0.4",
