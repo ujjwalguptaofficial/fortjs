@@ -20,6 +20,39 @@ Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting
 * Everything can be unit tested, so you can use a [TDD](https://guide.freecodecamp.org/agile/test-driven-development/) approach.
 * TypeScript Support - Fully supported for typescript users.
 
+# How to use
+
+## Controller
+
+```
+import {Controller, DefaultWorker, textResult } from "fortjs" 
+export class UserController extends Controller{
+
+    @DefaultWorker()
+    async getUsers(){
+        return textResult("Hey, I am get users method");
+    }
+}
+```
+
+## Bootstrap
+
+```
+import { Fort } from "fortjs";
+import { UserController } from "./controllers";
+
+// add routes
+Fort.routes = [{
+    controller: UserController,
+    path: "/user"
+}]
+
+// initiate app
+Fort.create().then(()=>{
+    Fort.logger.info(`App is started at location : http://localhost:${Fort.port}`);
+})
+```
+
 # Examples
 
 Check out repo - https://github.com/ujjwalguptaofficial/fortjs-examples
@@ -37,7 +70,7 @@ You are very welcome to contribute, please see contributing guidelines - [[Contr
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. For sponsoring, contact author of this project.
 
 
-## 2.0 feature
+## TODO
 
 * Absolute route
 * Retrieve dependency injection value from anywhere like in service
