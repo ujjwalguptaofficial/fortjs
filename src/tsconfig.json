@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "noImplicitAny": false,
         "noEmitOnError": true,
         "removeComments": false,
@@ -15,6 +16,24 @@
             "es2015",
             "dom"
         ],
+        "paths": {
+            // Paths have to be relative to `baseUrl`
+            "http://*": [
+                // This is the OSX location (assumine root is two levels up)
+                "../../Library/Caches/deno/deps/http/*",
+                // This is the typical location a Linux
+                "../../.cache/deno/deps/http/*"
+            ],
+            "https://*": [
+                // This is the OSX location (assumine root is two levels up)
+                "../../Library/Caches/deno/deps/https/*",
+                // This is the typical location a Linux
+                "../../.cache/deno/deps/https/*"
+            ]
+        },
+        "plugins": [{
+            "name": "deno_ls_plugin"
+        }],
         "experimentalDecorators": true
     }
 }
