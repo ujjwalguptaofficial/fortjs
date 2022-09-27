@@ -1,12 +1,12 @@
-import { Controller, DefaultWorker, Route, textResult, viewResult, Worker, Assign, Guards } from "fortjs";
+import { Controller, defaultWorker, route, textResult, viewResult, worker, assign, guards } from "fortjs";
 import { DefaultGuard } from "../guards/default_guard";
 
 export class DefaultController extends Controller {
 
     // do not remove the guard - its a test
-    @DefaultWorker()
-    @Guards(DefaultGuard)
-    async index(@Assign('FortJs') title) {
+    @defaultWorker()
+    @guards(DefaultGuard)
+    async index(@assign('FortJs') title) {
 
         const data = {
             title: title

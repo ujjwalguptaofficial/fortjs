@@ -1,1 +1,1 @@
-export declare const Singleton: (value: any) => ParameterDecorator;
+export declare const singleton: (value: any) => ParameterDecorator;

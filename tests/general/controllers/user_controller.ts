@@ -1,4 +1,4 @@
-import { Controller, Worker, Assign, HTTP_METHOD, htmlResult, textResult, Shields, Guards, jsonResult, Route, Singleton } from "fortjs";
+import { Controller, worker, assign, HTTP_METHOD, htmlResult, textResult, shields, guards, jsonResult, route, singleton } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
@@ -6,25 +6,25 @@ import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
 
-@Shields(AuthenticationShield)
+@shields(AuthenticationShield)
 export class UserController extends Controller {
     service: UserService;
 
-    constructor(@Singleton(UserService) service: UserService) {
+    constructor(@singleton(UserService) service: UserService) {
         super();
         this.service = service;
     }
 
-    @Worker(HTTP_METHOD.Get)
-    @Route("/")
-    default(@Assign('user default action') message: string) {
+    @worker(HTTP_METHOD.Get)
+    @route("/")
+    default(@assign('user default action') message: string) {
         return new Promise((resolve, reject) => {
             resolve(htmlResult(message));
         });
     }
 
-    @Worker(HTTP_METHOD.Get)
-    @Route("/{id}")
+    @worker(HTTP_METHOD.Get)
+    @route("/{id}")
     async getUser() {
         try {
             const userId = Number(this.param.id);
@@ -54,9 +54,9 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker(HTTP_METHOD.Post)
-    @Guards(ModelUserGuard)
-    @Route("/")
+    @worker(HTTP_METHOD.Post)
+    @guards(ModelUserGuard)
+    @route("/")
     async addUser() {
         try {
             const user: User = this.data.user;
@@ -67,8 +67,8 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker(HTTP_METHOD.Delete)
-    @Route("/{id}")
+    @worker(HTTP_METHOD.Delete)
+    @route("/{id}")
     async removeUser() {
         try {
             const userId = Number(this.param.id);
@@ -87,9 +87,9 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker(HTTP_METHOD.Put)
-    @Guards(ModelUserGuard)
-    @Route("/")
+    @worker(HTTP_METHOD.Put)
+    @guards(ModelUserGuard)
+    @route("/")
     async updateUser() {
         try {
             const user: User = this.data.user;
@@ -107,14 +107,14 @@ export class UserController extends Controller {
         }
     }
 
-    @Worker()
-    @Route('/counter/shield/')
+    @worker()
+    @route('/counter/shield/')
     async getCounter() {
         return jsonResult(this.data);
     }
 
-    @Worker()
-    @Route('/allow/me')
+    @worker()
+    @route('/allow/me')
     async allowMe() {
         return textResult("i am allowed");
     }

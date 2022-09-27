@@ -1,1 +1,1 @@
-export declare function ExpectQuery(value: any): MethodDecorator;
+export declare function expectQuery(value: any): MethodDecorator;

@@ -1,7 +1,7 @@
-import { Route, Worker, Controller, textResult, jsonResult } from "fortjs";
+import { route, worker, Controller, textResult, jsonResult } from "fortjs";
 
 export class SessionController extends Controller {
-    @Worker()
+    @worker()
     async add() {
         const key = this.body.key;
         const value = this.body.value;
@@ -9,8 +9,8 @@ export class SessionController extends Controller {
         return textResult("saved");
     }
 
-    @Worker()
-    @Route("/add-many")
+    @worker()
+    @route("/add-many")
     async addMany() {
         const key1 = this.body.key1;
         const value1 = this.body.value1;
@@ -23,7 +23,7 @@ export class SessionController extends Controller {
         return textResult("saved");
     }
 
-    @Worker()
+    @worker()
     async exist() {
         const key = this.query.key;
         if (await this.session.isExist(key)) {
@@ -35,7 +35,7 @@ export class SessionController extends Controller {
 
     }
 
-    @Worker()
+    @worker()
     async get() {
         const key = this.query.key;
         this.logger.debug("key", key);
@@ -46,7 +46,7 @@ export class SessionController extends Controller {
         });
     }
 
-    @Worker()
+    @worker()
     async update() {
         const key = this.body.key;
         const value = this.body.value;
@@ -54,20 +54,20 @@ export class SessionController extends Controller {
         return textResult("updated");
     }
 
-    @Worker()
+    @worker()
     async remove() {
         const key = this.query.key;
         await this.session.remove(key);
         return textResult("removed");
     }
 
-    @Worker()
+    @worker()
     async clear() {
         await this.session.clear();
         return textResult("cleared");
     }
 
-    @Worker()
+    @worker()
     async getAll() {
         const valueFromSession = await this.session.getAll();
         return jsonResult({

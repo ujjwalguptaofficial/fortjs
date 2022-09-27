@@ -5,6 +5,7 @@ import { removeLastSlash } from ".";
 import { RouteInfo } from "../models";
 
 const regex1 = /{(.*)}(?!.)/;
+// for extension - e.g - {{file}}.js
 const regex2 = /{(.*)}\.(\w+)(?!.)/;
 
 const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts: string[]) => {

@@ -1,1 +1,1 @@
-export declare const Assign: (value: any) => ParameterDecorator;
+export declare const assign: (value: any) => ParameterDecorator;

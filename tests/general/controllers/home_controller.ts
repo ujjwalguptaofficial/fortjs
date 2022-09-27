@@ -1,4 +1,4 @@
-import { Controller, viewResult, Worker, HTTP_METHOD, Route, jsonResult, htmlResult, textResult, DefaultWorker, redirectResult, Singleton } from "fortjs";
+import { Controller, viewResult, worker, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult, singleton } from "fortjs";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 import { StudentService } from "../services/student_service";
@@ -11,9 +11,9 @@ export class HomeController extends Controller {
     studentService: StudentService;
     employeeService: EmployeeService;
 
-    constructor(@Singleton(UserService) userService,
-        @Singleton(StudentService) studentService,
-        @Singleton(EmployeeService) employeeService) {
+    constructor(@singleton(UserService) userService,
+        @singleton(StudentService) studentService,
+        @singleton(EmployeeService) employeeService) {
 
         super();
         this.userService = userService;
@@ -21,7 +21,7 @@ export class HomeController extends Controller {
         this.employeeService = employeeService;
     }
 
-    @Worker(HTTP_METHOD.Post)
+    @worker(HTTP_METHOD.Post)
     async login() {
         const emailId = this.body.emailId;
         const pwd = this.body.password;
@@ -44,35 +44,35 @@ export class HomeController extends Controller {
         }
     }
 
-    @Worker(HTTP_METHOD.Get)
-    @Route("/login")
+    @worker(HTTP_METHOD.Get)
+    @route("/login")
     async getloginForm() {
         const result = viewResult("default/login_form.html");
         return result;
     }
 
-    @Worker(HTTP_METHOD.Get)
+    @worker(HTTP_METHOD.Get)
     text() {
         return new Promise((resolve, reject) => {
             resolve(textResult("text"));
         });
     }
 
-    @Worker()
+    @worker()
     json() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult({ key: 'hello', value: 'world' }));
         });
     }
 
-    @Worker()
+    @worker()
     html() {
         return new Promise((resolve, reject) => {
             resolve(htmlResult(`<h1>hey there i am html</h1>`));
         });
     }
 
-    @Worker(HTTP_METHOD.Post)
+    @worker(HTTP_METHOD.Post)
     post() {
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));
@@ -80,46 +80,46 @@ export class HomeController extends Controller {
     }
 
 
-    @Worker()
+    @worker()
     async redirect() {
         return await redirectResult("html");
     }
 
-    @Worker()
+    @worker()
     async getData() {
         return jsonResult(this.data);
     }
 
-    @Worker()
+    @worker()
     async logOut() {
         await this.session.clear();
         return textResult("Logged out");
     }
 
-    @Worker()
+    @worker()
     async getEnv() {
         return jsonResult(process.env);
     }
 
-    @Worker()
+    @worker()
     async getUsers() {
         return jsonResult(this.userService.getUsers());
     }
 
-    @Worker()
+    @worker()
     async getStudents() {
         return jsonResult(this.studentService.getAll());
     }
 
-    @Worker()
+    @worker()
     async getEmployees() {
         return jsonResult(this.employeeService.getAll());
     }
 
-    @Worker()
-    async getAllFromServices(@Singleton(UserService) userService,
-        @Singleton(StudentService) studentService,
-        @Singleton(EmployeeService) employeeService) {
+    @worker()
+    async getAllFromServices(@singleton(UserService) userService,
+        @singleton(StudentService) studentService,
+        @singleton(EmployeeService) employeeService) {
         return jsonResult([...studentService.getAll(), ...employeeService.getAll(),
         ...userService.getUsers()]);
     }

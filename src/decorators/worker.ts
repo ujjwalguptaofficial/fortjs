@@ -3,7 +3,7 @@ import { RouteHandler } from "../handlers";
 import { WorkerInfo } from "../types";
 
 // tslint:disable-next-line
-export const Worker = (...allowedMethods: HTTP_METHOD[]): MethodDecorator => {
+export const worker = (...allowedMethods: HTTP_METHOD[]): MethodDecorator => {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const className = (target.constructor.name as string);
         const actionInfo: WorkerInfo = {

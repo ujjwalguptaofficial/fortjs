@@ -1,11 +1,11 @@
-import { Controller, Route, ExpectQuery, Worker, textResult, HTTP_METHOD, ExpectBody } from "fortjs";
+import { Controller, route, expectQuery, worker, textResult, HTTP_METHOD, expectBody } from "fortjs";
 import { User } from "../models/user";
 
 export class ExpectController extends Controller {
 
-    @Route('/convert')
-    @ExpectQuery({ id: 0, name: "" })
-    @Worker(HTTP_METHOD.Get)
+    @route('/convert')
+    @expectQuery({ id: 0, name: "" })
+    @worker(HTTP_METHOD.Get)
     async normalExpectConvert() {
         const queryLength = Object.keys(this.query).length;
         const output = queryLength === 2 ? "ok" : "not_ok";
@@ -16,9 +16,9 @@ export class ExpectController extends Controller {
 
     }
 
-    @Route('/convert')
-    @ExpectBody({ id: 0, name: "" })
-    @Worker(HTTP_METHOD.Post)
+    @route('/convert')
+    @expectBody({ id: 0, name: "" })
+    @worker(HTTP_METHOD.Post)
     async normalExpectConvertBody() {
         const queryLength = Object.keys(this.body).length;
         const output = queryLength === 2 ? "ok" : "not_ok";
@@ -28,9 +28,9 @@ export class ExpectController extends Controller {
         return textResult("", 400);
     }
 
-    @Route('/model')
-    @ExpectBody(User)
-    @Worker(HTTP_METHOD.Post)
+    @route('/model')
+    @expectBody(User)
+    @worker(HTTP_METHOD.Post)
     async modelTest() {
         const queryLength = Object.keys(this.body).length;
         const expectedUser = {
@@ -49,9 +49,9 @@ export class ExpectController extends Controller {
         return textResult("", 400);
     }
 
-    @Route('/model')
-    @ExpectQuery(User)
-    @Worker(HTTP_METHOD.Get)
+    @route('/model')
+    @expectQuery(User)
+    @worker(HTTP_METHOD.Get)
     async modelTestForQuery() {
         const queryLength = Object.keys(this.query).length;
         const expectedUser = {

@@ -2,7 +2,7 @@ import { RouteHandler } from "../handlers";
 import { removeLastSlash } from "../helpers";
 
 // tslint:disable-next-line
-export const Route = (format: string): MethodDecorator => {
+export const route = (format: string): MethodDecorator => {
     return ((target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const className = (target.constructor.name as string);
         // remove / from route

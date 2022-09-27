@@ -1,5 +1,5 @@
 import { UserService } from "../services/user_service";
-import { Controller, Singleton, textResult } from "fortjs";
+import { Controller, singleton, textResult } from "fortjs";
 
 export class WebPushController extends Controller {
 
@@ -8,7 +8,7 @@ export class WebPushController extends Controller {
         super();
     }
 
-    sendNotification(@Singleton(UserService) service) {
+    sendNotification(@singleton(UserService) service) {
         console.log('send notification')
         return textResult("notification sent");
     }

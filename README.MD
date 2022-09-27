@@ -25,10 +25,10 @@ Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting
 ## Controller
 
 ```
-import {Controller, DefaultWorker, textResult } from "fortjs" 
+import {Controller, defaultWorker, textResult } from "fortjs" 
 export class UserController extends Controller{
 
-    @DefaultWorker()
+    @defaultWorker()
     async getUsers(){
         return textResult("Hey, I am get users method");
     }

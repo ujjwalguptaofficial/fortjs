@@ -1,17 +1,17 @@
-import { Controller, viewResult, Worker, Route, jsonResult, HTTP_METHOD, DefaultWorker, Assign, Singleton, textResult } from "fortjs";
+import { Controller, viewResult, worker, route, jsonResult, HTTP_METHOD, defaultWorker, assign, singleton, textResult } from "fortjs";
 import { ObjectID } from "mongodb";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 export class DefaultController extends Controller {
 
     singleton: MySingleton;
-    constructor(@Singleton(MySingleton) obj: MySingleton) {
+    constructor(@singleton(MySingleton) obj: MySingleton) {
         super();
         this.singleton = obj;
     }
 
-    @DefaultWorker()
-    async index(@Assign('Welcome to fort') title: string) {
+    @defaultWorker()
+    async index(@assign('Welcome to fort') title: string) {
         // just for making sure these fields has been initiated
         const params = this.param;
         const query = this.query;
@@ -21,23 +21,23 @@ export class DefaultController extends Controller {
         });
     }
 
-    @Worker()
-    async index1(@Assign('Ujjwal') firstName: string, @Assign('Gupta') lastName: string) {
+    @worker()
+    async index1(@assign('Ujjwal') firstName: string, @assign('Gupta') lastName: string) {
         return textResult(firstName + lastName)
     }
 
-    @Worker()
+    @worker()
     async setSingletonValue() {
         this.singleton.props = this.query.value;
     }
 
-    @Worker()
-    async getSingletonValue(@Singleton(MySingleton) obj) {
+    @worker()
+    async getSingletonValue(@singleton(MySingleton) obj) {
         return textResult(obj.props);
     }
 
-    @Worker(HTTP_METHOD.Get, HTTP_METHOD.Post)
-    @Route("/friends")
+    @worker(HTTP_METHOD.Get, HTTP_METHOD.Post)
+    @route("/friends")
     async getFriends() {
         const friends = ["mohan", "sohan"];
         return jsonResult({
@@ -45,8 +45,8 @@ export class DefaultController extends Controller {
         });
     }
 
-    @Worker(HTTP_METHOD.Get)
-    @Route('/get-mongo')
+    @worker(HTTP_METHOD.Get)
+    @route('/get-mongo')
     async getMongoEquivalentData() {
         return jsonResult([
             {
@@ -59,7 +59,7 @@ export class DefaultController extends Controller {
         ]);
     }
 
-    @Worker()
+    @worker()
     workerWithoutPromise() {
         console.error('query', this.query);
         return textResult("I am a worker without promise");

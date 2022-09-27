@@ -1,23 +1,23 @@
 import {
     Controller,
-    DefaultWorker,
+    defaultWorker,
     htmlResult,
     textResult,
     renderView,
-    Route,
+    route,
     fileResult,
-    Worker,
+    worker,
     HTTP_METHOD,
     jsonResult,
-    Assign
+    assign
 } from "fortjs";
 
 import * as Path from "path";
 
 export class FileController extends Controller {
 
-    @DefaultWorker()
-    async default(@Assign('Welcome to FortJs') title) {
+    @defaultWorker()
+    async default(@assign('Welcome to FortJs') title) {
         try {
             const viewData = await renderView('controller:default,action:default', { title: title });
             const result = await htmlResult(viewData);
@@ -30,8 +30,8 @@ export class FileController extends Controller {
         }
     }
 
-    @Route("/scripts/{file}.js")
-    @Worker()
+    @route("/scripts/{file}.js")
+    @worker()
     async getScripts() {
         // check for file exist when there is no upload
         // Note :- do not remove this
@@ -45,8 +45,8 @@ export class FileController extends Controller {
 
     }
 
-    @Worker(HTTP_METHOD.Post)
-    @Route("/upload")
+    @worker(HTTP_METHOD.Post)
+    @route("/upload")
     async uploadFile() {
         const pathToSave = Path.join(__dirname, "../upload.png");
         console.log("count", this.file.count);
@@ -68,8 +68,8 @@ export class FileController extends Controller {
         return jsonResult(result);
     }
 
-    @Worker(HTTP_METHOD.Get)
-    @Route("/upload")
+    @worker(HTTP_METHOD.Get)
+    @route("/upload")
     async getUploadForm() {
         return htmlResult(`<html><head></head><body>\
         <form method="POST" enctype="multipart/form-data">\
@@ -80,7 +80,7 @@ export class FileController extends Controller {
      </body></html>`);
     }
 
-    @Worker(HTTP_METHOD.Get)
+    @worker(HTTP_METHOD.Get)
     async getCookie() {
 
         const result = textResult(this.cookie.getCookie('hello'));

@@ -1,1 +1,1 @@
-export declare function ExpectBody(value: any): MethodDecorator;
+export declare function expectBody(value: any): MethodDecorator;

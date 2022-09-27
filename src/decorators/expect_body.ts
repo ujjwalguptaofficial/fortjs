@@ -2,7 +2,7 @@ import { RouteHandler } from "../handlers";
 import { getDataType, getClassName, removeMethodAndNullFromObject } from "../helpers";
 import { DATA_TYPE } from "../enums/data_type";
 
-export function ExpectBody(value: any): MethodDecorator {
+export function expectBody(value: any): MethodDecorator {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         const className: string = getClassName(target);
         const type = getDataType(value);

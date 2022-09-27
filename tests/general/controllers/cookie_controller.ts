@@ -1,8 +1,8 @@
-import { Controller, HttpCookie, Worker, HTTP_METHOD, textResult, jsonResult, Route, HttpResult, HTTP_STATUS_CODE } from "fortjs";
+import { Controller, HttpCookie, worker, HTTP_METHOD, textResult, jsonResult, route, HttpResult, HTTP_STATUS_CODE } from "fortjs";
 
 export class CookieController extends Controller {
-    @Worker(HTTP_METHOD.Post)
-    @Route('/{cookieName}')
+    @worker(HTTP_METHOD.Post)
+    @route('/{cookieName}')
     async setCookie() {
         const cookieName = this.param.cookieName;
         const cookieValue = this.body.cookieValue;
@@ -12,8 +12,8 @@ export class CookieController extends Controller {
         return jsonResult(cookie);
     }
 
-    @Worker(HTTP_METHOD.Get)
-    @Route('/{cookieName}')
+    @worker(HTTP_METHOD.Get)
+    @route('/{cookieName}')
     async getCookie() {
         const cookieName = this.param.cookieName;
         if (this.cookie.isExist(cookieName)) {
@@ -27,8 +27,8 @@ export class CookieController extends Controller {
     }
 
 
-    @Worker(HTTP_METHOD.Put)
-    @Route('/{cookieName}')
+    @worker(HTTP_METHOD.Put)
+    @route('/{cookieName}')
     async updateCookie() {
         const cookieName = this.param.cookieName;
         const cookieValue = this.body.cookieValue;
@@ -39,8 +39,8 @@ export class CookieController extends Controller {
         return jsonResult(cookie);
     }
 
-    @Worker(HTTP_METHOD.Delete)
-    @Route('/{cookieName}')
+    @worker(HTTP_METHOD.Delete)
+    @route('/{cookieName}')
     async removeCookie() {
         const cookieName = this.param.cookieName;
         const cookie = this.cookie.getCookie(cookieName);

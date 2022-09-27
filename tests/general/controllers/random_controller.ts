@@ -1,10 +1,10 @@
-import { Controller, DefaultWorker, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, Worker, jsonResult, Route, downloadResult, textResult, HTTP_METHOD, fileResult } from "fortjs";
+import { Controller, defaultWorker, HttpFormatResult, HttpResult, HTTP_STATUS_CODE, MIME_TYPE, worker, jsonResult, route, downloadResult, textResult, HTTP_METHOD, fileResult } from "fortjs";
 import * as path from "path";
 
 
 export class RandomController extends Controller {
 
-    @DefaultWorker()
+    @defaultWorker()
     async format() {
         const result = {
             statusCode: HTTP_STATUS_CODE.Ok,
@@ -23,48 +23,48 @@ export class RandomController extends Controller {
         return result;
     }
 
-    @Worker()
+    @worker()
     async form() {
         return jsonResult(this.body);
     }
 
-    @Worker()
-    @Route("/throw")
+    @worker()
+    @route("/throw")
     async throwTest() {
         throw "throw test";
     }
 
 
-    @Worker(HTTP_METHOD.Get)
-    @Route('/download')
+    @worker(HTTP_METHOD.Get)
+    @route('/download')
     async download() {
         const pathLocation = path.join(__dirname, "../contents/index.html");
         return downloadResult(pathLocation);
     }
 
 
-    @Worker(HTTP_METHOD.Post)
-    @Route('/download')
+    @worker(HTTP_METHOD.Post)
+    @route('/download')
     async downloadWithAlias() {
         const pathLocation = path.join(__dirname, "../contents/index.html");
         return downloadResult(pathLocation, 'alias');
     }
 
-    @Worker()
-    @Route('/file')
+    @worker()
+    @route('/file')
     async getFile() {
         const pathLocation = path.join(__dirname, "../contents/JsStore_16_16.png");
         return fileResult(pathLocation);
     }
 
 
-    @Worker()
+    @worker()
     async null() {
 
     }
 
-    @Worker()
-    @Route("/status-override")
+    @worker()
+    @route("/status-override")
     async statusCodeOverrideTestUsingWall() {
         return textResult("ok", 202);
     }
