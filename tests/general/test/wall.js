@@ -1,6 +1,6 @@
 let {
     request,
-    expect
+    expect, removeSpaceAndNewLine
 } = require('./common');
 
 describe("wall test", () => {
@@ -42,6 +42,29 @@ describe("wall test", () => {
         })
     })
 
+    it("/404", (done) => {
+        request.get('/home/getdatasss').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
+            expect(res.body).to.be.an("object");
+            expect(res).to.have.header('custom-header-from-incoming-wall', '*');
+            expect(res).to.have.header('injection-result', 'wall constructor onIncoming called on outgoing called');
+            expect(res).to.have.header('wall-without-outgoing-wall', '*');
+            done();
+        })
+    })
+
+    it("/500 by controler", (done) => {
+        request.post('/random/throw').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(removeSpaceAndNewLine(res.text)).to.be.eql('<h1>internalservererror</h1><h3>message:throwtest</h3>');
+
+            expect(res.body).to.be.an("object");
+            expect(res).to.have.header('custom-header-from-incoming-wall', '*');
+            done();
+        })
+    })
 
     it("/getdata", (done) => {
         request.get('/home/getdata').end((err, res) => {
@@ -51,21 +74,10 @@ describe("wall test", () => {
             expect(res).to.have.header('custom-header-from-incoming-wall', '*');
             expect(res).to.have.header('injection-result', 'wall constructor onIncoming called on outgoing called');
             expect(res).to.have.header('wall-without-outgoing-wall', '*');
-            expect(res.body).haveOwnProperty('reqCount').equal(111);
+            expect(res.body).haveOwnProperty('reqCount').equal(113);
             done();
         })
     })
 
-    // it("/404", (done) => {
-    //     request.get('/home/getdatasss').end((err, res) => {
-    //         expect(err).to.be.null;
-    //         expect(res).to.have.status(200);
-    //         expect(res.body).to.be.an("object");
-    //         expect(res).to.have.header('custom-header-from-incoming-wall', '*');
-    //         expect(res).to.have.header('injection-result', 'wall constructor onIncoming called on outgoing called');
-    //         expect(res).to.have.header('wall-without-outgoing-wall', '*');
-    //         expect(res.body).haveOwnProperty('reqCount').equal(111);
-    //         done();
-    //     })
-    // })
+
 })
