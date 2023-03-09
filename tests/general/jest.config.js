@@ -5,5 +5,5 @@ module.exports = {
     testEnvironment: 'node',
     testRegex: '.*\\.(test|spec)?\\.(ts|tsx|js)$',
     moduleFileExtensions: ['ts', 'js'],
-
+    globalTeardown: "./teardown.e2e.ts"
 };

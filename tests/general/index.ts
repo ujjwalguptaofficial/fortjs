@@ -42,5 +42,10 @@ if (process.env.NODE_ENV !== "test") {
     });
 }
 
+// process.on("beforeExit", async () => {
+//     await Fort.destroy();
+//     console.log("server destoryed");
+// })
+
 exports.initServer = initServer;
 exports.Router = Router;

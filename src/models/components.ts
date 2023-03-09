@@ -11,14 +11,14 @@ class ControllerListRef {
         }
     }
 
-    static getMethod(className: string, methodName: string, data?: ControllerTestData) {
+    static getMethod(className: string, methodName: string) {
         const controller = ControllerListRef.getInstance(className);
         if (controller) {
             return controller[methodName];
         }
     }
 
-    static executeMethod(className: string, methodName: string, data?: ControllerTestData) {
+    static executeMethod(className: string, methodName: string) {
         const controller = ControllerListRef.getInstance(className);
         if (controller) {
             return controller[methodName](...InjectorHandler.getMethodValues(className, methodName));

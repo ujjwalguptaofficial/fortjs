@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller } from "../abstracts";
-import { __ContentType, __AppName, __Cookie, __SetCookie } from "../constant";
+import { __Cookie } from "../constant";
 import { FortGlobal } from "../fort_global";
 import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary } from "../helpers";
 import { CookieManager, FileManager } from "../models";

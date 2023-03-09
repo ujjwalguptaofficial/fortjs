@@ -3,11 +3,12 @@ import { getDataType, getClassName, removeMethodAndNullFromObject } from "../hel
 import { DATA_TYPE } from "../enums/data_type";
 
 export function expectBody(value: any): MethodDecorator {
-    return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
+    return (target: any, methodName: string) => {
         const className: string = getClassName(target);
         const type = getDataType(value);
         switch (type) {
             case DATA_TYPE.Function:
+                // eslint-disable-next-line
                 const valueClassName = getClassName(value);
                 if (valueClassName != null) {
                     value = new value();

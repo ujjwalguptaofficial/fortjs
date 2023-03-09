@@ -8,11 +8,12 @@ export function expectQuery(value: any): MethodDecorator {
         const type = getDataType(value);
         switch (type) {
             case DATA_TYPE.Function:
+                // eslint-disable-next-line
                 const valueClassName = getClassName(value);
                 if (valueClassName != null) {
                     value = new value();
                 }
-            case DATA_TYPE.Object:
+            case DATA_TYPE.Object as string:
                 value = removeMethodAndNullFromObject(value);
                 RouteHandler.addExpected("query", className, methodName, value); break;
             default:

@@ -26,6 +26,7 @@ export abstract class Shield implements Controller {
 
     abstract protect(...args): Promise<HttpResult | void>;
 
+    // eslint-disable-next-line
     constructor(...args) {
 
     }

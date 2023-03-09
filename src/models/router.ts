@@ -1,5 +1,4 @@
 import { RouteHandler } from "../handlers";
-import { RouteInfo } from "./route_info";
 
 export class Router {
     get routes() {

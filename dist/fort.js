@@ -1,7 +1,7 @@
 /*!
- * @license :fortjs - V2.0.0 - 27/09/2022
+ * @license :fortjs - V2.0.1 - 09/03/2023
  * https://github.com/ujjwalguptaofficial/fortjs
- * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
+ * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
@@ -149,6 +149,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Controller = /** @class */ (function () {
+    // eslint-disable-next-line
     function Controller() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -194,6 +195,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Guard = /** @class */ (function () {
+    // eslint-disable-next-line
     function Guard() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -351,6 +353,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Shield = /** @class */ (function () {
+    // eslint-disable-next-line
     function Shield() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -452,6 +455,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var Wall = /** @class */ (function () {
+    // eslint-disable-next-line
     function Wall() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -622,11 +626,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function expectBody(value) {
-    return function (target, methodName, descriptor) {
+    return function (target, methodName) {
         var className = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(target);
         var type = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getDataType"])(value);
         switch (type) {
             case _enums_data_type__WEBPACK_IMPORTED_MODULE_2__["DATA_TYPE"].Function:
+                // eslint-disable-next-line
                 var valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(value);
                 if (valueClassName != null) {
                     value = new value();
@@ -666,6 +671,7 @@ function expectQuery(value) {
         var type = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getDataType"])(value);
         switch (type) {
             case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Function:
+                // eslint-disable-next-line
                 var valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(value);
                 if (valueClassName != null) {
                     value = new value();
@@ -1586,6 +1592,7 @@ var GenericSessionProvider = /** @class */ (function (_super) {
     GenericSessionProvider.prototype.setMany = function (values) {
         return null;
     };
+    // eslint-disable-next-line
     GenericSessionProvider.prototype.clear = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -2020,6 +2027,7 @@ var FileHandler = /** @class */ (function (_super) {
     };
     FileHandler.prototype.getFileStats_ = function (filePath) {
         return Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["promise"])(function (res, rej) {
+            // eslint-disable-next-line
             fs__WEBPACK_IMPORTED_MODULE_5__["lstat"](filePath, function (err, status) {
                 if (err) {
                     if (err.code === 'ENOENT') {
@@ -4772,13 +4780,13 @@ var ControllerListRef = /** @class */ (function () {
             return controller;
         }
     };
-    ControllerListRef.getMethod = function (className, methodName, data) {
+    ControllerListRef.getMethod = function (className, methodName) {
         var controller = ControllerListRef.getInstance(className);
         if (controller) {
             return controller[methodName];
         }
     };
-    ControllerListRef.executeMethod = function (className, methodName, data) {
+    ControllerListRef.executeMethod = function (className, methodName) {
         var controller = ControllerListRef.getInstance(className);
         if (controller) {
             return controller[methodName].apply(controller, _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].getMethodValues(className, methodName));
@@ -5122,6 +5130,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Fort = /** @class */ (function () {
+    // eslint-disable-next-line
     function Fort() {
     }
     Object.defineProperty(Fort, "logger", {
@@ -5496,7 +5505,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// exports.default = Fort;
 
 
 /***/ }),
@@ -5566,7 +5574,6 @@ var RouteInfo = /** @class */ (function () {
         get: function () {
             var _this = this;
             return Object.keys(this.workers).map(function (workerName) {
-                return _this.workers[workerName];
                 return _this.workers[workerName];
             });
         },

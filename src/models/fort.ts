@@ -3,12 +3,11 @@ import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper } from "../a
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FortGlobal } from "../fort_global";
 import { ErrorHandler } from ".";
-import { __AppName, __CurrentPath } from "../constant";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
-import { GenericSessionProvider, GenericXmlParser, GenericController } from "../generics";
-import {  isArray } from "../utils";
+import { GenericSessionProvider, GenericController } from "../generics";
+import { isArray } from "../utils";
 import { Logger } from "./logger";
 import { ComponentOption } from "../abstracts/component_option";
 
@@ -210,6 +209,7 @@ export class Fort {
 
     static instance = new Fort();
 
+    // eslint-disable-next-line
     private constructor() {
 
     }

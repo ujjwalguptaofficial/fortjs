@@ -1,6 +1,6 @@
 
 import { HttpResult, HttpFormatResult } from "../types";
-import { __SetCookie, __ContentType } from "../constant";
+import { __SetCookie } from "../constant";
 import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';

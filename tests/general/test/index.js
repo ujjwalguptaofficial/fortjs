@@ -24,7 +24,11 @@ require('./injection');
 require('./expect');
 require('./routes');
 require('./wall');
-// process.exit(0);
+// describe('exit', () => {
+//     it('after', () => {
+//         process.exit(0);
+//     })
+// })
 
 
 // run();

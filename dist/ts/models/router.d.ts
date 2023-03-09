@@ -1,7 +1,6 @@
-import { RouteInfo } from "./route_info";
 export declare class Router {
     get routes(): {
-        [controllerName: string]: RouteInfo;
+        [controllerName: string]: import("./route_info").RouteInfo;
     };
-    get routesAsArray(): RouteInfo[];
+    get routesAsArray(): import("./route_info").RouteInfo[];
 }

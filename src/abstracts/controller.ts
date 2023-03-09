@@ -23,6 +23,7 @@ export abstract class Controller {
         return FortGlobal.logger;
     }
 
+    // eslint-disable-next-line
     constructor(...args) {
 
     }

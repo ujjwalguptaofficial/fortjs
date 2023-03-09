@@ -1,7 +1,6 @@
 import { CookieManager } from "../models";
 import * as getUniqId from "uniqid";
 import { FortGlobal } from "../fort_global";
-import { SessionValue } from "../types";
 
 export abstract class SessionProvider {
 

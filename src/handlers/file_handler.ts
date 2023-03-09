@@ -32,6 +32,7 @@ export class FileHandler extends RequestHandlerHelper {
 
     private getFileStats_(filePath) {
         return promise<Fs.Stats>((res, rej) => {
+            // eslint-disable-next-line
             Fs.lstat(filePath, (err, status) => {
                 if (err) {
                     if (err.code === 'ENOENT') {

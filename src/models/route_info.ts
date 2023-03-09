@@ -13,7 +13,6 @@ export class RouteInfo implements IRouteInfo {
     get workersAsArray() {
         return Object.keys(this.workers).map(workerName => {
             return this.workers[workerName];
-            return this.workers[workerName];
         });
     }
 

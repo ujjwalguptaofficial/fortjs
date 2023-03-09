@@ -4,7 +4,6 @@ import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { GuardTestData, initGuard } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
-import { ComponentOption } from "./component_option";
 
 export abstract class Guard implements Controller {
     request: HttpRequest;
@@ -25,7 +24,8 @@ export abstract class Guard implements Controller {
     get option() {
         return FortGlobal.componentOption;
     }
-
+    
+    // eslint-disable-next-line
     constructor(...args) {
 
     }
