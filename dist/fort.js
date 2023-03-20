@@ -2261,25 +2261,12 @@ class RequestHandlerHelper {
         }).catch(ex => {
             const response = {
                 message: ex.message,
-                stack: ex.stack
+                stack: ex.stack,
+                type: ex.type
             };
-            this.controllerResult = response;
+            this.controllerResult = JSON.stringify(response);
             return this.returnResultFromError_();
         });
-        // if (typeof error === 'string') {
-        //     error = {
-        //         message: error
-        //     } as IException;
-        // }
-        // let response;
-        // try {
-        //     response = await new FortGlobal.errorHandler().onServerError(error);
-        // }
-        // catch (ex) {
-        //     response = JsonHelper.stringify(ex);
-        // }
-        // this.controllerResult = response;
-        // this.returnResultFromError_();
     }
     onRequestOptions(allowedMethods) {
         this.response.setHeader("Allow", allowedMethods.join(","));

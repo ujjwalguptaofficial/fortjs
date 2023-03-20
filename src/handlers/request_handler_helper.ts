@@ -120,26 +120,12 @@ export class RequestHandlerHelper {
         }).catch(ex => {
             const response = {
                 message: ex.message,
-                stack: ex.stack
-            } as any;
-            this.controllerResult = response;
+                stack: ex.stack,
+                type: ex.type
+            };
+            this.controllerResult = JSON.stringify(response) as any;
             return this.returnResultFromError_();
         });
-
-        // if (typeof error === 'string') {
-        //     error = {
-        //         message: error
-        //     } as IException;
-        // }
-        // let response;
-        // try {
-        //     response = await new FortGlobal.errorHandler().onServerError(error);
-        // }
-        // catch (ex) {
-        //     response = JsonHelper.stringify(ex);
-        // }
-        // this.controllerResult = response;
-        // this.returnResultFromError_();
     }
 
     protected onRequestOptions(allowedMethods: HTTP_METHOD[]) {
