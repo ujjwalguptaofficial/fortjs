@@ -1,5 +1,5 @@
 /*!
- * @license :fortjs - V2.0.1 - 09/03/2023
+ * @license :fortjs - V2.0.1 - 20/03/2023
  * https://github.com/ujjwalguptaofficial/fortjs
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -102,34 +102,30 @@ module.exports =
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComponentOption", function() { return ComponentOption; });
-var ComponentOption = /** @class */ (function () {
-    function ComponentOption() {
-    }
-    ComponentOption.prototype.toModel = function (expectedClass, from) {
-        var result = new expectedClass();
-        for (var prop in result) {
+class ComponentOption {
+    toModel(expectedClass, from) {
+        const result = new expectedClass();
+        for (const prop in result) {
             result[prop] = from[prop];
         }
         return result;
-    };
-    ComponentOption.prototype.extractHash = function (expectedHash, from) {
-        for (var prop in expectedHash) {
+    }
+    extractHash(expectedHash, from) {
+        for (const prop in expectedHash) {
             expectedHash[prop] = from[prop];
         }
         return expectedHash;
-    };
-    ComponentOption.prototype.isNull = function (value) {
+    }
+    isNull(value) {
         return value == null;
-    };
-    ComponentOption.prototype.isNullOrEmpty = function (value) {
+    }
+    isNullOrEmpty(value) {
         return value == null || value.length === 0;
-    };
-    ComponentOption.prototype.isEmpty = function (value) {
+    }
+    isEmpty(value) {
         return value.length === 0;
-    };
-    return ComponentOption;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -148,34 +144,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fort_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fort_global */ "./src/fort_global.ts");
 
 
-var Controller = /** @class */ (function () {
+class Controller {
     // eslint-disable-next-line
-    function Controller() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    constructor(...args) {
     }
-    Object.defineProperty(Controller.prototype, "option", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Controller.prototype, "logger", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Controller.prototype.initialize = function (data) {
+    get option() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
+    }
+    get logger() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
+    }
+    initialize(data) {
         Object(_test_helpers__WEBPACK_IMPORTED_MODULE_0__["initController"])(this, data);
-    };
-    return Controller;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -194,34 +176,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fort_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fort_global */ "./src/fort_global.ts");
 
 
-var Guard = /** @class */ (function () {
+class Guard {
     // eslint-disable-next-line
-    function Guard() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    constructor(...args) {
     }
-    Object.defineProperty(Guard.prototype, "logger", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Guard.prototype, "option", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Guard.prototype.initialize = function (data) {
+    get logger() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
+    }
+    get option() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
+    }
+    initialize(data) {
         return Object(_test_helpers__WEBPACK_IMPORTED_MODULE_0__["initGuard"])(this, data);
-    };
-    return Guard;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -285,12 +253,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResultMapper", function() { return ResultMapper; });
-var ResultMapper = /** @class */ (function () {
-    function ResultMapper() {
-    }
-    return ResultMapper;
-}());
-
+class ResultMapper {
+}
 
 
 /***/ }),
@@ -310,11 +274,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fort_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fort_global */ "./src/fort_global.ts");
 
 
-var SessionProvider = /** @class */ (function () {
-    function SessionProvider() {
-    }
-    SessionProvider.prototype.createSession = function (sessionId) {
-        var now = new Date();
+class SessionProvider {
+    createSession(sessionId) {
+        const now = new Date();
         this.sessionId = sessionId != null ? sessionId : uniqid__WEBPACK_IMPORTED_MODULE_0__();
         this.cookie.addCookie({
             name: _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appSessionIdentifier,
@@ -324,16 +286,14 @@ var SessionProvider = /** @class */ (function () {
             expires: new Date(now.setMinutes(now.getMinutes() + _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionTimeOut)),
             maxAge: _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionTimeOut * 60
         });
-    };
-    SessionProvider.prototype.destroySession = function () {
-        var cookie = this.cookie.getCookie(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appSessionIdentifier);
+    }
+    destroySession() {
+        const cookie = this.cookie.getCookie(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appSessionIdentifier);
         cookie.httpOnly = true;
         cookie.path = "/";
         this.cookie.removeCookie(cookie);
-    };
-    return SessionProvider;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -352,34 +312,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fort_global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../fort_global */ "./src/fort_global.ts");
 
 
-var Shield = /** @class */ (function () {
+class Shield {
     // eslint-disable-next-line
-    function Shield() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    constructor(...args) {
     }
-    Object.defineProperty(Shield.prototype, "logger", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Shield.prototype, "option", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Shield.prototype.initialize = function (data) {
+    get logger() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
+    }
+    get option() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
+    }
+    initialize(data) {
         return Object(_test_helpers__WEBPACK_IMPORTED_MODULE_0__["initShield"])(this, data);
-    };
-    return Shield;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -394,12 +340,8 @@ var Shield = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewEngine", function() { return ViewEngine; });
-var ViewEngine = /** @class */ (function () {
-    function ViewEngine() {
-    }
-    return ViewEngine;
-}());
-
+class ViewEngine {
+}
 
 
 /***/ }),
@@ -425,74 +367,27 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
-var Wall = /** @class */ (function () {
+class Wall {
     // eslint-disable-next-line
-    function Wall() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    constructor(...args) {
     }
-    Object.defineProperty(Wall.prototype, "logger", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Wall.prototype, "option", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Wall.prototype.onOutgoing = function (finalResult) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, null];
-            });
+    get logger() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
+    }
+    get option() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption;
+    }
+    onOutgoing(finalResult, ...args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return null;
         });
-    };
-    Wall.prototype.initialize = function (data) {
+    }
+    initialize(data) {
         return Object(_test_helpers__WEBPACK_IMPORTED_MODULE_0__["initWall"])(this, data);
-    };
-    return Wall;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -507,12 +402,8 @@ var Wall = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "XmlParser", function() { return XmlParser; });
-var XmlParser = /** @class */ (function () {
-    function XmlParser() {
-    }
-    return XmlParser;
-}());
-
+class XmlParser {
+}
 
 
 /***/ }),
@@ -534,13 +425,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__ContentLength", function() { return __ContentLength; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__Constructor", function() { return __Constructor; });
 /* tslint:disable */
-var __ContentType = "Content-Type";
-var __AppName = "fort";
-var __Cookie = "Cookie";
-var __SetCookie = 'Set-Cookie';
-var __CurrentPath = process.cwd();
-var __ContentLength = "Content-Length";
-var __Constructor = "const_constructor";
+const __ContentType = "Content-Type";
+const __AppName = "fort";
+const __Cookie = "Cookie";
+const __SetCookie = 'Set-Cookie';
+const __CurrentPath = process.cwd();
+const __ContentLength = "Content-Length";
+const __Constructor = "const_constructor";
 
 
 /***/ }),
@@ -560,9 +451,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var assign = function (value) {
-    return function (target, methodName, paramIndex) {
-        var className = target.name || target.constructor.name;
+const assign = (value) => {
+    return (target, methodName, paramIndex) => {
+        const className = target.name || target.constructor.name;
         if (methodName == null) {
             methodName = _constant__WEBPACK_IMPORTED_MODULE_1__["__Constructor"];
         }
@@ -590,17 +481,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var defaultWorker = function () {
-    var allowedMethods = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        allowedMethods[_i] = arguments[_i];
-    }
-    return function (target, methodName, descriptor) {
+const defaultWorker = (...allowedMethods) => {
+    return (target, methodName, descriptor) => {
         if (allowedMethods.length === 0) {
             Object(_worker__WEBPACK_IMPORTED_MODULE_2__["worker"])(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Get)(target, methodName, descriptor);
         }
         else {
-            _worker__WEBPACK_IMPORTED_MODULE_2__["worker"].apply(void 0, allowedMethods)(target, methodName, descriptor);
+            Object(_worker__WEBPACK_IMPORTED_MODULE_2__["worker"])(...allowedMethods)(target, methodName, descriptor);
         }
         Object(_route__WEBPACK_IMPORTED_MODULE_1__["route"])("/")(target, methodName, descriptor);
     };
@@ -626,13 +513,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function expectBody(value) {
-    return function (target, methodName) {
-        var className = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(target);
-        var type = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getDataType"])(value);
+    return (target, methodName) => {
+        const className = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(target);
+        const type = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getDataType"])(value);
         switch (type) {
             case _enums_data_type__WEBPACK_IMPORTED_MODULE_2__["DATA_TYPE"].Function:
                 // eslint-disable-next-line
-                var valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(value);
+                const valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getClassName"])(value);
                 if (valueClassName != null) {
                     value = new value();
                 }
@@ -641,7 +528,7 @@ function expectBody(value) {
                 _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("body", className, methodName, value);
                 break;
             default:
-                throw new Error("expected body should be always an object but found " + type);
+                throw new Error(`expected body should be always an object but found ${type}`);
         }
     };
 }
@@ -666,13 +553,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function expectQuery(value) {
-    return function (target, methodName, descriptor) {
-        var className = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(target);
-        var type = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getDataType"])(value);
+    return (target, methodName, descriptor) => {
+        const className = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(target);
+        const type = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getDataType"])(value);
         switch (type) {
             case _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Function:
                 // eslint-disable-next-line
-                var valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(value);
+                const valueClassName = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getClassName"])(value);
                 if (valueClassName != null) {
                     value = new value();
                 }
@@ -681,7 +568,7 @@ function expectQuery(value) {
                 _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addExpected("query", className, methodName, value);
                 break;
             default:
-                throw new Error("expected query should be always an object but found " + type);
+                throw new Error(`expected query should be always an object but found ${type}`);
         }
     };
 }
@@ -702,13 +589,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
 
 // tslint:disable-next-line
-var guards = function () {
-    var value = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        value[_i] = arguments[_i];
-    }
-    return (function (target, methodName, descriptor) {
-        var className = target.constructor.name;
+const guards = (...value) => {
+    return ((target, methodName, descriptor) => {
+        const className = target.constructor.name;
         _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addGuards(value, className, methodName);
     });
 };
@@ -780,9 +663,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var route = function (format) {
-    return (function (target, methodName, descriptor) {
-        var className = target.constructor.name;
+const route = (format) => {
+    return ((target, methodName, descriptor) => {
+        const className = target.constructor.name;
         // remove / from route
         if (format != null) {
             format = Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(format);
@@ -807,13 +690,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
 
 // tslint:disable-next-line
-var shields = function () {
-    var shields = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        shields[_i] = arguments[_i];
-    }
-    return function (target) {
-        var className = target.name;
+const shields = (...shields) => {
+    return (target) => {
+        const className = target.name;
         _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addShields(shields, className);
     };
 };
@@ -836,9 +715,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var singleton = function (value) {
-    return function (target, methodName, paramIndex) {
-        var className = target.name || target.constructor.name;
+const singleton = (value) => {
+    return (target, methodName, paramIndex) => {
+        const className = target.name || target.constructor.name;
         if (methodName == null || methodName === 'constructor') {
             methodName = _constant__WEBPACK_IMPORTED_MODULE_1__["__Constructor"];
         }
@@ -864,14 +743,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // tslint:disable-next-line
-var worker = function () {
-    var allowedMethods = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        allowedMethods[_i] = arguments[_i];
-    }
-    return function (target, methodName, descriptor) {
-        var className = target.constructor.name;
-        var actionInfo = {
+const worker = (...allowedMethods) => {
+    return (target, methodName, descriptor) => {
+        const className = target.constructor.name;
+        const actionInfo = {
             workerName: methodName,
             methodsAllowed: allowedMethods.length === 0 ? [
                 _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Delete,
@@ -881,7 +756,7 @@ var worker = function () {
                 _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_METHOD"].Put
             ] : allowedMethods,
             guards: [],
-            pattern: "/" + methodName.toLowerCase(),
+            pattern: `/${methodName.toLowerCase()}`,
             values: []
         };
         _handlers__WEBPACK_IMPORTED_MODULE_1__["RouteHandler"].addWorker(actionInfo, className);
@@ -1118,19 +993,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MemorySessionProvider", function() { return MemorySessionProvider; });
 /* harmony import */ var _abstracts_session_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts/session_provider */ "./src/abstracts/session_provider.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1140,118 +1002,63 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+
+const sessionValues = {};
+class MemorySessionProvider extends _abstracts_session_provider__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"] {
+    get(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const savedSession = sessionValues[this.sessionId];
+            return savedSession != null ? savedSession[key] : null;
+        });
+    }
+    isExist(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const savedValue = sessionValues[this.sessionId];
+            return savedValue == null ? false : savedValue[key] != null;
+        });
+    }
+    getAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const savedValue = sessionValues[this.sessionId];
+            return savedValue == null ? {} : savedValue;
+        });
+    }
+    set(key, val) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const savedValue = sessionValues[this.sessionId];
+            if (savedValue == null) {
+                this.createSession();
+                sessionValues[this.sessionId] = {
+                    [key]: val
+                };
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+            else {
+                savedValue[key] = val;
+            }
+        });
     }
-};
-
-var sessionValues = {};
-var MemorySessionProvider = /** @class */ (function (_super) {
-    __extends(MemorySessionProvider, _super);
-    function MemorySessionProvider() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    MemorySessionProvider.prototype.get = function (key) {
-        return __awaiter(this, void 0, void 0, function () {
-            var savedSession;
-            return __generator(this, function (_a) {
-                savedSession = sessionValues[this.sessionId];
-                return [2 /*return*/, savedSession != null ? savedSession[key] : null];
-            });
-        });
-    };
-    MemorySessionProvider.prototype.isExist = function (key) {
-        return __awaiter(this, void 0, void 0, function () {
-            var savedValue;
-            return __generator(this, function (_a) {
-                savedValue = sessionValues[this.sessionId];
-                return [2 /*return*/, savedValue == null ? false : savedValue[key] != null];
-            });
-        });
-    };
-    MemorySessionProvider.prototype.getAll = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var savedValue;
-            return __generator(this, function (_a) {
-                savedValue = sessionValues[this.sessionId];
-                return [2 /*return*/, savedValue == null ? {} : savedValue];
-            });
-        });
-    };
-    MemorySessionProvider.prototype.set = function (key, val) {
-        return __awaiter(this, void 0, void 0, function () {
-            var savedValue;
-            var _a;
-            return __generator(this, function (_b) {
-                savedValue = sessionValues[this.sessionId];
-                if (savedValue == null) {
-                    this.createSession();
-                    sessionValues[this.sessionId] = (_a = {},
-                        _a[key] = val,
-                        _a);
-                }
-                else {
-                    savedValue[key] = val;
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-    MemorySessionProvider.prototype.setMany = function (values) {
-        var _this = this;
-        return Promise.all(Object.keys(values).map(function (key) {
-            return _this.set(key, values[key]);
+    setMany(values) {
+        return Promise.all(Object.keys(values).map((key) => {
+            return this.set(key, values[key]);
         }));
-    };
-    MemorySessionProvider.prototype.remove = function (key) {
-        return __awaiter(this, void 0, void 0, function () {
-            var savedValue;
-            return __generator(this, function (_a) {
-                savedValue = sessionValues[this.sessionId];
-                if (savedValue != null) {
-                    savedValue[key] = null;
-                }
-                return [2 /*return*/];
-            });
+    }
+    remove(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const savedValue = sessionValues[this.sessionId];
+            if (savedValue != null) {
+                savedValue[key] = null;
+            }
         });
-    };
-    MemorySessionProvider.prototype.clear = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // remove session values
-                delete sessionValues[this.sessionId];
-                // expire cookie in browser
-                this.destroySession();
-                return [2 /*return*/];
-            });
+    }
+    clear() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // remove session values
+            delete sessionValues[this.sessionId];
+            // expire cookie in browser
+            this.destroySession();
         });
-    };
-    return MemorySessionProvider;
-}(_abstracts_session_provider__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"]));
-
+    }
+}
 
 
 /***/ }),
@@ -1278,56 +1085,18 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
-var MustacheViewEngine = /** @class */ (function () {
-    function MustacheViewEngine() {
-    }
-    MustacheViewEngine.prototype.render = function (value) {
-        return __awaiter(this, void 0, void 0, function () {
-            var viewData;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getViewFromFile"])({
-                            fileLocation: value.view
-                        })];
-                    case 1:
-                        viewData = _a.sent();
-                        return [2 /*return*/, mustache__WEBPACK_IMPORTED_MODULE_0__["render"](viewData, value.model)];
-                }
+class MustacheViewEngine {
+    render(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const viewData = yield Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["getViewFromFile"])({
+                fileLocation: value.view
             });
+            return mustache__WEBPACK_IMPORTED_MODULE_0__["render"](viewData, value.model);
         });
-    };
-    return MustacheViewEngine;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -1357,26 +1126,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var isDevelopment = process.env.NODE_ENV === 'development';
-var isProduction = process.env.NODE_ENV === "production";
-var FortGlobal = /** @class */ (function () {
-    function FortGlobal() {
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === "production";
+class FortGlobal {
+    static get isDevelopment() {
+        return isDevelopment;
     }
-    Object.defineProperty(FortGlobal, "isDevelopment", {
-        get: function () {
-            return isDevelopment;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(FortGlobal, "isProduction", {
-        get: function () {
-            return isProduction;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    FortGlobal.setDefault = function () {
+    static get isProduction() {
+        return isProduction;
+    }
+    static setDefault() {
         if (FortGlobal.viewPath == null) {
             FortGlobal.viewPath = path__WEBPACK_IMPORTED_MODULE_5__["join"](_constant__WEBPACK_IMPORTED_MODULE_4__["__CurrentPath"], "views");
         }
@@ -1403,18 +1162,16 @@ var FortGlobal = /** @class */ (function () {
         if (FortGlobal.errorHandler == null) {
             FortGlobal.errorHandler = _models__WEBPACK_IMPORTED_MODULE_0__["ErrorHandler"];
         }
-        FortGlobal.appSessionIdentifier = FortGlobal.appName + "_session_id";
-    };
-    FortGlobal.port = 4000;
-    FortGlobal.shouldParseCookie = true;
-    FortGlobal.shouldParsePost = true;
-    FortGlobal.sessionTimeOut = 60;
-    FortGlobal.walls = [];
-    FortGlobal.folders = [];
-    FortGlobal.componentOption = new _abstracts_component_option__WEBPACK_IMPORTED_MODULE_2__["ComponentOption"]();
-    return FortGlobal;
-}());
-
+        FortGlobal.appSessionIdentifier = `${FortGlobal.appName}_session_id`;
+    }
+}
+FortGlobal.port = 4000;
+FortGlobal.shouldParseCookie = true;
+FortGlobal.shouldParsePost = true;
+FortGlobal.sessionTimeOut = 60;
+FortGlobal.walls = [];
+FortGlobal.folders = [];
+FortGlobal.componentOption = new _abstracts_component_option__WEBPACK_IMPORTED_MODULE_2__["ComponentOption"]();
 
 
 /***/ }),
@@ -1430,32 +1187,12 @@ var FortGlobal = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenericController", function() { return GenericController; });
 /* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts */ "./src/abstracts/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
-var GenericController = /** @class */ (function (_super) {
-    __extends(GenericController, _super);
-    function GenericController() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return _super.call(this) || this;
+class GenericController extends _abstracts__WEBPACK_IMPORTED_MODULE_0__["Controller"] {
+    constructor(...args) {
+        super();
     }
-    return GenericController;
-}(_abstracts__WEBPACK_IMPORTED_MODULE_0__["Controller"]));
-
+}
 
 
 /***/ }),
@@ -1471,39 +1208,15 @@ var GenericController = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenericGuard", function() { return GenericGuard; });
 /* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts */ "./src/abstracts/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
-var GenericGuard = /** @class */ (function (_super) {
-    __extends(GenericGuard, _super);
-    function GenericGuard() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return _super.call(this) || this;
+class GenericGuard extends _abstracts__WEBPACK_IMPORTED_MODULE_0__["Guard"] {
+    constructor(...args) {
+        super();
     }
-    GenericGuard.prototype.check = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    check(...args) {
         return null;
-    };
-    return GenericGuard;
-}(_abstracts__WEBPACK_IMPORTED_MODULE_0__["Guard"]));
-
+    }
+}
 
 
 /***/ }),
@@ -1519,19 +1232,6 @@ var GenericGuard = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenericSessionProvider", function() { return GenericSessionProvider; });
 /* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts */ "./src/abstracts/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1541,68 +1241,32 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
-var GenericSessionProvider = /** @class */ (function (_super) {
-    __extends(GenericSessionProvider, _super);
-    function GenericSessionProvider() {
-        return _super !== null && _super.apply(this, arguments) || this;
+class GenericSessionProvider extends _abstracts__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"] {
+    get() {
+        return null;
     }
-    GenericSessionProvider.prototype.get = function () {
+    getAll() {
         return null;
-    };
-    GenericSessionProvider.prototype.getAll = function () {
+    }
+    set(key, value) {
         return null;
-    };
-    GenericSessionProvider.prototype.set = function (key, value) {
+    }
+    isExist(key) {
         return null;
-    };
-    GenericSessionProvider.prototype.isExist = function (key) {
+    }
+    remove(key) {
         return null;
-    };
-    GenericSessionProvider.prototype.remove = function (key) {
+    }
+    setMany(values) {
         return null;
-    };
-    GenericSessionProvider.prototype.setMany = function (values) {
-        return null;
-    };
+    }
     // eslint-disable-next-line
-    GenericSessionProvider.prototype.clear = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
+    clear() {
+        return __awaiter(this, void 0, void 0, function* () {
         });
-    };
-    return GenericSessionProvider;
-}(_abstracts__WEBPACK_IMPORTED_MODULE_0__["SessionProvider"]));
-
+    }
+}
 
 
 /***/ }),
@@ -1618,39 +1282,15 @@ var GenericSessionProvider = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenericShield", function() { return GenericShield; });
 /* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts */ "./src/abstracts/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
-var GenericShield = /** @class */ (function (_super) {
-    __extends(GenericShield, _super);
-    function GenericShield() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return _super.call(this) || this;
+class GenericShield extends _abstracts__WEBPACK_IMPORTED_MODULE_0__["Shield"] {
+    constructor(...args) {
+        super();
     }
-    GenericShield.prototype.protect = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    protect(...args) {
         return null;
-    };
-    return GenericShield;
-}(_abstracts__WEBPACK_IMPORTED_MODULE_0__["Shield"]));
-
+    }
+}
 
 
 /***/ }),
@@ -1666,39 +1306,15 @@ var GenericShield = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GenericWall", function() { return GenericWall; });
 /* harmony import */ var _abstracts__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../abstracts */ "./src/abstracts/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
-var GenericWall = /** @class */ (function (_super) {
-    __extends(GenericWall, _super);
-    function GenericWall() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return _super.call(this) || this;
+class GenericWall extends _abstracts__WEBPACK_IMPORTED_MODULE_0__["Wall"] {
+    constructor(...args) {
+        super();
     }
-    GenericWall.prototype.onIncoming = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    onIncoming(...args) {
         return null;
-    };
-    return GenericWall;
-}(_abstracts__WEBPACK_IMPORTED_MODULE_0__["Wall"]));
-
+    }
+}
 
 
 /***/ }),
@@ -1722,49 +1338,16 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var GenericXmlParser = /** @class */ (function () {
-    function GenericXmlParser() {
-    }
-    GenericXmlParser.prototype.parse = function (xml) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // tslint:disable-next-line
-                throw {
-                    message: "no xml parser configured"
-                };
-            });
+class GenericXmlParser {
+    parse(xml) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // tslint:disable-next-line
+            throw {
+                message: "no xml parser configured"
+            };
         });
-    };
-    return GenericXmlParser;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -1822,19 +1405,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! path */ "path");
 /* harmony import */ var path__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../helpers */ "./src/helpers/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1844,65 +1414,33 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 
 
 
-var ControllerResultHandler = /** @class */ (function (_super) {
-    __extends(ControllerResultHandler, _super);
-    function ControllerResultHandler() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ControllerResultHandler.prototype.handleRedirectResult_ = function () {
+class ControllerResultHandler extends _file_handler__WEBPACK_IMPORTED_MODULE_2__["FileHandler"] {
+    handleRedirectResult_() {
         this.response.writeHead(this.controllerResult.statusCode || _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok, { 'Location': this.controllerResult.responseData });
         this.response.end();
-    };
-    ControllerResultHandler.prototype.handleFileResult_ = function () {
-        var result = this.controllerResult;
-        var parsedPath = path__WEBPACK_IMPORTED_MODULE_3__["parse"](result.file.filePath);
+    }
+    handleFileResult_() {
+        const result = this.controllerResult;
+        const parsedPath = path__WEBPACK_IMPORTED_MODULE_3__["parse"](result.file.filePath);
         if (result.file.shouldDownload === true) {
-            var fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
-            this.response.setHeader("content-disposition", "attachment;filename=" + fileName + parsedPath.ext);
+            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+            this.response.setHeader("content-disposition", `attachment;filename=${fileName}${parsedPath.ext}`);
         }
         this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
-    };
-    ControllerResultHandler.prototype.onTerminationFromWall = function (result) {
+    }
+    onTerminationFromWall(result) {
         this.controllerResult = result;
         this.handleFinalResult_();
-    };
-    ControllerResultHandler.prototype.handleFinalResult_ = function () {
-        var _this = this;
-        var result = this.controllerResult;
-        this.cookieManager.responseCookie_.forEach(function (value) {
-            _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
+    }
+    handleFinalResult_() {
+        const result = this.controllerResult;
+        this.cookieManager.responseCookie_.forEach(value => {
+            this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_0__["__SetCookie"], value);
         });
         if (result.shouldRedirect === true) {
             this.handleRedirectResult_();
@@ -1910,8 +1448,8 @@ var ControllerResultHandler = /** @class */ (function (_super) {
         else {
             if (result.responseFormat == null) {
                 if (result.file == null) {
-                    var contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
-                    var negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
+                    const contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Text;
+                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
                     if (negotiateMimeType != null) {
                         this.endResponse_(negotiateMimeType);
                     }
@@ -1927,35 +1465,21 @@ var ControllerResultHandler = /** @class */ (function (_super) {
                 this.handleFormatResult_();
             }
         }
-    };
-    ControllerResultHandler.prototype.onResultFromController = function (result) {
-        return __awaiter(this, void 0, void 0, function () {
-            var ex_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.controllerResult = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_1 = _a.sent();
-                        this.onErrorOccured(ex_1);
-                        return [2 /*return*/];
-                    case 4:
-                        this.handleFinalResult_();
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onResultFromController(result) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.controllerResult = result || Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])("");
+            try {
+                yield this.runWallOutgoing();
+            }
+            catch (ex) {
+                this.onErrorOccured(ex);
+                return;
+            }
+            this.handleFinalResult_();
         });
-    };
-    return ControllerResultHandler;
-}(_file_handler__WEBPACK_IMPORTED_MODULE_2__["FileHandler"]));
-
+    }
+}
 
 
 /***/ }),
@@ -1984,19 +1508,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! fresh */ "fresh");
 /* harmony import */ var fresh__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(fresh__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 
 
 
@@ -2007,14 +1518,10 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 
 
-var FileHandler = /** @class */ (function (_super) {
-    __extends(FileHandler, _super);
-    function FileHandler() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    FileHandler.prototype.getFileInfoFromUrl_ = function (urlPath) {
-        var splittedValue = urlPath.split("/");
-        var fileInfo = {
+class FileHandler extends _request_handler_helper__WEBPACK_IMPORTED_MODULE_4__["RequestHandlerHelper"] {
+    getFileInfoFromUrl_(urlPath) {
+        const splittedValue = urlPath.split("/");
+        const fileInfo = {
             file: ""
         };
         if (splittedValue.length > 2 || !Object(_utils__WEBPACK_IMPORTED_MODULE_9__["isNullOrEmpty"])(path__WEBPACK_IMPORTED_MODULE_2__["parse"](urlPath).ext)) {
@@ -2024,11 +1531,11 @@ var FileHandler = /** @class */ (function (_super) {
         }
         fileInfo.folder = splittedValue[1];
         return fileInfo;
-    };
-    FileHandler.prototype.getFileStats_ = function (filePath) {
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["promise"])(function (res, rej) {
+    }
+    getFileStats_(filePath) {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["promise"])((res, rej) => {
             // eslint-disable-next-line
-            fs__WEBPACK_IMPORTED_MODULE_5__["lstat"](filePath, function (err, status) {
+            fs__WEBPACK_IMPORTED_MODULE_5__["lstat"](filePath, (err, status) => {
                 if (err) {
                     if (err.code === 'ENOENT') {
                         res(null);
@@ -2042,52 +1549,51 @@ var FileHandler = /** @class */ (function (_super) {
                 }
             });
         });
-    };
-    FileHandler.prototype.handleFileRequestFromAbsolutePath = function (absolutePath, fileType) {
-        var _this = this;
-        this.getFileStats_(absolutePath).then(function (fileInfo) {
+    }
+    handleFileRequestFromAbsolutePath(absolutePath, fileType) {
+        this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
-                    _this.handleFileRequestForFolderPath_(absolutePath);
+                    this.handleFileRequestForFolderPath_(absolutePath);
                 }
                 else {
-                    _this.sendFile_(absolutePath, fileType, fileInfo);
+                    this.sendFile_(absolutePath, fileType, fileInfo);
                 }
             }
             else {
-                _this.onNotFound();
+                this.onNotFound();
             }
-        }).catch(function (ex) {
-            _this.onErrorOccured(ex);
+        }).catch(ex => {
+            this.onErrorOccured(ex);
         });
-    };
-    FileHandler.prototype.checkForFolderAllowAndReturnPath_ = function (urlPath) {
-        var fileInfo = this.getFileInfoFromUrl_(urlPath);
-        var getAbsPath = function () {
-            var folder = _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders.find(function (qry) { return qry.alias === fileInfo.folder; });
+    }
+    checkForFolderAllowAndReturnPath_(urlPath) {
+        const fileInfo = this.getFileInfoFromUrl_(urlPath);
+        const getAbsPath = function () {
+            const folder = _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders.find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
                 return path__WEBPACK_IMPORTED_MODULE_2__["join"](folder.path, fileInfo.file);
             }
             return null;
         };
-        var absPath = getAbsPath();
+        let absPath = getAbsPath();
         if (absPath == null) {
             fileInfo.folder = "/";
             fileInfo.file = urlPath;
             absPath = getAbsPath();
         }
         return absPath;
-    };
-    FileHandler.prototype.handleFileRequest = function (urlPath) {
-        var extension = path__WEBPACK_IMPORTED_MODULE_2__["parse"](urlPath).ext;
-        var absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
+    }
+    handleFileRequest(urlPath) {
+        const extension = path__WEBPACK_IMPORTED_MODULE_2__["parse"](urlPath).ext;
+        const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
         if (absFilePath != null) {
             this.handleFileRequestFromAbsolutePath(absFilePath, extension);
         }
         else {
             this.onNotFound();
         }
-    };
+    }
     /**
      * process folders handling asuuming path is folder.
      * Please check whether the file is folder before calling this function
@@ -2098,70 +1604,63 @@ var FileHandler = /** @class */ (function (_super) {
      * @returns
      * @memberof FileHandler
      */
-    FileHandler.prototype.handleFileRequestForFolderPath_ = function (absolutePath) {
-        var _this = this;
+    handleFileRequestForFolderPath_(absolutePath) {
         absolutePath = path__WEBPACK_IMPORTED_MODULE_2__["join"](absolutePath, "index.html");
-        this.getFileStats_(absolutePath).then(function (fileInfo) {
+        this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
-                var fileType = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html;
-                _this.sendFile_(absolutePath, fileType, fileInfo);
+                const fileType = _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html;
+                this.sendFile_(absolutePath, fileType, fileInfo);
             }
             else {
-                _this.onNotFound();
+                this.onNotFound();
             }
         }).catch(this.onErrorOccured.bind(this));
-    };
-    FileHandler.prototype.isClientHasFreshFile_ = function (lastModified, etagValue) {
+    }
+    isClientHasFreshFile_(lastModified, etagValue) {
         return fresh__WEBPACK_IMPORTED_MODULE_8__(this.request.headers, {
             'etag': etagValue,
             'last-modified': lastModified
         });
-    };
-    FileHandler.prototype.sendFileAsResponse_ = function (filePath, mimeType) {
-        var _a;
-        var _this = this;
-        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {},
-            _a[_constant__WEBPACK_IMPORTED_MODULE_3__["__ContentType"]] = mimeType,
-            _a));
-        var readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](filePath);
+    }
+    sendFileAsResponse_(filePath, mimeType) {
+        this.response.writeHead(_enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, {
+            [_constant__WEBPACK_IMPORTED_MODULE_3__["__ContentType"]]: mimeType
+        });
+        const readStream = fs__WEBPACK_IMPORTED_MODULE_5__["createReadStream"](filePath);
         // Handle non-existent file
         readStream.on('error', this.onErrorOccured.bind(this));
-        readStream.on('open', function () {
-            readStream.pipe(_this.response);
+        readStream.on('open', () => {
+            readStream.pipe(this.response);
         });
-    };
-    FileHandler.prototype.getMimeTypeFromFileType_ = function (fileType) {
+    }
+    getMimeTypeFromFileType_(fileType) {
         return fileType[0] === '.' ? Object(_helpers__WEBPACK_IMPORTED_MODULE_6__["getMimeTypeFromExtension"])(fileType) :
             fileType;
-    };
-    return FileHandler;
-}(_request_handler_helper__WEBPACK_IMPORTED_MODULE_4__["RequestHandlerHelper"]));
-
+    }
+}
 if (_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].isProduction) {
     FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
-        var _this = this;
-        this.runWallOutgoing().then(function () {
-            var lastModified = fileInfo.mtime.toUTCString();
-            var eTagValue = etag__WEBPACK_IMPORTED_MODULE_7__(fileInfo, {
+        this.runWallOutgoing().then(() => {
+            const lastModified = fileInfo.mtime.toUTCString();
+            const eTagValue = etag__WEBPACK_IMPORTED_MODULE_7__(fileInfo, {
                 weak: _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].eTag.type === _enums__WEBPACK_IMPORTED_MODULE_0__["ETag_Type"].Weak
             });
-            if (_this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
-                _this.response.statusCode = _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotModified;
-                _this.response.end();
+            if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+                this.response.statusCode = _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].NotModified;
+                this.response.end();
             }
             else {
-                _this.response.setHeader('Etag', eTagValue);
-                _this.response.setHeader('Last-Modified', lastModified);
-                _this.sendFileAsResponse_(filePath, _this.getMimeTypeFromFileType_(fileType));
+                this.response.setHeader('Etag', eTagValue);
+                this.response.setHeader('Last-Modified', lastModified);
+                this.sendFileAsResponse_(filePath, this.getMimeTypeFromFileType_(fileType));
             }
         }).catch(this.onErrorOccured.bind(this));
     };
 }
 else {
     FileHandler.prototype.sendFile_ = function (filePath, fileType, fileInfo) {
-        var _this = this;
-        this.runWallOutgoing().then(function () {
-            _this.sendFileAsResponse_(filePath, _this.getMimeTypeFromFileType_(fileType));
+        this.runWallOutgoing().then(() => {
+            this.sendFileAsResponse_(filePath, this.getMimeTypeFromFileType_(fileType));
         }).catch(this.onErrorOccured.bind(this));
     };
 }
@@ -2223,19 +1722,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constant__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constant */ "./src/constant.ts");
 
 // this stores information of injector values that are available per class & worker
-var injectorStoreInfos = [];
+const injectorStoreInfos = [];
 // this stores injector values
-var injectorValues = [];
+const injectorValues = [];
 // this stores the singletons name & their respective index in injector values
-var singletons = {};
-var InjectorHandler = /** @class */ (function () {
-    function InjectorHandler() {
-    }
-    InjectorHandler.addWorkerValue = function (className, methodName, paramIndex, paramValue, shouldFindIndex) {
-        var _a;
-        if (shouldFindIndex === void 0) { shouldFindIndex = true; }
+const singletons = {};
+class InjectorHandler {
+    static addWorkerValue(className, methodName, paramIndex, paramValue, shouldFindIndex = true) {
         if (shouldFindIndex === true) {
-            var paramValueIndex = injectorValues.indexOf(paramValue);
+            const paramValueIndex = injectorValues.indexOf(paramValue);
             if (paramValueIndex < 0) {
                 paramValue = injectorValues.push(paramValue) - 1;
             }
@@ -2243,12 +1738,12 @@ var InjectorHandler = /** @class */ (function () {
                 paramValue = paramValueIndex;
             }
         }
-        var savedValue = injectorStoreInfos.find(function (x) { return x.className === className; });
-        var value = {
+        const savedValue = injectorStoreInfos.find(x => x.className === className);
+        const value = {
             className: className,
-            methods: (_a = {},
-                _a[methodName] = [],
-                _a)
+            methods: {
+                [methodName]: []
+            }
         };
         if (savedValue == null) {
             value.methods[methodName][paramIndex] = paramValue;
@@ -2262,24 +1757,24 @@ var InjectorHandler = /** @class */ (function () {
             savedValue.methods[methodName][paramIndex] = paramValue;
         }
         return paramValue;
-    };
-    InjectorHandler.getConstructorValues = function (className) {
+    }
+    static getConstructorValues(className) {
         return this.getMethodValues(className, _constant__WEBPACK_IMPORTED_MODULE_0__["__Constructor"]);
-    };
-    InjectorHandler.getMethodValues = function (className, methodName) {
-        var savedValue = injectorStoreInfos.find(function (qry) { return qry.className === className; });
+    }
+    static getMethodValues(className, methodName) {
+        const savedValue = injectorStoreInfos.find(qry => qry.className === className);
         if (savedValue != null) {
-            var methodArgs = savedValue.methods[methodName];
+            const methodArgs = savedValue.methods[methodName];
             if (methodArgs != null) {
-                return methodArgs.map(function (injectorValueIndex) {
+                return methodArgs.map(injectorValueIndex => {
                     return injectorValues[injectorValueIndex];
                 });
             }
         }
         return [];
-    };
-    InjectorHandler.addSingleton = function (className, methodName, paramIndex, paramValue) {
-        var singletonClassName = paramValue.name;
+    }
+    static addSingleton(className, methodName, paramIndex, paramValue) {
+        const singletonClassName = paramValue.name;
         if (singletonClassName) {
             if (singletons[singletonClassName] == null) {
                 singletons[singletonClassName] = InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue());
@@ -2288,10 +1783,8 @@ var InjectorHandler = /** @class */ (function () {
                 InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletons[singletonClassName], false);
             }
         }
-    };
-    return InjectorHandler;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -2318,19 +1811,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var multiparty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(multiparty__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _models__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../models */ "./src/models/index.ts");
 /* harmony import */ var _fort_global__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../fort_global */ "./src/fort_global.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -2340,33 +1820,6 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 
@@ -2376,96 +1829,79 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
-var PostHandler = /** @class */ (function (_super) {
-    __extends(PostHandler, _super);
-    function PostHandler() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    PostHandler.prototype.getPostRawData_ = function () {
-        var _this = this;
-        var body = [];
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (res, rej) {
-            _this.request.on('data', function (chunk) {
+class PostHandler extends _controller_result_handler__WEBPACK_IMPORTED_MODULE_0__["ControllerResultHandler"] {
+    getPostRawData_() {
+        const body = [];
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["promise"])((res, rej) => {
+            this.request.on('data', (chunk) => {
                 body.push(chunk);
-            }).on('end', function () {
-                var bodyBuffer = Buffer.concat(body);
+            }).on('end', () => {
+                const bodyBuffer = Buffer.concat(body);
                 res(bodyBuffer.toString());
             }).on("error", function (err) {
                 rej(err);
             });
         });
-    };
-    PostHandler.prototype.parseMultiPartData_ = function () {
-        var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["promise"])(function (res, rej) {
-            new multiparty__WEBPACK_IMPORTED_MODULE_6__["Form"]().parse(_this.request, function (err, fields, files) {
+    }
+    parseMultiPartData_() {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_1__["promise"])((res, rej) => {
+            new multiparty__WEBPACK_IMPORTED_MODULE_6__["Form"]().parse(this.request, (err, fields, files) => {
                 if (err) {
                     rej(err);
                 }
                 else {
-                    var result = {
+                    const result = {
                         field: {},
                         file: {}
                     };
-                    for (var field in fields) {
+                    for (const field in fields) {
                         result.field[field] = fields[field].length === 1 ? fields[field][0] : fields[field];
                     }
-                    for (var file in files) {
+                    for (const file in files) {
                         result.file[file] = files[file].length === 1 ? files[file][0] : files[file];
                     }
                     res(result);
                 }
             });
         });
-    };
-    PostHandler.prototype.parsePostData = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var postData, contentType, result, bodyDataAsString;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        contentType = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_2__["__ContentType"]] || this.request.headers["content-type"];
-                        if (contentType != null) {
-                            contentType = content_type__WEBPACK_IMPORTED_MODULE_4__["parse"](contentType).type;
-                        }
-                        if (!(contentType === _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormMultiPart)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.parseMultiPartData_()];
-                    case 1:
-                        result = _a.sent();
-                        postData = result.field;
-                        this.file = new _models__WEBPACK_IMPORTED_MODULE_7__["FileManager"](result.file);
-                        return [3 /*break*/, 4];
-                    case 2:
-                        this.file = new _models__WEBPACK_IMPORTED_MODULE_7__["FileManager"]({});
-                        return [4 /*yield*/, this.getPostRawData_()];
-                    case 3:
-                        bodyDataAsString = _a.sent();
-                        switch (contentType) {
-                            case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
-                                postData = _helpers__WEBPACK_IMPORTED_MODULE_1__["JsonHelper"].parse(bodyDataAsString);
-                                break;
-                            case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
-                            case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
-                                postData = bodyDataAsString;
-                                break;
-                            case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
-                                postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyDataAsString);
-                                break;
-                            case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Xml:
-                                postData = new _fort_global__WEBPACK_IMPORTED_MODULE_8__["FortGlobal"].xmlParser().parse(bodyDataAsString);
-                                break;
-                            default:
-                                postData = {};
-                        }
-                        _a.label = 4;
-                    case 4: return [2 /*return*/, postData];
+    }
+    parsePostData() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let postData;
+            let contentType = this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_2__["__ContentType"]] || this.request.headers["content-type"];
+            if (contentType != null) {
+                contentType = content_type__WEBPACK_IMPORTED_MODULE_4__["parse"](contentType).type;
+            }
+            if (contentType === _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormMultiPart) {
+                const result = yield this.parseMultiPartData_();
+                postData = result.field;
+                this.file = new _models__WEBPACK_IMPORTED_MODULE_7__["FileManager"](result.file);
+            }
+            else {
+                this.file = new _models__WEBPACK_IMPORTED_MODULE_7__["FileManager"]({});
+                const bodyDataAsString = yield this.getPostRawData_();
+                switch (contentType) {
+                    case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Json:
+                        postData = _helpers__WEBPACK_IMPORTED_MODULE_1__["JsonHelper"].parse(bodyDataAsString);
+                        break;
+                    case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Text:
+                    case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Html:
+                        postData = bodyDataAsString;
+                        break;
+                    case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].FormUrlEncoded:
+                        postData = querystring__WEBPACK_IMPORTED_MODULE_5__["parse"](bodyDataAsString);
+                        break;
+                    case _enums__WEBPACK_IMPORTED_MODULE_3__["MIME_TYPE"].Xml:
+                        postData = new _fort_global__WEBPACK_IMPORTED_MODULE_8__["FortGlobal"].xmlParser().parse(bodyDataAsString);
+                        break;
+                    default:
+                        postData = {};
                 }
-            });
+            }
+            return postData;
         });
-    };
-    return PostHandler;
-}(_controller_result_handler__WEBPACK_IMPORTED_MODULE_0__["ControllerResultHandler"]));
-
+    }
+}
 
 
 /***/ }),
@@ -2490,19 +1926,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _post_handler__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./post_handler */ "./src/handlers/post_handler.ts");
 /* harmony import */ var _injector_handler__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./injector_handler */ "./src/handlers/injector_handler.ts");
 /* harmony import */ var _route_handler__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./route_handler */ "./src/handlers/route_handler.ts");
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -2512,225 +1935,150 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+
+
+
+
+
+
+
+
+
+class RequestHandler extends _post_handler__WEBPACK_IMPORTED_MODULE_6__["PostHandler"] {
+    constructor(request, response) {
+        super();
+        this.data_ = {};
+        this.request = request;
+        this.response = response;
+        this.registerEvents_();
     }
-};
-var __spreadArrays = (undefined && undefined.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
-
-
-
-
-
-
-
-
-
-var RequestHandler = /** @class */ (function (_super) {
-    __extends(RequestHandler, _super);
-    function RequestHandler(request, response) {
-        var _this = _super.call(this) || this;
-        _this.data_ = {};
-        _this.request = request;
-        _this.response = response;
-        _this.registerEvents_();
-        return _this;
-    }
-    RequestHandler.prototype.registerEvents_ = function () {
+    registerEvents_() {
         this.request.on('error', this.onBadRequest.bind(this));
         this.response.on('error', this.onErrorOccured.bind(this));
-    };
-    RequestHandler.prototype.executeWallIncoming_ = function () {
-        var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) {
-            var index = 0;
-            var wallLength = _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].walls.length;
-            var executeWallIncomingByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
-                var wall, constructorArgsValues, wallObj, methodArgsValues, result, ex_1;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!(wallLength > index)) return [3 /*break*/, 5];
-                            wall = _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].walls[index++];
-                            constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(wall.name);
-                            wallObj = new (wall.bind.apply(wall, __spreadArrays([void 0], constructorArgsValues)))();
-                            wallObj.cookie = this.cookieManager;
-                            wallObj.session = this.session_;
-                            wallObj.request = this.request;
-                            wallObj.response = this.response;
-                            wallObj.data = this.data_;
-                            wallObj.query = this.query_;
-                            this.wallInstances.push(wallObj);
-                            methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(wall.name, 'onIncoming');
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, wallObj.onIncoming.apply(wallObj, methodArgsValues)];
-                        case 2:
-                            result = _a.sent();
-                            if (result == null) {
-                                executeWallIncomingByIndex();
-                            }
-                            else {
-                                res(false);
-                                this.onTerminationFromWall(result);
-                            }
-                            return [3 /*break*/, 4];
-                        case 3:
-                            ex_1 = _a.sent();
-                            this.onErrorOccured(ex_1);
+    }
+    executeWallIncoming_() {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])((res) => {
+            let index = 0;
+            const wallLength = _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].walls.length;
+            const executeWallIncomingByIndex = () => __awaiter(this, void 0, void 0, function* () {
+                if (wallLength > index) {
+                    const wall = _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].walls[index++];
+                    const constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(wall.name);
+                    const wallObj = new wall(...constructorArgsValues);
+                    wallObj.cookie = this.cookieManager;
+                    wallObj.session = this.session_;
+                    wallObj.request = this.request;
+                    wallObj.response = this.response;
+                    wallObj.data = this.data_;
+                    wallObj.query = this.query_;
+                    this.wallInstances.push(wallObj);
+                    const methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(wall.name, 'onIncoming');
+                    try {
+                        const result = yield wallObj.onIncoming(...methodArgsValues);
+                        if (result == null) {
+                            executeWallIncomingByIndex();
+                        }
+                        else {
                             res(false);
-                            return [3 /*break*/, 4];
-                        case 4: return [3 /*break*/, 6];
-                        case 5:
-                            res(true);
-                            _a.label = 6;
-                        case 6: return [2 /*return*/];
+                            this.onTerminationFromWall(result);
+                        }
                     }
-                });
-            }); };
+                    catch (ex) {
+                        this.onErrorOccured(ex);
+                        res(false);
+                    }
+                }
+                else {
+                    res(true);
+                }
+            });
             executeWallIncomingByIndex();
         });
-    };
-    RequestHandler.prototype.executeShieldsProtection_ = function () {
-        var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) {
-            var index = 0;
-            var shieldLength = _this.routeMatchInfo_.shields.length;
-            var executeShieldByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
-                var shield, constructorArgsValues, shieldObj, methodArgsValues, result, ex_2;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!(shieldLength > index)) return [3 /*break*/, 5];
-                            shield = this.routeMatchInfo_.shields[index++];
-                            constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(shield.name);
-                            shieldObj = new (shield.bind.apply(shield, __spreadArrays([void 0], constructorArgsValues)))();
-                            shieldObj.cookie = this.cookieManager;
-                            shieldObj.query = this.query_;
-                            shieldObj.session = this.session_;
-                            shieldObj.request = this.request;
-                            shieldObj.response = this.response;
-                            shieldObj.data = this.data_;
-                            shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
-                            methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(shield.name, 'protect');
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, shieldObj.protect.apply(shieldObj, methodArgsValues)];
-                        case 2:
-                            result = _a.sent();
-                            if (result == null) {
-                                executeShieldByIndex();
-                            }
-                            else {
-                                res(false);
-                                this.onResultFromController(result);
-                            }
-                            return [3 /*break*/, 4];
-                        case 3:
-                            ex_2 = _a.sent();
-                            this.onErrorOccured(ex_2);
+    }
+    executeShieldsProtection_() {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])((res) => {
+            let index = 0;
+            const shieldLength = this.routeMatchInfo_.shields.length;
+            const executeShieldByIndex = () => __awaiter(this, void 0, void 0, function* () {
+                if (shieldLength > index) {
+                    const shield = this.routeMatchInfo_.shields[index++];
+                    const constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(shield.name);
+                    const shieldObj = new shield(...constructorArgsValues);
+                    shieldObj.cookie = this.cookieManager;
+                    shieldObj.query = this.query_;
+                    shieldObj.session = this.session_;
+                    shieldObj.request = this.request;
+                    shieldObj.response = this.response;
+                    shieldObj.data = this.data_;
+                    shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
+                    const methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(shield.name, 'protect');
+                    try {
+                        const result = yield shieldObj.protect(...methodArgsValues);
+                        if (result == null) {
+                            executeShieldByIndex();
+                        }
+                        else {
                             res(false);
-                            return [3 /*break*/, 4];
-                        case 4: return [3 /*break*/, 6];
-                        case 5:
-                            res(true);
-                            _a.label = 6;
-                        case 6: return [2 /*return*/];
+                            this.onResultFromController(result);
+                        }
                     }
-                });
-            }); };
+                    catch (ex) {
+                        this.onErrorOccured(ex);
+                        res(false);
+                    }
+                }
+                else {
+                    res(true);
+                }
+            });
             executeShieldByIndex();
         });
-    };
-    RequestHandler.prototype.executeGuardsCheck_ = function (guards) {
-        var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])(function (res) {
-            var index = 0;
-            var shieldLength = guards.length;
-            var executeGuardByIndex = function () { return __awaiter(_this, void 0, void 0, function () {
-                var guard, constructorArgsValues, guardObj, methodArgsValues, result, ex_3;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!(shieldLength > index)) return [3 /*break*/, 5];
-                            guard = guards[index++];
-                            constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(guard.name);
-                            guardObj = new (guard.bind.apply(guard, __spreadArrays([void 0], constructorArgsValues)))();
-                            guardObj.body = this.body;
-                            guardObj.cookie = this.cookieManager;
-                            guardObj.query = this.query_;
-                            guardObj.session = this.session_;
-                            guardObj.request = this.request;
-                            guardObj.response = this.response;
-                            guardObj.data = this.data_;
-                            guardObj.file = this.file;
-                            guardObj.param = this.routeMatchInfo_.params;
-                            methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(guard.name, 'check');
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, guardObj.check.apply(guardObj, methodArgsValues)];
-                        case 2:
-                            result = _a.sent();
-                            if (result == null) {
-                                executeGuardByIndex();
-                            }
-                            else {
-                                res(false);
-                                this.onResultFromController(result);
-                            }
-                            return [3 /*break*/, 4];
-                        case 3:
-                            ex_3 = _a.sent();
-                            this.onErrorOccured(ex_3);
+    }
+    executeGuardsCheck_(guards) {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["promise"])((res) => {
+            let index = 0;
+            const shieldLength = guards.length;
+            const executeGuardByIndex = () => __awaiter(this, void 0, void 0, function* () {
+                if (shieldLength > index) {
+                    const guard = guards[index++];
+                    const constructorArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(guard.name);
+                    const guardObj = new guard(...constructorArgsValues);
+                    guardObj.body = this.body;
+                    guardObj.cookie = this.cookieManager;
+                    guardObj.query = this.query_;
+                    guardObj.session = this.session_;
+                    guardObj.request = this.request;
+                    guardObj.response = this.response;
+                    guardObj.data = this.data_;
+                    guardObj.file = this.file;
+                    guardObj.param = this.routeMatchInfo_.params;
+                    const methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(guard.name, 'check');
+                    try {
+                        const result = yield guardObj.check(...methodArgsValues);
+                        if (result == null) {
+                            executeGuardByIndex();
+                        }
+                        else {
                             res(false);
-                            return [3 /*break*/, 4];
-                        case 4: return [3 /*break*/, 6];
-                        case 5:
-                            res(true);
-                            _a.label = 6;
-                        case 6: return [2 /*return*/];
+                            this.onResultFromController(result);
+                        }
                     }
-                });
-            }); };
+                    catch (ex) {
+                        this.onErrorOccured(ex);
+                        res(false);
+                    }
+                }
+                else {
+                    res(true);
+                }
+            });
             executeGuardByIndex();
         });
-    };
-    RequestHandler.prototype.parseCookieFromRequest_ = function () {
+    }
+    parseCookieFromRequest_() {
         if (_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].shouldParseCookie === true) {
-            var rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
-            var parsedCookies = void 0;
+            const rawCookie = (this.request.headers[_constant__WEBPACK_IMPORTED_MODULE_1__["__Cookie"]] || this.request.headers["cookie"]);
+            let parsedCookies;
             try {
                 parsedCookies = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseCookie"])(rawCookie);
             }
@@ -2746,153 +2094,118 @@ var RequestHandler = /** @class */ (function (_super) {
             this.cookieManager = new _models__WEBPACK_IMPORTED_MODULE_4__["CookieManager"]({});
         }
         return true;
-    };
-    RequestHandler.prototype.setPreHeader_ = function () {
+    }
+    setPreHeader_() {
         this.response.setHeader('X-Powered-By', _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].appName);
         this.response.setHeader('Vary', 'Accept-Encoding');
         this.response.sendDate = true;
-    };
-    RequestHandler.prototype.checkExpectedQuery_ = function () {
-        var expectedQuery = _route_handler__WEBPACK_IMPORTED_MODULE_8__["RouteHandler"].getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
+    }
+    checkExpectedQuery_() {
+        const expectedQuery = _route_handler__WEBPACK_IMPORTED_MODULE_8__["RouteHandler"].getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
         if (expectedQuery != null) {
             this.query_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["compareExpectedAndRemoveUnnecessary"])(expectedQuery, this.query_, true);
         }
-    };
-    RequestHandler.prototype.checkExpectedBody_ = function () {
-        var expectedBody = _route_handler__WEBPACK_IMPORTED_MODULE_8__["RouteHandler"].getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
+    }
+    checkExpectedBody_() {
+        const expectedBody = _route_handler__WEBPACK_IMPORTED_MODULE_8__["RouteHandler"].getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
         if (expectedBody != null) {
             this.body = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["compareExpectedAndRemoveUnnecessary"])(expectedBody, this.body, false);
         }
-    };
-    RequestHandler.prototype.onRouteMatched_ = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var actionInfo, shouldExecuteNextComponent;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        actionInfo = this.routeMatchInfo_.workerInfo;
-                        if (!(actionInfo == null)) return [3 /*break*/, 1];
-                        if (this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Options) {
-                            this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
-                        }
-                        else {
-                            this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
-                        }
-                        return [3 /*break*/, 5];
-                    case 1:
-                        this.checkExpectedQuery_();
-                        if (this.query_ == null) {
-                            this.onBadRequest({
-                                message: "Bad query string data - query string data does not match with expected value"
-                            });
-                            return [2 /*return*/];
-                        }
-                        return [4 /*yield*/, this.executeShieldsProtection_()];
-                    case 2:
-                        shouldExecuteNextComponent = _a.sent();
-                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.handlePostData()];
-                    case 3:
-                        shouldExecuteNextComponent = _a.sent();
-                        if (!(shouldExecuteNextComponent === true)) return [3 /*break*/, 5];
+    }
+    onRouteMatched_() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const actionInfo = this.routeMatchInfo_.workerInfo;
+            if (actionInfo == null) {
+                if (this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Options) {
+                    this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
+                }
+                else {
+                    this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
+                }
+            }
+            else {
+                this.checkExpectedQuery_();
+                if (this.query_ == null) {
+                    this.onBadRequest({
+                        message: "Bad query string data - query string data does not match with expected value"
+                    });
+                    return;
+                }
+                let shouldExecuteNextComponent = yield this.executeShieldsProtection_();
+                if (shouldExecuteNextComponent === true) {
+                    shouldExecuteNextComponent = yield this.handlePostData();
+                    if (shouldExecuteNextComponent === true) {
                         this.checkExpectedBody_();
                         if (this.body == null) {
                             this.onBadRequest({
                                 message: "Bad body data - body data does not match with expected value"
                             });
-                            return [2 /*return*/];
+                            return;
                         }
-                        return [4 /*yield*/, this.executeGuardsCheck_(actionInfo.guards)];
-                    case 4:
-                        shouldExecuteNextComponent = _a.sent();
+                        shouldExecuteNextComponent = yield this.executeGuardsCheck_(actionInfo.guards);
                         if (shouldExecuteNextComponent === true) {
                             this.runController_();
                         }
-                        _a.label = 5;
-                    case 5: return [2 /*return*/];
+                    }
                 }
-            });
+            }
         });
-    };
-    RequestHandler.prototype.execute_ = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var urlDetail, shouldExecuteNextProcess, pathUrl, requestMethod;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
-                        this.query_ = urlDetail.query;
-                        shouldExecuteNextProcess = this.parseCookieFromRequest_();
-                        if (!(shouldExecuteNextProcess === true)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.executeWallIncoming_()];
-                    case 1:
-                        shouldExecuteNextProcess = _a.sent();
-                        if (shouldExecuteNextProcess === true) {
-                            pathUrl = urlDetail.pathname;
-                            requestMethod = this.request.method;
-                            try {
-                                this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
-                            }
-                            catch (ex) {
-                                this.onErrorOccured(ex);
-                                return [2 /*return*/];
-                            }
-                            if (this.routeMatchInfo_ == null) { // no route matched
-                                // it may be a file or folder then
-                                this.handleFileRequest(pathUrl);
-                            }
-                            else {
-                                this.onRouteMatched_();
-                            }
-                        }
-                        _a.label = 2;
-                    case 2: return [2 /*return*/];
+    }
+    execute_() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const urlDetail = url__WEBPACK_IMPORTED_MODULE_0__["parse"](this.request.url, true);
+            this.query_ = urlDetail.query;
+            let shouldExecuteNextProcess = this.parseCookieFromRequest_();
+            if (shouldExecuteNextProcess === true) {
+                shouldExecuteNextProcess = yield this.executeWallIncoming_();
+                if (shouldExecuteNextProcess === true) {
+                    const pathUrl = urlDetail.pathname;
+                    const requestMethod = this.request.method;
+                    try {
+                        this.routeMatchInfo_ = Object(_helpers__WEBPACK_IMPORTED_MODULE_3__["parseAndMatchRoute"])(pathUrl.toLowerCase(), requestMethod);
+                    }
+                    catch (ex) {
+                        this.onErrorOccured(ex);
+                        return;
+                    }
+                    if (this.routeMatchInfo_ == null) { // no route matched
+                        // it may be a file or folder then
+                        this.handleFileRequest(pathUrl);
+                    }
+                    else {
+                        this.onRouteMatched_();
+                    }
                 }
-            });
+            }
         });
-    };
-    RequestHandler.prototype.handlePostData = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, ex_4;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (!(this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Get)) return [3 /*break*/, 1];
-                        this.body = {};
-                        this.file = new _models__WEBPACK_IMPORTED_MODULE_4__["FileManager"]({});
-                        return [3 /*break*/, 5];
-                    case 1:
-                        if (!(_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].shouldParsePost === true)) return [3 /*break*/, 5];
-                        _b.label = 2;
-                    case 2:
-                        _b.trys.push([2, 4, , 5]);
-                        _a = this;
-                        return [4 /*yield*/, this.parsePostData()];
-                    case 3:
-                        _a.body = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 4:
-                        ex_4 = _b.sent();
-                        this.onBadRequest(ex_4);
-                        return [2 /*return*/, false];
-                    case 5: return [2 /*return*/, true];
+    }
+    handlePostData() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.request.method === _enums__WEBPACK_IMPORTED_MODULE_5__["HTTP_METHOD"].Get) {
+                this.body = {};
+                this.file = new _models__WEBPACK_IMPORTED_MODULE_4__["FileManager"]({});
+            }
+            else if (_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].shouldParsePost === true) {
+                try {
+                    this.body = yield this.parsePostData();
                 }
-            });
+                catch (ex) {
+                    this.onBadRequest(ex);
+                    return false;
+                }
+            }
+            return true;
         });
-    };
-    RequestHandler.prototype.handle = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.setPreHeader_();
-                this.execute_();
-                return [2 /*return*/];
-            });
+    }
+    handle() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.setPreHeader_();
+            this.execute_();
         });
-    };
-    RequestHandler.prototype.setControllerProps_ = function () {
-        var _a;
-        var constructorValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(this.routeMatchInfo_.controller.name);
-        var controllerObj = new ((_a = this.routeMatchInfo_.controller).bind.apply(_a, __spreadArrays([void 0], constructorValues)))();
+    }
+    setControllerProps_() {
+        const constructorValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getConstructorValues(this.routeMatchInfo_.controller.name);
+        const controllerObj = new this.routeMatchInfo_.controller(...constructorValues);
         controllerObj.request = this.request;
         controllerObj.response = this.response;
         controllerObj.query = this.query_;
@@ -2902,12 +2215,10 @@ var RequestHandler = /** @class */ (function (_super) {
         controllerObj.param = this.routeMatchInfo_.params;
         controllerObj.data = this.data_;
         controllerObj.file = this.file;
-        var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
-        return controllerObj[this.routeMatchInfo_.workerInfo.workerName].apply(controllerObj, methodArgsValues);
-    };
-    return RequestHandler;
-}(_post_handler__WEBPACK_IMPORTED_MODULE_6__["PostHandler"]));
-
+        const methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_7__["InjectorHandler"].getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        return controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues);
+    }
+}
 if (_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].isProduction) {
     RequestHandler.prototype.runController_ = function () {
         this.setControllerProps_().then(this.onResultFromController.bind(this)).catch(this.onErrorOccured.bind(this));
@@ -2915,7 +2226,7 @@ if (_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].isProduction) {
 }
 else {
     RequestHandler.prototype.runController_ = function () {
-        var result = this.setControllerProps_();
+        const result = this.setControllerProps_();
         if (Promise.resolve(result) !== result) {
             this.onErrorOccured({
                 message: "Wrong implementation - worker does not return promise"
@@ -2956,74 +2267,39 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __spreadArrays = (undefined && undefined.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 
 
 
 
 
 
-var RequestHandlerHelper = /** @class */ (function () {
-    function RequestHandlerHelper() {
+class RequestHandlerHelper {
+    constructor() {
         this.wallInstances = [];
         this.controllerResult = {};
     }
-    RequestHandlerHelper.prototype.runWallOutgoing = function () {
-        var _this = this;
-        var outgoingResults = [];
-        Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["reverseLoop"])(this.wallInstances, function (value) {
-            var methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_5__["InjectorHandler"].getMethodValues(value.constructor.name, 'onOutgoing');
+    runWallOutgoing() {
+        const outgoingResults = [];
+        Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["reverseLoop"])(this.wallInstances, (value) => {
+            const methodArgsValues = _injector_handler__WEBPACK_IMPORTED_MODULE_5__["InjectorHandler"].getMethodValues(value.constructor.name, 'onOutgoing');
             methodArgsValues.shift();
-            outgoingResults.push(value.onOutgoing.apply(value, __spreadArrays([_this.controllerResult], methodArgsValues)));
+            outgoingResults.push(value.onOutgoing(this.controllerResult, ...methodArgsValues));
         });
         return Promise.all(outgoingResults);
-    };
-    RequestHandlerHelper.prototype.getContentTypeFromNegotiation = function (type) {
-        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_3__(this.request);
-        var availableTypes = this.getAvailableTypes_(type);
+    }
+    getContentTypeFromNegotiation(type) {
+        const negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_3__(this.request);
+        let availableTypes = this.getAvailableTypes_(type);
         if (availableTypes == null) {
             availableTypes = [type];
         }
         return negotiator.mediaType(availableTypes);
-    };
-    RequestHandlerHelper.prototype.getContentTypeFromNegotiationHavingMultipleTypes = function (types) {
-        var negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_3__(this.request);
+    }
+    getContentTypeFromNegotiationHavingMultipleTypes(types) {
+        const negotiator = new negotiator__WEBPACK_IMPORTED_MODULE_3__(this.request);
         return negotiator.mediaType(types);
-    };
-    RequestHandlerHelper.prototype.getAvailableTypes_ = function (type) {
+    }
+    getAvailableTypes_(type) {
         switch (type) {
             case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json:
             case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Xml:
@@ -3038,191 +2314,118 @@ var RequestHandlerHelper = /** @class */ (function () {
                     _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Css, _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Rtf, _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Csv];
         }
         return null;
-    };
-    RequestHandlerHelper.prototype.onBadRequest = function (error) {
-        return __awaiter(this, void 0, void 0, function () {
-            var message, ex_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onBadRequest(error)];
-                    case 1:
-                        message = _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_1 = _a.sent();
-                        return [2 /*return*/, this.onErrorOccured(ex_1)];
-                    case 3:
-                        this.onResultFromError_(message);
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onBadRequest(error) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let message;
+            try {
+                message = yield new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onBadRequest(error);
+            }
+            catch (ex) {
+                return this.onErrorOccured(ex);
+            }
+            this.onResultFromError_(message);
         });
-    };
-    RequestHandlerHelper.prototype.onForbiddenRequest = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var message, ex_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onForbiddenRequest()];
-                    case 1:
-                        message = _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_2 = _a.sent();
-                        return [2 /*return*/, this.onErrorOccured(ex_2)];
-                    case 3:
-                        this.onResultFromError_(message);
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onForbiddenRequest() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let message;
+            try {
+                message = yield new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onForbiddenRequest();
+            }
+            catch (ex) {
+                return this.onErrorOccured(ex);
+            }
+            this.onResultFromError_(message);
         });
-    };
-    RequestHandlerHelper.prototype.onNotAcceptableRequest = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var errMessage, ex_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onNotAcceptableRequest()];
-                    case 1:
-                        errMessage = _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_3 = _a.sent();
-                        return [2 /*return*/, this.onErrorOccured(ex_3)];
-                    case 3:
-                        this.onResultFromError_(errMessage);
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onNotAcceptableRequest() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let errMessage;
+            try {
+                errMessage = yield new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onNotAcceptableRequest();
+            }
+            catch (ex) {
+                return this.onErrorOccured(ex);
+            }
+            this.onResultFromError_(errMessage);
         });
-    };
-    RequestHandlerHelper.prototype.onNotFound = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var response, ex_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onNotFound(this.request.url)];
-                    case 1:
-                        response = _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_4 = _a.sent();
-                        return [2 /*return*/, this.onErrorOccured(ex_4)];
-                    case 3:
-                        this.onResultFromError_(response);
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onNotFound() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response;
+            try {
+                response = yield new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onNotFound(this.request.url);
+            }
+            catch (ex) {
+                return this.onErrorOccured(ex);
+            }
+            this.onResultFromError_(response);
         });
-    };
-    RequestHandlerHelper.prototype.onMethodNotAllowed = function (allowedMethods) {
-        return __awaiter(this, void 0, void 0, function () {
-            var response, ex_5;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onMethodNotAllowed()];
-                    case 1:
-                        response = _a.sent();
-                        return [3 /*break*/, 3];
-                    case 2:
-                        ex_5 = _a.sent();
-                        return [2 /*return*/, this.onErrorOccured(ex_5)];
-                    case 3:
-                        this.response.setHeader("Allow", allowedMethods.join(","));
-                        this.onResultFromError_(response);
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onMethodNotAllowed(allowedMethods) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let response;
+            try {
+                response = yield new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onMethodNotAllowed();
+            }
+            catch (ex) {
+                return this.onErrorOccured(ex);
+            }
+            this.response.setHeader("Allow", allowedMethods.join(","));
+            this.onResultFromError_(response);
         });
-    };
+    }
     // it won't execute wallOutgoing as if there is some issue in wallOutgoing
     // then it would become an infinite loop
     // treat it as someone comes to your fort & they start doing things 
     // which was not supposed to be done
     // then you don't follow regular rules but just throw them from anywhere
-    RequestHandlerHelper.prototype.onErrorOccured = function (error) {
-        return __awaiter(this, void 0, void 0, function () {
-            var response, ex_6;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (typeof error === 'string') {
-                            error = {
-                                message: error
-                            };
-                        }
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onServerError(error)];
-                    case 2:
-                        response = _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_6 = _a.sent();
-                        response = _helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex_6);
-                        return [3 /*break*/, 4];
-                    case 4:
-                        this.controllerResult = response;
-                        this.returnResultFromError_();
-                        return [2 /*return*/];
-                }
-            });
+    onErrorOccured(error) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (typeof error === 'string') {
+                error = {
+                    message: error
+                };
+            }
+            let response;
+            try {
+                response = yield new _fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].errorHandler().onServerError(error);
+            }
+            catch (ex) {
+                response = _helpers__WEBPACK_IMPORTED_MODULE_4__["JsonHelper"].stringify(ex);
+            }
+            this.controllerResult = response;
+            this.returnResultFromError_();
         });
-    };
-    RequestHandlerHelper.prototype.onRequestOptions = function (allowedMethods) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.response.setHeader("Allow", allowedMethods.join(","));
-                this.onResultFromError_(Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])(""));
-                return [2 /*return*/];
-            });
+    }
+    onRequestOptions(allowedMethods) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.response.setHeader("Allow", allowedMethods.join(","));
+            this.onResultFromError_(Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["textResult"])(""));
         });
-    };
-    RequestHandlerHelper.prototype.onResultFromError_ = function (result) {
-        return __awaiter(this, void 0, void 0, function () {
-            var ex_7;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        this.controllerResult = result;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4 /*yield*/, this.runWallOutgoing()];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
-                    case 3:
-                        ex_7 = _a.sent();
-                        this.onErrorOccured(ex_7);
-                        return [2 /*return*/];
-                    case 4:
-                        this.returnResultFromError_();
-                        return [2 /*return*/];
-                }
-            });
+    }
+    onResultFromError_(result) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.controllerResult = result;
+            try {
+                yield this.runWallOutgoing();
+            }
+            catch (ex) {
+                this.onErrorOccured(ex);
+                return;
+            }
+            this.returnResultFromError_();
         });
-    };
-    RequestHandlerHelper.prototype.returnResultFromError_ = function () {
-        var _this = this;
-        var result = this.controllerResult;
-        this.cookieManager.responseCookie_.forEach(function (value) {
-            _this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_1__["__SetCookie"], value);
+    }
+    returnResultFromError_() {
+        const result = this.controllerResult;
+        this.cookieManager.responseCookie_.forEach(value => {
+            this.response.setHeader(_constant__WEBPACK_IMPORTED_MODULE_1__["__SetCookie"], value);
         });
         if (result.responseFormat == null) {
-            var contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text;
-            var negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
+            const contentType = result.contentType || _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text;
+            const negotiateMimeType = this.getContentTypeFromNegotiation(contentType);
             if (negotiateMimeType != null) {
                 this.endResponse_(negotiateMimeType);
             }
@@ -3233,11 +2436,10 @@ var RequestHandlerHelper = /** @class */ (function () {
         else {
             this.handleFormatResult_(true);
         }
-    };
-    RequestHandlerHelper.prototype.handleFormatResult_ = function (shouldSendFirstMatch) {
-        if (shouldSendFirstMatch === void 0) { shouldSendFirstMatch = false; }
-        var negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult.responseFormat));
-        var key = Object.keys(this.controllerResult.responseFormat).find(function (qry) { return qry === negotiateMimeType; });
+    }
+    handleFormatResult_(shouldSendFirstMatch = false) {
+        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(this.controllerResult.responseFormat));
+        let key = Object.keys(this.controllerResult.responseFormat).find(qry => qry === negotiateMimeType);
         if (key != null) {
             this.controllerResult.responseData = this.controllerResult.responseFormat[key]();
             this.endResponse_(negotiateMimeType);
@@ -3250,18 +2452,15 @@ var RequestHandlerHelper = /** @class */ (function () {
         else {
             this.onNotAcceptableRequest();
         }
-    };
-    RequestHandlerHelper.prototype.endResponse_ = function (negotiateMimeType) {
-        var _a;
-        var data = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["getResultBasedOnMiMe"])(negotiateMimeType, this.controllerResult.responseData, function (type) {
+    }
+    endResponse_(negotiateMimeType) {
+        const data = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["getResultBasedOnMiMe"])(negotiateMimeType, this.controllerResult.responseData, (type) => {
             negotiateMimeType = type;
         });
-        this.response.writeHead(this.controllerResult.statusCode || _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, (_a = {}, _a[_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]] = negotiateMimeType, _a));
+        this.response.writeHead(this.controllerResult.statusCode || _enums__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok, { [_constant__WEBPACK_IMPORTED_MODULE_1__["__ContentType"]]: negotiateMimeType });
         this.response.end(data);
-    };
-    return RequestHandlerHelper;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -3282,65 +2481,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var routerCollection = {};
-var pushRouterIntoCollection = function (route) {
-    var routeObj = new _models__WEBPACK_IMPORTED_MODULE_1__["RouteInfo"]();
+const routerCollection = {};
+const pushRouterIntoCollection = (route) => {
+    const routeObj = new _models__WEBPACK_IMPORTED_MODULE_1__["RouteInfo"]();
     routeObj.init(route);
     routerCollection[route.controllerName] = routeObj;
 };
-var getActionPattern = function (parentRoute, pattern) {
-    return (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNull"])(parentRoute.path) || parentRoute.path === "/*") ? pattern : "" + parentRoute.path + pattern;
+const getActionPattern = (parentRoute, pattern) => {
+    return (Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNull"])(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
 };
-var RouteHandler = /** @class */ (function () {
-    function RouteHandler() {
+class RouteHandler {
+    static get routerCollection() {
+        return routerCollection;
     }
-    Object.defineProperty(RouteHandler, "routerCollection", {
-        get: function () {
-            return routerCollection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(RouteHandler, "routesAsArray", {
-        get: function () {
-            return Object.keys(routerCollection).map(function (workerName) {
-                return routerCollection[workerName];
-            });
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RouteHandler.findControllerFromPath = function (urlParts) {
-        var _loop_1 = function (controllerName) {
-            var isMatched = false;
-            var controller = routerCollection[controllerName];
-            var patternSplit = controller.path.split("/");
-            patternSplit.every(function (patternPart, i) {
+    static get routesAsArray() {
+        return Object.keys(routerCollection).map(workerName => {
+            return routerCollection[workerName];
+        });
+    }
+    static findControllerFromPath(urlParts) {
+        for (const controllerName in routerCollection) {
+            let isMatched = false;
+            const controller = routerCollection[controllerName];
+            const patternSplit = controller.path.split("/");
+            patternSplit.every((patternPart, i) => {
                 isMatched = patternPart === urlParts[i];
                 return isMatched;
             });
             if (isMatched === true) {
-                return { value: controller };
+                return controller;
             }
-        };
-        for (var controllerName in routerCollection) {
-            var state_1 = _loop_1(controllerName);
-            if (typeof state_1 === "object")
-                return state_1.value;
         }
-    };
-    RouteHandler.getControllerFromName = function (name) {
+    }
+    static getControllerFromName(name) {
         return routerCollection[name];
-    };
-    Object.defineProperty(RouteHandler, "defaultRoute", {
-        get: function () {
-            return routerCollection[RouteHandler.defaultRouteControllerName];
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RouteHandler.addToRouterCollection = function (value) {
-        var route = routerCollection[value.controller.name];
+    }
+    static get defaultRoute() {
+        return routerCollection[RouteHandler.defaultRouteControllerName];
+    }
+    static addToRouterCollection(value) {
+        const route = routerCollection[value.controller.name];
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
@@ -3355,14 +2535,14 @@ var RouteHandler = /** @class */ (function () {
             route.controller = value.controller;
             route.path = value.path;
             // change pattern value since we have controller name now.
-            for (var workerName in route.workers) {
-                var actionInfo = route.workers[workerName];
+            for (const workerName in route.workers) {
+                const actionInfo = route.workers[workerName];
                 actionInfo.pattern = getActionPattern(value, actionInfo.pattern);
             }
         }
-    };
-    RouteHandler.addShields = function (shields, className) {
-        var route = routerCollection[className];
+    }
+    static addShields(shields, className) {
+        const route = routerCollection[className];
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
@@ -3376,16 +2556,15 @@ var RouteHandler = /** @class */ (function () {
         else {
             route.shields = shields;
         }
-    };
-    RouteHandler.addWorker = function (newWorker, className) {
-        var _a;
-        var workerName = newWorker.workerName;
-        var route = routerCollection[className];
+    }
+    static addWorker(newWorker, className) {
+        const workerName = newWorker.workerName;
+        const route = routerCollection[className];
         if (route == null) {
             pushRouterIntoCollection({
-                workers: (_a = {},
-                    _a[workerName] = newWorker,
-                    _a),
+                workers: {
+                    [workerName]: newWorker
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -3394,7 +2573,7 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = route.workers[workerName];
+            const savedAction = route.workers[workerName];
             if (savedAction == null) {
                 newWorker.pattern = getActionPattern(route, newWorker.pattern);
                 route.workers[workerName] = newWorker;
@@ -3405,22 +2584,21 @@ var RouteHandler = /** @class */ (function () {
                 // route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
         }
-    };
-    RouteHandler.addGuards = function (guards, className, workerName) {
-        var _a;
-        var route = routerCollection[className];
-        var pattern = workerName.toLowerCase();
+    }
+    static addGuards(guards, className, workerName) {
+        const route = routerCollection[className];
+        const pattern = workerName.toLowerCase();
         if (route == null) {
             pushRouterIntoCollection({
-                workers: (_a = {},
-                    _a[workerName] = {
+                workers: {
+                    [workerName]: {
                         workerName: workerName,
                         guards: guards,
                         methodsAllowed: null,
                         pattern: pattern,
                         values: []
-                    },
-                    _a),
+                    }
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -3429,7 +2607,7 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = route.workers[workerName];
+            const savedAction = route.workers[workerName];
             if (savedAction == null) {
                 route.workers[workerName] = {
                     workerName: workerName,
@@ -3443,21 +2621,20 @@ var RouteHandler = /** @class */ (function () {
                 savedAction.guards = guards;
             }
         }
-    };
-    RouteHandler.addPattern = function (pattern, className, workerName) {
-        var _a;
-        var route = routerCollection[className];
+    }
+    static addPattern(pattern, className, workerName) {
+        const route = routerCollection[className];
         if (route == null) {
             pushRouterIntoCollection({
-                workers: (_a = {},
-                    _a[workerName] = {
+                workers: {
+                    [workerName]: {
                         workerName: workerName,
                         guards: [],
                         methodsAllowed: null,
                         pattern: pattern,
                         values: []
-                    },
-                    _a),
+                    }
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -3466,7 +2643,7 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = route.workers[workerName];
+            const savedAction = route.workers[workerName];
             pattern = getActionPattern(route, pattern);
             if (savedAction == null) {
                 route.workers[workerName] = {
@@ -3481,17 +2658,16 @@ var RouteHandler = /** @class */ (function () {
                 savedAction.pattern = pattern;
             }
         }
-    };
-    RouteHandler.addExpected = function (type, className, workerName, expectedValue) {
-        var _a;
-        for (var prop in expectedValue) {
-            var propValue = expectedValue[prop];
+    }
+    static addExpected(type, className, workerName, expectedValue) {
+        for (const prop in expectedValue) {
+            const propValue = expectedValue[prop];
             expectedValue[prop] = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__["getDataType"])(propValue);
         }
-        var isQuery = type === 'query';
-        var pattern = workerName.toLowerCase();
-        var router = routerCollection[className];
-        var worker = {
+        const isQuery = type === 'query';
+        const pattern = workerName.toLowerCase();
+        const router = routerCollection[className];
+        const worker = {
             workerName: workerName,
             guards: [],
             methodsAllowed: null,
@@ -3502,9 +2678,9 @@ var RouteHandler = /** @class */ (function () {
         };
         if (router == null) {
             pushRouterIntoCollection({
-                workers: (_a = {},
-                    _a[workerName] = worker,
-                    _a),
+                workers: {
+                    [workerName]: worker
+                },
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -3513,7 +2689,7 @@ var RouteHandler = /** @class */ (function () {
             });
         }
         else {
-            var savedAction = router.workers[workerName];
+            const savedAction = router.workers[workerName];
             if (savedAction == null) {
                 router.workers[workerName] = worker;
             }
@@ -3522,16 +2698,14 @@ var RouteHandler = /** @class */ (function () {
                 savedAction.expectedBody = worker.expectedBody;
             }
         }
-    };
-    RouteHandler.getExpectedQuery = function (controllerName, workerName) {
+    }
+    static getExpectedQuery(controllerName, workerName) {
         return routerCollection[controllerName].workers[workerName].expectedQuery;
-    };
-    RouteHandler.getExpectedBody = function (controllerName, workerName) {
+    }
+    static getExpectedBody(controllerName, workerName) {
         return routerCollection[controllerName].workers[workerName].expectedBody;
-    };
-    return RouteHandler;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -3550,9 +2724,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
 
 
-var compareExpectedAndRemoveUnnecessary = function (expected, actual, isQuery) {
-    var result = {};
-    for (var prop in expected) {
+const compareExpectedAndRemoveUnnecessary = (expected, actual, isQuery) => {
+    const result = {};
+    for (const prop in expected) {
         if (isQuery === true && expected[prop] === _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Number) {
             result[prop] = Number(actual[prop]);
             if (isNaN(result[prop]) === true) {
@@ -3584,7 +2758,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadResult", function() { return downloadResult; });
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
 
-var downloadResult = function (filePath, downloadFileName) {
+const downloadResult = (filePath, downloadFileName) => {
     return {
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok,
         file: {
@@ -3610,7 +2784,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fileResult", function() { return fileResult; });
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
 
-var fileResult = function (filePath) {
+const fileResult = (filePath) => {
     return {
         statusCode: _enums_http_status_code__WEBPACK_IMPORTED_MODULE_0__["HTTP_STATUS_CODE"].Ok,
         file: {
@@ -3632,7 +2806,7 @@ var fileResult = function (filePath) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getClassName", function() { return getClassName; });
-var getClassName = function (target) {
+const getClassName = (target) => {
     return target.name || (target.constructor && target.constructor.name);
 };
 
@@ -3651,8 +2825,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataType", function() { return getDataType; });
 /* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
 
-var getDataType = function (value) {
-    var type = typeof value;
+const getDataType = (value) => {
+    const type = typeof value;
     switch (type) {
         case 'object':
             if (Array.isArray(value)) {
@@ -3678,7 +2852,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMimeTypeFromExtension", function() { return getMimeTypeFromExtension; });
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 
-var getMimeTypeFromExtension = function (ext) {
+const getMimeTypeFromExtension = (ext) => {
     switch (ext) {
         case ".htm":
         case ".html":
@@ -3749,7 +2923,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setResultMapper", function() { return setResultMapper; });
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums */ "./src/enums/index.ts");
 
-var getResultBasedOnMiMe = function (type, result, setMimeType) {
+let getResultBasedOnMiMe = (type, result, setMimeType) => {
     switch (type) {
         case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json:
         case _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text:
@@ -3763,7 +2937,7 @@ var getResultBasedOnMiMe = function (type, result, setMimeType) {
     return result;
 };
 function setResultMapper(mapper) {
-    getResultBasedOnMiMe = function (type, result, callBack) {
+    getResultBasedOnMiMe = (type, result, callBack) => {
         return new mapper().map(type, result, callBack);
     };
 }
@@ -3795,85 +2969,36 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
 
-var viewCache = {};
-var getViewFromFile;
-var readView = function (option) { return __awaiter(void 0, void 0, void 0, function () {
-    var pathOfView, result;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                pathOfView = path__WEBPACK_IMPORTED_MODULE_1__["join"](_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].viewPath, option.fileLocation);
-                return [4 /*yield*/, Object(fs_extra__WEBPACK_IMPORTED_MODULE_0__["readFile"])(pathOfView, {
-                        encoding: 'utf8'
-                    })];
-            case 1:
-                result = _a.sent();
-                if (option.mapView != null) {
-                    return [2 /*return*/, option.mapView(result)];
-                }
-                return [2 /*return*/, result];
-        }
+const viewCache = {};
+let getViewFromFile;
+const readView = (option) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathOfView = path__WEBPACK_IMPORTED_MODULE_1__["join"](_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].viewPath, option.fileLocation);
+    // eslint-disable-next-line
+    const result = yield Object(fs_extra__WEBPACK_IMPORTED_MODULE_0__["readFile"])(pathOfView, {
+        encoding: 'utf8'
     });
-}); };
+    if (option.mapView != null) {
+        return option.mapView(result);
+    }
+    return result;
+});
 if (_fort_global__WEBPACK_IMPORTED_MODULE_2__["FortGlobal"].isProduction === true) {
     getViewFromFile = function (option) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        if (!(viewCache[option.fileLocation] == null)) return [3 /*break*/, 2];
-                        _a = viewCache;
-                        _b = option.fileLocation;
-                        return [4 /*yield*/, readView(option)];
-                    case 1:
-                        _a[_b] = _c.sent();
-                        _c.label = 2;
-                    case 2: return [2 /*return*/, viewCache[option.fileLocation]];
-                }
-            });
+        return __awaiter(this, void 0, void 0, function* () {
+            if (viewCache[option.fileLocation] == null) {
+                viewCache[option.fileLocation] = yield readView(option);
+            }
+            return viewCache[option.fileLocation];
         });
     };
 }
 else {
     getViewFromFile = function (option) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, readView(option)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield readView(option);
         });
     };
 }
@@ -3895,7 +3020,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
 
 
-var htmlResult = function (html, statusCode) {
+const htmlResult = (html, statusCode) => {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Html,
         responseData: html,
@@ -4023,10 +3148,8 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonHelper", function() { return JsonHelper; });
-var JsonHelper = /** @class */ (function () {
-    function JsonHelper() {
-    }
-    JsonHelper.parse = function (value) {
+class JsonHelper {
+    static parse(value) {
         try {
             return JSON.parse(value);
         }
@@ -4036,13 +3159,11 @@ var JsonHelper = /** @class */ (function () {
                 message: "Post data is invalid"
             };
         }
-    };
-    JsonHelper.stringify = function (value) {
+    }
+    static stringify(value) {
         return JSON.stringify(value);
-    };
-    return JsonHelper;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -4061,7 +3182,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
 
 
-var jsonResult = function (value, statusCode) {
+const jsonResult = (value, statusCode) => {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Json,
         responseData: value,
@@ -4084,55 +3205,53 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LogHelper", function() { return LogHelper; });
 /* harmony import */ var _enums_error_type__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../enums/error_type */ "./src/enums/error_type.ts");
 
-var LogHelper = /** @class */ (function () {
-    function LogHelper(type, info) {
+class LogHelper {
+    constructor(type, info) {
         this.type = type;
         this.info_ = info;
         this.message = this.getMsg_();
     }
-    LogHelper.prototype.throw = function () {
-        var errMsg = this.get();
+    throw() {
+        const errMsg = this.get();
         throw JSON.stringify(errMsg);
-    };
-    LogHelper.log = function (msg) {
+    }
+    static log(msg) {
         console.log(msg);
-    };
-    LogHelper.prototype.logError = function () {
+    }
+    logError() {
         console.error(this.get());
-    };
-    LogHelper.prototype.logWarning = function () {
+    }
+    logWarning() {
         console.warn(this.get());
-    };
-    LogHelper.prototype.get = function () {
+    }
+    get() {
         return {
             message: this.message,
             type: this.type
         };
-    };
-    LogHelper.prototype.getMsg_ = function () {
-        var errMsg;
+    }
+    getMsg_() {
+        let errMsg;
         switch (this.type) {
             case _enums_error_type__WEBPACK_IMPORTED_MODULE_0__["ERROR_TYPE"].InvalidControllerName:
-                errMsg = "Invalid controller name - '" + this.info_ + "'. Controller name must contain 'controller'.";
+                errMsg = `Invalid controller name - '${this.info_}'. Controller name must contain 'controller'.`;
                 break;
             case _enums_error_type__WEBPACK_IMPORTED_MODULE_0__["ERROR_TYPE"].InvalidContentType:
-                errMsg = "Content type - '" + this.info_ + "' is not valid. Please create an issue if you think this is valid type.";
+                errMsg = `Content type - '${this.info_}' is not valid. Please create an issue if you think this is valid type.`;
                 break;
             case _enums_error_type__WEBPACK_IMPORTED_MODULE_0__["ERROR_TYPE"].PortInUse:
-                errMsg = "Port " + this.info_ + " is being used by another process.";
+                errMsg = `Port ${this.info_} is being used by another process.`;
                 break;
             case _enums_error_type__WEBPACK_IMPORTED_MODULE_0__["ERROR_TYPE"].UndefinedViewEngine:
-                errMsg = "View engine is not initiated.Initiate the view engine where fort is created.";
+                errMsg = `View engine is not initiated.Initiate the view engine where fort is created.`;
                 break;
             default:
                 errMsg = this.message;
                 break;
         }
         return errMsg;
-    };
-    return LogHelper;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -4149,11 +3268,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseCookie", function() { return parseCookie; });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
 
-var parseCookie = function (cookie) {
-    var value = {};
+const parseCookie = (cookie) => {
+    const value = {};
     if (!Object(_utils__WEBPACK_IMPORTED_MODULE_0__["isNullOrEmpty"])(cookie)) {
-        cookie.split(';').forEach(function (val) {
-            var parts = val.split('=');
+        cookie.split(';').forEach((val) => {
+            const parts = val.split('=');
             value[parts.shift().trim()] = decodeURI(parts.join('='));
         });
     }
@@ -4175,72 +3294,60 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseAndMatchRoute", function() { return parseAndMatchRoute; });
 /* harmony import */ var _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers/route_handler */ "./src/handlers/route_handler.ts");
 /* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! . */ "./src/helpers/index.ts");
-var __spreadArrays = (undefined && undefined.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 
 
-var regex1 = /{(.*)}(?!.)/;
+const regex1 = /{(.*)}(?!.)/;
 // for extension - e.g - {{file}}.js
-var regex2 = /{(.*)}\.(\w+)(?!.)/;
-var checkRouteInWorker = function (route, httpMethod, urlParts) {
-    var matchedRoute = {
+const regex2 = /{(.*)}\.(\w+)(?!.)/;
+const checkRouteInWorker = (route, httpMethod, urlParts) => {
+    const matchedRoute = {
         allowedHttpMethod: [],
         controller: route.controller,
         controllerName: route.controllerName
     };
-    var urlPartLength = urlParts.length;
-    var _loop_1 = function (workerName) {
-        var worker = route.workers[workerName];
-        var patternSplit = worker.pattern.split("/");
+    const urlPartLength = urlParts.length;
+    for (const workerName in route.workers) {
+        const worker = route.workers[workerName];
+        const patternSplit = worker.pattern.split("/");
         if (urlPartLength === patternSplit.length) {
-            var isMatched_1 = true;
-            var params_1 = {};
-            urlParts.every(function (urlPart, i) {
+            let isMatched = true;
+            const params = {};
+            urlParts.every((urlPart, i) => {
                 // if not equal then check for regex match
                 if (urlPart !== patternSplit[i]) {
-                    var regMatch1 = patternSplit[i].match(regex1);
-                    var regMatch2 = patternSplit[i].match(regex2);
+                    const regMatch1 = patternSplit[i].match(regex1);
+                    const regMatch2 = patternSplit[i].match(regex2);
                     if (regMatch1 != null) {
-                        params_1[regMatch1[1]] = urlPart;
+                        params[regMatch1[1]] = urlPart;
                     }
                     else if (regMatch2 != null) {
-                        var splitByDot = urlPart.split(".");
+                        const splitByDot = urlPart.split(".");
                         if (splitByDot[1] === regMatch2[2]) {
-                            params_1[regMatch2[1]] = splitByDot[0];
+                            params[regMatch2[1]] = splitByDot[0];
                         }
                         else {
-                            isMatched_1 = false;
+                            isMatched = false;
                         }
                     }
                     else {
-                        isMatched_1 = false;
+                        isMatched = false;
                     }
                 }
                 // means its direct match
-                return isMatched_1;
+                return isMatched;
             });
-            if (isMatched_1 === true) {
+            if (isMatched === true) {
                 if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
                     matchedRoute.workerInfo = worker;
-                    matchedRoute.params = params_1;
+                    matchedRoute.params = params;
                     matchedRoute.shields = route.shields;
-                    return "break";
+                    break;
                 }
                 else {
-                    matchedRoute.allowedHttpMethod = __spreadArrays(matchedRoute.allowedHttpMethod, worker.methodsAllowed);
+                    matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
                 }
             }
         }
-    };
-    for (var workerName in route.workers) {
-        var state_1 = _loop_1(workerName);
-        if (state_1 === "break")
-            break;
     }
     if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
         return null;
@@ -4249,8 +3356,8 @@ var checkRouteInWorker = function (route, httpMethod, urlParts) {
 };
 function parseAndMatchRoute(url, httpMethod) {
     url = Object(___WEBPACK_IMPORTED_MODULE_1__["removeLastSlash"])(url);
-    var urlParts = url.split("/");
-    var route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(urlParts);
+    const urlParts = url.split("/");
+    const route = _handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].findControllerFromPath(urlParts);
     return route == null ? checkRouteInWorker(_handlers_route_handler__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRoute, httpMethod, urlParts) :
         checkRouteInWorker(route, httpMethod, urlParts);
 }
@@ -4268,7 +3375,7 @@ function parseAndMatchRoute(url, httpMethod) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "promise", function() { return promise; });
-var promise = function (callBack) {
+const promise = (callBack) => {
     return new Promise(callBack);
 };
 
@@ -4289,7 +3396,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
 
 
-var redirectResult = function (url) {
+const redirectResult = (url) => {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text,
         responseData: url,
@@ -4311,7 +3418,7 @@ var redirectResult = function (url) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeFirstSlash", function() { return removeFirstSlash; });
-var removeFirstSlash = function (value) {
+const removeFirstSlash = function (value) {
     // remove / from string at 0th index
     if (value[0] === "/") {
         return value.substr(1);
@@ -4332,8 +3439,8 @@ var removeFirstSlash = function (value) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeLastSlash", function() { return removeLastSlash; });
-var removeLastSlash = function (url) {
-    var urlLength = url.length;
+const removeLastSlash = (url) => {
+    const urlLength = url.length;
     // removing / from url;
     if (url[urlLength - 1] === "/") {
         return url.substr(0, urlLength - 1);
@@ -4358,10 +3465,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_data_type__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/data_type */ "./src/enums/data_type.ts");
 
 
-var removeMethodAndNullFromObject = function (value) {
-    var outputValue = {};
-    for (var prop in value) {
-        var type = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(value[prop]);
+const removeMethodAndNullFromObject = (value) => {
+    const outputValue = {};
+    for (const prop in value) {
+        const type = Object(_get_data_type__WEBPACK_IMPORTED_MODULE_0__["getDataType"])(value[prop]);
         if (!(value[prop] == null || type === _enums_data_type__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Function)) {
             outputValue[prop] = value[prop];
         }
@@ -4388,23 +3495,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var renderView;
+let renderView;
 if (_fort_global__WEBPACK_IMPORTED_MODULE_0__["FortGlobal"].isProduction === true) {
-    renderView = function (viewName, model) {
+    renderView = (viewName, model) => {
         return _fort_global__WEBPACK_IMPORTED_MODULE_0__["FortGlobal"].viewEngine.render({
             view: viewName,
-            model: model
+            model
         });
     };
 }
 else {
-    renderView = function (viewName, model) {
+    renderView = (viewName, model) => {
         if (_fort_global__WEBPACK_IMPORTED_MODULE_0__["FortGlobal"].viewEngine == null) {
             new _log_helper__WEBPACK_IMPORTED_MODULE_1__["LogHelper"](_enums_error_type__WEBPACK_IMPORTED_MODULE_2__["ERROR_TYPE"].UndefinedViewEngine).throw();
         }
         return _fort_global__WEBPACK_IMPORTED_MODULE_0__["FortGlobal"].viewEngine.render({
             view: viewName,
-            model: model
+            model
         });
     };
 }
@@ -4422,8 +3529,8 @@ else {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reverseLoop", function() { return reverseLoop; });
-var reverseLoop = function (values, cb) {
-    for (var length_1 = values.length, i = length_1 - 1; i >= 0; i--) {
+const reverseLoop = function (values, cb) {
+    for (let length = values.length, i = length - 1; i >= 0; i--) {
         cb(values[i], i);
     }
 };
@@ -4445,7 +3552,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _enums_http_status_code__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../enums/http_status_code */ "./src/enums/http_status_code.ts");
 
 
-var textResult = function (text, statusCode) {
+const textResult = (text, statusCode) => {
     return {
         contentType: _enums__WEBPACK_IMPORTED_MODULE_0__["MIME_TYPE"].Text,
         responseData: text,
@@ -4477,50 +3584,16 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 
 
-var viewResult = function (viewName, model) { return __awaiter(void 0, void 0, void 0, function () {
-    var viewData;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, model)];
-            case 1:
-                viewData = _a.sent();
-                return [2 /*return*/, {
-                        contentType: _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Html,
-                        responseData: viewData,
-                        statusCode: _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
-                    }];
-        }
-    });
-}); };
+const viewResult = (viewName, model) => __awaiter(void 0, void 0, void 0, function* () {
+    const viewData = yield Object(_render_view__WEBPACK_IMPORTED_MODULE_0__["renderView"])(viewName, model);
+    return {
+        contentType: _enums__WEBPACK_IMPORTED_MODULE_1__["MIME_TYPE"].Html,
+        responseData: viewData,
+        statusCode: _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Ok
+    };
+});
 
 
 /***/ }),
@@ -4760,47 +3833,32 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Components", function() { return Components; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
-var __spreadArrays = (undefined && undefined.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 
-var ControllerListRef = /** @class */ (function () {
-    function ControllerListRef() {
-    }
-    ControllerListRef.getInstance = function (name, data) {
-        var _a;
-        var routeInfo = _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].getControllerFromName(name);
+class ControllerListRef {
+    static getInstance(name, data) {
+        const routeInfo = _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].getControllerFromName(name);
         if (routeInfo) {
-            var controller = new ((_a = routeInfo.controller).bind.apply(_a, __spreadArrays([void 0], _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].getConstructorValues(name))))();
+            const controller = new routeInfo.controller(..._handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].getConstructorValues(name));
             controller.initialize(data);
             return controller;
         }
-    };
-    ControllerListRef.getMethod = function (className, methodName) {
-        var controller = ControllerListRef.getInstance(className);
+    }
+    static getMethod(className, methodName) {
+        const controller = ControllerListRef.getInstance(className);
         if (controller) {
             return controller[methodName];
         }
-    };
-    ControllerListRef.executeMethod = function (className, methodName) {
-        var controller = ControllerListRef.getInstance(className);
-        if (controller) {
-            return controller[methodName].apply(controller, _handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].getMethodValues(className, methodName));
-        }
-    };
-    return ControllerListRef;
-}());
-var Components = /** @class */ (function () {
-    function Components() {
     }
-    Components.controllers = ControllerListRef;
-    return Components;
-}());
-
+    static executeMethod(className, methodName) {
+        const controller = ControllerListRef.getInstance(className);
+        if (controller) {
+            return controller[methodName](..._handlers__WEBPACK_IMPORTED_MODULE_0__["InjectorHandler"].getMethodValues(className, methodName));
+        }
+    }
+}
+class Components {
+}
+Components.controllers = ControllerListRef;
 
 
 /***/ }),
@@ -4815,8 +3873,8 @@ var Components = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CookieManager", function() { return CookieManager; });
-var CookieManager = /** @class */ (function () {
-    function CookieManager(parsedValue) {
+class CookieManager {
+    constructor(parsedValue) {
         this.responseCookie_ = [];
         this.cookieCollection_ = parsedValue;
     }
@@ -4827,47 +3885,43 @@ var CookieManager = /** @class */ (function () {
      * @returns
      * @memberof CookieManager
      */
-    CookieManager.prototype.getCookie = function (name) {
+    getCookie(name) {
         return {
             name: name,
             value: this.cookieCollection_[name]
         };
-    };
+    }
     /**
      * add cookie
      *
      * @param {HttpCookie} cookie
      * @memberof CookieManager
      */
-    CookieManager.prototype.addCookie = function (cookie) {
+    addCookie(cookie) {
         this.cookieCollection_[cookie.name] = cookie.value;
         this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
-    };
+    }
     /**
      * remove cookie
      *
      * @param {HttpCookie} cookie
      * @memberof CookieManager
      */
-    CookieManager.prototype.removeCookie = function (cookie) {
+    removeCookie(cookie) {
         this.cookieCollection_[cookie.name] = null;
         cookie.expires = new Date('Thu, 01 Jan 1970 00:00:00 GMT');
         cookie.maxAge = -1;
         this.responseCookie_.push(this.getCookieStringFromCookie_(cookie));
-    };
-    Object.defineProperty(CookieManager.prototype, "cookieCollection", {
-        /**
-         * collection of http cookie
-         *
-         * @readonly
-         * @memberof CookieManager
-         */
-        get: function () {
-            return this.cookieCollection_;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    /**
+     * collection of http cookie
+     *
+     * @readonly
+     * @memberof CookieManager
+     */
+    get cookieCollection() {
+        return this.cookieCollection_;
+    }
     /**
      * determine whether value exist or not
      *
@@ -4875,32 +3929,30 @@ var CookieManager = /** @class */ (function () {
      * @returns
      * @memberof CookieManager
      */
-    CookieManager.prototype.isExist = function (name) {
+    isExist(name) {
         return this.cookieCollection_[name] != null;
-    };
-    CookieManager.prototype.getCookieStringFromCookie_ = function (cookie) {
-        var cookies = [];
-        cookies.push(cookie.name + "=" + cookie.value);
+    }
+    getCookieStringFromCookie_(cookie) {
+        const cookies = [];
+        cookies.push(`${cookie.name}=${cookie.value}`);
         if (cookie.expires) {
-            cookies.push("Expires=" + cookie.expires.toUTCString());
+            cookies.push(`Expires=${cookie.expires.toUTCString()}`);
         }
         if (cookie.httpOnly === true) {
             cookies.push("HttpOnly");
         }
         if (cookie.maxAge != null) {
-            cookies.push("Max-Age=" + cookie.maxAge);
+            cookies.push(`Max-Age=${cookie.maxAge}`);
         }
         if (cookie.path) {
-            cookies.push("Path=" + cookie.path);
+            cookies.push(`Path=${cookie.path}`);
         }
         if (cookie.domain) {
-            cookies.push("Domain=" + cookie.domain);
+            cookies.push(`Domain=${cookie.domain}`);
         }
         return cookies.join('; ');
-    };
-    return CookieManager;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -4926,102 +3978,58 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+
+
+class ErrorHandler {
+    onServerError(ex) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let errMessage = `<h1>internal server error</h1>
+            <h3>message : ${ex.message}</h3>`;
+            if (ex.stack) {
+                errMessage += `<p><b>stacktrace:</b> ${ex.stack}</p>`;
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+            if (ex.type) {
+                errMessage += `<p><b>type:</b> ${ex.type}</p>`;
+            }
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(errMessage, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].InternalServerError);
+        });
     }
-};
-
-
-var ErrorHandler = /** @class */ (function () {
-    function ErrorHandler() {
+    onBadRequest(ex) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let errMessage = `<h1>Bad Request</h1>`;
+            if (ex.message) {
+                errMessage += ` <h3>message : ${ex.message} </h3>`;
+            }
+            if (ex.stack) {
+                errMessage += `<p><b>stacktrace:</b> ${ex.stack}</p>`;
+            }
+            if (ex.type) {
+                errMessage += `<p><b>type:</b> ${ex.type}</p>`;
+            }
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(errMessage, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].BadRequest);
+        });
     }
-    ErrorHandler.prototype.onServerError = function (ex) {
-        return __awaiter(this, void 0, void 0, function () {
-            var errMessage;
-            return __generator(this, function (_a) {
-                errMessage = "<h1>internal server error</h1>\n            <h3>message : " + ex.message + "</h3>";
-                if (ex.stack) {
-                    errMessage += "<p><b>stacktrace:</b> " + ex.stack + "</p>";
-                }
-                if (ex.type) {
-                    errMessage += "<p><b>type:</b> " + ex.type + "</p>";
-                }
-                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(errMessage, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].InternalServerError)];
-            });
+    onForbiddenRequest() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(`<h1>Forbidden</h1>`, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Forbidden);
         });
-    };
-    ErrorHandler.prototype.onBadRequest = function (ex) {
-        return __awaiter(this, void 0, void 0, function () {
-            var errMessage;
-            return __generator(this, function (_a) {
-                errMessage = "<h1>Bad Request</h1>";
-                if (ex.message) {
-                    errMessage += " <h3>message : " + ex.message + " </h3>";
-                }
-                if (ex.stack) {
-                    errMessage += "<p><b>stacktrace:</b> " + ex.stack + "</p>";
-                }
-                if (ex.type) {
-                    errMessage += "<p><b>type:</b> " + ex.type + "</p>";
-                }
-                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(errMessage, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].BadRequest)];
-            });
+    }
+    onNotAcceptableRequest() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(`<h1>Not Acceptable</h1>`, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].NotAcceptable);
         });
-    };
-    ErrorHandler.prototype.onForbiddenRequest = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>Forbidden</h1>", _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].Forbidden)];
-            });
+    }
+    onMethodNotAllowed() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(`<h1>Method Not allowed.</h1>`, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].MethodNotAllowed);
         });
-    };
-    ErrorHandler.prototype.onNotAcceptableRequest = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>Not Acceptable</h1>", _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].NotAcceptable)];
-            });
+    }
+    onNotFound(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])(`<h1>The requested resource ${url} was not found.</h1>`, _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].NotFound);
         });
-    };
-    ErrorHandler.prototype.onMethodNotAllowed = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>Method Not allowed.</h1>", _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].MethodNotAllowed)];
-            });
-        });
-    };
-    ErrorHandler.prototype.onNotFound = function (url) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["htmlResult"])("<h1>The requested resource " + url + " was not found.</h1>", _enums__WEBPACK_IMPORTED_MODULE_1__["HTTP_STATUS_CODE"].NotFound)];
-            });
-        });
-    };
-    return ErrorHandler;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -5039,33 +4047,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fs-extra */ "fs-extra");
 /* harmony import */ var fs_extra__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fs_extra__WEBPACK_IMPORTED_MODULE_0__);
 
-var FileManager = /** @class */ (function () {
-    function FileManager(value) {
+class FileManager {
+    constructor(value) {
         this.files_ = value;
     }
-    Object.defineProperty(FileManager.prototype, "count", {
-        /**
-         * get total no of files
-         *
-         * @returns - number
-         * @memberof FileManager
-         */
-        get: function () {
-            return Object.keys(this.files_).length;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(FileManager.prototype, "files", {
-        get: function () {
-            var _this = this;
-            return Object.keys(this.files_).map(function (fileId) {
-                return _this.files_[fileId];
-            });
-        },
-        enumerable: false,
-        configurable: true
-    });
+    /**
+     * get total no of files
+     *
+     * @returns - number
+     * @memberof FileManager
+     */
+    get count() {
+        return Object.keys(this.files_).length;
+    }
+    get files() {
+        return Object.keys(this.files_).map(fileId => {
+            return this.files_[fileId];
+        });
+    }
     /**
      * check for existance of file
      *
@@ -5073,9 +4072,9 @@ var FileManager = /** @class */ (function () {
      * @returns
      * @memberof FileManager
      */
-    FileManager.prototype.isExist = function (fieldName) {
+    isExist(fieldName) {
         return this.files_[fieldName] != null;
-    };
+    }
     /**
      * return the file
      *
@@ -5083,9 +4082,9 @@ var FileManager = /** @class */ (function () {
      * @returns
      * @memberof FileManager
      */
-    FileManager.prototype.getFile = function (fieldName) {
+    getFile(fieldName) {
         return this.files_[fieldName];
-    };
+    }
     /**
      * saves file to supplied path
      *
@@ -5094,12 +4093,10 @@ var FileManager = /** @class */ (function () {
      * @returns
      * @memberof FileManager
      */
-    FileManager.prototype.saveTo = function (fieldName, pathToSave) {
+    saveTo(fieldName, pathToSave) {
         return fs_extra__WEBPACK_IMPORTED_MODULE_0__["copy"](this.files_[fieldName].path, pathToSave);
-    };
-    return FileManager;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -5129,287 +4126,211 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var Fort = /** @class */ (function () {
+class Fort {
     // eslint-disable-next-line
-    function Fort() {
+    constructor() {
     }
-    Object.defineProperty(Fort, "logger", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
-        },
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger = typeof value === 'function' ? new this.value() :
-                value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "walls", {
-        set: function (walls) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].walls = walls;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "port", {
-        get: function () {
-            return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port;
-        },
-        /**
-         * port at which app will listen, default - 4000
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "errorHandler", {
-        /**
-         * typeof ErrorHandler
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].errorHandler = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "routes", {
-        set: function (value) {
-            if (value == null) {
-                value = [];
+    static set logger(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger = typeof value === 'function' ? new this.value() :
+            value;
+    }
+    static get logger() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].logger;
+    }
+    static set walls(walls) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].walls = walls;
+    }
+    /**
+     * port at which app will listen, default - 4000
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set port(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port = value;
+    }
+    static get port() {
+        return _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port;
+    }
+    /**
+     * typeof ErrorHandler
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set errorHandler(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].errorHandler = value;
+    }
+    static set routes(value) {
+        if (value == null) {
+            value = [];
+        }
+        let isDefaultRouteExist = false;
+        // removing / from routes
+        value.forEach(route => {
+            // route.path = removeFirstSlash(route.path);
+            route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeLastSlash"])(route.path);
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
+            if (route.path === "/*") {
+                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = route.controller.name;
+                isDefaultRouteExist = true;
             }
-            var isDefaultRouteExist = false;
-            // removing / from routes
-            value.forEach(function (route) {
-                // route.path = removeFirstSlash(route.path);
-                route.path = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeLastSlash"])(route.path);
-                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection(route);
-                if (route.path === "/*") {
-                    _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = route.controller.name;
-                    isDefaultRouteExist = true;
-                }
+        });
+        if (isDefaultRouteExist === false) {
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = _generics__WEBPACK_IMPORTED_MODULE_5__["GenericController"].name;
+            _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection({
+                controller: _generics__WEBPACK_IMPORTED_MODULE_5__["GenericController"],
+                path: "/*"
             });
-            if (isDefaultRouteExist === false) {
-                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].defaultRouteControllerName = _generics__WEBPACK_IMPORTED_MODULE_5__["GenericController"].name;
-                _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].addToRouterCollection({
-                    controller: _generics__WEBPACK_IMPORTED_MODULE_5__["GenericController"],
-                    path: "/*"
-                });
+        }
+    }
+    /**
+     * view engine use to render the view
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set viewEngine(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewEngine = new value();
+    }
+    /**
+     * sessionProvider class, default - MemorySessionProvider
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set sessionProvider(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionProvider = value;
+    }
+    static set resultMapper(value) {
+        Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["setResultMapper"])(value);
+    }
+    /**
+     * XmlParser class - used to parse the xml
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set xmlParser(xmlParser) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].xmlParser = xmlParser;
+    }
+    /**
+     * Whether to parse cookie or not, default - true
+     * If false, then session wont work.
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set shouldParseCookie(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParseCookie = value;
+    }
+    /**
+     * Whether to parse the post data, default - true
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set shouldParsePost(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParsePost = value;
+    }
+    /**
+     * session timeout in minute - default is 60 minute
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set sessionTimeOut(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionTimeOut = value;
+    }
+    /**
+     * name of application - default is fort. Visible in header and cookie.
+     * Change name if you dont want any one to know the framework name.
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set appName(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appName = value;
+    }
+    /**
+     * Views folder location. By default it is - views.
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set viewPath(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewPath = value;
+    }
+    static set componentOption(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption = new value();
+    }
+    static get httpServer() {
+        return Fort.instance.httpServer;
+    }
+    static set httpServer(value) {
+        Fort.instance.httpServer = value;
+    }
+    /**
+     * folders which should be visible to requests. By default nothing is allowed.
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set folders(value) {
+        value = value || [];
+        if (Object(_utils__WEBPACK_IMPORTED_MODULE_6__["isArray"])(value) === false) {
+            throw new Error(`folders should be an array`);
+        }
+        // remove / from files routes
+        value.forEach(folder => {
+            const length = folder.alias.length;
+            if (length > 1) {
+                folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeFirstSlash"])(folder.alias);
+                folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeLastSlash"])(folder.alias);
             }
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "viewEngine", {
-        /**
-         * view engine use to render the view
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewEngine = new value();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "sessionProvider", {
-        /**
-         * sessionProvider class, default - MemorySessionProvider
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionProvider = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "resultMapper", {
-        set: function (value) {
-            Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["setResultMapper"])(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "xmlParser", {
-        /**
-         * XmlParser class - used to parse the xml
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (xmlParser) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].xmlParser = xmlParser;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "shouldParseCookie", {
-        /**
-         * Whether to parse cookie or not, default - true
-         * If false, then session wont work.
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParseCookie = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "shouldParsePost", {
-        /**
-         * Whether to parse the post data, default - true
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].shouldParsePost = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "sessionTimeOut", {
-        /**
-         * session timeout in minute - default is 60 minute
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionTimeOut = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "appName", {
-        /**
-         * name of application - default is fort. Visible in header and cookie.
-         * Change name if you dont want any one to know the framework name.
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appName = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "viewPath", {
-        /**
-         * Views folder location. By default it is - views.
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].viewPath = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "componentOption", {
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].componentOption = new value();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "httpServer", {
-        get: function () {
-            return Fort.instance.httpServer;
-        },
-        set: function (value) {
-            Fort.instance.httpServer = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "folders", {
-        /**
-         * folders which should be visible to requests. By default nothing is allowed.
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            value = value || [];
-            if (Object(_utils__WEBPACK_IMPORTED_MODULE_6__["isArray"])(value) === false) {
-                throw new Error("folders should be an array");
-            }
-            // remove / from files routes
-            value.forEach(function (folder) {
-                var length = folder.alias.length;
-                if (length > 1) {
-                    folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeFirstSlash"])(folder.alias);
-                    folder.alias = Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["removeLastSlash"])(folder.alias);
-                }
-            });
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Fort, "eTag", {
-        /**
-         * eTag Settings
-         *
-         * @static
-         * @memberof Fort
-         */
-        set: function (value) {
-            _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].eTag = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Fort.create = function () {
-        var _this = this;
+        });
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].folders = value;
+    }
+    /**
+     * eTag Settings
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set eTag(value) {
+        _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].eTag = value;
+    }
+    static create() {
         _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].setDefault();
         if (this.instance.httpServer != null) {
             return;
         }
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["promise"])(function (res, rej) {
-            _this.instance.httpServer = http__WEBPACK_IMPORTED_MODULE_2__["createServer"](Fort.onNewRequest).once("error", function (err) {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["promise"])((res, rej) => {
+            this.instance.httpServer = http__WEBPACK_IMPORTED_MODULE_2__["createServer"](Fort.onNewRequest).once("error", (err) => {
                 if (err.code === 'EADDRINUSE') {
-                    var error = new _helpers__WEBPACK_IMPORTED_MODULE_4__["LogHelper"](_enums__WEBPACK_IMPORTED_MODULE_3__["ERROR_TYPE"].PortInUse, _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port).get();
+                    const error = new _helpers__WEBPACK_IMPORTED_MODULE_4__["LogHelper"](_enums__WEBPACK_IMPORTED_MODULE_3__["ERROR_TYPE"].PortInUse, _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port).get();
                     rej(error);
                 }
                 else {
                     rej(err);
                 }
-            }).once('listening', function () {
+            }).once('listening', () => {
                 // set default route
                 // RouteHandler.defaultRouteControllerName = RouteHandler.getDefaultRoute();
                 res();
             }).listen(_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].port);
         });
-    };
-    Fort.onNewRequest = function (request, response) {
+    }
+    static onNewRequest(request, response) {
         new _handlers__WEBPACK_IMPORTED_MODULE_0__["RequestHandler"](request, response).handle();
-    };
-    Fort.destroy = function () {
-        var _this = this;
-        return Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["promise"])(function (res) {
-            _this.instance.httpServer.close(res);
+    }
+    static destroy() {
+        return Object(_helpers__WEBPACK_IMPORTED_MODULE_4__["promise"])((res) => {
+            this.instance.httpServer.close(res);
         });
-    };
-    Fort.instance = new Fort();
-    return Fort;
-}());
-
+    }
+}
+Fort.instance = new Fort();
 
 
 /***/ }),
@@ -5424,14 +4345,12 @@ var Fort = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpCookie", function() { return HttpCookie; });
-var HttpCookie = /** @class */ (function () {
-    function HttpCookie(name, value) {
+class HttpCookie {
+    constructor(name, value) {
         this.name = name;
         this.value = value;
     }
-    return HttpCookie;
-}());
-
+}
 
 
 /***/ }),
@@ -5446,12 +4365,8 @@ var HttpCookie = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpFile", function() { return HttpFile; });
-var HttpFile = /** @class */ (function () {
-    function HttpFile() {
-    }
-    return HttpFile;
-}());
-
+class HttpFile {
+}
 
 
 /***/ }),
@@ -5519,40 +4434,20 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Logger", function() { return Logger; });
-var Logger = /** @class */ (function () {
-    function Logger() {
+class Logger {
+    info(...args) {
+        this.debug(args);
     }
-    Logger.prototype.info = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    error(...args) {
         this.debug(args);
-    };
-    Logger.prototype.error = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+    }
+    log(...args) {
         this.debug(args);
-    };
-    Logger.prototype.log = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        this.debug(args);
-    };
-    Logger.prototype.debug = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        console.log.apply(console, args);
-    };
-    return Logger;
-}());
-
+    }
+    debug(...args) {
+        console.log(...args);
+    }
+}
 
 
 /***/ }),
@@ -5567,30 +4462,21 @@ var Logger = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RouteInfo", function() { return RouteInfo; });
-var RouteInfo = /** @class */ (function () {
-    function RouteInfo() {
+class RouteInfo {
+    get workersAsArray() {
+        return Object.keys(this.workers).map(workerName => {
+            return this.workers[workerName];
+        });
     }
-    Object.defineProperty(RouteInfo.prototype, "workersAsArray", {
-        get: function () {
-            var _this = this;
-            return Object.keys(this.workers).map(function (workerName) {
-                return _this.workers[workerName];
-            });
-        },
-        enumerable: false,
-        configurable: true
-    });
-    RouteInfo.prototype.init = function (value) {
+    init(value) {
         this.controllerName = value.controllerName;
         this.controller = value.controller;
         this.path = value.path;
         this.shields = value.shields;
         this.values = value.values;
         this.workers = value.workers;
-    };
-    return RouteInfo;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -5607,26 +4493,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return Router; });
 /* harmony import */ var _handlers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../handlers */ "./src/handlers/index.ts");
 
-var Router = /** @class */ (function () {
-    function Router() {
+class Router {
+    get routes() {
+        return _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection;
     }
-    Object.defineProperty(Router.prototype, "routes", {
-        get: function () {
-            return _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routerCollection;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Router.prototype, "routesAsArray", {
-        get: function () {
-            return _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routesAsArray;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Router;
-}());
-
+    get routesAsArray() {
+        return _handlers__WEBPACK_IMPORTED_MODULE_0__["RouteHandler"].routesAsArray;
+    }
+}
 
 
 /***/ }),
@@ -5641,13 +4515,11 @@ var Router = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpRequestStub", function() { return HttpRequestStub; });
-var HttpRequestStub = /** @class */ (function () {
-    function HttpRequestStub(headers) {
+class HttpRequestStub {
+    constructor(headers) {
         this.headers = headers;
     }
-    return HttpRequestStub;
-}());
-
+}
 
 
 /***/ }),
@@ -5662,31 +4534,29 @@ var HttpRequestStub = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpResponseStub", function() { return HttpResponseStub; });
-var HttpResponseStub = /** @class */ (function () {
-    function HttpResponseStub(headers) {
+class HttpResponseStub {
+    constructor(headers) {
         this.headers_ = headers;
     }
-    HttpResponseStub.prototype.getHeader = function (name) {
+    getHeader(name) {
         return this.headers_[name];
-    };
-    HttpResponseStub.prototype.hasHeader = function (name) {
+    }
+    hasHeader(name) {
         return this.headers_[name] != null;
-    };
-    HttpResponseStub.prototype.setHeader = function (name, value) {
+    }
+    setHeader(name, value) {
         this.headers_[name] = value;
-    };
-    HttpResponseStub.prototype.getHeaders = function () {
+    }
+    getHeaders() {
         return this.headers_;
-    };
-    HttpResponseStub.prototype.getHeaderNames = function () {
+    }
+    getHeaderNames() {
         return Object.keys[this.headers_];
-    };
-    HttpResponseStub.prototype.removeHeader = function (name) {
+    }
+    removeHeader(name) {
         delete this.headers_[name];
-    };
-    return HttpResponseStub;
-}());
-
+    }
+}
 
 
 /***/ }),
@@ -5738,16 +4608,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var initController = function (controllerInstance, data) {
+const initController = (controllerInstance, data) => {
     data = data || {};
-    var parsedCookies = data.cookieValue || {};
-    var headers = (data.request && data.request.headers) || {};
+    const parsedCookies = data.cookieValue || {};
+    const headers = (data.request && data.request.headers) || {};
     controllerInstance.request = new _http_request_stub__WEBPACK_IMPORTED_MODULE_3__["HttpRequestStub"](headers);
     controllerInstance.response = new _http_response_stub__WEBPACK_IMPORTED_MODULE_2__["HttpResponseStub"](headers);
     controllerInstance.query = data.query || {};
     controllerInstance.body = data.body || {};
     controllerInstance.cookie = new _models__WEBPACK_IMPORTED_MODULE_0__["CookieManager"](parsedCookies);
-    var session = new _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionProvider();
+    const session = new _fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].sessionProvider();
     session.cookie = controllerInstance.cookie;
     session.sessionId = parsedCookies[_fort_global__WEBPACK_IMPORTED_MODULE_1__["FortGlobal"].appSessionIdentifier];
     controllerInstance.session = session;
@@ -5772,7 +4642,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initGuard", function() { return initGuard; });
 /* harmony import */ var _init_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init_controller */ "./src/test_helpers/init_controller.ts");
 
-var initGuard = function (guardInstance, data) {
+const initGuard = (guardInstance, data) => {
     return Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(guardInstance, data);
 };
 
@@ -5791,8 +4661,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initShield", function() { return initShield; });
 /* harmony import */ var _init_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init_controller */ "./src/test_helpers/init_controller.ts");
 
-var initShield = function (shieldInstance, data) {
-    var value = Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(shieldInstance, data);
+const initShield = (shieldInstance, data) => {
+    const value = Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(shieldInstance, data);
     value.workerName = data && data.workerName;
     return value;
 };
@@ -5812,7 +4682,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initWall", function() { return initWall; });
 /* harmony import */ var _init_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./init_controller */ "./src/test_helpers/init_controller.ts");
 
-var initWall = function (wallInstance, data) {
+const initWall = (wallInstance, data) => {
     return Object(_init_controller__WEBPACK_IMPORTED_MODULE_0__["initController"])(wallInstance, data);
 };
 
@@ -6092,7 +4962,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArray", function() { return isArray; });
-var isArray = function (value) {
+const isArray = (value) => {
     return Array.isArray(value);
 };
 
@@ -6109,7 +4979,7 @@ var isArray = function (value) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNull", function() { return isNull; });
-var isNull = function (value) {
+const isNull = (value) => {
     return value == null;
 };
 
@@ -6126,7 +4996,7 @@ var isNull = function (value) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNullOrEmpty", function() { return isNullOrEmpty; });
-var isNullOrEmpty = function (value) {
+const isNullOrEmpty = (value) => {
     return value == null || value.length === 0;
 };
 
