@@ -61,60 +61,46 @@ export class RequestHandlerHelper {
         return null;
     }
 
-    protected async onBadRequest(error) {
-        let message;
-        try {
-            message = await new FortGlobal.errorHandler().onBadRequest(error);
-        }
-        catch (ex) {
+    protected onBadRequest(error) {
+        return new FortGlobal.errorHandler().onBadRequest(error).then(data => {
+            return this.onResultFromError_(data);
+        }).catch(ex => {
             return this.onErrorOccured(ex);
-        }
-        this.onResultFromError_(message);
+        });
     }
 
-    protected async onForbiddenRequest() {
-        let message;
-        try {
-            message = await new FortGlobal.errorHandler().onForbiddenRequest();
-        }
-        catch (ex) {
+    protected onForbiddenRequest() {
+        return new FortGlobal.errorHandler().onForbiddenRequest().then(data => {
+            return this.onResultFromError_(data);
+        }).catch(ex => {
             return this.onErrorOccured(ex);
-        }
-        this.onResultFromError_(message);
+        });
     }
 
-    protected async onNotAcceptableRequest() {
-        let errMessage;
-        try {
-            errMessage = await new FortGlobal.errorHandler().onNotAcceptableRequest();
-        }
-        catch (ex) {
+    protected onNotAcceptableRequest() {
+        return new FortGlobal.errorHandler().onNotAcceptableRequest().then(data => {
+            return this.onResultFromError_(data);
+        }).catch(ex => {
             return this.onErrorOccured(ex);
-        }
-        this.onResultFromError_(errMessage);
+        });
     }
 
-    protected async onNotFound() {
-        let response;
-        try {
-            response = await new FortGlobal.errorHandler().onNotFound(this.request.url);
-        }
-        catch (ex) {
+    protected onNotFound() {
+        return new FortGlobal.errorHandler().onNotFound(this.request.url).then(data => {
+            return this.onResultFromError_(data);
+        }).catch(ex => {
             return this.onErrorOccured(ex);
-        }
-        this.onResultFromError_(response);
+        });
     }
 
-    protected async onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
-        let response;
-        try {
-            response = await new FortGlobal.errorHandler().onMethodNotAllowed();
-        }
-        catch (ex) {
+    protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
+
+        return new FortGlobal.errorHandler().onMethodNotAllowed().then(data => {
+            this.response.setHeader("Allow", allowedMethods.join(","));
+            return this.onResultFromError_(data);
+        }).catch(ex => {
             return this.onErrorOccured(ex);
-        }
-        this.response.setHeader("Allow", allowedMethods.join(","));
-        this.onResultFromError_(response);
+        });
     }
 
     // it won't execute wallOutgoing as if there is some issue in wallOutgoing
@@ -122,37 +108,53 @@ export class RequestHandlerHelper {
     // treat it as someone comes to your fort & they start doing things 
     // which was not supposed to be done
     // then you don't follow regular rules but just throw them from anywhere
-    protected async onErrorOccured(error) {
+    protected onErrorOccured(error) {
         if (typeof error === 'string') {
             error = {
                 message: error
             } as IException;
         }
-        let response;
-        try {
-            response = await new FortGlobal.errorHandler().onServerError(error);
-        }
-        catch (ex) {
-            response = JsonHelper.stringify(ex);
-        }
-        this.controllerResult = response;
-        this.returnResultFromError_();
+        return new FortGlobal.errorHandler().onServerError(error).then(data => {
+            this.controllerResult = data;
+            return this.returnResultFromError_();
+        }).catch(ex => {
+            const response = {
+                message: ex.message,
+                stack: ex.stack
+            } as any;
+            this.controllerResult = response;
+            return this.returnResultFromError_();
+        });
+
+        // if (typeof error === 'string') {
+        //     error = {
+        //         message: error
+        //     } as IException;
+        // }
+        // let response;
+        // try {
+        //     response = await new FortGlobal.errorHandler().onServerError(error);
+        // }
+        // catch (ex) {
+        //     response = JsonHelper.stringify(ex);
+        // }
+        // this.controllerResult = response;
+        // this.returnResultFromError_();
     }
 
-    protected async onRequestOptions(allowedMethods: HTTP_METHOD[]) {
+    protected onRequestOptions(allowedMethods: HTTP_METHOD[]) {
         this.response.setHeader("Allow", allowedMethods.join(","));
-        this.onResultFromError_(textResult(""));
+        return this.onResultFromError_(textResult(""));
     }
 
-    private async onResultFromError_(result: HttpResult | HttpFormatResult) {
+    private onResultFromError_(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
-        try {
-            await this.runWallOutgoing();
-        } catch (ex) {
-            this.onErrorOccured(ex);
-            return;
-        }
-        this.returnResultFromError_();
+        return this.runWallOutgoing().then(_ => {
+            return this.returnResultFromError_();
+
+        }).catch(ex => {
+            return this.onErrorOccured(ex);
+        });
     }
 
     private returnResultFromError_() {

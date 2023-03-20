@@ -4,6 +4,7 @@ import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { WallTestData, initWall } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
+import { promiseResolve } from "../utils";
 
 export abstract class Wall implements Controller {
     request: HttpRequest;
@@ -24,8 +25,8 @@ export abstract class Wall implements Controller {
 
     abstract onIncoming(...args): Promise<HttpResult | void>;
 
-    async onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args) {
-        return null;
+    onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args) {
+        return promiseResolve(null);
     }
 
     // eslint-disable-next-line

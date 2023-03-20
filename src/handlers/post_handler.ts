@@ -51,40 +51,38 @@ export class PostHandler extends ControllerResultHandler {
         });
     }
 
-    protected async parsePostData() {
-
-        let postData;
-
+    protected parsePostData() {
         let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
         if (contentType != null) {
             contentType = ContentType.parse(contentType as string).type;
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
-            const result = await this.parseMultiPartData_();
-            postData = result.field;
-            this.file = new FileManager(result.file);
+            return this.parseMultiPartData_().then(result => {
+                this.file = new FileManager(result.file);
+                return (result.field);
+            });
         }
         else {
+            let postData;
             this.file = new FileManager({});
-            const bodyDataAsString = await this.getPostRawData_();
-            switch (contentType) {
-                case MIME_TYPE.Json:
-                    postData = JsonHelper.parse(bodyDataAsString);
-                    break;
-                case MIME_TYPE.Text:
-                case MIME_TYPE.Html:
-                    postData = bodyDataAsString; break;
-                case MIME_TYPE.FormUrlEncoded:
-                    postData = QueryString.parse(bodyDataAsString); break;
-                case MIME_TYPE.Xml:
-                    postData = new (FortGlobal as any).xmlParser().parse(bodyDataAsString);
-                    break;
-                default:
-                    postData = {};
-            }
+            return this.getPostRawData_().then(bodyDataAsString => {
+                switch (contentType) {
+                    case MIME_TYPE.Json:
+                        postData = JsonHelper.parse(bodyDataAsString);
+                        break;
+                    case MIME_TYPE.Text:
+                    case MIME_TYPE.Html:
+                        postData = bodyDataAsString; break;
+                    case MIME_TYPE.FormUrlEncoded:
+                        postData = QueryString.parse(bodyDataAsString); break;
+                    case MIME_TYPE.Xml:
+                        postData = new (FortGlobal as any).xmlParser().parse(bodyDataAsString);
+                        break;
+                    default:
+                        postData = {};
+                }
+                return postData;
+            });
         }
-
-        return postData;
-
     }
 }

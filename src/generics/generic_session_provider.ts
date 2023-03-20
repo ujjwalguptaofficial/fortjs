@@ -32,7 +32,7 @@ export class GenericSessionProvider extends SessionProvider {
     }
 
     // eslint-disable-next-line
-    async clear() {
-
+    clear() {
+        return null;
     }
 }

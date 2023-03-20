@@ -10,5 +10,5 @@ export declare class GenericSessionProvider extends SessionProvider {
     isExist(key: any): any;
     remove(key: any): any;
     setMany(values: SessionValue[]): Promise<null>;
-    clear(): Promise<void>;
+    clear(): any;
 }

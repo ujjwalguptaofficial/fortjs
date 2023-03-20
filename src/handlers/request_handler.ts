@@ -12,6 +12,7 @@ import { PostHandler } from "./post_handler";
 import { InjectorHandler } from "./injector_handler";
 import { RouteHandler } from "./route_handler";
 import { IException } from "../interfaces";
+import { promiseResolve } from "../utils";
 
 
 export class RequestHandler extends PostHandler {
@@ -38,7 +39,7 @@ export class RequestHandler extends PostHandler {
         return promise((res) => {
             let index = 0;
             const wallLength = FortGlobal.walls.length;
-            const executeWallIncomingByIndex = async () => {
+            const executeWallIncomingByIndex = () => {
                 if (wallLength > index) {
                     const wall = FortGlobal.walls[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
@@ -52,8 +53,7 @@ export class RequestHandler extends PostHandler {
 
                     this.wallInstances.push(wallObj);
                     const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
-                    try {
-                        const result = await wallObj.onIncoming(...methodArgsValues);
+                    wallObj.onIncoming(...methodArgsValues).then(result => {
                         if (result == null) {
                             executeWallIncomingByIndex();
                         }
@@ -61,10 +61,10 @@ export class RequestHandler extends PostHandler {
                             res(false);
                             this.onTerminationFromWall(result);
                         }
-                    } catch (ex) {
+                    }).catch(ex => {
                         this.onErrorOccured(ex);
                         res(false);
-                    }
+                    });
                 }
                 else {
                     res(true);
@@ -80,7 +80,7 @@ export class RequestHandler extends PostHandler {
         return promise((res) => {
             let index = 0;
             const shieldLength = this.routeMatchInfo_.shields.length;
-            const executeShieldByIndex = async () => {
+            const executeShieldByIndex = () => {
                 if (shieldLength > index) {
                     const shield = this.routeMatchInfo_.shields[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(shield.name);
@@ -95,8 +95,7 @@ export class RequestHandler extends PostHandler {
 
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
 
-                    try {
-                        const result = await shieldObj.protect(...methodArgsValues);
+                    shieldObj.protect(...methodArgsValues).then(result => {
                         if (result == null) {
                             executeShieldByIndex();
                         }
@@ -104,10 +103,11 @@ export class RequestHandler extends PostHandler {
                             res(false);
                             this.onResultFromController(result);
                         }
-                    } catch (ex) {
+                    }).catch(ex => {
                         this.onErrorOccured(ex);
                         res(false);
-                    }
+                    })
+
                 }
                 else {
                     res(true);
@@ -121,7 +121,7 @@ export class RequestHandler extends PostHandler {
         return promise((res) => {
             let index = 0;
             const shieldLength = guards.length;
-            const executeGuardByIndex = async () => {
+            const executeGuardByIndex = () => {
                 if (shieldLength > index) {
                     const guard = guards[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
@@ -137,8 +137,7 @@ export class RequestHandler extends PostHandler {
                     guardObj.param = this.routeMatchInfo_.params;
 
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
-                    try {
-                        const result = await guardObj.check(...methodArgsValues);
+                    guardObj.check(...methodArgsValues).then(result => {
                         if (result == null) {
                             executeGuardByIndex();
                         }
@@ -146,10 +145,10 @@ export class RequestHandler extends PostHandler {
                             res(false);
                             this.onResultFromController(result);
                         }
-                    } catch (ex) {
+                    }).catch(ex => {
                         this.onErrorOccured(ex);
                         res(false);
-                    }
+                    });
                 }
                 else {
                     res(true);
@@ -199,7 +198,7 @@ export class RequestHandler extends PostHandler {
         }
     }
 
-    private async onRouteMatched_() {
+    private onRouteMatched_() {
         const actionInfo = this.routeMatchInfo_.workerInfo;
         if (actionInfo == null) {
             if (this.request.method === HTTP_METHOD.Options) {
@@ -217,10 +216,10 @@ export class RequestHandler extends PostHandler {
                 } as IException);
                 return;
             }
-            let shouldExecuteNextComponent = await this.executeShieldsProtection_();
-            if (shouldExecuteNextComponent === true) {
-                shouldExecuteNextComponent = await this.handlePostData();
-                if (shouldExecuteNextComponent === true) {
+            this.executeShieldsProtection_().then(isAllowedByShield => {
+                if (isAllowedByShield === false) return;
+                return this.handlePostData().then(isPostDataValid => {
+                    if (isPostDataValid === false) return;
                     this.checkExpectedBody_();
                     if (this.body == null) {
                         this.onBadRequest({
@@ -228,59 +227,60 @@ export class RequestHandler extends PostHandler {
                         } as IException);
                         return;
                     }
-                    shouldExecuteNextComponent = await this.executeGuardsCheck_(actionInfo.guards);
-                    if (shouldExecuteNextComponent === true) {
-                        this.runController_();
-                    }
-                }
-            }
+                    return this.executeGuardsCheck_(actionInfo.guards).then(shouldExecuteController => {
+                        if (shouldExecuteController === true) {
+                            this.runController_();
+                        }
+                    });
+                });
+            });
         }
     }
 
-    private async execute_() {
+    private execute_() {
         const urlDetail = url.parse(this.request.url, true);
         this.query_ = urlDetail.query;
-        let shouldExecuteNextProcess = this.parseCookieFromRequest_();
-        if (shouldExecuteNextProcess === true) {
-            shouldExecuteNextProcess = await this.executeWallIncoming_();
-            if (shouldExecuteNextProcess === true) {
-                const pathUrl = urlDetail.pathname;
-                const requestMethod = this.request.method as HTTP_METHOD;
-                try {
-                    this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-                }
-                catch (ex) {
-                    this.onErrorOccured(ex);
-                    return;
-                }
-                if (this.routeMatchInfo_ == null) { // no route matched
-                    // it may be a file or folder then
-                    this.handleFileRequest(pathUrl);
-                }
-                else {
-                    this.onRouteMatched_();
-                }
+        const isCookieValid = this.parseCookieFromRequest_();
+        if (isCookieValid === false) return;
+        this.executeWallIncoming_().then(isAllowedByWalls => {
+            if (isAllowedByWalls === false) return;
+            const pathUrl = urlDetail.pathname;
+            const requestMethod = this.request.method as HTTP_METHOD;
+
+            this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
+            if (this.routeMatchInfo_ == null) { // no route matched
+                // it may be a file or folder then
+                this.handleFileRequest(pathUrl);
             }
-        }
+            else {
+                this.onRouteMatched_();
+            }
+
+        }).catch(ex => {
+            this.onErrorOccured(ex);
+        })
+
     }
 
-    async handlePostData() {
+    handlePostData() {
         if (this.request.method === HTTP_METHOD.Get) {
             this.body = {};
             this.file = new FileManager({});
+            return promiseResolve(true);
         }
-        else if (FortGlobal.shouldParsePost === true) {
-            try {
-                this.body = await this.parsePostData();
-            } catch (ex) {
+
+        if (FortGlobal.shouldParsePost === true) {
+            return this.parsePostData().then(body => {
+                this.body = body;
+                return true;
+            }).catch(ex => {
                 this.onBadRequest(ex);
                 return false;
-            }
+            })
         }
-        return true;
     }
 
-    async handle() {
+    handle() {
         this.setPreHeader_();
         this.execute_();
     }

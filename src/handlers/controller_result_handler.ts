@@ -63,14 +63,12 @@ export class ControllerResultHandler extends FileHandler {
         }
     }
 
-    async onResultFromController(result: HttpResult | HttpFormatResult) {
+    onResultFromController(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result || textResult("");
-        try {
-            await this.runWallOutgoing();
-        } catch (ex) {
+        return this.runWallOutgoing().then(_ => {
+            this.handleFinalResult_();
+        }).catch(ex => {
             this.onErrorOccured(ex);
-            return;
-        }
-        this.handleFinalResult_();
+        });
     }
 }

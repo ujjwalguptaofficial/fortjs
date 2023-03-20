@@ -5,10 +5,11 @@ import { ViewEngine } from "../abstracts";
 
 export class MustacheViewEngine implements ViewEngine {
 
-    async render(value: ViewEngineData) {
-        const viewData = await getViewFromFile({
+    render(value: ViewEngineData) {
+        return getViewFromFile({
             fileLocation: value.view
-        });
-        return Mustache.render(viewData, value.model);
+        }).then(viewData => {
+            return Mustache.render(viewData, value.model);
+        })
     }
 }

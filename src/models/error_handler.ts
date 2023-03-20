@@ -2,9 +2,10 @@ import { IException } from "../interfaces";
 import { htmlResult } from "../helpers";
 import { HttpResult, HttpFormatResult } from "../types";
 import { HTTP_STATUS_CODE } from "../enums";
+import { promiseResolve } from "../utils";
 
 export class ErrorHandler {
-    async onServerError(ex: IException): Promise<HttpResult | HttpFormatResult> {
+    onServerError(ex: IException): Promise<HttpResult | HttpFormatResult> {
         let errMessage = `<h1>internal server error</h1>
             <h3>message : ${ex.message}</h3>`;
         if (ex.stack) {
@@ -13,10 +14,12 @@ export class ErrorHandler {
         if (ex.type) {
             errMessage += `<p><b>type:</b> ${ex.type}</p>`;
         }
-        return htmlResult(errMessage, HTTP_STATUS_CODE.InternalServerError);
+        return promiseResolve(
+            htmlResult(errMessage, HTTP_STATUS_CODE.InternalServerError)
+        );
     }
 
-    async onBadRequest(ex: IException): Promise<HttpResult | HttpFormatResult> {
+    onBadRequest(ex: IException): Promise<HttpResult | HttpFormatResult> {
         let errMessage = `<h1>Bad Request</h1>`;
         if (ex.message) {
             errMessage += ` <h3>message : ${ex.message} </h3>`;
@@ -27,22 +30,32 @@ export class ErrorHandler {
         if (ex.type) {
             errMessage += `<p><b>type:</b> ${ex.type}</p>`;
         }
-        return htmlResult(errMessage, HTTP_STATUS_CODE.BadRequest);
+        return promiseResolve(
+            htmlResult(errMessage, HTTP_STATUS_CODE.BadRequest)
+        );
     }
 
-    async onForbiddenRequest(): Promise<HttpResult | HttpFormatResult> {
-        return htmlResult(`<h1>Forbidden</h1>`, HTTP_STATUS_CODE.Forbidden);
+    onForbiddenRequest(): Promise<HttpResult | HttpFormatResult> {
+        return promiseResolve(
+            htmlResult(`<h1>Forbidden</h1>`, HTTP_STATUS_CODE.Forbidden)
+        );
     }
 
-    async onNotAcceptableRequest(): Promise<HttpResult | HttpFormatResult> {
-        return htmlResult(`<h1>Not Acceptable</h1>`, HTTP_STATUS_CODE.NotAcceptable);
+    onNotAcceptableRequest(): Promise<HttpResult | HttpFormatResult> {
+        return promiseResolve(
+            htmlResult(`<h1>Not Acceptable</h1>`, HTTP_STATUS_CODE.NotAcceptable)
+        );
     }
 
-    async onMethodNotAllowed(): Promise<HttpResult | HttpFormatResult> {
-        return htmlResult(`<h1>Method Not allowed.</h1>`, HTTP_STATUS_CODE.MethodNotAllowed);
+    onMethodNotAllowed(): Promise<HttpResult | HttpFormatResult> {
+        return promiseResolve(
+            htmlResult(`<h1>Method Not allowed.</h1>`, HTTP_STATUS_CODE.MethodNotAllowed)
+        );
     }
 
-    async onNotFound(url: string): Promise<HttpResult | HttpFormatResult> {
-        return htmlResult(`<h1>The requested resource ${url} was not found.</h1>`, HTTP_STATUS_CODE.NotFound);
+    onNotFound(url: string): Promise<HttpResult | HttpFormatResult> {
+        return promiseResolve(
+            htmlResult(`<h1>The requested resource ${url} was not found.</h1>`, HTTP_STATUS_CODE.NotFound)
+        );
     }
 }

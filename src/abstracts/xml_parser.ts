@@ -1,3 +1,3 @@
 export abstract class XmlParser {
-    abstract async parse(xml: string): Promise<string>;
+    abstract parse(xml: string): Promise<string>;
 }

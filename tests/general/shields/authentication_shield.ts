@@ -8,7 +8,7 @@ export class AuthenticationShield extends Shield {
         this.constructorValue = value;
     }
 
-    protect(@assign('protect called') value: string): Promise<HttpResult> {
+    async protect(@assign('protect called') value: string) {
         if (this.query.shield_injection_test != null) {
             return textResult(`${this.constructorValue} ${value}`, 200) as any;
         }

@@ -18,7 +18,7 @@ export declare class RequestHandler extends PostHandler {
     private checkExpectedBody_;
     private onRouteMatched_;
     private execute_;
-    handlePostData(): Promise<boolean>;
-    handle(): Promise<void>;
+    handlePostData(): Promise<unknown>;
+    handle(): void;
     setControllerProps_(): any;
 }

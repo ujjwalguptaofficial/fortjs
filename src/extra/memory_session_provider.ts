@@ -1,25 +1,26 @@
 import { SessionProvider } from "../abstracts/session_provider";
+import { promiseResolve } from "../utils";
 
 const sessionValues: { [identifier: string]: any } = {};
 
 export class MemorySessionProvider extends SessionProvider {
 
-    async get(key: string) {
+    get(key: string) {
         const savedSession = sessionValues[this.sessionId];
-        return savedSession != null ? savedSession[key] : null;
+        return promiseResolve(savedSession != null ? savedSession[key] : null);
     }
 
-    async isExist(key: string) {
+    isExist(key: string) {
         const savedValue = sessionValues[this.sessionId];
-        return savedValue == null ? false : savedValue[key] != null;
+        return promiseResolve<boolean>(savedValue == null ? false : savedValue[key] != null);
     }
 
-    async getAll() {
+    getAll() {
         const savedValue = sessionValues[this.sessionId];
-        return savedValue == null ? {} : savedValue;
+        return promiseResolve(savedValue == null ? {} : savedValue);
     }
 
-    async set(key: string, val: any) {
+    set(key: string, val: any) {
         const savedValue = sessionValues[this.sessionId];
         if (savedValue == null) {
             this.createSession();
@@ -30,6 +31,7 @@ export class MemorySessionProvider extends SessionProvider {
         else {
             savedValue[key] = val;
         }
+        return promiseResolve<void>(null);
     }
 
     setMany(values: { [key: string]: any }) {
@@ -40,17 +42,19 @@ export class MemorySessionProvider extends SessionProvider {
         );
     }
 
-    async remove(key: string) {
+    remove(key: string) {
         const savedValue = sessionValues[this.sessionId];
         if (savedValue != null) {
             savedValue[key] = null;
         }
+        return promiseResolve<void>(null);
     }
 
-    async clear() {
+    clear() {
         // remove session values
         delete sessionValues[this.sessionId];
         // expire cookie in browser
         this.destroySession();
+        return promiseResolve<void>(null);
     }
 }

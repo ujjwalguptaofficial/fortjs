@@ -17,7 +17,7 @@ export declare abstract class Wall implements Controller {
     get logger(): Logger;
     get option(): import("./component_option").ComponentOption;
     abstract onIncoming(...args: any[]): Promise<HttpResult | void>;
-    onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args: any[]): Promise<any>;
+    onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args: any[]): Promise<unknown>;
     constructor(...args: any[]);
     initialize(data?: WallTestData): Controller;
 }
