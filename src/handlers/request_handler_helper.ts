@@ -190,6 +190,11 @@ export class RequestHandlerHelper {
             }
         );
 
+        if (this.response.headersSent) {
+            console.trace("Request is finished, but triggered again");
+            return;
+        }
+
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [__ContentType]: negotiateMimeType });
         this.response.end(data);

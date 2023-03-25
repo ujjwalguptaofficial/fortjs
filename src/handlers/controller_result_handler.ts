@@ -39,28 +39,28 @@ export class ControllerResultHandler extends FileHandler {
         });
 
         if ((result as HttpResult).shouldRedirect === true) {
-            this.handleRedirectResult_();
+            return this.handleRedirectResult_();
         }
-        else {
-            if ((result as HttpFormatResult).responseFormat == null) {
-                if ((result as HttpResult).file == null) {
-                    const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
-                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-                    if (negotiateMimeType != null) {
-                        this.endResponse_(negotiateMimeType);
-                    }
-                    else {
-                        this.onNotAcceptableRequest();
-                    }
+
+        if ((result as HttpFormatResult).responseFormat == null) {
+            if ((result as HttpResult).file == null) {
+                const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
+                const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                if (negotiateMimeType != null) {
+                    this.endResponse_(negotiateMimeType);
                 }
                 else {
-                    this.handleFileResult_();
+                    this.onNotAcceptableRequest();
                 }
             }
             else {
-                this.handleFormatResult_();
+                this.handleFileResult_();
             }
         }
+        else {
+            this.handleFormatResult_();
+        }
+
     }
 
     onResultFromController(result: HttpResult | HttpFormatResult) {
