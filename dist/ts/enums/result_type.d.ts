@@ -1,4 +1,4 @@
-declare enum RESULT_TYPE {
+declare enum RESULT_TYPES {
     Object = "object",
     String = "string"
 }

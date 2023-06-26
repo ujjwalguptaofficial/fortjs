@@ -3,7 +3,6 @@ import { CookieManager, Logger } from "../models";
 import { SessionProvider, Controller } from ".";
 import { ShieldTestData, initShield } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
-import { ComponentOption } from "./component_option";
 
 export abstract class Shield implements Controller {
     workerName: string;

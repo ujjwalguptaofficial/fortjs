@@ -1,6 +1,4 @@
-import { RouteHandler } from "../handlers";
 import { HTTP_METHOD } from "../enums";
-import { WorkerInfo } from "../types";
 import { route } from "./route";
 import { worker } from "./worker";
 

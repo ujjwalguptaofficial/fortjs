@@ -3,7 +3,7 @@ import { DATA_TYPE } from "../enums/data_type";
 import { getClassName, removeMethodAndNullFromObject, getDataType } from "../helpers";
 
 export function expectQuery(value: any): MethodDecorator {
-    return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
+    return (target: any, methodName: string) => {
         const className: string = getClassName(target);
         const type = getDataType(value);
         switch (type) {

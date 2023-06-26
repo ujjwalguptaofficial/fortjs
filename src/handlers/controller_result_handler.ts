@@ -65,7 +65,7 @@ export class ControllerResultHandler extends FileHandler {
 
     onResultFromController(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result || textResult("");
-        return this.runWallOutgoing().then(_ => {
+        return this.runWallOutgoing().then(() => {
             this.handleFinalResult_();
         }).catch(ex => {
             this.onErrorOccured(ex);

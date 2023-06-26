@@ -166,7 +166,7 @@ if (FortGlobal.isProduction) {
     };
 }
 else {
-    FileHandler.prototype.sendFile_ = function (filePath: string, fileType: string, fileInfo: Fs.Stats) {
+    FileHandler.prototype.sendFile_ = function (filePath: string, fileType: string) {
         this.runWallOutgoing().then(() => {
             this.sendFileAsResponse_(filePath, this.getMimeTypeFromFileType_(fileType));
         }).catch(this.onErrorOccured.bind(this));

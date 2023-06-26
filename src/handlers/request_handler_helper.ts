@@ -6,7 +6,7 @@ import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
-import { JsonHelper, reverseLoop, textResult, getResultBasedOnMiMe } from "../helpers";
+import { reverseLoop, textResult, getResultBasedOnMiMe } from "../helpers";
 import { InjectorHandler } from "./injector_handler";
 import { HttpResult, HttpFormatResult } from "../types";
 
@@ -135,9 +135,8 @@ export class RequestHandlerHelper {
 
     private onResultFromError_(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
-        return this.runWallOutgoing().then(_ => {
+        return this.runWallOutgoing().then(() => {
             return this.returnResultFromError_();
-
         }).catch(ex => {
             return this.onErrorOccured(ex);
         });
