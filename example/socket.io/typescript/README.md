@@ -1,1 +1,0 @@
-This example has been moved to - https://github.com/ujjwalguptaofficial/fortjs-examples/tree/master/socket.io/typescript
