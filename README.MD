@@ -5,7 +5,7 @@
 Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting good code structures & modularity.
 
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
-[![Build Status](https://travis-ci.org/ujjwalguptaofficial/fortjs.svg?branch=master)](https://travis-ci.org/ujjwalguptaofficial/fortjs)
+[![TEST](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml/badge.svg)](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
 [![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](http://fortjs.info/)
 
@@ -20,46 +20,14 @@ Component based MVC web framework for [nodejs](https://nodejs.org/en/) targeting
 * Everything can be unit tested, so you can use a [TDD](https://guide.freecodecamp.org/agile/test-driven-development/) approach.
 * TypeScript Support - Fully supported for typescript users.
 
-# How to use
+# Docs
 
-## Controller
-
-```
-import {Controller, defaultWorker, textResult } from "fortjs" 
-export class UserController extends Controller{
-
-    @defaultWorker()
-    async getUsers(){
-        return textResult("Hey, I am get users method");
-    }
-}
-```
-
-## Bootstrap
-
-```
-import { Fort } from "fortjs";
-import { UserController } from "./controllers";
-
-// add routes
-Fort.routes = [{
-    controller: UserController,
-    path: "/user"
-}]
-
-// initiate app
-Fort.create().then(()=>{
-    Fort.logger.info(`App is started at location : http://localhost:${Fort.port}`);
-})
-```
+https://ujjwalguptaofficial.github.io/fortjs-doc/
 
 # Examples
 
 Check out repo - https://github.com/ujjwalguptaofficial/fortjs-examples
 
-# Website
-
-http://fortjs.info/
 
 ## Contributors
 
@@ -68,7 +36,6 @@ You are very welcome to contribute, please see contributing guidelines - [[Contr
 ## Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. For sponsoring, contact author of this project.
-
 
 ## TODO
 
