@@ -50,7 +50,7 @@ export class FileHandler extends RequestHandlerHelper {
     }
 
     protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
-        this.getFileStats_(absolutePath).then(fileInfo => {
+        return this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
                     this.handleFileRequestForFolderPath_(absolutePath);
@@ -62,8 +62,6 @@ export class FileHandler extends RequestHandlerHelper {
             else {
                 this.onNotFound();
             }
-        }).catch(ex => {
-            this.onErrorOccured(ex);
         });
     }
 
@@ -115,14 +113,14 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    private isClientHasFreshFile_(lastModified: string, etagValue: string) {
+    protected isClientHasFreshFile(lastModified: string, etagValue: string) {
         return fresh(this.request.headers, {
             'etag': etagValue,
             'last-modified': lastModified
         });
     }
 
-    private sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
+    protected sendFileAsResponse(filePath: string, mimeType: MIME_TYPE) {
         this.response.writeHead(HTTP_STATUS_CODE.Ok, {
             [__ContentType]: mimeType
         });
@@ -134,7 +132,7 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    private getMimeTypeFromFileType_(fileType: string) {
+    protected getMimeTypeFromFileType(fileType: string) {
         return fileType[0] === '.' ? getMimeTypeFromExtension(fileType) :
             fileType as MIME_TYPE;
     }
@@ -143,28 +141,28 @@ export class FileHandler extends RequestHandlerHelper {
 }
 
 if (FortGlobal.isProduction) {
-    FileHandler.prototype.sendFile_ = function (filePath: string, fileType: string, fileInfo: Fs.Stats) {
+    FileHandler.prototype.sendFile_ = function (this: FileHandler, filePath: string, fileType: string, fileInfo: Fs.Stats) {
         this.runWallOutgoing().then(() => {
             const lastModified = fileInfo.mtime.toUTCString();
             const eTagValue = etag(fileInfo, {
                 weak: FortGlobal.eTag.type === ETag_Type.Weak
             });
-            if (this.isClientHasFreshFile_(lastModified, eTagValue)) { // client has fresh file
+            if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
                 this.response.statusCode = HTTP_STATUS_CODE.NotModified;
                 this.response.end();
             }
             else {
                 this.response.setHeader('Etag', eTagValue);
                 this.response.setHeader('Last-Modified', lastModified);
-                this.sendFileAsResponse_(filePath, this.getMimeTypeFromFileType_(fileType));
+                this.sendFileAsResponse(filePath, this.getMimeTypeFromFileType(fileType));
             }
         }).catch(this.onErrorOccured.bind(this));
     };
 }
 else {
-    FileHandler.prototype.sendFile_ = function (filePath: string, fileType: string) {
+    FileHandler.prototype.sendFile_ = function (this: FileHandler, filePath: string, fileType: string) {
         this.runWallOutgoing().then(() => {
-            this.sendFileAsResponse_(filePath, this.getMimeTypeFromFileType_(fileType));
+            this.sendFileAsResponse(filePath, this.getMimeTypeFromFileType(fileType));
         }).catch(this.onErrorOccured.bind(this));
     };
 }

@@ -64,42 +64,31 @@ export class RequestHandlerHelper {
     protected onBadRequest(error) {
         return new FortGlobal.errorHandler().onBadRequest(error).then(data => {
             return this.onResultFromError_(data);
-        }).catch(ex => {
-            return this.onErrorOccured(ex);
         });
     }
 
     protected onForbiddenRequest() {
         return new FortGlobal.errorHandler().onForbiddenRequest().then(data => {
             return this.onResultFromError_(data);
-        }).catch(ex => {
-            return this.onErrorOccured(ex);
         });
     }
 
     protected onNotAcceptableRequest() {
         return new FortGlobal.errorHandler().onNotAcceptableRequest().then(data => {
             return this.onResultFromError_(data);
-        }).catch(ex => {
-            return this.onErrorOccured(ex);
         });
     }
 
     protected onNotFound() {
         return new FortGlobal.errorHandler().onNotFound(this.request.url).then(data => {
             return this.onResultFromError_(data);
-        }).catch(ex => {
-            return this.onErrorOccured(ex);
         });
     }
 
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
-
         return new FortGlobal.errorHandler().onMethodNotAllowed().then(data => {
             this.response.setHeader("Allow", allowedMethods.join(","));
             return this.onResultFromError_(data);
-        }).catch(ex => {
-            return this.onErrorOccured(ex);
         });
     }
 
@@ -137,8 +126,6 @@ export class RequestHandlerHelper {
         this.controllerResult = result;
         return this.runWallOutgoing().then(() => {
             return this.returnResultFromError_();
-        }).catch(ex => {
-            return this.onErrorOccured(ex);
         });
     }
 
@@ -159,7 +146,7 @@ export class RequestHandlerHelper {
             }
         }
         else {
-            this.handleFormatResult_(true);
+            return this.handleFormatResult_(true);
         }
     }
 
@@ -176,7 +163,7 @@ export class RequestHandlerHelper {
             this.endResponse_(negotiateMimeType);
         }
         else {
-            this.onNotAcceptableRequest();
+            return this.onNotAcceptableRequest();
         }
     }
 

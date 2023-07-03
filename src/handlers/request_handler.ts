@@ -31,7 +31,11 @@ export class RequestHandler extends PostHandler {
     }
 
     private registerEvents_() {
-        this.request.on('error', this.onBadRequest.bind(this));
+        this.request.on('error', (err) => {
+            this.onBadRequest(err).catch(ex => {
+                this.onErrorOccured(ex);
+            });
+        });
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
@@ -202,34 +206,31 @@ export class RequestHandler extends PostHandler {
         else {
             this.checkExpectedQuery_();
             if (this.query_ == null) {
-                this.onBadRequest({
+                return this.onBadRequest({
                     message: "Bad query string data - query string data does not match with expected value"
                 } as IException);
-                return;
             }
-            this.executeShieldsProtection_().then(isAllowedByShield => {
+            return this.executeShieldsProtection_().then(isAllowedByShield => {
                 if (isAllowedByShield === false) return false;
                 return this.handlePostData().catch(ex => {
-                    this.onBadRequest(ex);
-                    return false;
+                    return this.onBadRequest(ex).then(() => {
+                        return false;
+                    });
                 })
             }).then(shouldExecuteGuard => {
                 if (shouldExecuteGuard === false) return;
                 this.checkExpectedBody_();
                 if (this.body == null) {
-                    this.onBadRequest({
+                    return this.onBadRequest({
                         message: "Bad body data - body data does not match with expected value"
                     } as IException);
-                    return;
                 }
                 return this.executeGuardsCheck_(actionInfo.guards);
             }).then(shouldExecuteController => {
                 if (shouldExecuteController === true) {
                     return this.runController_();
                 }
-            }).catch(ex => {
-                this.onErrorOccured(ex);
-            })
+            });
         }
     }
 
