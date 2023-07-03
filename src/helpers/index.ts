@@ -21,3 +21,4 @@ export * from './get_data_type';
 export * from './get_class_name';
 export * from './remove_method_and_null_from_object';
 export * from './get_result_based_on_mime';
+export * from './get_mime_type_from_file_type';

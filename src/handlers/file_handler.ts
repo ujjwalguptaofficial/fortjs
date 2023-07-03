@@ -4,7 +4,7 @@ import * as path from "path";
 import { __ContentType } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension, promise } from "../helpers";
+import { getMimeTypeFromExtension, getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
@@ -53,14 +53,14 @@ export class FileHandler extends RequestHandlerHelper {
         return this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
-                    this.handleFileRequestForFolderPath_(absolutePath);
+                    return this.handleFileRequestForFolderPath_(absolutePath);
                 }
                 else {
                     this.sendFile_(absolutePath, fileType, fileInfo);
                 }
             }
             else {
-                this.onNotFound();
+                return this.onNotFound();
             }
         });
     }
@@ -132,16 +132,7 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    protected getMimeTypeFromFileType(fileType: string) {
-        return fileType[0] === '.' ? getMimeTypeFromExtension(fileType) :
-            fileType as MIME_TYPE;
-    }
-
-    sendFile_: (filePath: string, fileType: string, fileInfo: Fs.Stats) => any;
-}
-
-if (FortGlobal.isProduction) {
-    FileHandler.prototype.sendFile_ = function (this: FileHandler, filePath: string, fileType: string, fileInfo: Fs.Stats) {
+    sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
         this.runWallOutgoing().then(() => {
             const lastModified = fileInfo.mtime.toUTCString();
             const eTagValue = etag(fileInfo, {
@@ -154,15 +145,8 @@ if (FortGlobal.isProduction) {
             else {
                 this.response.setHeader('Etag', eTagValue);
                 this.response.setHeader('Last-Modified', lastModified);
-                this.sendFileAsResponse(filePath, this.getMimeTypeFromFileType(fileType));
+                this.sendFileAsResponse(filePath, getMimeTypeFromFileType(fileType));
             }
         }).catch(this.onErrorOccured.bind(this));
-    };
-}
-else {
-    FileHandler.prototype.sendFile_ = function (this: FileHandler, filePath: string, fileType: string) {
-        this.runWallOutgoing().then(() => {
-            this.sendFileAsResponse(filePath, this.getMimeTypeFromFileType(fileType));
-        }).catch(this.onErrorOccured.bind(this));
-    };
+    }
 }
