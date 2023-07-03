@@ -89,10 +89,10 @@ export class FileHandler extends RequestHandlerHelper {
         const extension = path.parse(urlPath).ext;
         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
         if (absFilePath != null) {
-            this.handleFileRequestFromAbsolutePath(absFilePath, extension);
+            return this.handleFileRequestFromAbsolutePath(absFilePath, extension);
         }
         else {
-            this.onNotFound();
+            return this.onNotFound();
         }
     }
 
@@ -108,15 +108,11 @@ export class FileHandler extends RequestHandlerHelper {
      */
     private handleFileRequestForFolderPath_(absolutePath: string) {
         absolutePath = path.join(absolutePath, "index.html");
-        this.getFileStats_(absolutePath).then(fileInfo => {
-            if (fileInfo != null) {
-                const fileType = MIME_TYPE.Html;
-                this.sendFile_(absolutePath, fileType, fileInfo);
-            }
-            else {
+        return this.getFileStats_(absolutePath).then(fileInfo => {
+            return fileInfo != null ?
+                this.sendFile_(absolutePath, MIME_TYPE.Html, fileInfo) :
                 this.onNotFound();
-            }
-        }).catch(this.onErrorOccured.bind(this));
+        });
     }
 
     private isClientHasFreshFile_(lastModified: string, etagValue: string) {

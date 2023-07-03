@@ -36,7 +36,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private executeWallIncoming_(): Promise<boolean> {
-        return promise((res) => {
+        return promise((res, rej) => {
             let index = 0;
             const wallLength = FortGlobal.walls.length;
             const executeWallIncomingByIndex = () => {
@@ -61,10 +61,7 @@ export class RequestHandler extends PostHandler {
                             res(false);
                             this.onTerminationFromWall(result);
                         }
-                    }).catch(ex => {
-                        this.onErrorOccured(ex);
-                        res(false);
-                    });
+                    }).catch(rej);
                 }
                 else {
                     res(true);
@@ -161,9 +158,10 @@ export class RequestHandler extends PostHandler {
                 this.onErrorOccured(ex);
                 return false;
             }
-            this.session_ = new FortGlobal.sessionProvider();
-            this.session_.cookie = this.cookieManager = new CookieManager(parsedCookies);
-            this.session_.sessionId = parsedCookies[FortGlobal.appSessionIdentifier];
+            const session = new FortGlobal.sessionProvider();
+            session.cookie = this.cookieManager = new CookieManager(parsedCookies);
+            session.sessionId = parsedCookies[FortGlobal.appSessionIdentifier];
+            this.session_ = session;
         }
         else {
             this.cookieManager = new CookieManager({});
@@ -195,10 +193,10 @@ export class RequestHandler extends PostHandler {
         const actionInfo = this.routeMatchInfo_.workerInfo;
         if (actionInfo == null) {
             if (this.request.method === HTTP_METHOD.Options) {
-                this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
+                return this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
             }
             else {
-                this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
+                return this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
             }
         }
         else {
@@ -224,11 +222,11 @@ export class RequestHandler extends PostHandler {
                     } as IException);
                     return;
                 }
-                return this.executeGuardsCheck_(actionInfo.guards).then(shouldExecuteController => {
-                    if (shouldExecuteController === true) {
-                        return this.runController_();
-                    }
-                });
+                return this.executeGuardsCheck_(actionInfo.guards);
+            }).then(shouldExecuteController => {
+                if (shouldExecuteController === true) {
+                    return this.runController_();
+                }
             }).catch(ex => {
                 this.onErrorOccured(ex);
             })
@@ -246,13 +244,8 @@ export class RequestHandler extends PostHandler {
             const requestMethod = this.request.method as HTTP_METHOD;
 
             this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-            if (this.routeMatchInfo_ == null) { // no route matched
-                // it may be a file or folder then
-                this.handleFileRequest(pathUrl);
-            }
-            else {
+            return this.routeMatchInfo_ == null ? this.handleFileRequest(pathUrl) :
                 this.onRouteMatched_();
-            }
         }).catch(ex => {
             this.onErrorOccured(ex);
         })
