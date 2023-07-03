@@ -77,7 +77,7 @@ export class RequestHandler extends PostHandler {
     runController_;
 
     private executeShieldsProtection_(): Promise<boolean> {
-        return promise((res) => {
+        return promise((res, rej) => {
             let index = 0;
             const shieldLength = this.routeMatchInfo_.shields.length;
             const executeShieldByIndex = () => {
@@ -95,19 +95,15 @@ export class RequestHandler extends PostHandler {
 
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
 
-                    shieldObj.protect(...methodArgsValues).then(result => {
+                    return shieldObj.protect(...methodArgsValues).then(result => {
                         if (result == null) {
-                            executeShieldByIndex();
+                            return executeShieldByIndex();
                         }
                         else {
                             res(false);
-                            this.onResultFromController(result);
+                            return this.onResultFromComponent(result);
                         }
-                    }).catch(ex => {
-                        this.onErrorOccured(ex);
-                        res(false);
-                    })
-
+                    }).catch(rej);
                 }
                 else {
                     res(true);
@@ -118,7 +114,7 @@ export class RequestHandler extends PostHandler {
     }
 
     private executeGuardsCheck_(guards: Array<typeof GenericGuard>): Promise<boolean> {
-        return promise((res) => {
+        return promise((res, rej) => {
             let index = 0;
             const shieldLength = guards.length;
             const executeGuardByIndex = () => {
@@ -139,16 +135,13 @@ export class RequestHandler extends PostHandler {
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
                     guardObj.check(...methodArgsValues).then(result => {
                         if (result == null) {
-                            executeGuardByIndex();
+                            return executeGuardByIndex();
                         }
                         else {
                             res(false);
-                            this.onResultFromController(result);
+                            return this.onResultFromComponent(result);
                         }
-                    }).catch(ex => {
-                        this.onErrorOccured(ex);
-                        res(false);
-                    });
+                    }).catch(rej);
                 }
                 else {
                     res(true);
@@ -217,23 +210,28 @@ export class RequestHandler extends PostHandler {
                 return;
             }
             this.executeShieldsProtection_().then(isAllowedByShield => {
-                if (isAllowedByShield === false) return;
-                return this.handlePostData().then(isPostDataValid => {
-                    if (isPostDataValid === false) return;
-                    this.checkExpectedBody_();
-                    if (this.body == null) {
-                        this.onBadRequest({
-                            message: "Bad body data - body data does not match with expected value"
-                        } as IException);
-                        return;
+                if (isAllowedByShield === false) return false;
+                return this.handlePostData().catch(ex => {
+                    this.onBadRequest(ex);
+                    return false;
+                })
+            }).then(shouldExecuteGuard => {
+                if (shouldExecuteGuard === false) return;
+                this.checkExpectedBody_();
+                if (this.body == null) {
+                    this.onBadRequest({
+                        message: "Bad body data - body data does not match with expected value"
+                    } as IException);
+                    return;
+                }
+                return this.executeGuardsCheck_(actionInfo.guards).then(shouldExecuteController => {
+                    if (shouldExecuteController === true) {
+                        return this.runController_();
                     }
-                    return this.executeGuardsCheck_(actionInfo.guards).then(shouldExecuteController => {
-                        if (shouldExecuteController === true) {
-                            this.runController_();
-                        }
-                    });
                 });
-            });
+            }).catch(ex => {
+                this.onErrorOccured(ex);
+            })
         }
     }
 
@@ -255,7 +253,6 @@ export class RequestHandler extends PostHandler {
             else {
                 this.onRouteMatched_();
             }
-
         }).catch(ex => {
             this.onErrorOccured(ex);
         })
@@ -272,10 +269,6 @@ export class RequestHandler extends PostHandler {
         if (FortGlobal.shouldParsePost === true) {
             return this.parsePostData().then(body => {
                 this.body = body;
-                return true;
-            }).catch(ex => {
-                this.onBadRequest(ex);
-                return false;
             })
         }
     }
@@ -302,24 +295,24 @@ export class RequestHandler extends PostHandler {
     }
 }
 if (FortGlobal.isProduction) {
-    RequestHandler.prototype.runController_ = function () {
-        this.setControllerProps_().then(
-            this.onResultFromController.bind(this)
-        ).catch(this.onErrorOccured.bind(this));
+    RequestHandler.prototype.runController_ = function (this: RequestHandler) {
+        return this.setControllerProps_().then(
+            this.onResultFromComponent.bind(this)
+        );
     };
 }
 else {
     RequestHandler.prototype.runController_ = function () {
         const result = this.setControllerProps_();
         if (Promise.resolve(result) !== result) {
-            this.onErrorOccured({
+            return Promise.reject({
                 message: "Wrong implementation - worker does not return promise"
             } as IException);
         }
         else {
-            result.then(
-                this.onResultFromController.bind(this)
-            ).catch(this.onErrorOccured.bind(this));
+            return result.then(
+                this.onResultFromComponent.bind(this)
+            );
         }
     };
 }
