@@ -10,7 +10,6 @@ export class HttpResponseStub implements HttpResponse {
         return this.headers_[name];
     }
 
-
     hasHeader(name: string) {
         return this.headers_[name] != null;
     }

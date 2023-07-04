@@ -1,4 +1,3 @@
-import { ControllerResultHandler } from "./controller_result_handler";
 import { promise, JsonHelper } from "../helpers";
 import { __ContentType } from "../constant";
 import { MIME_TYPE } from "../enums";

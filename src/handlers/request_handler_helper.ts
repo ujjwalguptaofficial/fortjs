@@ -1,13 +1,10 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
-import * as http from "http";
 import { __ContentType, __SetCookie } from "../constant";
 import { FortGlobal } from "../fort_global";
 import * as Negotiator from "negotiator";
-import { CookieManager } from "../models";
 import { IComponentProp, IException } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";
-import { HttpResult, HttpFormatResult, HttpRequest, HttpResponse } from "../types";
-import { SessionProvider } from "../abstracts";
+import { HttpResult, HttpFormatResult } from "../types";
 
 
 
