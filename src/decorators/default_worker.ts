@@ -2,7 +2,6 @@ import { HTTP_METHOD } from "../enums";
 import { route } from "./route";
 import { worker } from "./worker";
 
-// tslint:disable-next-line
 export const defaultWorker = (...allowedMethods: HTTP_METHOD[]): MethodDecorator => {
     return (target: any, methodName: string, descriptor: PropertyDescriptor) => {
         if (allowedMethods.length === 0) {
