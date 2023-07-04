@@ -1,12 +1,11 @@
 import { ErrorHandler, Logger } from "./models";
-import { ViewEngine, XmlParser } from "./abstracts";
+import { ViewEngine, XmlParser, ComponentOption } from "./abstracts";
 import { EtagOption, FolderMap } from "./types";
 import { GenericSessionProvider, GenericWall, GenericXmlParser } from "./generics";
-import { ComponentOption } from "./abstracts/component_option";
 import { MustacheViewEngine, MemorySessionProvider } from "./extra";
-import { __AppName, __CurrentPath } from "./constant";
+import { APP_NAME, CURRENT_PATH } from "./constant";
 import * as path from "path";
-import { ETag_Type } from "./enums";
+import { ETAG_TYPE } from "./enums";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -45,7 +44,7 @@ export class FortGlobal {
     static setDefault() {
 
         if (FortGlobal.viewPath == null) {
-            FortGlobal.viewPath = path.join(__CurrentPath, "views");
+            FortGlobal.viewPath = path.join(CURRENT_PATH, "views");
         }
 
         if (FortGlobal.logger == null) {
@@ -65,12 +64,12 @@ export class FortGlobal {
         }
 
         if (FortGlobal.appName == null) {
-            FortGlobal.appName = __AppName;
+            FortGlobal.appName = APP_NAME;
         }
 
         if (FortGlobal.eTag == null) {
             FortGlobal.eTag = {
-                type: ETag_Type.Weak
+                type: ETAG_TYPE.Weak
             } as EtagOption;
         }
 

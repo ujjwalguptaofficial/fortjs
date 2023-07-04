@@ -1,4 +1,4 @@
-import { __Constructor } from "../constant";
+import { CONSTRUCTOR } from "../constant";
 
 type InjectorStoreInfo = {
     className: string;
@@ -52,7 +52,7 @@ export class InjectorHandler {
     }
 
     static getConstructorValues(className: string) {
-        return this.getMethodValues(className, __Constructor);
+        return this.getMethodValues(className, CONSTRUCTOR);
     }
 
     static getMethodValues(className: string, methodName: string) {

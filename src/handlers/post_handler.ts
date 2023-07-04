@@ -1,5 +1,5 @@
 import { promise, JsonHelper } from "../helpers";
-import { __ContentType } from "../constant";
+import { CONTENT_TYPE } from "../constant";
 import { MIME_TYPE } from "../enums";
 import * as ContentType from "content-type";
 import * as QueryString from 'querystring';
@@ -52,7 +52,7 @@ export class PostHandler {
     }
 
     parsePostData() {
-        let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
+        let contentType = this.request.headers[CONTENT_TYPE] || this.request.headers["content-type"];
         if (contentType != null) {
             contentType = ContentType.parse(contentType as string).type;
         }

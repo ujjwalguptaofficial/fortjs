@@ -1,5 +1,5 @@
-import { ETag_Type } from "../enums";
+import { ETAG_TYPE } from "../enums";
 
 export type EtagOption = {
-    type: ETag_Type
+    type: ETAG_TYPE
 };

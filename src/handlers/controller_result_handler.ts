@@ -1,6 +1,6 @@
 
 import { HttpResult, HttpFormatResult } from "../types";
-import { __SetCookie } from "../constant";
+import { SET_COOKIE } from "../constant";
 import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
@@ -40,7 +40,7 @@ export class ControllerResultHandler extends FileHandler {
         const result = this.controllerResult;
 
         (this.componentProps.cookie['responseCookie_']).forEach(value => {
-            this.response.setHeader(__SetCookie, value);
+            this.response.setHeader(SET_COOKIE, value);
         });
 
         if ((result as HttpResult).shouldRedirect === true) {

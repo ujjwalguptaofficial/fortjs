@@ -1,9 +1,7 @@
-import { FortGlobal } from "./fort_global";
-/* tslint:disable */
-export const __ContentType = "Content-Type";
-export const __AppName = "fort";
-export const __Cookie = "Cookie";
-export const __SetCookie = 'Set-Cookie';
-export const __CurrentPath = process.cwd();
-export const __ContentLength = "Content-Length";
-export const __Constructor = "const_constructor";
+export const CONTENT_TYPE = "Content-Type";
+export const APP_NAME = "fort";
+export const COOKIE = "Cookie";
+export const SET_COOKIE = 'Set-Cookie';
+export const CURRENT_PATH = process.cwd();
+export const CONTENT_LENGTH = "Content-Length";
+export const CONSTRUCTOR = "const_constructor";

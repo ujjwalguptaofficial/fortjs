@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
-import { __Cookie } from "../constant";
+import { COOKIE } from "../constant";
 import { FortGlobal } from "../fort_global";
 import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary, reverseLoop } from "../helpers";
 import { CookieManager, FileManager } from "../models";
@@ -135,7 +135,7 @@ export class RequestHandler extends ControllerResultHandler {
     private parseCookieFromRequest_() {
         if (FortGlobal.shouldParseCookie === true) {
             const { request } = this.componentProps;
-            const rawCookie = (request.headers[__Cookie] || request.headers["cookie"]) as string;
+            const rawCookie = (request.headers[COOKIE] || request.headers["cookie"]) as string;
             let parsedCookies;
             try {
                 parsedCookies = parseCookie(rawCookie);

@@ -1,7 +1,7 @@
-import { HTTP_STATUS_CODE, MIME_TYPE, ETag_Type } from "../enums";
+import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
 import { FortGlobal } from "../fort_global";
 import * as path from "path";
-import { __ContentType } from "../constant";
+import { CONTENT_TYPE } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
 import { getMimeTypeFromFileType, promise } from "../helpers";
@@ -123,7 +123,7 @@ export class FileHandler extends RequestHandlerHelper {
 
     protected sendFileAsResponse(filePath: string, mimeType: MIME_TYPE) {
         this.response.writeHead(HTTP_STATUS_CODE.Ok, {
-            [__ContentType]: mimeType
+            [CONTENT_TYPE]: mimeType
         });
         const readStream = Fs.createReadStream(filePath);
         // Handle non-existent file
@@ -136,7 +136,7 @@ export class FileHandler extends RequestHandlerHelper {
     sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
         const lastModified = fileInfo.mtime.toUTCString();
         const eTagValue = etag(fileInfo, {
-            weak: FortGlobal.eTag.type === ETag_Type.Weak
+            weak: FortGlobal.eTag.type === ETAG_TYPE.Weak
         });
         const response = this.response;
         if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file

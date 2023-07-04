@@ -1,5 +1,5 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
-import { __ContentType, __SetCookie } from "../constant";
+import { CONTENT_TYPE, SET_COOKIE } from "../constant";
 import { FortGlobal } from "../fort_global";
 import * as Negotiator from "negotiator";
 import { IComponentProp, IException } from "../interfaces";
@@ -121,7 +121,7 @@ export class RequestHandlerHelper {
     private returnResultFromError_() {
         const result = this.controllerResult;
         (this.componentProps.cookie['responseCookie_']).forEach(value => {
-            this.response.setHeader(__SetCookie, value);
+            this.response.setHeader(SET_COOKIE, value);
         });
 
         if ((result as HttpFormatResult).responseFormat == null) {
@@ -171,7 +171,7 @@ export class RequestHandlerHelper {
         }
 
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
-            { [__ContentType]: negotiateMimeType });
+            { [CONTENT_TYPE]: negotiateMimeType });
         this.response.end(data);
     }
 

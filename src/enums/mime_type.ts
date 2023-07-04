@@ -25,5 +25,4 @@ export enum MIME_TYPE {
     Swf = "application/x-shockwave-flash",
     Avi = "video/avi",
     FormMultiPart = "multipart/form-data"
-
 }
