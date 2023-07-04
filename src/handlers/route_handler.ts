@@ -93,7 +93,7 @@ export class RouteHandler {
             });
         }
         else {
-            route.shields = shields;
+            route.shields = route.shields ? [...route.shields, ...shields] : shields;
         }
     }
 
@@ -161,7 +161,8 @@ export class RouteHandler {
                 };
             }
             else {
-                savedAction.guards = guards;
+                savedAction.guards = savedAction.guards ? [...savedAction.guards, ...guards]
+                    : guards;
             }
         }
     }

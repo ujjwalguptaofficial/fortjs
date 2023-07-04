@@ -15,7 +15,9 @@ export function expectQuery(value: any): MethodDecorator {
                 }
             case DATA_TYPE.Object as string:
                 value = removeMethodAndNullFromObject(value);
-                RouteHandler.addExpected("query", className, methodName, value); break;
+                RouteHandler.addExpected("query", className, methodName, value);
+                // RouteHandler.addShields([ExpectQueryShield], className);
+                break;
             default:
                 throw new Error(`expected query should be always an object but found ${type}`);
         }

@@ -18,4 +18,5 @@ export interface IComponentProp {
     data: { [key: string]: any };
     file?: FileManager;
     workerName?: string;
+    controllerName?: string;
 }

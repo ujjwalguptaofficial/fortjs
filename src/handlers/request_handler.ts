@@ -168,16 +168,10 @@ export class RequestHandler extends ControllerResultHandler {
         }
     }
 
-    private checkExpectedBody_() {
-        const expectedBody = RouteHandler.getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
-        if (expectedBody != null) {
-            this.componentProps.body = compareExpectedAndRemoveUnnecessary(expectedBody, this.componentProps.body, false);
-        }
-    }
-
     private onRouteMatched_() {
         const actionInfo = this.routeMatchInfo_.workerInfo;
         this.componentProps.param = this.routeMatchInfo_.params;
+        this.componentProps.controllerName = this.routeMatchInfo_.controllerName;
         if (actionInfo == null) {
             return () => {
                 return this.request.method === HTTP_METHOD.Options ?
@@ -202,14 +196,6 @@ export class RequestHandler extends ControllerResultHandler {
                 })
             }).then(shieldResult => {
                 if (shieldResult) return shieldResult;
-                this.checkExpectedBody_();
-                if (this.componentProps.body == null) {
-                    return () => {
-                        this.onBadRequest({
-                            message: "Bad body data - body data does not match with expected value"
-                        } as IException);
-                    }
-                }
                 return this.executeGuardsCheck_(actionInfo.guards);
             }).then(guardResult => {
                 if (guardResult) return guardResult;
