@@ -6,8 +6,7 @@ import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
 import { Wall } from "../abstracts";
 import { IException } from "../interfaces";
-import { reverseLoop, textResult, getResultBasedOnMiMe } from "../helpers";
-import { InjectorHandler } from "./injector_handler";
+import { textResult, getResultBasedOnMiMe } from "../helpers";
 import { HttpResult, HttpFormatResult } from "../types";
 
 
@@ -19,16 +18,6 @@ export class RequestHandlerHelper {
     protected wallInstances: Wall[] = [];
 
     protected controllerResult: HttpResult | HttpFormatResult = {} as any;
-
-    protected runWallOutgoing() {
-        const outgoingResults: Array<Promise<any>> = [];
-        reverseLoop(this.wallInstances, (value: Wall) => {
-            const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing');
-            methodArgsValues.shift();
-            outgoingResults.push(value.onOutgoing(this.controllerResult, ...methodArgsValues));
-        });
-        return Promise.all(outgoingResults);
-    }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
         const negotiator = new Negotiator(this.request);
@@ -124,9 +113,7 @@ export class RequestHandlerHelper {
 
     private onResultFromError_(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
-        return this.runWallOutgoing().then(() => {
-            return this.returnResultFromError_();
-        });
+        this.returnResultFromError_();
     }
 
     private returnResultFromError_() {
@@ -176,10 +163,10 @@ export class RequestHandlerHelper {
             }
         );
 
-        // if (this.response.headersSent) {
-        //     console.trace("Request is finished, but triggered again");
-        //     return;
-        // }
+        if (this.response.headersSent) {
+            console.trace("Request is finished, but triggered again");
+            return;
+        }
 
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [__ContentType]: negotiateMimeType });

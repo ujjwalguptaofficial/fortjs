@@ -1,9 +1,9 @@
 import * as http from "http";
 import * as url from 'url';
-import { Controller } from "../abstracts";
+import { Controller, Wall } from "../abstracts";
 import { __Cookie } from "../constant";
 import { FortGlobal } from "../fort_global";
-import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary } from "../helpers";
+import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary, reverseLoop } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericSessionProvider, GenericGuard } from "../generics";
 import { RouteMatch, HttpRequest, HttpResponse } from "../types";
@@ -77,7 +77,7 @@ export class RequestHandler extends PostHandler {
 
     runController_;
 
-    private executeShieldsProtection_(): Promise<boolean> {
+    private executeShieldsProtection_(): Promise<() => void> {
         return promise((res, rej) => {
             let index = 0;
             const shieldLength = this.routeMatchInfo_.shields.length;
@@ -98,23 +98,22 @@ export class RequestHandler extends PostHandler {
 
                     return shieldObj.protect(...methodArgsValues).then(result => {
                         if (result == null) {
-                            return executeShieldByIndex();
+                            executeShieldByIndex();
                         }
                         else {
-                            res(false);
-                            return this.onResultFromComponent(result);
+                            res(this.onResultFromComponent(result));
                         }
                     }).catch(rej);
                 }
                 else {
-                    res(true);
+                    res(null);
                 }
             };
             executeShieldByIndex();
         });
     }
 
-    private executeGuardsCheck_(guards: Array<typeof GenericGuard>): Promise<boolean> {
+    private executeGuardsCheck_(guards: Array<typeof GenericGuard>): Promise<() => void> {
         return promise((res, rej) => {
             let index = 0;
             const shieldLength = guards.length;
@@ -136,16 +135,15 @@ export class RequestHandler extends PostHandler {
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
                     guardObj.check(...methodArgsValues).then(result => {
                         if (result == null) {
-                            return executeGuardByIndex();
+                            executeGuardByIndex();
                         }
                         else {
-                            res(false);
-                            return this.onResultFromComponent(result);
+                            res(this.onResultFromComponent(result));
                         }
                     }).catch(rej);
                 }
                 else {
-                    res(true);
+                    res(null);
                 }
             };
             executeGuardByIndex();
@@ -196,11 +194,10 @@ export class RequestHandler extends PostHandler {
     private onRouteMatched_() {
         const actionInfo = this.routeMatchInfo_.workerInfo;
         if (actionInfo == null) {
-            if (this.request.method === HTTP_METHOD.Options) {
-                return this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod);
-            }
-            else {
-                return this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
+            return () => {
+                return this.request.method === HTTP_METHOD.Options ?
+                    this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod) :
+                    this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
             }
         }
         else {
@@ -210,28 +207,39 @@ export class RequestHandler extends PostHandler {
                     message: "Bad query string data - query string data does not match with expected value"
                 } as IException);
             }
-            return this.executeShieldsProtection_().then(isAllowedByShield => {
-                if (isAllowedByShield === false) return false;
+            return this.executeShieldsProtection_().then(shieldResult => {
+                if (shieldResult) return shieldResult;
                 return this.handlePostData().catch(ex => {
-                    return this.onBadRequest(ex).then(() => {
-                        return false;
-                    });
+                    return () => {
+                        return this.onBadRequest(ex);
+                    }
                 })
-            }).then(shouldExecuteGuard => {
-                if (shouldExecuteGuard === false) return;
+            }).then(shieldResult => {
+                if (shieldResult) return shieldResult;
                 this.checkExpectedBody_();
                 if (this.body == null) {
-                    return this.onBadRequest({
-                        message: "Bad body data - body data does not match with expected value"
-                    } as IException);
+                    return () => {
+                        this.onBadRequest({
+                            message: "Bad body data - body data does not match with expected value"
+                        } as IException);
+                    }
                 }
                 return this.executeGuardsCheck_(actionInfo.guards);
-            }).then(shouldExecuteController => {
-                if (shouldExecuteController === true) {
-                    return this.runController_();
-                }
+            }).then(guardResult => {
+                if (guardResult) return guardResult;
+                return this.runController_();
             });
         }
+    }
+
+    private runWallOutgoing_() {
+        const outgoingResults: Array<Promise<any>> = [];
+        reverseLoop(this.wallInstances, (value: Wall) => {
+            const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing');
+            methodArgsValues.shift();
+            outgoingResults.push(value.onOutgoing(this.controllerResult, ...methodArgsValues));
+        });
+        return Promise.all(outgoingResults);
     }
 
     private execute_() {
@@ -245,8 +253,14 @@ export class RequestHandler extends PostHandler {
             const requestMethod = this.request.method as HTTP_METHOD;
 
             this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
-            return this.routeMatchInfo_ == null ? this.handleFileRequest(pathUrl) :
+            return this.routeMatchInfo_ == null ? () => {
+                return this.handleFileRequest(pathUrl);
+            } :
                 this.onRouteMatched_();
+        }).then(finalCallback => {
+            if (finalCallback) {
+                return this.runWallOutgoing_().then(finalCallback);
+            }
         }).catch(ex => {
             this.onErrorOccured(ex);
         })
@@ -257,7 +271,7 @@ export class RequestHandler extends PostHandler {
         if (this.request.method === HTTP_METHOD.Get) {
             this.body = {};
             this.file = new FileManager({});
-            return promiseResolve(true);
+            return promiseResolve(null);
         }
 
         if (FortGlobal.shouldParsePost === true) {
@@ -296,7 +310,7 @@ if (FortGlobal.isProduction) {
     };
 }
 else {
-    RequestHandler.prototype.runController_ = function () {
+    RequestHandler.prototype.runController_ = function (this: RequestHandler) {
         const result = this.setControllerProps_();
         if (Promise.resolve(result) !== result) {
             return Promise.reject({

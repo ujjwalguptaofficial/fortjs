@@ -7,7 +7,7 @@ import * as Fs from "fs";
 import { getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
-import { isNullOrEmpty } from "../utils";
+import { isNullOrEmpty, promiseResolve } from "../utils";
 
 type FileInfo = {
     folder: string,
@@ -57,6 +57,7 @@ export class FileHandler extends RequestHandlerHelper {
                 }
                 else {
                     return this.sendFile_(absolutePath, fileType, fileInfo);
+
                 }
             }
             else {
@@ -133,21 +134,19 @@ export class FileHandler extends RequestHandlerHelper {
     }
 
     sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
-        return this.runWallOutgoing().then(() => {
-            const lastModified = fileInfo.mtime.toUTCString();
-            const eTagValue = etag(fileInfo, {
-                weak: FortGlobal.eTag.type === ETag_Type.Weak
-            });
-            const response = this.response;
-            if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
-                response.statusCode = HTTP_STATUS_CODE.NotModified;
-                response.end();
-            }
-            else {
-                response.setHeader('Etag', eTagValue);
-                response.setHeader('Last-Modified', lastModified);
-                this.sendFileAsResponse(filePath, getMimeTypeFromFileType(fileType));
-            }
-        }).catch(this.onErrorOccured.bind(this));
+        const lastModified = fileInfo.mtime.toUTCString();
+        const eTagValue = etag(fileInfo, {
+            weak: FortGlobal.eTag.type === ETag_Type.Weak
+        });
+        const response = this.response;
+        if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
+            response.statusCode = HTTP_STATUS_CODE.NotModified;
+            response.end();
+        }
+        else {
+            response.setHeader('Etag', eTagValue);
+            response.setHeader('Last-Modified', lastModified);
+            this.sendFileAsResponse(filePath, getMimeTypeFromFileType(fileType));
+        }
     }
 }

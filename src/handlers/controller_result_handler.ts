@@ -5,6 +5,7 @@ import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { textResult } from "../helpers";
+import { promiseResolve } from "../utils";
 
 export class ControllerResultHandler extends FileHandler {
 
@@ -12,6 +13,7 @@ export class ControllerResultHandler extends FileHandler {
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { 'Location': (this.controllerResult as HttpResult).responseData });
         this.response.end();
+        return promiseResolve(null);
     }
 
     private handleFileResult_() {
@@ -29,7 +31,9 @@ export class ControllerResultHandler extends FileHandler {
 
     onTerminationFromWall(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
-        return this.handleFinalResult_();
+        return this.handleFinalResult_().catch(ex => {
+            this.onErrorOccured(ex);
+        });
     }
 
     private handleFinalResult_() {
@@ -64,8 +68,8 @@ export class ControllerResultHandler extends FileHandler {
 
     onResultFromComponent(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result || textResult("");
-        return this.runWallOutgoing().then(() => {
+        return () => {
             return this.handleFinalResult_();
-        });
+        }
     }
 }
