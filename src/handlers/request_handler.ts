@@ -156,16 +156,10 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private setPreHeader_() {
-        this.response.setHeader('X-Powered-By', FortGlobal.appName);
-        this.response.setHeader('Vary', 'Accept-Encoding');
-        this.response.sendDate = true;
-    }
-
-    private checkExpectedQuery_() {
-        const expectedQuery = RouteHandler.getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
-        if (expectedQuery != null) {
-            this.componentProps.query = compareExpectedAndRemoveUnnecessary(expectedQuery, this.componentProps.query, true);
-        }
+        const response = this.response;
+        response.setHeader('X-Powered-By', FortGlobal.appName);
+        response.setHeader('Vary', 'Accept-Encoding');
+        response.sendDate = true;
     }
 
     private onRouteMatched_() {
@@ -180,12 +174,6 @@ export class RequestHandler extends ControllerResultHandler {
             }
         }
         else {
-            this.checkExpectedQuery_();
-            if (this.componentProps.query == null) {
-                return this.onBadRequest({
-                    message: "Bad query string data - query string data does not match with expected value"
-                } as IException);
-            }
             this.componentProps.workerName = this.routeMatchInfo_.workerInfo.workerName;
             return this.executeShieldsProtection_().then(shieldResult => {
                 if (shieldResult) return shieldResult;
