@@ -24,12 +24,12 @@ export class ControllerResultHandler extends FileHandler {
                 `attachment;filename=${fileName}${parsedPath.ext}`
             );
         }
-        this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
+        return this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
     }
 
     onTerminationFromWall(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
-        this.handleFinalResult_();
+        return this.handleFinalResult_();
     }
 
     private handleFinalResult_() {
@@ -50,23 +50,22 @@ export class ControllerResultHandler extends FileHandler {
                     this.endResponse_(negotiateMimeType);
                 }
                 else {
-                    this.onNotAcceptableRequest();
+                    return this.onNotAcceptableRequest();
                 }
             }
             else {
-                this.handleFileResult_();
+                return this.handleFileResult_();
             }
         }
         else {
-            this.handleFormatResult_();
+            return this.handleFormatResult_();
         }
-
     }
 
     onResultFromComponent(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result || textResult("");
         return this.runWallOutgoing().then(() => {
-            this.handleFinalResult_();
+            return this.handleFinalResult_();
         });
     }
 }

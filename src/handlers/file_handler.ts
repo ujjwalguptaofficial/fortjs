@@ -4,7 +4,7 @@ import * as path from "path";
 import { __ContentType } from "../constant";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension, getMimeTypeFromFileType, promise } from "../helpers";
+import { getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
@@ -56,7 +56,7 @@ export class FileHandler extends RequestHandlerHelper {
                     return this.handleFileRequestForFolderPath_(absolutePath);
                 }
                 else {
-                    this.sendFile_(absolutePath, fileType, fileInfo);
+                    return this.sendFile_(absolutePath, fileType, fileInfo);
                 }
             }
             else {
@@ -133,18 +133,19 @@ export class FileHandler extends RequestHandlerHelper {
     }
 
     sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
-        this.runWallOutgoing().then(() => {
+        return this.runWallOutgoing().then(() => {
             const lastModified = fileInfo.mtime.toUTCString();
             const eTagValue = etag(fileInfo, {
                 weak: FortGlobal.eTag.type === ETag_Type.Weak
             });
+            const response = this.response;
             if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
-                this.response.statusCode = HTTP_STATUS_CODE.NotModified;
-                this.response.end();
+                response.statusCode = HTTP_STATUS_CODE.NotModified;
+                response.end();
             }
             else {
-                this.response.setHeader('Etag', eTagValue);
-                this.response.setHeader('Last-Modified', lastModified);
+                response.setHeader('Etag', eTagValue);
+                response.setHeader('Last-Modified', lastModified);
                 this.sendFileAsResponse(filePath, getMimeTypeFromFileType(fileType));
             }
         }).catch(this.onErrorOccured.bind(this));
