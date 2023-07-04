@@ -240,7 +240,7 @@ export class Fort {
     }
 
     static onNewRequest(request, response) {
-        new RequestHandler(request, response).handle();
+        new RequestHandler().handle(request, response);
     }
 
     static destroy(): Promise<void> {

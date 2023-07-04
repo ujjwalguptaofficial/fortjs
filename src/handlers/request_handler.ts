@@ -3,14 +3,13 @@ import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
 import { COOKIE } from "../constants";
 import { FortGlobal } from "../constants/fort_global";
-import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary, reverseLoop } from "../helpers";
+import { parseCookie, parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericGuard } from "../generics";
 import { RouteMatch } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { PostHandler } from "./post_handler";
 import { InjectorHandler } from "./injector_handler";
-import { RouteHandler } from "./route_handler";
 import { IException } from "../interfaces";
 import { promiseResolve } from "../utils";
 import { ControllerResultHandler } from "./controller_result_handler";
@@ -21,15 +20,6 @@ export class RequestHandler extends ControllerResultHandler {
     private routeMatchInfo_: RouteMatch;
     private wallInstances: Wall[] = [];
 
-    constructor(request: http.IncomingMessage, response: http.ServerResponse) {
-        super();
-        this.componentProps = {
-            request,
-            response,
-            data: {}
-        } as any;
-        this.registerEvents_();
-    }
 
     private registerEvents_() {
         this.request.on('error', (err) => {
@@ -203,6 +193,7 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private execute_() {
+
         const request = this.componentProps.request;
         const urlDetail = url.parse(request.url, true);
         this.componentProps.query = urlDetail.query;
@@ -246,7 +237,13 @@ export class RequestHandler extends ControllerResultHandler {
         }
     }
 
-    handle() {
+    handle(request: http.IncomingMessage, response: http.ServerResponse) {
+        this.componentProps = {
+            request,
+            response,
+            data: {}
+        } as any;
+        this.registerEvents_();
         this.setPreHeader_();
         this.execute_();
     }
