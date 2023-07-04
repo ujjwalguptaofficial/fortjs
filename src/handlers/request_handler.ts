@@ -167,11 +167,15 @@ export class RequestHandler extends ControllerResultHandler {
             this.componentProps.workerName = this.routeMatchInfo_.workerInfo.workerName;
             return this.executeShieldsProtection_().then(shieldResult => {
                 if (shieldResult) return shieldResult;
-                return this.handlePostData().catch(ex => {
+                return this.handlePostData().then(postResult => {
+                    this.componentProps.file = postResult[0];
+                    this.componentProps.body = postResult[1];
+                    return null;
+                }).catch(ex => {
                     return () => {
                         return this.onBadRequest(ex);
                     }
-                })
+                });
             }).then(shieldResult => {
                 if (shieldResult) return shieldResult;
                 return this.executeGuardsCheck_(actionInfo.guards);
@@ -221,19 +225,14 @@ export class RequestHandler extends ControllerResultHandler {
 
     handlePostData() {
         if (this.request.method === HTTP_METHOD.Get) {
-            this.componentProps.body = {};
-            this.componentProps.file = new FileManager({});
-            return promiseResolve(null);
+            return promiseResolve([new FileManager({}), {}]);
         }
 
         if (FortGlobal.shouldParsePost === true) {
             const postHandler = new PostHandler(
                 this.request
             );
-            return postHandler.parsePostData().then(postResult => {
-                this.componentProps.file = postResult[0];
-                this.componentProps.body = postResult[1];
-            });
+            return postHandler.parsePostData();
         }
     }
 
