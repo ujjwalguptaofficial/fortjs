@@ -1,19 +1,13 @@
-import { HttpRequest, HttpResponse, HttpResult } from "../types";
-import { CookieManager, Logger } from "../models";
-import { SessionProvider, Controller } from ".";
+import { HttpResult } from "../types";
+import { Logger } from "../models";
 import { ShieldTestData, initShield } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
+import { Component } from "./component";
 
-export abstract class Shield implements Controller {
-    workerName: string;
-    request: HttpRequest;
-    response: HttpResponse;
-    query: { [key: string]: any };
-
-    session: SessionProvider;
-    cookie: CookieManager;
-
-    data: { [key: string]: any };
+export abstract class Shield extends Component {
+    get workerName() {
+        return this['componentProp_'].workerName;
+    }
 
     get logger(): Logger {
         return FortGlobal.logger;
@@ -27,7 +21,7 @@ export abstract class Shield implements Controller {
 
     // eslint-disable-next-line
     constructor(...args) {
-
+        super();
     }
 
     initialize(data?: ShieldTestData) {

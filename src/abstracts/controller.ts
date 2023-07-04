@@ -1,36 +1,28 @@
-import { HttpRequest, HttpResponse, ControllerTestData } from "../types";
-import { CookieManager, FileManager, Logger } from "../models";
-import { SessionProvider } from ".";
+import { ControllerTestData } from "../types";
 import { initController } from "../test_helpers";
-import { FortGlobal } from "../fort_global";
+import { Component } from "./component";
 
-export abstract class Controller {
-    request: HttpRequest;
-    response: HttpResponse;
-    query: { [key: string]: any };
-    body?: { [key: string]: any };
-    session: SessionProvider;
-    cookie: CookieManager;
-    param?: { [key: string]: string };
-    data: { [key: string]: any };
+export abstract class Controller extends Component {
 
-    get option() {
-        return FortGlobal.componentOption;
+    get body() {
+        return this['componentProp_'].body;
     }
 
-    file?: FileManager;
-    get logger(): Logger {
-        return FortGlobal.logger;
+    get param() {
+        return this['componentProp_'].param;
+    }
+
+    get file() {
+        return this['componentProp_'].file;
     }
 
     // eslint-disable-next-line
     constructor(...args) {
-
+        super();
     }
 
     initialize(data?: ControllerTestData) {
         initController(this, data);
     }
-
 
 }

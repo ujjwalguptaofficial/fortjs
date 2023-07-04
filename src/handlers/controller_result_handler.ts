@@ -38,7 +38,8 @@ export class ControllerResultHandler extends FileHandler {
 
     private handleFinalResult_() {
         const result = this.controllerResult;
-        ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
+
+        (this.componentProps.cookie['responseCookie_']).forEach(value => {
             this.response.setHeader(__SetCookie, value);
         });
 

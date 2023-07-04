@@ -4,17 +4,25 @@ import { Controller } from "./controller";
 import { SessionProvider } from "./session_provider";
 import { GuardTestData, initGuard } from "../test_helpers";
 import { FortGlobal } from "../fort_global";
+import { Component } from "./component";
 
-export abstract class Guard implements Controller {
-    request: HttpRequest;
-    response: HttpResponse;
-    query: { [key: string]: any };
-    body: { [key: string]: any };
-    session: SessionProvider;
-    cookie: CookieManager;
-    param?: { [key: string]: string };
-    data: { [key: string]: any };
-    file: FileManager;
+export abstract class Guard extends Component {
+    get body() {
+        return this['componentProp_'].body;
+    }
+
+    get param() {
+        return this['componentProp_'].param;
+    }
+
+    get file() {
+        return this['componentProp_'].file;
+    }
+
+    get workerName() {
+        return this['componentProp_'].workerName;
+    }
+
     abstract check(...args): Promise<HttpResult | void>;
 
     get logger(): Logger {
@@ -24,10 +32,10 @@ export abstract class Guard implements Controller {
     get option() {
         return FortGlobal.componentOption;
     }
-    
+
     // eslint-disable-next-line
     constructor(...args) {
-
+        super();
     }
 
     initialize(data?: GuardTestData) {

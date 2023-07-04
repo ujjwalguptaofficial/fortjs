@@ -18,19 +18,16 @@ import { ControllerResultHandler } from "./controller_result_handler";
 
 export class RequestHandler extends ControllerResultHandler {
 
-    private session_: GenericSessionProvider;
-    private query_: any;
-    private data_ = {};
     private routeMatchInfo_: RouteMatch;
     private wallInstances: Wall[] = [];
 
-    protected body: any;
-    protected file: FileManager;
-
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
         super();
-        this.request = request;
-        this.response = response;
+        this.componentProps = {
+            request,
+            response,
+            data: {}
+        } as any;
         this.registerEvents_();
     }
 
@@ -52,14 +49,9 @@ export class RequestHandler extends ControllerResultHandler {
                     const wall = FortGlobal.walls[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
                     const wallObj = new wall(...constructorArgsValues);
-                    wallObj.cookie = this.cookieManager;
-                    wallObj.session = this.session_;
-                    wallObj.request = this.request as HttpRequest;
-                    wallObj.response = this.response as HttpResponse;
-                    wallObj.data = this.data_;
-                    wallObj.query = this.query_;
-
+                    wallObj['componentProp_'] = this.componentProps;
                     this.wallInstances.push(wallObj);
+
                     const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
                     wallObj.onIncoming(...methodArgsValues).then(result => {
                         if (result == null) {
@@ -90,13 +82,7 @@ export class RequestHandler extends ControllerResultHandler {
                     const shield = this.routeMatchInfo_.shields[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(shield.name);
                     const shieldObj = new shield(...constructorArgsValues);
-                    shieldObj.cookie = this.cookieManager;
-                    shieldObj.query = this.query_;
-                    shieldObj.session = this.session_;
-                    shieldObj.request = this.request as HttpRequest;
-                    shieldObj.response = this.response as HttpResponse;
-                    shieldObj.data = this.data_;
-                    shieldObj.workerName = this.routeMatchInfo_.workerInfo.workerName;
+                    shieldObj['componentProp_'] = this.componentProps;
 
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
 
@@ -126,15 +112,7 @@ export class RequestHandler extends ControllerResultHandler {
                     const guard = guards[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
                     const guardObj = new guard(...constructorArgsValues);
-                    guardObj.body = this.body;
-                    guardObj.cookie = this.cookieManager;
-                    guardObj.query = this.query_;
-                    guardObj.session = this.session_;
-                    guardObj.request = this.request as HttpRequest;
-                    guardObj.response = this.response as HttpResponse;
-                    guardObj.data = this.data_;
-                    guardObj.file = this.file;
-                    guardObj.param = this.routeMatchInfo_.params;
+                    guardObj['componentProp_'] = this.componentProps;
 
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
                     guardObj.check(...methodArgsValues).then(result => {
@@ -156,7 +134,8 @@ export class RequestHandler extends ControllerResultHandler {
 
     private parseCookieFromRequest_() {
         if (FortGlobal.shouldParseCookie === true) {
-            const rawCookie = (this.request.headers[__Cookie] || this.request.headers["cookie"]) as string;
+            const { request } = this.componentProps;
+            const rawCookie = (request.headers[__Cookie] || request.headers["cookie"]) as string;
             let parsedCookies;
             try {
                 parsedCookies = parseCookie(rawCookie);
@@ -165,12 +144,13 @@ export class RequestHandler extends ControllerResultHandler {
                 return false;
             }
             const session = new FortGlobal.sessionProvider();
-            session.cookie = this.cookieManager = new CookieManager(parsedCookies);
+            session.cookie = new CookieManager(parsedCookies);
             session.sessionId = parsedCookies[FortGlobal.appSessionIdentifier];
-            this.session_ = session;
+            this.componentProps.session = session;
+            this.componentProps.cookie = session.cookie;
         }
         else {
-            this.cookieManager = new CookieManager({});
+            this.componentProps.cookie = new CookieManager({});
         }
         return true;
     }
@@ -184,19 +164,20 @@ export class RequestHandler extends ControllerResultHandler {
     private checkExpectedQuery_() {
         const expectedQuery = RouteHandler.getExpectedQuery(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
         if (expectedQuery != null) {
-            this.query_ = compareExpectedAndRemoveUnnecessary(expectedQuery, this.query_, true);
+            this.componentProps.query = compareExpectedAndRemoveUnnecessary(expectedQuery, this.componentProps.query, true);
         }
     }
 
     private checkExpectedBody_() {
         const expectedBody = RouteHandler.getExpectedBody(this.routeMatchInfo_.controllerName, this.routeMatchInfo_.workerInfo.workerName);
         if (expectedBody != null) {
-            this.body = compareExpectedAndRemoveUnnecessary(expectedBody, this.body, false);
+            this.componentProps.body = compareExpectedAndRemoveUnnecessary(expectedBody, this.componentProps.body, false);
         }
     }
 
     private onRouteMatched_() {
         const actionInfo = this.routeMatchInfo_.workerInfo;
+        this.componentProps.param = this.routeMatchInfo_.params;
         if (actionInfo == null) {
             return () => {
                 return this.request.method === HTTP_METHOD.Options ?
@@ -206,11 +187,12 @@ export class RequestHandler extends ControllerResultHandler {
         }
         else {
             this.checkExpectedQuery_();
-            if (this.query_ == null) {
+            if (this.componentProps.query == null) {
                 return this.onBadRequest({
                     message: "Bad query string data - query string data does not match with expected value"
                 } as IException);
             }
+            this.componentProps.workerName = this.routeMatchInfo_.workerInfo.workerName;
             return this.executeShieldsProtection_().then(shieldResult => {
                 if (shieldResult) return shieldResult;
                 return this.handlePostData().catch(ex => {
@@ -221,7 +203,7 @@ export class RequestHandler extends ControllerResultHandler {
             }).then(shieldResult => {
                 if (shieldResult) return shieldResult;
                 this.checkExpectedBody_();
-                if (this.body == null) {
+                if (this.componentProps.body == null) {
                     return () => {
                         this.onBadRequest({
                             message: "Bad body data - body data does not match with expected value"
@@ -247,14 +229,15 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private execute_() {
-        const urlDetail = url.parse(this.request.url, true);
-        this.query_ = urlDetail.query;
+        const request = this.componentProps.request;
+        const urlDetail = url.parse(request.url, true);
+        this.componentProps.query = urlDetail.query;
         const isCookieValid = this.parseCookieFromRequest_();
         if (isCookieValid === false) return;
         this.executeWallIncoming_().then(isAllowedByWalls => {
             if (isAllowedByWalls === false) return;
             const pathUrl = urlDetail.pathname;
-            const requestMethod = this.request.method as HTTP_METHOD;
+            const requestMethod = request.method as HTTP_METHOD;
 
             this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
             return this.routeMatchInfo_ == null ? () => {
@@ -273,8 +256,8 @@ export class RequestHandler extends ControllerResultHandler {
 
     handlePostData() {
         if (this.request.method === HTTP_METHOD.Get) {
-            this.body = {};
-            this.file = new FileManager({});
+            this.componentProps.body = {};
+            this.componentProps.file = new FileManager({});
             return promiseResolve(null);
         }
 
@@ -283,8 +266,8 @@ export class RequestHandler extends ControllerResultHandler {
                 this.request
             );
             return postHandler.parsePostData().then(postResult => {
-                this.file = postResult[0];
-                this.body = postResult[1];
+                this.componentProps.file = postResult[0];
+                this.componentProps.body = postResult[1];
             });
         }
     }
@@ -297,15 +280,9 @@ export class RequestHandler extends ControllerResultHandler {
     setControllerProps_() {
         const constructorValues = InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
         const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
-        controllerObj.request = this.request as HttpRequest;
-        controllerObj.response = this.response;
-        controllerObj.query = this.query_;
-        controllerObj.body = this.body;
-        controllerObj.session = this.session_;
-        controllerObj.cookie = this.cookieManager;
-        controllerObj.param = this.routeMatchInfo_.params;
-        controllerObj.data = this.data_;
-        controllerObj.file = this.file;
+
+        controllerObj['componentProp_'] = this.componentProps;
+
         const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
         return controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues);
     }

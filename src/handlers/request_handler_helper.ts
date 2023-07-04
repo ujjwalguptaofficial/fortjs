@@ -4,18 +4,25 @@ import { __ContentType, __SetCookie } from "../constant";
 import { FortGlobal } from "../fort_global";
 import * as Negotiator from "negotiator";
 import { CookieManager } from "../models";
-import { Wall } from "../abstracts";
-import { IException } from "../interfaces";
+import { IComponentProp, IException } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";
-import { HttpResult, HttpFormatResult } from "../types";
+import { HttpResult, HttpFormatResult, HttpRequest, HttpResponse } from "../types";
+import { SessionProvider } from "../abstracts";
+
 
 
 export class RequestHandlerHelper {
-    protected cookieManager: CookieManager;
-    protected response: http.ServerResponse;
-    protected request: http.IncomingMessage;
+    protected componentProps: IComponentProp;
 
     protected controllerResult: HttpResult | HttpFormatResult = {} as any;
+
+    get request() {
+        return this.componentProps.request;
+    }
+
+    get response() {
+        return this.componentProps.response;
+    }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
         const negotiator = new Negotiator(this.request);
@@ -116,7 +123,7 @@ export class RequestHandlerHelper {
 
     private returnResultFromError_() {
         const result = this.controllerResult;
-        ((this.cookieManager as any).responseCookie_ as string[]).forEach(value => {
+        (this.componentProps.cookie['responseCookie_']).forEach(value => {
             this.response.setHeader(__SetCookie, value);
         });
 

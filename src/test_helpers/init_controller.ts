@@ -12,17 +12,21 @@ export const initController = (controllerInstance: Controller, data?: Controller
     data = data || {};
     const parsedCookies = data.cookieValue || {};
     const headers = (data.request && data.request.headers) || {};
-    controllerInstance.request = new HttpRequestStub(headers);
-    controllerInstance.response = new HttpResponseStub(headers);
-    controllerInstance.query = data.query || {};
-    controllerInstance.body = data.body || {};
-    controllerInstance.cookie = new CookieManager(parsedCookies);
     const session = new FortGlobal.sessionProvider();
-    session.cookie = controllerInstance.cookie;
+    const cookie = new CookieManager(parsedCookies);
+    session.cookie = cookie;
     session.sessionId = parsedCookies[FortGlobal.appSessionIdentifier];
-    controllerInstance.session = session;
-    controllerInstance.param = data.param || {};
-    controllerInstance.data = data.data || {};
-    controllerInstance.file = new FileManager(data.file || {});
+    controllerInstance['componentProp_'] = {
+        request: new HttpRequestStub(headers) as any,
+        response: new HttpResponseStub(headers) as any,
+        query: data.query || {},
+        body: data.body || {},
+        cookie: cookie,
+        session: session,
+        param: data.param || {},
+        data: data.data || {},
+        file: new FileManager(data.file || {}),
+        workerName: (data as any).workerName
+    };
     return controllerInstance;
 };
