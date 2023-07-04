@@ -1,7 +1,7 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import * as path from "path";
-import { CONTENT_TYPE } from "../constant";
+import { CONTENT_TYPE } from "../constants";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import * as Fs from "fs";
 import { getMimeTypeFromFileType, promise } from "../helpers";

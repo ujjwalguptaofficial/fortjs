@@ -1,8 +1,8 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
-import { COOKIE } from "../constant";
-import { FortGlobal } from "../fort_global";
+import { COOKIE } from "../constants";
+import { FortGlobal } from "../constants/fort_global";
 import { parseCookie, parseAndMatchRoute, promise, compareExpectedAndRemoveUnnecessary, reverseLoop } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericGuard } from "../generics";

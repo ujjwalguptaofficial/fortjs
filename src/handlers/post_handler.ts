@@ -1,12 +1,12 @@
 import { promise, JsonHelper } from "../helpers";
-import { CONTENT_TYPE } from "../constant";
+import { CONTENT_TYPE } from "../constants";
 import { MIME_TYPE } from "../enums";
 import * as ContentType from "content-type";
 import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
 import { MultiPartParseResult } from "../types";
 import { FileManager } from "../models";
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import * as http from "http";
 
 export class PostHandler {

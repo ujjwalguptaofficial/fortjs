@@ -1,4 +1,4 @@
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import { LogHelper } from "./log_helper";
 import { ERROR_TYPE } from "../enums/error_type";
 

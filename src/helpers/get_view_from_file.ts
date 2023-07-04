@@ -1,6 +1,6 @@
 import { readFile } from "fs-extra";
 import * as path from "path";
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import { ViewReadOption } from "../types";
 import { promiseResolve } from "../utils";
 

@@ -1,7 +1,7 @@
 import { ParentRoute, EtagOption, FolderMap } from "../types";
 import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import { ErrorHandler } from ".";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";

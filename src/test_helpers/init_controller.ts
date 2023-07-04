@@ -1,6 +1,6 @@
 
 import { CookieManager, FileManager } from "../models";
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import { ControllerTestData } from "../types";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";

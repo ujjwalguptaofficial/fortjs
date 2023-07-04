@@ -1,6 +1,6 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
-import { CONTENT_TYPE, SET_COOKIE } from "../constant";
-import { FortGlobal } from "../fort_global";
+import { CONTENT_TYPE, SET_COOKIE } from "../constants";
+import { FortGlobal } from "../constants/fort_global";
 import * as Negotiator from "negotiator";
 import { IComponentProp, IException } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";

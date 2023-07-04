@@ -1,4 +1,4 @@
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import { IComponentProp } from "../interfaces";
 import { Logger } from "../models";
 import { HttpRequest, HttpResponse } from "../types";

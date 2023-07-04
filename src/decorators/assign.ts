@@ -1,5 +1,5 @@
 import { InjectorHandler } from "../handlers";
-import { CONSTRUCTOR } from "../constant";
+import { CONSTRUCTOR } from "../constants";
 
 export const assign = (value): ParameterDecorator => {
     return (target: any, methodName: string, paramIndex: number) => {

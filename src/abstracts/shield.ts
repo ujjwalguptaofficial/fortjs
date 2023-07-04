@@ -1,7 +1,7 @@
 import { HttpResult } from "../types";
 import { Logger } from "../models";
 import { ShieldTestData, initShield } from "../test_helpers";
-import { FortGlobal } from "../fort_global";
+import { FortGlobal } from "../constants/fort_global";
 import { Component } from "./component";
 
 export abstract class Shield extends Component {

@@ -1,4 +1,4 @@
-import { CONSTRUCTOR } from "../constant";
+import { CONSTRUCTOR } from "../constants";
 
 type InjectorStoreInfo = {
     className: string;

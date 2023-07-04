@@ -1,21 +1,21 @@
-import { ErrorHandler, Logger } from "./models";
-import { ViewEngine, XmlParser, ComponentOption } from "./abstracts";
-import { EtagOption, FolderMap } from "./types";
-import { GenericSessionProvider, GenericWall, GenericXmlParser } from "./generics";
-import { MustacheViewEngine, MemorySessionProvider } from "./extra";
-import { APP_NAME, CURRENT_PATH } from "./constant";
+import { ErrorHandler, Logger } from "../models";
+import { ViewEngine, XmlParser, ComponentOption } from "../abstracts";
+import { EtagOption, FolderMap } from "../types";
+import { GenericSessionProvider, GenericWall, GenericXmlParser } from "../generics";
+import { MustacheViewEngine, MemorySessionProvider } from "../extra";
+import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
-import { ETAG_TYPE } from "./enums";
+import { ETAG_TYPE } from "../enums";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
 export class FortGlobal {
-    static port: number = 4000;
+    static port = 4000;
     static viewPath;
-    static shouldParseCookie: boolean = true;
-    static shouldParsePost: boolean = true;
+    static shouldParseCookie = true;
+    static shouldParsePost = true;
     static sessionProvider: typeof GenericSessionProvider;
-    static sessionTimeOut: number = 60;
+    static sessionTimeOut = 60;
     static viewEngine: ViewEngine;
     static walls: Array<typeof GenericWall> = [];
     static errorHandler: typeof ErrorHandler;
