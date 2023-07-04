@@ -7,7 +7,7 @@ import * as Fs from "fs";
 import { getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
-import { isNullOrEmpty, promiseResolve } from "../utils";
+import { isNullOrEmpty } from "../utils";
 
 type FileInfo = {
     folder: string,

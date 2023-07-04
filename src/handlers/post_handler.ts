@@ -8,11 +8,12 @@ import * as Multiparty from "multiparty";
 import { MultiPartParseResult } from "../types";
 import { FileManager } from "../models";
 import { FortGlobal } from "../fort_global";
+import * as http from "http";
 
+export class PostHandler {
 
-export class PostHandler extends ControllerResultHandler {
-    protected body: any;
-    protected file: FileManager;
+    constructor(private request: http.IncomingMessage) {
+    }
 
     private getPostRawData_(): Promise<string> {
         const body = [];
@@ -51,20 +52,18 @@ export class PostHandler extends ControllerResultHandler {
         });
     }
 
-    protected parsePostData() {
+    parsePostData() {
         let contentType = this.request.headers[__ContentType] || this.request.headers["content-type"];
         if (contentType != null) {
             contentType = ContentType.parse(contentType as string).type;
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
             return this.parseMultiPartData_().then(result => {
-                this.file = new FileManager(result.file);
-                return (result.field);
+                return [new FileManager(result.file), result.field];
             });
         }
         else {
             let postData;
-            this.file = new FileManager({});
             return this.getPostRawData_().then(bodyDataAsString => {
                 switch (contentType) {
                     case MIME_TYPE.Json:
@@ -81,7 +80,7 @@ export class PostHandler extends ControllerResultHandler {
                     default:
                         postData = {};
                 }
-                return postData;
+                return [new FileManager({}), postData];
             });
         }
     }

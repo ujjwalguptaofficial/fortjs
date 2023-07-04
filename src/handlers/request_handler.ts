@@ -13,15 +13,19 @@ import { InjectorHandler } from "./injector_handler";
 import { RouteHandler } from "./route_handler";
 import { IException } from "../interfaces";
 import { promiseResolve } from "../utils";
+import { ControllerResultHandler } from "./controller_result_handler";
 
 
-export class RequestHandler extends PostHandler {
+export class RequestHandler extends ControllerResultHandler {
 
     private session_: GenericSessionProvider;
     private query_: any;
     private data_ = {};
     private routeMatchInfo_: RouteMatch;
+    private wallInstances: Wall[] = [];
 
+    protected body: any;
+    protected file: FileManager;
 
     constructor(request: http.IncomingMessage, response: http.ServerResponse) {
         super();
@@ -275,9 +279,13 @@ export class RequestHandler extends PostHandler {
         }
 
         if (FortGlobal.shouldParsePost === true) {
-            return this.parsePostData().then(body => {
-                this.body = body;
-            })
+            const postHandler = new PostHandler(
+                this.request
+            );
+            return postHandler.parsePostData().then(postResult => {
+                this.file = postResult[0];
+                this.body = postResult[1];
+            });
         }
     }
 

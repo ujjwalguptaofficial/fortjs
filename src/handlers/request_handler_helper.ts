@@ -15,8 +15,6 @@ export class RequestHandlerHelper {
     protected response: http.ServerResponse;
     protected request: http.IncomingMessage;
 
-    protected wallInstances: Wall[] = [];
-
     protected controllerResult: HttpResult | HttpFormatResult = {} as any;
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
