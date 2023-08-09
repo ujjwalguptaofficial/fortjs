@@ -1,7 +1,7 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const SmartBannerPlugin = require('smart-banner-webpack-plugin');
 const banner = require('./license');
+const { BannerPlugin } = require('webpack');
 
 module.exports = [{
     name: "fort",
@@ -12,7 +12,6 @@ module.exports = [{
     output: {
         path: path.join(__dirname, "./../dist"),
         filename: "fort.js",
-        library: 'FortJs',
         libraryTarget: "commonjs2"
     },
     optimization: {
@@ -21,13 +20,9 @@ module.exports = [{
         nodeEnv: false
     },
     node: {
-        console: false,
         global: false,
-        process: false,
-        Buffer: false,
         __filename: false,
         __dirname: false,
-        NODE_ENV: false
     },
     module: {
         rules: [{
@@ -39,10 +34,10 @@ module.exports = [{
         }]
     },
     resolve: {
-        extensions: ['.ts'] // '' is needed to find modules like "jquery"
+        extensions: ['.ts']
     },
     plugins: [
-        new SmartBannerPlugin(banner)
+        new BannerPlugin(banner)
     ],
     externals: [nodeExternals()]
 }];
