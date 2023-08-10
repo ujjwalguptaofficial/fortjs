@@ -106,7 +106,7 @@ export class HomeController extends Controller {
         return jsonResult(this.userService.getUsers());
     }
 
-    @worker()
+    @worker
     async getStudents() {
         return jsonResult(this.studentService.getAll());
     }

@@ -31,7 +31,7 @@ export class DefaultController extends Controller {
         this.singleton.props = this.query.value;
     }
 
-    @worker()
+    @worker
     async getSingletonValue(@singleton(MySingleton) obj) {
         return textResult(obj.props);
     }

@@ -6,7 +6,7 @@ export class Routes extends Router {
 export class RouteController extends Controller {
 
     // @worker()
-    @defaultWorker()
+    @defaultWorker
     async index() {
         return jsonResult(new Routes().routesAsArray);
     }
