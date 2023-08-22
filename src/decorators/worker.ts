@@ -19,7 +19,6 @@ const allHttpMethod = [
 
 function createWorker(target: any, methodName: string, ...allowedMethods: HTTP_METHOD[]) {
     const className = (target.constructor.name as string);
-    console.log("allowedMethods", allowedMethods);
     const actionInfo: WorkerInfo = {
         workerName: methodName,
         methodsAllowed: allowedMethods.length === 0 ? allHttpMethod : allowedMethods,
