@@ -1,32 +1,36 @@
 import { SessionProvider } from "../abstracts/session_provider";
 import { promiseResolve } from "../utils";
 
-const sessionValues: { [identifier: string]: any } = {};
+const sessionValues: Map<string, { [key: string]: any }> = new Map();
 
 export class MemorySessionProvider extends SessionProvider {
 
+    private getSessionValue_() {
+        return sessionValues.get(this.sessionId);
+    }
+
     get(key: string) {
-        const savedSession = sessionValues[this.sessionId];
-        return promiseResolve(savedSession != null ? savedSession[key] : null);
+        const savedValue = this.getSessionValue_()
+        return promiseResolve(savedValue != null ? savedValue[key] : null);
     }
 
     isExist(key: string) {
-        const savedValue = sessionValues[this.sessionId];
+        const savedValue = this.getSessionValue_()
         return promiseResolve<boolean>(savedValue == null ? false : savedValue[key] != null);
     }
 
     getAll() {
-        const savedValue = sessionValues[this.sessionId];
-        return promiseResolve(savedValue == null ? {} : savedValue);
+        const savedValue = this.getSessionValue_();
+        return promiseResolve(savedValue || {});
     }
 
     set(key: string, val: any) {
-        const savedValue = sessionValues[this.sessionId];
+        const savedValue = this.getSessionValue_();
         if (savedValue == null) {
             this.createSession();
-            sessionValues[this.sessionId] = {
+            sessionValues.set(this.sessionId, {
                 [key]: val
-            };
+            });
         }
         else {
             savedValue[key] = val;
@@ -43,7 +47,7 @@ export class MemorySessionProvider extends SessionProvider {
     }
 
     remove(key: string) {
-        const savedValue = sessionValues[this.sessionId];
+        const savedValue = this.getSessionValue_();
         if (savedValue != null) {
             savedValue[key] = null;
         }
@@ -52,7 +56,7 @@ export class MemorySessionProvider extends SessionProvider {
 
     clear() {
         // remove session values
-        delete sessionValues[this.sessionId];
+        sessionValues.delete(this.sessionId);
         // expire cookie in browser
         this.destroySession();
         return promiseResolve<void>(null);
