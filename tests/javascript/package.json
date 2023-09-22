@@ -8,7 +8,7 @@
     "webpack": "webpack --config webpack.config.js",
     "webpack:watch": "webpack --config webpack.config.js --watch",
     "lint": "tslint src/**/*.ts",
-    "build": "npm run webpack",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider; npm run webpack",
     "start": "npm run webpack:watch",
     "deploy": "NODE_ENV=production npm run build",
     "test": "cross-env NODE_ENV=test jest --runInBand",

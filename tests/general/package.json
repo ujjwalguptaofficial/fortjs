@@ -7,7 +7,7 @@
     "install:lib": "node installer.js",
     "install:eshtml": "npm i ../../eshtml-0.1.0.tgz",
     "install:build": "npm run install:lib && npm run build",
-    "build": "webpack --config webpack.config.js",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider; webpack --config webpack.config.js",
     "test:e2e": "mocha test/index.js --exit",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "cross-env NODE_ENV=test jest --runInBand",

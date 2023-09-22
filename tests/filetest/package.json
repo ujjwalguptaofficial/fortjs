@@ -6,7 +6,7 @@
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
     "webpack:watch": "webpack --config webpack.config.js --watch",
-    "build": "npm run webpack",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider; npm run webpack",
     "start": "npm run webpack:watch && opn http://localhost:4000",
     "install:lib": "node installer.js",
     "install:build": "npm run install:lib && npm run build",
