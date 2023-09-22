@@ -43,6 +43,23 @@ describe("/user", () => {
         })
     })
 
+    it("/profile", (done) => {
+        request.get('/user/profile').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const user = {
+                id: 1,
+                name: 'ujjwal',
+                address: 'bhubaneswar india',
+                emailId: 'ujjwal@mg.com',
+                gender: 'male',
+                password: 'admin'
+            }
+            expect(res.body).to.be.eql(user);
+            done();
+        })
+    })
+
     it("/{userId} with 0", (done) => {
         request.get('/user/0').accept(browserAccept).buffer().end((err, res) => {
             expect(err).to.be.null;

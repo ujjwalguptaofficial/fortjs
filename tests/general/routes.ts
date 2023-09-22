@@ -9,6 +9,7 @@ import { InjectionController } from "./controllers/injection_controller";
 import { ExpectController } from "./controllers/expect_controller";
 import { RouteController } from "./controllers/route_controller";
 import { WebPushController } from "./controllers/web_push_controller";
+import { UserProfileController } from "./controllers/user_profile_controller";
 
 export const routes: ParentRoute[] = [{
     controller: DefaultController,
@@ -19,10 +20,22 @@ export const routes: ParentRoute[] = [{
 }, {
     controller: RandomController,
     path: "/random"
-}, {
+},
+{
     controller: UserController,
-    path: "/user"
-}, {
+    path: "/user",
+    children: [
+        {
+            controller: UserProfileController,
+            path: "/profile"
+        }
+    ]
+},
+// {
+//     controller: UserProfileController,
+//     path: "/user/profile"
+// },
+{
     controller: CookieController,
     path: "/cookie/"
 }, {
@@ -34,7 +47,7 @@ export const routes: ParentRoute[] = [{
 }, {
     controller: ExpectController,
     path: "/expect"
-},{
+}, {
     controller: RouteController,
     path: "/api/routes"
 },

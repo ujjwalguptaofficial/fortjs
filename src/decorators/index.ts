@@ -7,3 +7,4 @@ export * from './assign';
 export * from './singleton';
 export * from './expect_body';
 export * from './expect_query';
+export * from './controller';

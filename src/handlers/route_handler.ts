@@ -36,7 +36,8 @@ export class RouteHandler {
             let isMatched: boolean = false as any;
             const controller = routerCollection[controllerName];
             const patternSplit = controller.path.split("/");
-
+            // console.log("urlParts", urlParts, patternSplit);
+            // if (urlParts.length === patternSplit.length) {
             patternSplit.every((patternPart, i) => {
                 isMatched = patternPart === urlParts[i];
                 return isMatched;
@@ -44,6 +45,7 @@ export class RouteHandler {
             if (isMatched === true) {
                 return controller;
             }
+            // }
         }
     }
 
