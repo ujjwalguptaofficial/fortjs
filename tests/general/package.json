@@ -16,7 +16,7 @@
     "build:test:prod": "NODE_ENV=production npm run build:test",
     "install:build:test": "npm run install:lib &&  npm run build:test",
     "webpack:watch": "webpack --config webpack.config.js --watch",
-    "start": "npm run webpack:watch",
+    "start": "export NODE_OPTIONS=--openssl-legacy-provider; npm run webpack:watch",
     "start:dev": "NODE_ENV=development npm run start",
     "start:prod": "NODE_ENV=production npm run start"
   },

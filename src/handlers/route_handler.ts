@@ -1,6 +1,6 @@
 import { WorkerInfo, ParentRoute } from "../types";
 import { GenericShield, GenericGuard } from "../generics";
-import { isNull } from "../utils";
+import { compareString, isNull } from "../utils";
 import { RouteInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
 import { getDataType } from "../helpers";
@@ -38,7 +38,7 @@ export class RouteHandler {
             const patternSplit = controller.path.split("/");
 
             patternSplit.every((patternPart, i) => {
-                isMatched = patternPart === urlParts[i];
+                isMatched = compareString(urlParts[i], patternPart);
                 return isMatched;
             });
             if (isMatched === true) {

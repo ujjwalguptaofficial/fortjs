@@ -123,4 +123,13 @@ export class HomeController extends Controller {
         return jsonResult([...studentService.getAll(), ...employeeService.getAll(),
         ...userService.getUsers()]);
     }
+
+    @worker()
+    @route("/param/{value}")
+    async getParam() {
+        return jsonResult({
+            param: this.param,
+            query: this.query
+        });
+    }
 }

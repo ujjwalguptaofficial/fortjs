@@ -3,6 +3,7 @@ import { RouteMatch } from "../types/route_match";
 import { HTTP_METHOD } from "../enums";
 import { removeLastSlash } from ".";
 import { RouteInfo } from "../models";
+import { compareString } from "../utils";
 
 const regex1 = /{(.*)}(?!.)/;
 // for extension - e.g - {{file}}.js
@@ -24,7 +25,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
             const params = {};
             urlParts.every((urlPart, i) => {
                 // if not equal then check for regex match
-                if (urlPart !== patternSplit[i]) {
+                if (compareString(urlPart, patternSplit[i]) === false) {
                     const regMatch1 = patternSplit[i].match(regex1);
                     const regMatch2 = patternSplit[i].match(regex2);
                     if (regMatch1 != null) {

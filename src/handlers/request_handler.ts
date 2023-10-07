@@ -208,7 +208,7 @@ export class RequestHandler extends ControllerResultHandler {
             const pathUrl = urlDetail.pathname;
             const requestMethod = request.method as HTTP_METHOD;
 
-            this.routeMatchInfo_ = parseAndMatchRoute(pathUrl.toLowerCase(), requestMethod);
+            this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestMethod);
             return this.routeMatchInfo_ == null ? () => {
                 return this.handleFileRequest(pathUrl);
             } :

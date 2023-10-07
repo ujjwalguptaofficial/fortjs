@@ -230,7 +230,7 @@ describe("/home", () => {
     });
 
     it('/getUsers with http method option', (done) => {
-        request.options('/home/getUsers').end((err, res) => {
+        request.options('/home/getusers').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.eql({});
@@ -287,6 +287,25 @@ describe("/home", () => {
                 gender: 'male',
                 password: 'admin'
             }]
+            expect(res.body).to.be.eql(data);
+            done();
+        });
+    });
+
+    it('/getParam', (done) => {
+        request.get('/home/param/UjjwaL').query({
+            name: "Ujjwal Gupta"
+        }).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const data = {
+                param: {
+                    value: "UjjwaL"
+                },
+                query: {
+                    name: "Ujjwal Gupta"
+                }
+            }
             expect(res.body).to.be.eql(data);
             done();
         });
