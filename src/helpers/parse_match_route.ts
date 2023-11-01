@@ -24,25 +24,23 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
             let isMatched = true;
             const params = {};
             urlParts.every((urlPart, i) => {
+                const patternSplitAtIndex = patternSplit[i];
                 // if not equal then check for regex match
-                if (compareString(urlPart, patternSplit[i]) === false) {
-                    const regMatch1 = patternSplit[i].match(regex1);
-                    const regMatch2 = patternSplit[i].match(regex2);
+                if (compareString(urlPart, patternSplitAtIndex) === false) {
+                    const regMatch1 = patternSplitAtIndex.match(regex1);
                     if (regMatch1 != null) {
                         params[regMatch1[1]] = urlPart;
+                        return true;
                     }
-                    else if (regMatch2 != null) {
+                    const regMatch2 = patternSplitAtIndex.match(regex2);
+                    if (regMatch2 != null) {
                         const splitByDot = urlPart.split(".");
                         if (splitByDot[1] === regMatch2[2]) {
                             params[regMatch2[1]] = splitByDot[0];
-                        }
-                        else {
-                            isMatched = false;
+                            return true;
                         }
                     }
-                    else {
-                        isMatched = false;
-                    }
+                    isMatched = false;
                 }
                 // means its direct match
                 return isMatched;
