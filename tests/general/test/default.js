@@ -126,4 +126,13 @@ describe("/default", () => {
             })
         }
     })
+
+    it('empty controller', (done) => {
+        request.get('/empty/noWorker').type("application/json").end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res.text).to.contains('Invalid route registration in Controller : EmptyController and method : dailyAccountBalance.Route exist but method has not been decorated with worker.')
+            done();
+        })
+    })
 });

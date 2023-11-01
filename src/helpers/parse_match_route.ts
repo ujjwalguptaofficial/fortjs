@@ -48,6 +48,10 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
                 return isMatched;
             });
             if (isMatched === true) {
+                if (!worker.methodsAllowed) {
+                    throw `Invalid route registration in Controller : ${route.controllerName} and method : ${worker.workerName}.Route exist but method has not been decorated with worker.`;
+                }
+
                 if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
                     matchedRoute.workerInfo = worker;
                     matchedRoute.params = params;

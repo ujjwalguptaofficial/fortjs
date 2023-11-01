@@ -9,6 +9,7 @@ import { InjectionController } from "./controllers/injection_controller";
 import { ExpectController } from "./controllers/expect_controller";
 import { RouteController } from "./controllers/route_controller";
 import { WebPushController } from "./controllers/web_push_controller";
+import { EmptyController } from "./controllers/empty_controller";
 
 export const routes: ParentRoute[] = [{
     controller: DefaultController,
@@ -34,12 +35,16 @@ export const routes: ParentRoute[] = [{
 }, {
     controller: ExpectController,
     path: "/expect"
-},{
+}, {
     controller: RouteController,
     path: "/api/routes"
 },
 {
     controller: WebPushController,
     path: "/api/webpush"
+},
+{
+    controller: EmptyController,
+    path: "/empty"
 }
 ];
