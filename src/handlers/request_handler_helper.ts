@@ -127,12 +127,7 @@ export class RequestHandlerHelper {
         if ((result as HttpFormatResult).responseFormat == null) {
             const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
             const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-            if (negotiateMimeType != null) {
-                this.endResponse_(negotiateMimeType);
-            }
-            else {
-                this.endResponse_(contentType);
-            }
+            this.endResponse_(negotiateMimeType != null ? negotiateMimeType : contentType);
         }
         else {
             return this.handleFormatResult_(true);
