@@ -6,8 +6,6 @@ import { IComponentProp, IException } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";
 import { HttpResult, HttpFormatResult } from "../types";
 
-
-
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
 

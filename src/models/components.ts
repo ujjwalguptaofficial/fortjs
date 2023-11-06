@@ -27,6 +27,6 @@ class ControllerListRef {
 }
 
 export class Components {
-    static controllers = ControllerListRef;
+    static controller = ControllerListRef;
 }
 

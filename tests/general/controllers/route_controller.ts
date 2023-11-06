@@ -20,6 +20,6 @@ export class RouteController extends Controller {
     @worker()
     async sendNotification() {
         // console.log(Components.controllers.)
-        return Components.controllers.executeMethod('WebPushController', 'sendNotification');
+        return Components.controller.executeMethod('WebPushController', 'sendNotification');
     }
 }
