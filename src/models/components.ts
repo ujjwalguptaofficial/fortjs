@@ -6,7 +6,9 @@ class ControllerListRef {
         const routeInfo = RouteHandler.getControllerFromName(name);
         if (routeInfo) {
             const controller = new routeInfo.controller(...InjectorHandler.getConstructorValues(name));
-            controller.initialize(data);
+            if (data) {
+                controller.initialize(data);
+            }
             return controller;
         }
     }
