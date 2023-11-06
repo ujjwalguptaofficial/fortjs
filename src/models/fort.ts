@@ -1,7 +1,7 @@
 import { ParentRoute, EtagOption, FolderMap } from "../types";
 import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
-import { FortGlobal } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants/fort_global";
 import { ErrorHandler } from ".";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
@@ -14,16 +14,16 @@ import { ComponentOption } from "../abstracts/component_option";
 export class Fort {
 
     static set logger(value) {
-        FortGlobal.logger = typeof value === 'function' ? new (this as any).value() :
+        FORT_GLOBAL.logger = typeof value === 'function' ? new (this as any).value() :
             value;
     }
 
     static get logger(): Logger {
-        return FortGlobal.logger;
+        return FORT_GLOBAL.logger;
     }
 
     static set walls(walls: Array<typeof Wall>) {
-        FortGlobal.walls = walls as any;
+        FORT_GLOBAL.walls = walls as any;
     }
 
 
@@ -34,11 +34,11 @@ export class Fort {
      * @memberof Fort
      */
     static set port(value: number) {
-        FortGlobal.port = value;
+        FORT_GLOBAL.port = value;
     }
 
     static get port() {
-        return FortGlobal.port;
+        return FORT_GLOBAL.port;
     }
 
     /**
@@ -48,7 +48,7 @@ export class Fort {
      * @memberof Fort
      */
     static set errorHandler(value: typeof ErrorHandler) {
-        FortGlobal.errorHandler = value;
+        FORT_GLOBAL.errorHandler = value;
     }
 
     static set routes(value: ParentRoute[]) {
@@ -82,7 +82,7 @@ export class Fort {
      * @memberof Fort
      */
     static set viewEngine(value: typeof ViewEngine) {
-        FortGlobal.viewEngine = new (value as any)();
+        FORT_GLOBAL.viewEngine = new (value as any)();
     }
 
     /**
@@ -92,7 +92,7 @@ export class Fort {
      * @memberof Fort
      */
     static set sessionProvider(value: typeof SessionProvider) {
-        FortGlobal.sessionProvider = value as typeof GenericSessionProvider;
+        FORT_GLOBAL.sessionProvider = value as typeof GenericSessionProvider;
     }
 
     static set resultMapper(value: typeof ResultMapper) {
@@ -106,7 +106,7 @@ export class Fort {
      * @memberof Fort
      */
     static set xmlParser(xmlParser: typeof XmlParser) {
-        FortGlobal.xmlParser = xmlParser;
+        FORT_GLOBAL.xmlParser = xmlParser;
     }
 
     /**
@@ -117,7 +117,7 @@ export class Fort {
      * @memberof Fort
      */
     static set shouldParseCookie(value: boolean) {
-        FortGlobal.shouldParseCookie = value;
+        FORT_GLOBAL.shouldParseCookie = value;
     }
 
     /**
@@ -127,7 +127,7 @@ export class Fort {
      * @memberof Fort
      */
     static set shouldParsePost(value: boolean) {
-        FortGlobal.shouldParsePost = value;
+        FORT_GLOBAL.shouldParsePost = value;
     }
 
     /**
@@ -137,7 +137,7 @@ export class Fort {
      * @memberof Fort
      */
     static set sessionTimeOut(value: number) {
-        FortGlobal.sessionTimeOut = value;
+        FORT_GLOBAL.sessionTimeOut = value;
     }
 
     /**
@@ -148,7 +148,7 @@ export class Fort {
      * @memberof Fort
      */
     static set appName(value: string) {
-        FortGlobal.appName = value;
+        FORT_GLOBAL.appName = value;
     }
 
     /**
@@ -158,11 +158,11 @@ export class Fort {
      * @memberof Fort
      */
     static set viewPath(value: string) {
-        FortGlobal.viewPath = value;
+        FORT_GLOBAL.viewPath = value;
     }
 
     static set componentOption(value: typeof ComponentOption) {
-        FortGlobal.componentOption = new value();
+        FORT_GLOBAL.componentOption = new value();
     }
 
     static get httpServer() {
@@ -194,7 +194,7 @@ export class Fort {
             }
         });
 
-        FortGlobal.folders = value;
+        FORT_GLOBAL.folders = value;
     }
 
     /**
@@ -204,7 +204,7 @@ export class Fort {
      * @memberof Fort
      */
     static set eTag(value: EtagOption) {
-        FortGlobal.eTag = value;
+        FORT_GLOBAL.eTag = value;
     }
 
     static instance = new Fort();
@@ -217,7 +217,7 @@ export class Fort {
     private httpServer: http.Server;
 
     static create(): Promise<void> {
-        FortGlobal.setDefault();
+        FORT_GLOBAL.setDefault();
 
         if (this.instance.httpServer != null) {
             return;
@@ -225,7 +225,7 @@ export class Fort {
         return promise((res, rej) => {
             this.instance.httpServer = http.createServer(Fort.onNewRequest).once("error", (err) => {
                 if ((err as any).code === 'EADDRINUSE') {
-                    const error = new LogHelper(ERROR_TYPE.PortInUse, FortGlobal.port).get();
+                    const error = new LogHelper(ERROR_TYPE.PortInUse, FORT_GLOBAL.port).get();
                     rej(error);
                 }
                 else {
@@ -235,7 +235,7 @@ export class Fort {
                 // set default route
                 // RouteHandler.defaultRouteControllerName = RouteHandler.getDefaultRoute();
                 res();
-            }).listen(FortGlobal.port);
+            }).listen(FORT_GLOBAL.port);
         });
     }
 

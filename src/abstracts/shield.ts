@@ -1,7 +1,7 @@
 import { HttpResult } from "../types";
 import { Logger } from "../models";
 import { ShieldTestData, initShield } from "../test_helpers";
-import { FortGlobal } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants/fort_global";
 import { Component } from "./component";
 
 export abstract class Shield extends Component {
@@ -10,11 +10,11 @@ export abstract class Shield extends Component {
     }
 
     get logger(): Logger {
-        return FortGlobal.logger;
+        return FORT_GLOBAL.logger;
     }
 
     get option() {
-        return FortGlobal.componentOption;
+        return FORT_GLOBAL.componentOption;
     }
 
     abstract protect(...args): Promise<HttpResult | void>;

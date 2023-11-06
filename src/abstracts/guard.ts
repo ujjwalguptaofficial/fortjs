@@ -1,7 +1,7 @@
 import { HttpResult } from "../types";
 import { Logger } from "../models";
 import { GuardTestData, initGuard } from "../test_helpers";
-import { FortGlobal } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants/fort_global";
 import { Component } from "./component";
 
 export abstract class Guard extends Component {
@@ -24,11 +24,11 @@ export abstract class Guard extends Component {
     abstract check(...args): Promise<HttpResult | void>;
 
     get logger(): Logger {
-        return FortGlobal.logger;
+        return FORT_GLOBAL.logger;
     }
 
     get option() {
-        return FortGlobal.componentOption;
+        return FORT_GLOBAL.componentOption;
     }
 
     // eslint-disable-next-line

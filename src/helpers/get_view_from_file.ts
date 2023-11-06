@@ -1,6 +1,6 @@
 import { readFile } from "fs-extra";
 import * as path from "path";
-import { FortGlobal } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants/fort_global";
 import { ViewReadOption } from "../types";
 import { promiseResolve } from "../utils";
 
@@ -11,7 +11,7 @@ const viewCache = {
 export let getViewFromFile: (option: ViewReadOption) => Promise<string | any>;
 
 const readView = (option: ViewReadOption) => {
-    const pathOfView = path.join(FortGlobal.viewPath, option.fileLocation);
+    const pathOfView = path.join(FORT_GLOBAL.viewPath, option.fileLocation);
     // eslint-disable-next-line
     return readFile(pathOfView, {
         encoding: 'utf8'
@@ -22,7 +22,7 @@ const readView = (option: ViewReadOption) => {
         return result;
     });
 };
-if (FortGlobal.isProduction === true) {
+if (FORT_GLOBAL.isProduction === true) {
     getViewFromFile = function (option: ViewReadOption): Promise<string | any> {
         if (viewCache[option.fileLocation] == null) {
             return readView(option).then(result => {

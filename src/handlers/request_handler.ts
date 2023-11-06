@@ -2,7 +2,7 @@ import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
 import { COOKIE } from "../constants";
-import { FortGlobal } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants/fort_global";
 import { parseCookie, parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { CookieManager, FileManager } from "../models";
 import { GenericGuard } from "../generics";
@@ -33,10 +33,10 @@ export class RequestHandler extends ControllerResultHandler {
     private executeWallIncoming_(): Promise<boolean> {
         return promise((res, rej) => {
             let index = 0;
-            const wallLength = FortGlobal.walls.length;
+            const wallLength = FORT_GLOBAL.walls.length;
             const executeWallIncomingByIndex = () => {
                 if (wallLength > index) {
-                    const wall = FortGlobal.walls[index++];
+                    const wall = FORT_GLOBAL.walls[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
                     const wallObj = new wall(...constructorArgsValues);
                     wallObj['componentProp_'] = this.componentProps;
@@ -123,7 +123,7 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private parseCookieFromRequest_() {
-        if (FortGlobal.shouldParseCookie === true) {
+        if (FORT_GLOBAL.shouldParseCookie === true) {
             const { request } = this.componentProps;
             const rawCookie = (request.headers[COOKIE] || request.headers["cookie"]) as string;
             let parsedCookies;
@@ -133,9 +133,9 @@ export class RequestHandler extends ControllerResultHandler {
                 this.onErrorOccured(ex);
                 return false;
             }
-            const session = new FortGlobal.sessionProvider();
+            const session = new FORT_GLOBAL.sessionProvider();
             session.cookie = new CookieManager(parsedCookies);
-            session.sessionId = parsedCookies[FortGlobal.appSessionIdentifier];
+            session.sessionId = parsedCookies[FORT_GLOBAL.appSessionIdentifier];
             this.componentProps.session = session;
             this.componentProps.cookie = session.cookie;
         }
@@ -147,7 +147,7 @@ export class RequestHandler extends ControllerResultHandler {
 
     private setPreHeader_() {
         const response = this.response;
-        response.setHeader('X-Powered-By', FortGlobal.appName);
+        response.setHeader('X-Powered-By', FORT_GLOBAL.appName);
         response.setHeader('Vary', 'Accept-Encoding');
         response.sendDate = true;
     }
@@ -228,7 +228,7 @@ export class RequestHandler extends ControllerResultHandler {
             return promiseResolve([new FileManager({}), {}]);
         }
 
-        if (FortGlobal.shouldParsePost === true) {
+        if (FORT_GLOBAL.shouldParsePost === true) {
             const postHandler = new PostHandler(
                 this.request
             );
@@ -257,7 +257,7 @@ export class RequestHandler extends ControllerResultHandler {
         return controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues);
     }
 }
-if (FortGlobal.isProduction) {
+if (FORT_GLOBAL.isProduction) {
     RequestHandler.prototype.runController_ = function (this: RequestHandler) {
         return this.setControllerProps_().then(
             this.onResultFromComponent.bind(this)

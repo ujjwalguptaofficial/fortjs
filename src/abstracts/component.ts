@@ -1,4 +1,4 @@
-import { FortGlobal } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants/fort_global";
 import { IComponentProp } from "../interfaces";
 import { Logger } from "../models";
 import { HttpRequest, HttpResponse } from "../types";
@@ -29,11 +29,11 @@ export class Component {
     }
 
     get logger(): Logger {
-        return FortGlobal.logger;
+        return FORT_GLOBAL.logger;
     }
 
     get option() {
-        return FortGlobal.componentOption;
+        return FORT_GLOBAL.componentOption;
     }
 
     private componentProp_: IComponentProp;
