@@ -53,6 +53,14 @@ describe("/user", () => {
         })
     })
 
+    it("/{userId} with throw exception", (done) => {
+        request.get('/user/1/?throwException=true').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            done();
+        })
+    })
+
     it("/ + guard_injection_test", (done) => {
 
         request.post('/user?guard_injection_test=true').end((err, res) => {
@@ -82,6 +90,21 @@ describe("/user", () => {
             expect(res.body).haveOwnProperty('emailId');
             expect(res.body).haveOwnProperty('gender');
             expect(res.body).haveOwnProperty('password')
+            done();
+        })
+    })
+
+    it("/ + post with exception throw", (done) => {
+        const user = {
+            name: 'angela',
+            address: 'newyork street 5 america',
+            emailId: 'angela@mg.com',
+            gender: 'female',
+            password: 'hiangela'
+        }
+        request.post('/user?throwException=true').send(user).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
             done();
         })
     })
@@ -145,7 +168,7 @@ describe("/user", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res.body).to.be.an("object");
-            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(11);
+            expect(res.body).haveOwnProperty('authenticationShieldCounter').equal(13);
             done();
         })
     })

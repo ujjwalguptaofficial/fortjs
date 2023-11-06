@@ -26,6 +26,9 @@ export class UserController extends Controller {
     @worker(HTTP_METHOD.Get)
     @route("/{id}")
     async getUser() {
+        if (this.query.throwException) {
+            throw "Exception thrown";
+        }
         try {
             const userId = Number(this.param.id);
             if (userId === 0) {
@@ -58,13 +61,11 @@ export class UserController extends Controller {
     @guards(ModelUserGuard)
     @route("/")
     async addUser() {
-        try {
-            const user: User = this.data.user;
-            return jsonResult(this.service.addUser(user), HTTP_STATUS_CODE.Created);
+        if (this.query.throwException) {
+            throw "Exception thrown";
         }
-        catch (ex) {
-            return jsonResult(ex);
-        }
+        const user: User = this.data.user;
+        return jsonResult(this.service.addUser(user), HTTP_STATUS_CODE.Created);
     }
 
     @worker(HTTP_METHOD.Delete)
