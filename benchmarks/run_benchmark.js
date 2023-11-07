@@ -49,10 +49,17 @@ const runTest = async (index = 0) => {
                 const result = item.result;
                 return {
                     Name: item.name,
-                    TotalRequestCount: result["2xx"],
-                    TotalDuration: result.duration
+                    TotalRequestCount: result.requests.total,
+                    TotalDuration: result.duration,
+                    // request: result.requests,
+                    "MinReq/Second": result.requests.min,
+                    "AverageReq/Second": result.requests.average,
+                    "MaxReq/Second": result.requests.max,
+                    MinLatency: result.latency.min,
+                    AverageLatency: result.latency.average,
+                    MaxLatency: result.latency.max,
                 }
-            })
+            }),
         );
         return;
     }
@@ -71,8 +78,9 @@ const runTest = async (index = 0) => {
     await runCommand(`sleep 5`);
     console.log(`Test finished for ${name}`);
     apps[index].result = result;
+    // console.log(result.latency.m);
     return runTest(index + 1);
-    
+
 }
 
 runTest().then(_ => {
