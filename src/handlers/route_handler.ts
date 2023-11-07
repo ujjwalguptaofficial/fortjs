@@ -35,7 +35,7 @@ export class RouteHandler {
         for (const controllerName in routerCollection) {
             let isMatched: boolean = false as any;
             const controller = routerCollection[controllerName];
-            const patternSplit = controller.path.split("/");
+            const patternSplit = controller.pathSplitted;
 
             patternSplit.every((patternPart, i) => {
                 isMatched = compareString(urlParts[i], patternPart);

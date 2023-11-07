@@ -5,7 +5,7 @@ import { IRouteInfo } from "../interfaces";
 export class RouteInfo implements IRouteInfo {
     controller: typeof GenericController;
     controllerName: string;
-    path: string;
+    path_: string;
     workers: {
         [workerName: string]: WorkerInfo
     };
@@ -19,6 +19,8 @@ export class RouteInfo implements IRouteInfo {
     shields: Array<typeof GenericShield>;
     values: any[];
 
+    pathSplitted: string[];
+
     init(value: IRouteInfo) {
         this.controllerName = value.controllerName;
         this.controller = value.controller;
@@ -27,4 +29,15 @@ export class RouteInfo implements IRouteInfo {
         this.values = value.values;
         this.workers = value.workers;
     }
+
+    set path(value) {
+        if (value) {
+            this.pathSplitted = value.split("/");
+        }
+        this.path_ = value;
+    }
+
+    // get path() {
+    //     return this.path_;
+    // }
 }
