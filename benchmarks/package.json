@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Benchmarking fortjs vs other frameworks",
   "scripts": {
+    "install:fort": "node fort_installer.js",
     "benchmark": "node run_benchmark.js",
+    "install:benchmark": "npm run install:fort && npm run benchmark",
     "test": "echo \"Error: no test specified\" && exit 1",
     "preinstall": "sh install.sh"
   },
