@@ -24,14 +24,7 @@ export class InjectorHandler {
             }
         }
 
-
         const savedValue = injectorStoreInfos.get(className);
-        // const value: InjectorStoreInfo = new Map
-        // {
-        //     methods: {
-        //         [methodName]: []
-        //     }
-        // };
         if (savedValue == null) {
             const methods = [];
             methods[paramIndex] = paramValue;
