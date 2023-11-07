@@ -11,9 +11,11 @@ const injectorStoreInfos: InjectorStoreInfo[] = [];
 // this stores injector values
 const injectorValues: any[] = [];
 // this stores the singletons name & their respective index in injector values
-const singletons: {
-    [className: string]: number
-} = {};
+const singletons: Map<string, number> = new Map();
+
+// {
+//     [className: string]: number
+// } = {};
 export class InjectorHandler {
 
     static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
@@ -27,7 +29,7 @@ export class InjectorHandler {
                 paramValue = paramValueIndex;
             }
         }
-        
+
 
         const savedValue = injectorStoreInfos.find(x => x.className === className);
         const value: InjectorStoreInfo = {
@@ -71,11 +73,14 @@ export class InjectorHandler {
     static addSingleton(className: string, methodName: string, paramIndex, paramValue) {
         const singletonClassName = paramValue.name;
         if (singletonClassName) {
-            if (singletons[singletonClassName] == null) {
-                singletons[singletonClassName] = InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue());
+            const singletonValueStored = singletons.get(singletonClassName);
+            if (singletonValueStored == null) {
+                singletons.set(singletonClassName,
+                    InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue())
+                );
             }
             else {
-                InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletons[singletonClassName], false);
+                InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletonValueStored, false);
             }
         }
     }
