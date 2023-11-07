@@ -1,11 +1,7 @@
 import { CONSTRUCTOR } from "../constants";
 
-type InjectorStoreInfo = {
-    // className: string;
-    methods: {
-        [methodName: string]: any[]
-    }
-};
+type InjectorStoreInfo = Map<string, any[]>;
+
 // this stores information of injector values that are available per class & worker
 // const injectorStoreInfos: InjectorStoreInfo[] = [];
 const injectorStoreInfos: Map<string, InjectorStoreInfo> = new Map();
@@ -30,21 +26,28 @@ export class InjectorHandler {
 
 
         const savedValue = injectorStoreInfos.get(className);
-        const value: InjectorStoreInfo = {
-            methods: {
-                [methodName]: []
-            }
-        };
+        // const value: InjectorStoreInfo = new Map
+        // {
+        //     methods: {
+        //         [methodName]: []
+        //     }
+        // };
         if (savedValue == null) {
-            value.methods[methodName][paramIndex] = paramValue;
+            const methods = [];
+            methods[paramIndex] = paramValue;
+
+            const value = new Map();
+            value.set(methodName, methods);
+
             injectorStoreInfos.set(className, value);
         }
         else {
-            // const savedMethod = savedValue.methods[methodName];
-            if (savedValue.methods[methodName] == null) {
-                savedValue.methods[methodName] = [];
+            let savedMethod = savedValue.get(methodName);
+            if (savedMethod == null) {
+                savedMethod = [];
+                savedValue.set(methodName, savedMethod);
             }
-            savedValue.methods[methodName][paramIndex] = paramValue;
+            savedMethod[paramIndex] = paramValue;
         }
 
         return paramValue;
@@ -57,7 +60,7 @@ export class InjectorHandler {
     static getMethodValues(className: string, methodName: string) {
         const savedValue = injectorStoreInfos.get(className);
         if (savedValue != null) {
-            const methodArgs = savedValue.methods[methodName];
+            const methodArgs = savedValue.get(methodName);
             if (methodArgs != null) {
                 return methodArgs.map(injectorValueIndex => {
                     return injectorValues[injectorValueIndex];
