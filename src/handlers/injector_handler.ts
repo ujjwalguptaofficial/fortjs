@@ -1,21 +1,19 @@
 import { CONSTRUCTOR } from "../constants";
 
 type InjectorStoreInfo = {
-    className: string;
+    // className: string;
     methods: {
         [methodName: string]: any[]
     }
 };
 // this stores information of injector values that are available per class & worker
-const injectorStoreInfos: InjectorStoreInfo[] = [];
+// const injectorStoreInfos: InjectorStoreInfo[] = [];
+const injectorStoreInfos: Map<string, InjectorStoreInfo> = new Map();
 // this stores injector values
 const injectorValues: any[] = [];
 // this stores the singletons name & their respective index in injector values
 const singletons: Map<string, number> = new Map();
 
-// {
-//     [className: string]: number
-// } = {};
 export class InjectorHandler {
 
     static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
@@ -31,16 +29,15 @@ export class InjectorHandler {
         }
 
 
-        const savedValue = injectorStoreInfos.find(x => x.className === className);
+        const savedValue = injectorStoreInfos.get(className);
         const value: InjectorStoreInfo = {
-            className: className,
             methods: {
                 [methodName]: []
             }
         };
         if (savedValue == null) {
             value.methods[methodName][paramIndex] = paramValue;
-            injectorStoreInfos.push(value);
+            injectorStoreInfos.set(className, value);
         }
         else {
             // const savedMethod = savedValue.methods[methodName];
@@ -58,7 +55,7 @@ export class InjectorHandler {
     }
 
     static getMethodValues(className: string, methodName: string) {
-        const savedValue = injectorStoreInfos.find(qry => qry.className === className);
+        const savedValue = injectorStoreInfos.get(className);
         if (savedValue != null) {
             const methodArgs = savedValue.methods[methodName];
             if (methodArgs != null) {
