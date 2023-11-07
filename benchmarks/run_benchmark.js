@@ -21,6 +21,11 @@ const runCommand = function (cmd, finishMessage) {
 
 const apps = [
     {
+        command: `cd fort && npm run dev & sleep 5`,
+        name: "Fort",
+        port: 4000
+    },
+    {
         command: `node express.js & sleep 5`,
         name: "Express",
         port: 8090
@@ -35,16 +40,20 @@ const apps = [
         name: "KOA",
         port: 3070
     },
-    {
-        command: `cd fort && npm run dev & sleep 5`,
-        name: "Fort",
-        port: 4000
-    }
 ]
-
 const runTest = async (index = 0) => {
     if (index >= apps.length) {
-        console.log(`Test finished`);
+        console.log(`---------Benchmark finished----------`);
+        console.table(
+            apps.map(item => {
+                const result = item.result;
+                return {
+                    Name: item.name,
+                    TotalRequestCount: result["2xx"],
+                    TotalDuration: result.duration
+                }
+            })
+        );
         return;
     }
     const { name, port, command } = apps[index];
@@ -56,16 +65,14 @@ const runTest = async (index = 0) => {
         duration: 10
     });
 
-    // instance..on('done', () => {
-    // console.log('Test completed.', instance);
     console.log(`---- ${name} ----`);
     console.log(`${result["2xx"]} request sent within ${result.duration} second`);
     await runCommand(`kill -9 $(lsof -t -i:${port} -sTCP:LISTEN)`);
     await runCommand(`sleep 5`);
     console.log(`Test finished for ${name}`);
-
+    apps[index].result = result;
     return runTest(index + 1);
-    // return result;
+    
 }
 
 runTest().then(_ => {
