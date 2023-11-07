@@ -1,0 +1,13 @@
+{
+    "name": "koa-benchmark",
+    "version": "1.0.0",
+    "description": "NodeJS Framework Benchmarking",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "RrArdian",
+    "license": "ISC",
+    "dependencies": {
+        "koa": "^2.4.1"
+    }
+}

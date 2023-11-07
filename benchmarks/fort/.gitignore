@@ -1,0 +1,6 @@
+dist
+bin
+build
+.npmrc
+.env
+node_modules
