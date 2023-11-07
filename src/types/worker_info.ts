@@ -5,7 +5,7 @@ export type WorkerInfo = {
     workerName: string;
     methodsAllowed: HTTP_METHOD[];
     guards: Array<typeof GenericGuard>;
-    pattern: string;
+    pattern: string[];
     values: any[];
     expectedQuery?: any;
     expectedBody?: any;

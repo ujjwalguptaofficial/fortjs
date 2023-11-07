@@ -1,5 +1,6 @@
 import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../handlers";
+import { splitRoute } from "../helpers";
 import { WorkerInfo } from "../types";
 import { wrapMethodDecorator } from "./wrap_method_decorator";
 
@@ -23,7 +24,7 @@ function createWorker(target: any, methodName: string, ...allowedMethods: HTTP_M
         workerName: methodName,
         methodsAllowed: allowedMethods.length === 0 ? allHttpMethod : allowedMethods,
         guards: [],
-        pattern: `/${methodName.toLowerCase()}`,
+        pattern: splitRoute(`/${methodName.toLowerCase()}`),
         values: []
     };
     RouteHandler.addWorker(actionInfo, className);

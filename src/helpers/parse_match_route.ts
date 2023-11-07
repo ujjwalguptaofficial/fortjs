@@ -19,7 +19,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     const urlPartLength = urlParts.length;
     for (const workerName in route.workers) {
         const worker = route.workers[workerName];
-        const patternSplit = worker.pattern.split("/");
+        const patternSplit = worker.pattern;
         if (urlPartLength === patternSplit.length) {
             let isMatched = true;
             const params = {};

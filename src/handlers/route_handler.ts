@@ -3,7 +3,7 @@ import { GenericShield, GenericGuard } from "../generics";
 import { compareString, isNull } from "../utils";
 import { RouteInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
-import { getDataType } from "../helpers";
+import { getDataType, joinRoute, splitRoute } from "../helpers";
 
 const routerCollection: {
     [controllerName: string]: RouteInfo
@@ -15,8 +15,9 @@ const pushRouterIntoCollection = (route: IRouteInfo) => {
     routerCollection[route.controllerName] = routeObj;
 };
 
-const getActionPattern = (parentRoute: ParentRoute, pattern: string) => {
-    return (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
+const getWorkerPattern = (parentRoute: ParentRoute, pattern: string) => {
+    const routeWithParent = (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
+    return splitRoute(routeWithParent);
 };
 
 export class RouteHandler {
@@ -75,7 +76,7 @@ export class RouteHandler {
             // change pattern value since we have controller name now.
             for (const workerName in route.workers) {
                 const actionInfo = route.workers[workerName];
-                actionInfo.pattern = getActionPattern(value, actionInfo.pattern);
+                actionInfo.pattern = getWorkerPattern(value, joinRoute(actionInfo.pattern));
             }
         }
     }
@@ -116,12 +117,12 @@ export class RouteHandler {
         else {
             const savedAction = route.workers[workerName];
             if (savedAction == null) {
-                newWorker.pattern = getActionPattern(route, newWorker.pattern);
+                newWorker.pattern = getWorkerPattern(route, joinRoute(newWorker.pattern));
                 route.workers[workerName] = newWorker;
             }
             else {
                 savedAction.methodsAllowed = newWorker.methodsAllowed;
-                savedAction.pattern = getActionPattern(route, savedAction.pattern);
+                savedAction.pattern = getWorkerPattern(route, joinRoute(savedAction.pattern));
                 // route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
         }
@@ -130,7 +131,7 @@ export class RouteHandler {
     static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
 
         const route = routerCollection[className];
-        const pattern = workerName.toLowerCase();
+        const pattern = splitRoute(workerName.toLowerCase());
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {
@@ -176,7 +177,7 @@ export class RouteHandler {
                         workerName: workerName,
                         guards: [],
                         methodsAllowed: null,
-                        pattern: pattern,
+                        pattern: splitRoute(pattern),
                         values: []
                     }
                 },
@@ -189,18 +190,18 @@ export class RouteHandler {
         }
         else {
             const savedAction = route.workers[workerName];
-            pattern = getActionPattern(route, pattern);
+            const workerRouteWithController = getWorkerPattern(route, pattern);
             if (savedAction == null) {
                 route.workers[workerName] = {
                     workerName: workerName,
                     guards: [],
                     methodsAllowed: null,
-                    pattern: pattern,
+                    pattern: workerRouteWithController,
                     values: []
                 };
             }
             else {
-                savedAction.pattern = pattern;
+                savedAction.pattern = workerRouteWithController;
             }
         }
     }
@@ -219,7 +220,7 @@ export class RouteHandler {
             workerName: workerName,
             guards: [],
             methodsAllowed: null,
-            pattern: pattern,
+            pattern: pattern.split("/"),
             values: [],
             expectedQuery: isQuery ? expectedValue : null,
             expectedBody: isQuery ? null : expectedValue
