@@ -1,6 +1,5 @@
 import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../handlers";
-import { splitRoute } from "../helpers";
 import { IWorkerInfo } from "../types";
 import { wrapMethodDecorator } from "./wrap_method_decorator";
 

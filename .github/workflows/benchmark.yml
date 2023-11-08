@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: npm ci 
 
+      - name : Build fortjs SDK
+        run:  npm run buidpack
+      
+      - name: Install dependencies in benchmark
+        run:  cd benchmarks && npm install
       # Runs a set of commands using the runners shell
       - name: Run Benchmark
-        run: npm run buildpack && npm run benchmark
+        run: npm run benchmark
