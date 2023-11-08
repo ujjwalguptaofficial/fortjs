@@ -5,7 +5,6 @@ import { WorkerInfo } from "./worker_info";
 export class RouteInfo implements IRouteInfo {
     controller: typeof GenericController;
     controllerName: string;
-    path_: string;
     // workerName => WorkerInfo
     workers: Map<string, WorkerInfo>;
 
@@ -33,6 +32,5 @@ export class RouteInfo implements IRouteInfo {
         if (value) {
             this.pathSplitted = value.split("/");
         }
-        this.path_ = value;
     }
 }

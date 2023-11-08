@@ -5,7 +5,7 @@ export * from './http_request';
 export * from './http_response';
 export * from './parent_route';
 export * from "./session_value";
-export * from "./worker_info";
+export * from "../interfaces/worker_info";
 export * from "./etag_option";
 export * from "./folder_map";
 export * from "./multi_part_parse_result";
