@@ -1,7 +1,7 @@
-import { WorkerInfo, ParentRoute } from "../types";
+import { IWorkerInfo, ParentRoute } from "../types";
 import { GenericShield, GenericGuard } from "../generics";
 import { compareString, isNull } from "../utils";
-import { RouteInfo } from "../models";
+import { RouteInfo, WorkerInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
 import { getDataType, joinRoute, splitRoute } from "../helpers";
 
@@ -10,14 +10,13 @@ const routerCollection: {
 } = {};
 
 const pushRouterIntoCollection = (route: IRouteInfo) => {
-    const routeObj = new RouteInfo();
-    routeObj.init(route);
+    const routeObj = new RouteInfo(route);
     routerCollection[route.controllerName] = routeObj;
 };
 
 const getWorkerPattern = (parentRoute: ParentRoute, pattern: string) => {
     const routeWithParent = (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
-    return splitRoute(routeWithParent);
+    return routeWithParent;
 };
 
 export class RouteHandler {
@@ -76,7 +75,7 @@ export class RouteHandler {
             // change pattern value since we have controller name now.
             for (const workerName in route.workers) {
                 const actionInfo = route.workers[workerName];
-                actionInfo.pattern = getWorkerPattern(value, joinRoute(actionInfo.pattern));
+                actionInfo.pattern = getWorkerPattern(value, actionInfo.pattern);
             }
         }
     }
@@ -98,14 +97,14 @@ export class RouteHandler {
         }
     }
 
-    static addWorker(newWorker: WorkerInfo, className: string) {
+    static addWorker(newWorker: IWorkerInfo, className: string) {
 
         const workerName = newWorker.workerName;
         const route = routerCollection[className];
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {
-                    [workerName]: newWorker
+                    [workerName]: new WorkerInfo(newWorker)
                 },
                 controller: null,
                 controllerName: className,
@@ -117,12 +116,12 @@ export class RouteHandler {
         else {
             const savedAction = route.workers[workerName];
             if (savedAction == null) {
-                newWorker.pattern = getWorkerPattern(route, joinRoute(newWorker.pattern));
-                route.workers[workerName] = newWorker;
+                newWorker.pattern = getWorkerPattern(route, newWorker.pattern);
+                route.workers[workerName] = new WorkerInfo(newWorker);
             }
             else {
                 savedAction.methodsAllowed = newWorker.methodsAllowed;
-                savedAction.pattern = getWorkerPattern(route, joinRoute(savedAction.pattern));
+                savedAction.pattern = getWorkerPattern(route, savedAction.pattern);
                 // route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
         }
@@ -131,17 +130,17 @@ export class RouteHandler {
     static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
 
         const route = routerCollection[className];
-        const pattern = splitRoute(workerName.toLowerCase());
+        const pattern = workerName.toLowerCase();
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {
-                    [workerName]: {
+                    [workerName]: new WorkerInfo({
                         workerName: workerName,
                         guards: guards,
                         methodsAllowed: null,
                         pattern: pattern,
                         values: []
-                    }
+                    })
                 },
                 controller: null,
                 controllerName: className,
@@ -153,13 +152,13 @@ export class RouteHandler {
         else {
             const savedAction = route.workers[workerName];
             if (savedAction == null) {
-                route.workers[workerName] = {
+                route.workers[workerName] = new WorkerInfo({
                     workerName: workerName,
                     guards: guards,
                     methodsAllowed: null,
                     pattern: pattern,
                     values: []
-                };
+                });
             }
             else {
                 savedAction.guards = savedAction.guards ? [...savedAction.guards, ...guards]
@@ -173,13 +172,13 @@ export class RouteHandler {
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {
-                    [workerName]: {
+                    [workerName]: new WorkerInfo({
                         workerName: workerName,
                         guards: [],
                         methodsAllowed: null,
-                        pattern: splitRoute(pattern),
+                        pattern: pattern,
                         values: []
-                    }
+                    })
                 },
                 controller: null,
                 controllerName: className,
@@ -192,13 +191,13 @@ export class RouteHandler {
             const savedAction = route.workers[workerName];
             const workerRouteWithController = getWorkerPattern(route, pattern);
             if (savedAction == null) {
-                route.workers[workerName] = {
+                route.workers[workerName] = new WorkerInfo({
                     workerName: workerName,
                     guards: [],
                     methodsAllowed: null,
                     pattern: workerRouteWithController,
                     values: []
-                };
+                });
             }
             else {
                 savedAction.pattern = workerRouteWithController;
@@ -216,15 +215,15 @@ export class RouteHandler {
         const isQuery = type === 'query';
         const pattern = workerName.toLowerCase();
         const router = routerCollection[className];
-        const worker = {
+        const worker = new WorkerInfo({
             workerName: workerName,
             guards: [],
             methodsAllowed: null,
-            pattern: pattern.split("/"),
+            pattern: pattern,
             values: [],
             expectedQuery: isQuery ? expectedValue : null,
             expectedBody: isQuery ? null : expectedValue
-        };
+        } as IWorkerInfo);
         if (router == null) {
             pushRouterIntoCollection({
                 workers: {

@@ -1,6 +1,6 @@
 import { GenericShield, GenericController } from "../generics";
-import { WorkerInfo } from "../types";
 import { IRouteInfo } from "../interfaces";
+import { WorkerInfo } from "./worker_info";
 
 export class RouteInfo implements IRouteInfo {
     controller: typeof GenericController;
@@ -21,13 +21,13 @@ export class RouteInfo implements IRouteInfo {
 
     pathSplitted: string[];
 
-    init(value: IRouteInfo) {
+    constructor(value: IRouteInfo) {
         this.controllerName = value.controllerName;
         this.controller = value.controller;
         this.path = value.path;
         this.shields = value.shields;
         this.values = value.values;
-        this.workers = value.workers;
+        this.workers = value.workers as any;
     }
 
     set path(value) {
@@ -36,8 +36,4 @@ export class RouteInfo implements IRouteInfo {
         }
         this.path_ = value;
     }
-
-    // get path() {
-    //     return this.path_;
-    // }
 }

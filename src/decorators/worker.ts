@@ -1,7 +1,7 @@
 import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../handlers";
 import { splitRoute } from "../helpers";
-import { WorkerInfo } from "../types";
+import { IWorkerInfo } from "../types";
 import { wrapMethodDecorator } from "./wrap_method_decorator";
 
 export function worker(allowedMethods1?: HTTP_METHOD, allowedMethods2?: HTTP_METHOD, allowedMethods3?: HTTP_METHOD): MethodDecorator;
@@ -20,11 +20,11 @@ const allHttpMethod = [
 
 function createWorker(target: any, methodName: string, ...allowedMethods: HTTP_METHOD[]) {
     const className = (target.constructor.name as string);
-    const actionInfo: WorkerInfo = {
+    const actionInfo: IWorkerInfo = {
         workerName: methodName,
         methodsAllowed: allowedMethods.length === 0 ? allHttpMethod : allowedMethods,
         guards: [],
-        pattern: splitRoute(`/${methodName.toLowerCase()}`),
+        pattern: `/${methodName.toLowerCase()}`,
         values: []
     };
     RouteHandler.addWorker(actionInfo, className);
