@@ -34,7 +34,7 @@ jobs:
         run: npm ci 
 
       - name : Build fortjs SDK
-        run:  npm run buidpack
+        run:  npm run buildpack
       
       - name: Install dependencies in benchmark
         run:  cd benchmarks && npm install
