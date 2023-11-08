@@ -3,15 +3,13 @@ import { GenericShield, GenericGuard } from "../generics";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
-import { getDataType, joinRoute, splitRoute } from "../helpers";
+import { getDataType } from "../helpers";
 
-const routerCollection: {
-    [controllerName: string]: RouteInfo
-} = {};
+const routerCollection = new Map<string, RouteInfo>();
 
 const pushRouterIntoCollection = (route: IRouteInfo) => {
     const routeObj = new RouteInfo(route);
-    routerCollection[route.controllerName] = routeObj;
+    routerCollection.set(route.controllerName, routeObj);
 };
 
 const getWorkerPattern = (parentRoute: ParentRoute, pattern: string) => {
@@ -32,11 +30,9 @@ export class RouteHandler {
     }
 
     static findControllerFromPath(urlParts: string[]) {
-        for (const controllerName in routerCollection) {
+        for (const [key, controller] of routerCollection.entries()) {
             let isMatched: boolean = false as any;
-            const controller = routerCollection[controllerName];
             const patternSplit = controller.pathSplitted;
-
             patternSplit.every((patternPart, i) => {
                 isMatched = compareString(urlParts[i], patternPart);
                 return isMatched;
@@ -48,17 +44,17 @@ export class RouteHandler {
     }
 
     static getControllerFromName(name: string) {
-        return routerCollection[name];
+        return routerCollection.get(name);
     }
 
     static get defaultRoute() {
-        return routerCollection[RouteHandler.defaultRouteControllerName];
+        return routerCollection.get(RouteHandler.defaultRouteControllerName);
     }
 
     static defaultRouteControllerName: string;
 
     static addToRouterCollection(value: ParentRoute) {
-        const route = routerCollection[value.controller.name];
+        const route = routerCollection.get(value.controller.name);
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
@@ -81,7 +77,7 @@ export class RouteHandler {
     }
 
     static addShields(shields: Array<typeof GenericShield>, className: string) {
-        const route = routerCollection[className];
+        const route = routerCollection.get(className);
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {},
@@ -100,7 +96,7 @@ export class RouteHandler {
     static addWorker(newWorker: IWorkerInfo, className: string) {
 
         const workerName = newWorker.workerName;
-        const route = routerCollection[className];
+        const route = routerCollection.get(className);
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {
@@ -129,7 +125,7 @@ export class RouteHandler {
 
     static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
 
-        const route = routerCollection[className];
+        const route = routerCollection.get(className);
         const pattern = workerName.toLowerCase();
         if (route == null) {
             pushRouterIntoCollection({
@@ -168,7 +164,7 @@ export class RouteHandler {
     }
 
     static addPattern(pattern: string, className: string, workerName: string) {
-        const route = routerCollection[className];
+        const route = routerCollection.get(className);
         if (route == null) {
             pushRouterIntoCollection({
                 workers: {
@@ -214,7 +210,7 @@ export class RouteHandler {
 
         const isQuery = type === 'query';
         const pattern = workerName.toLowerCase();
-        const router = routerCollection[className];
+        const router = routerCollection.get(className);
         const worker = new WorkerInfo({
             workerName: workerName,
             guards: [],
@@ -249,11 +245,11 @@ export class RouteHandler {
     }
 
     static getExpectedQuery(controllerName: string, workerName: string) {
-        return routerCollection[controllerName].workers[workerName].expectedQuery;
+        return routerCollection.get(controllerName).workers[workerName].expectedQuery;
     }
 
     static getExpectedBody(controllerName: string, workerName: string) {
-        return routerCollection[controllerName].workers[workerName].expectedBody;
+        return routerCollection.get(controllerName).workers[workerName].expectedBody;
     }
 
 }
