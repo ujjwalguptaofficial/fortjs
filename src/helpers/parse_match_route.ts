@@ -20,45 +20,45 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     for (const workerName in route.workers) {
         const worker = route.workers[workerName];
         const patternSplit = worker.patternSplitted;
-        if (urlPartLength === patternSplit.length) {
-            let isMatched = true;
-            const params = {};
-            urlParts.every((urlPart, i) => {
-                const patternSplitAtIndex = patternSplit[i];
-                // if not equal then check for regex match
-                if (compareString(urlPart, patternSplitAtIndex) === false) {
-                    const regMatch1 = patternSplitAtIndex.match(regex1);
-                    if (regMatch1 != null) {
-                        params[regMatch1[1]] = urlPart;
+        if (urlPartLength !== patternSplit.length) continue;
+        let isMatched = true;
+        const params = {};
+        urlParts.every((urlPart, i) => {
+            const patternSplitAtIndex = patternSplit[i];
+            // if not equal then check for regex match
+            if (compareString(urlPart, patternSplitAtIndex) === false) {
+                const regMatch1 = patternSplitAtIndex.match(regex1);
+                if (regMatch1 != null) {
+                    params[regMatch1[1]] = urlPart;
+                    return true;
+                }
+                const regMatch2 = patternSplitAtIndex.match(regex2);
+                if (regMatch2 != null) {
+                    const splitByDot = urlPart.split(".");
+                    if (splitByDot[1] === regMatch2[2]) {
+                        params[regMatch2[1]] = splitByDot[0];
                         return true;
                     }
-                    const regMatch2 = patternSplitAtIndex.match(regex2);
-                    if (regMatch2 != null) {
-                        const splitByDot = urlPart.split(".");
-                        if (splitByDot[1] === regMatch2[2]) {
-                            params[regMatch2[1]] = splitByDot[0];
-                            return true;
-                        }
-                    }
-                    isMatched = false;
                 }
-                // means its direct match
-                return isMatched;
-            });
-            if (isMatched === true) {
-                if (!worker.methodsAllowed) {
-                    throw `Invalid route registration in Controller : ${route.controllerName} and method : ${worker.workerName}.Route exist but method has not been decorated with worker.`;
-                }
+                isMatched = false;
+            }
+            // means its direct match
+            return isMatched;
+        });
 
-                if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
-                    matchedRoute.workerInfo = worker;
-                    matchedRoute.params = params;
-                    matchedRoute.shields = route.shields;
-                    break;
-                }
-                else {
-                    matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
-                }
+        if (isMatched === true) {
+            if (!worker.methodsAllowed) {
+                throw `Invalid route registration in Controller : ${route.controllerName} and method : ${worker.workerName}.Route exist but method has not been decorated with worker.`;
+            }
+
+            if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
+                matchedRoute.workerInfo = worker;
+                matchedRoute.params = params;
+                matchedRoute.shields = route.shields;
+                break;
+            }
+            else {
+                matchedRoute.allowedHttpMethod = [...matchedRoute.allowedHttpMethod, ...worker.methodsAllowed];
             }
         }
     }
