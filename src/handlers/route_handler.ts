@@ -24,8 +24,8 @@ export class RouteHandler {
     }
 
     static get routesAsArray() {
-        return Object.keys(routerCollection).map(workerName => {
-            return routerCollection[workerName];
+        return Array.from(routerCollection.keys()).map(workerName => {
+            return routerCollection.get(workerName);
         });
     }
 
