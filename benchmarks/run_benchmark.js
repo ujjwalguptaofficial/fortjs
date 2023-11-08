@@ -1,5 +1,25 @@
 const { exec } = require("child_process");
 const autocannon = require('autocannon');
+const { Console } = require('console');
+const { Transform } = require('stream');
+
+function table(input) {
+    // @see https://stackoverflow.com/a/67859384
+    const ts = new Transform({ transform(chunk, enc, cb) { cb(null, chunk) } })
+    const logger = new Console({ stdout: ts })
+    logger.table(input)
+    const table = (ts.read() || '').toString()
+    let result = '';
+    for (let row of table.split(/[\r\n]+/)) {
+        let r = row.replace(/[^┬]*┬/, '┌');
+        r = r.replace(/^├─*┼/, '├');
+        r = r.replace(/│[^│]*/, '');
+        r = r.replace(/^└─*┴/, '└');
+        r = r.replace(/'/g, ' ');
+        result += `${r}\n`;
+    }
+    console.log(result);
+}
 
 const runCommand = function (cmd, finishMessage) {
     return new Promise(function (res, rej) {
@@ -44,12 +64,12 @@ const apps = [
 const runTest = async (index = 0) => {
     if (index >= apps.length) {
         console.log(`---------Benchmark finished----------`);
-        console.table(
+        table(
             apps.map(item => {
                 const result = item.result;
                 return {
                     Name: item.name,
-                    TotalRequestCount: result.requests.total,
+                    TotalRequest: result.requests.total,
                     TotalDuration: result.duration,
                     // request: result.requests,
                     "MinReq/Second": result.requests.min,
@@ -60,6 +80,7 @@ const runTest = async (index = 0) => {
                     MaxLatency: result.latency.max,
                 }
             }),
+            // ['Name', 'TotalRequest', 'TotalDuration', 'MinReq/Second', 'AverageReq/Second', 'MaxReq/Second', 'MinLatency', 'AverageLatency', 'MaxLatency']
         );
         return;
     }
