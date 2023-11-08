@@ -17,8 +17,7 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     } as RouteMatch;
 
     const urlPartLength = urlParts.length;
-    for (const workerName in route.workers) {
-        const worker = route.workers[workerName];
+    for (const [workerName, worker] of route.workers.entries()) {
         const patternSplit = worker.patternSplitted;
         if (urlPartLength !== patternSplit.length) continue;
         let isMatched = true;

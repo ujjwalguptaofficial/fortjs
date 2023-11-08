@@ -5,9 +5,8 @@ export interface IRouteInfo {
     controller: typeof GenericController;
     controllerName: string;
     path: string;
-    workers: {
-        [workerName: string]: WorkerInfo
-    };
+    // workerName => WorkerInfo
+    workers: Map<string, WorkerInfo>;
     shields: Array<typeof GenericShield>;
     values: any[];
 }

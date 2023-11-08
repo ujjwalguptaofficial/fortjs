@@ -6,13 +6,12 @@ export class RouteInfo implements IRouteInfo {
     controller: typeof GenericController;
     controllerName: string;
     path_: string;
-    workers: {
-        [workerName: string]: WorkerInfo
-    };
+    // workerName => WorkerInfo
+    workers: Map<string, WorkerInfo>;
 
     get workersAsArray() {
-        return Object.keys(this.workers).map(workerName => {
-            return this.workers[workerName];
+        return Array.from(this.workers.keys()).map(workerName => {
+            return this.workers.get(workerName);
         });
     }
 
