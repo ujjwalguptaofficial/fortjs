@@ -66,10 +66,11 @@ export class RequestHandler extends ControllerResultHandler {
     private executeShieldsProtection_(): Promise<() => void> {
         return promise((res, rej) => {
             let index = 0;
-            const shieldLength = this.routeMatchInfo_.shields.length;
+            const shields = this.routeMatchInfo_.shields;
+            const shieldLength = shields.length;
             const executeShieldByIndex = () => {
                 if (shieldLength > index) {
-                    const shield = this.routeMatchInfo_.shields[index++];
+                    const shield = shields[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(shield.name);
                     const shieldObj = new shield(...constructorArgsValues);
                     shieldObj['componentProp_'] = this.componentProps;
