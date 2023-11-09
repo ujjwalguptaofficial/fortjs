@@ -221,10 +221,19 @@ export class RouteHandler {
             guards: [],
             methodsAllowed: null,
             pattern: pattern,
-            values: [],
-            expectedQuery: isQuery ? expectedValue : null,
-            expectedBody: isQuery ? null : expectedValue
+            values: []
         } as IWorkerInfo);
+        switch (type) {
+            case "body":
+                worker.expectedBody = expectedValue;
+                break;
+            case "query":
+                worker.expectedQuery = expectedValue;
+                break;
+            case "param":
+                worker.expectedParam = expectedValue;
+                break;
+        }
         if (router == null) {
             pushRouterIntoCollection({
                 workers: new Map([
@@ -245,6 +254,7 @@ export class RouteHandler {
             else {
                 savedAction.expectedQuery = worker.expectedQuery;
                 savedAction.expectedBody = worker.expectedBody;
+                savedAction.expectedParam = worker.expectedParam;
             }
         }
     }
@@ -255,6 +265,10 @@ export class RouteHandler {
 
     static getExpectedBody(controllerName: string, workerName: string) {
         return routerCollection.get(controllerName).workers.get(workerName).expectedBody;
+    }
+
+    static getExpectedParam(controllerName: string, workerName: string) {
+        return routerCollection.get(controllerName).workers.get(workerName).expectedParam;
     }
 
 }

@@ -11,6 +11,7 @@ export class WorkerInfo implements IWorkerInfo {
     values: any[];
     expectedQuery?: any;
     expectedBody?: any;
+    expectedParam?: any;
     patternSplitted: string[];
 
     constructor(value: IWorkerInfo) {
