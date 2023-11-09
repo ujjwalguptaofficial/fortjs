@@ -1,10 +1,23 @@
-import { Controller, route, expectQuery, worker, textResult, HTTP_METHOD, expectBody } from "fortjs";
+import { Controller, route, worker, validateQuery, validateBody, textResult, HTTP_METHOD } from "fortjs";
 import { User } from "../models/user";
+import { IsInt, IsString } from "class-validator";
+import { Type } from 'class-transformer';
+
+
+class QueryType1 {
+
+    @Type(() => Number)
+    @IsInt()
+    id: Number;
+
+    @IsString()
+    name: string;
+}
 
 export class ExpectController extends Controller {
 
     @route('/convert')
-    @expectQuery({ id: 0, name: "" })
+    @validateQuery(QueryType1)
     @worker(HTTP_METHOD.Get)
     async normalExpectConvert() {
         const queryLength = Object.keys(this.query).length;
@@ -17,7 +30,7 @@ export class ExpectController extends Controller {
     }
 
     @route('/convert')
-    @expectBody({ id: 0, name: "" })
+    @validateBody(QueryType1)
     @worker(HTTP_METHOD.Post)
     async normalExpectConvertBody() {
         const queryLength = Object.keys(this.body).length;
@@ -29,7 +42,7 @@ export class ExpectController extends Controller {
     }
 
     @route('/model')
-    @expectBody(User)
+    @validateBody(User)
     @worker(HTTP_METHOD.Post)
     async modelTest() {
         const queryLength = Object.keys(this.body).length;
@@ -50,7 +63,7 @@ export class ExpectController extends Controller {
     }
 
     @route('/model')
-    @expectQuery(User)
+    @validateQuery(User)
     @worker(HTTP_METHOD.Get)
     async modelTestForQuery() {
         const queryLength = Object.keys(this.query).length;

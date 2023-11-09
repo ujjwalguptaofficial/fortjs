@@ -10,6 +10,7 @@ import { GenericSessionProvider, GenericController } from "../generics";
 import { isArray } from "../utils";
 import { Logger } from "./logger";
 import { ComponentOption } from "../abstracts/component_option";
+import { IDtoValidator } from "../interfaces";
 
 export class Fort {
 
@@ -247,6 +248,10 @@ export class Fort {
         return promise((res) => {
             this.instance.httpServer.close(res);
         });
+    }
+
+    static set validator(validator: IDtoValidator) {
+        FORT_GLOBAL.validator = validator;
     }
 
 }

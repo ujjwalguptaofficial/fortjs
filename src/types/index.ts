@@ -1,3 +1,5 @@
+import { HttpResult } from './http_result';
+
 export * from './http_result';
 export * from './http_format_result';
 export * from './view_engine_data';
@@ -13,3 +15,5 @@ export * from "./file_result_info";
 export * from "./route_match";
 export * from './controller_test_data';
 export * from './view_read_option';
+
+export type ErrorResultMapper = (error: any) => HttpResult;
