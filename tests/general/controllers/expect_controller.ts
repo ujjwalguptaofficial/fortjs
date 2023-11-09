@@ -1,17 +1,20 @@
 import { Controller, route, worker, validateQuery, validateBody, textResult, HTTP_METHOD } from "fortjs";
 import { User } from "../models/user";
-import { IsInt, IsString } from "class-validator";
-import { Type } from 'class-transformer';
+import { IsInt, IsNumber, IsString, } from "class-validator";
 
 
 class QueryType1 {
 
-    @Type(() => Number)
-    @IsInt()
+    @IsNumber()
     id: Number;
 
     @IsString()
     name: string;
+
+    constructor(data) {
+        this.id = Number(data.id);
+        this.name = data.name;        
+    }
 }
 
 export class ExpectController extends Controller {
@@ -25,7 +28,7 @@ export class ExpectController extends Controller {
         if (this.query.id === 0 && this.option.isEmpty(this.query.name)) {
             return textResult(output);
         }
-        return textResult("", 400);
+        return textResult("empty", 400);
 
     }
 

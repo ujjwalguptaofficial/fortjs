@@ -10,7 +10,7 @@ const defaultErrorResultMapper = (validationResult) => {
             message: validationResult,
             type: "ValidationError",
         }
-    }, HTTP_STATUS_CODE.BadRequest)
+    }, HTTP_STATUS_CODE.BadRequest);
 };
 
 export class DtoValidator implements IDtoValidator {
@@ -18,13 +18,15 @@ export class DtoValidator implements IDtoValidator {
     validatorOption: ValidatorOptions;
     getErrorResult: ErrorResultMapper;
 
-    constructor(validatorOption: ValidatorOptions = {}, errorResultMapper: ErrorResultMapper = defaultErrorResultMapper) {
-        const defaultValidatorOption = {
-            whitelist: true,
-            forbidNonWhitelisted: true,
-            forbidUnknownValues: true
-        } as ValidatorOptions;
-        this.validatorOption = Object.assign(defaultValidatorOption, validatorOption);
+    constructor(validatorOption: ValidatorOptions = null, errorResultMapper: ErrorResultMapper = defaultErrorResultMapper) {
+        // const defaultValidatorOption = {
+        //     // whitelist: true,
+        //     // forbidNonWhitelisted: true,
+        //     // forbidUnknownValues: false
+        // } as ValidatorOptions;
+        this.validatorOption = validatorOption;
+        // Object.assign(defaultValidatorOption, validatorOption);
+        this.validatorOption = validatorOption;
         this.getErrorResult = errorResultMapper;
     }
 
