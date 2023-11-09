@@ -6,3 +6,4 @@ export * from './default_worker';
 export * from './assign';
 export * from './singleton';
 export * from './validate';
+export * from './body';

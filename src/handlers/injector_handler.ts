@@ -47,16 +47,23 @@ export class InjectorHandler {
     }
 
     static getConstructorValues(className: string) {
-        return this.getMethodValues(className, CONSTRUCTOR);
+        return this.getMethodValues(className, CONSTRUCTOR, null);
     }
 
-    static getMethodValues(className: string, methodName: string) {
+    static getMethodValues(className: string, methodName: string, component) {
         const savedValue = injectorStoreInfos.get(className);
         if (savedValue != null) {
             const methodArgs = savedValue.get(methodName);
             if (methodArgs != null) {
                 return methodArgs.map(injectorValueIndex => {
-                    return injectorValues[injectorValueIndex];
+                    const value = injectorValues[injectorValueIndex];
+                    switch (value['__fortReqType__']) {
+                        case "body":
+                        case "query":
+                        case "param":
+                            return value.inject(component);
+                    }
+                    return value;
                 });
             }
         }

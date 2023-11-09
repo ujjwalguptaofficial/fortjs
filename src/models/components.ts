@@ -23,7 +23,7 @@ class ControllerListRef {
     static executeMethod(className: string, methodName: string) {
         const controller = ControllerListRef.getInstance(className);
         if (controller) {
-            return controller[methodName](...InjectorHandler.getMethodValues(className, methodName));
+            return controller[methodName](...InjectorHandler.getMethodValues(className, methodName, null));
         }
     }
 }

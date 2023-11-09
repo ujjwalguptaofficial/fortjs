@@ -42,7 +42,7 @@ export class RequestHandler extends ControllerResultHandler {
                     wallObj['componentProp_'] = this.componentProps;
                     this.wallInstances.push(wallObj);
 
-                    const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming');
+                    const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming', wallObj);
                     wallObj.onIncoming(...methodArgsValues).then(result => {
                         if (result == null) {
                             executeWallIncomingByIndex();
@@ -75,7 +75,7 @@ export class RequestHandler extends ControllerResultHandler {
                     const shieldObj = new shield(...constructorArgsValues);
                     shieldObj['componentProp_'] = this.componentProps;
 
-                    const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect');
+                    const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect', shieldObj);
 
                     return shieldObj.protect(...methodArgsValues).then(result => {
                         if (result == null) {
@@ -105,7 +105,7 @@ export class RequestHandler extends ControllerResultHandler {
                     const guardObj = new guard(...constructorArgsValues);
                     guardObj['componentProp_'] = this.componentProps;
 
-                    const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check');
+                    const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check', guardObj);
                     guardObj.check(...methodArgsValues).then(result => {
                         if (result == null) {
                             executeGuardByIndex();
@@ -154,10 +154,10 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private onRouteMatched_() {
-        const actionInfo = this.routeMatchInfo_.workerInfo;
+        const workerInfo = this.routeMatchInfo_.workerInfo;
         this.componentProps.param = this.routeMatchInfo_.params;
         this.componentProps.controllerName = this.routeMatchInfo_.controllerName;
-        if (actionInfo == null) {
+        if (workerInfo == null) {
             return () => {
                 return this.request.method === HTTP_METHOD.Options ?
                     this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod) :
@@ -179,7 +179,7 @@ export class RequestHandler extends ControllerResultHandler {
                 });
             }).then(shieldResult => {
                 if (shieldResult) return shieldResult;
-                return this.executeGuardsCheck_(actionInfo.guards);
+                return this.executeGuardsCheck_(workerInfo.guards);
             }).then(guardResult => {
                 if (guardResult) return guardResult;
                 return this.runController_();
@@ -190,7 +190,7 @@ export class RequestHandler extends ControllerResultHandler {
     private runWallOutgoing_() {
         const outgoingResults: Array<Promise<any>> = [];
         reverseLoop(this.wallInstances, (value: Wall) => {
-            const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing');
+            const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing', value);
             methodArgsValues.shift();
             outgoingResults.push(value.onOutgoing(this.controllerResult, ...methodArgsValues));
         });
@@ -254,7 +254,7 @@ export class RequestHandler extends ControllerResultHandler {
 
         controllerObj['componentProp_'] = this.componentProps;
 
-        const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName);
+        const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName, controllerObj);
         return controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues);
     }
 }
