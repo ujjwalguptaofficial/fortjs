@@ -1,10 +1,13 @@
-import { Controller, worker, assign, HTTP_METHOD, htmlResult, textResult, shields, guards, jsonResult, route, singleton } from "fortjs";
+import { Controller, worker, assign, HTTP_METHOD, htmlResult, textResult, body, param, shields, guards, jsonResult, route, singleton } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
 import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
 
+class ParamDto {
+    id: string;
+}
 
 @shields(AuthenticationShield)
 export class UserController extends Controller {
@@ -25,12 +28,13 @@ export class UserController extends Controller {
 
     @worker(HTTP_METHOD.Get)
     @route("/{id}")
-    async getUser() {
+    async getUser(@param() paramDto: ParamDto) {
+        console.log("paramDto", paramDto);
         if (this.query.throwException) {
             throw "Exception thrown";
         }
         try {
-            const userId = Number(this.param.id);
+            const userId = Number(paramDto.id);
             if (userId === 0) {
                 let users = this.service.getUsers();
                 let userss = users.map(val => {
@@ -60,19 +64,20 @@ export class UserController extends Controller {
     @worker(HTTP_METHOD.Post)
     @guards(ModelUserGuard)
     @route("/")
-    async addUser() {
+    async addUser(@body() user: User) {
         if (this.query.throwException) {
             throw "Exception thrown";
         }
-        const user: User = this.data.user;
+        // const user: User = this.data.user;
         return jsonResult(this.service.addUser(user), HTTP_STATUS_CODE.Created);
     }
 
     @worker(HTTP_METHOD.Delete)
     @route("/{id}")
-    async removeUser() {
+    async removeUser(@param() paramDto: ParamDto) {
         try {
-            const userId = Number(this.param.id);
+            const userId = Number(paramDto.id);
+            // const userId = Number(this.param.id);
             const user = this.service.getUser(userId);
             if (user != null) {
                 this.service.removeUser(userId);
@@ -91,9 +96,9 @@ export class UserController extends Controller {
     @worker(HTTP_METHOD.Put)
     @guards(ModelUserGuard)
     @route("/")
-    async updateUser() {
+    async updateUser(@body() user: User) {
         try {
-            const user: User = this.data.user;
+            // const user: User = this.data.user;
             const userUpdated = this.service.updateUser(user);
             if (userUpdated === true) {
                 return textResult("user updated");
