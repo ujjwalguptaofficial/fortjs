@@ -10,28 +10,15 @@ const createBodyInjectParam = (type, prop) => {
     };
 }
 
-export const body = (): ParameterDecorator => {
-    return (target: any, methodName: string, paramIndex: number) => {
-        assign(createBodyInjectParam("body", "body"))(target, methodName, paramIndex);
-    };
-};
+export function asBody(target: any, propertyKey: string | symbol, parameterIndex: number) {
+    assign(createBodyInjectParam("body", "body"))(target, propertyKey, parameterIndex);
+}
 
-export const query = (): ParameterDecorator => {
-    return (target: any, methodName: string, paramIndex: number) => {
-        assign(createBodyInjectParam("query", "query"))(target, methodName, paramIndex);
-    };
-};
+export function asQuery(target: any, methodName: string, paramIndex: number) {
+    assign(createBodyInjectParam("query", "query"))(target, methodName, paramIndex);
+}
 
-export function param(target: any, key: string, propertyIndex): void;
-export function param(...args): ParameterDecorator;
-export function param(...args) {
-    const executor = (target: any, methodName: string, paramIndex: number) => {
-        assign(createBodyInjectParam("param", "param"))(target, methodName, paramIndex);
-    };
-    // if (args.length === 3) {
-    //     executor(args[0], args[1], args[2]);
-    //     return;
-    // }
-    return executor;
+export function asParam(target: any, methodName: string, paramIndex: number) {
+    assign(createBodyInjectParam("param", "param"))(target, methodName, paramIndex);
 }
 

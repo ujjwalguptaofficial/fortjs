@@ -1,4 +1,4 @@
-import { Controller, worker, assign, HTTP_METHOD, htmlResult, textResult, body, param, shields, guards, jsonResult, route, singleton } from "fortjs";
+import { Controller, worker, assign, HTTP_METHOD, htmlResult, textResult, asBody, asParam, shields, guards, jsonResult, route, singleton } from "fortjs";
 import { AuthenticationShield } from "../shields/authentication_shield";
 import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
@@ -28,8 +28,7 @@ export class UserController extends Controller {
 
     @worker(HTTP_METHOD.Get)
     @route("/{id}")
-    async getUser(@param() paramDto: ParamDto) {
-        console.log("paramDto", paramDto);
+    async getUser(@asParam paramDto: ParamDto) {
         if (this.query.throwException) {
             throw "Exception thrown";
         }
@@ -64,7 +63,7 @@ export class UserController extends Controller {
     @worker(HTTP_METHOD.Post)
     @guards(ModelUserGuard)
     @route("/")
-    async addUser(@body() user: User) {
+    async addUser(@asBody user: User) {
         if (this.query.throwException) {
             throw "Exception thrown";
         }
@@ -74,7 +73,7 @@ export class UserController extends Controller {
 
     @worker(HTTP_METHOD.Delete)
     @route("/{id}")
-    async removeUser(@param() paramDto: ParamDto) {
+    async removeUser(@asParam paramDto: ParamDto) {
         try {
             const userId = Number(paramDto.id);
             // const userId = Number(this.param.id);
@@ -96,7 +95,7 @@ export class UserController extends Controller {
     @worker(HTTP_METHOD.Put)
     @guards(ModelUserGuard)
     @route("/")
-    async updateUser(@body() user: User) {
+    async updateUser(@asBody user: User) {
         try {
             // const user: User = this.data.user;
             const userUpdated = this.service.updateUser(user);
