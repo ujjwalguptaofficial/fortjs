@@ -19,25 +19,27 @@ fortjs goes beyond the basics by introducing reusable components such as walls, 
 
 3. **Scalability:** fortjs provides a scalable architecture for building both small and large web applications.
 
-4. **Reusable Components:** Components like walls, shields, and guards offer a modular and reusable approach to building applications.
+4. **Faster:** Fortjs delivers unparalleled speed, surpassing popular alternatives like Express and Nest by more than two times, providing a high-performance solution for web applications. Take a look at [Benchmark](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/benchmark.yml)
 
-5. **Intuitive Routing:** fortjs simplifies routing, making it intuitive for developers to define and manage routes.
+5. **Reusable Components:** Components like walls, shields, and guards offer a modular and reusable approach to building applications.
 
-6. **Dependency Injection:** The framework includes a robust dependency injection system, promoting clean and organized code.
+6. **Intuitive Routing:** fortjs simplifies routing, making it intuitive for developers to define and manage routes.
 
-7. **Unit Testable:** Fort.js is designed to be unit-testable, enabling developers to write tests for their code, ensuring stability and maintainability.
+7. **Dependency Injection:** The framework includes a robust dependency injection system, promoting clean and organized code.
 
-8. **Authentication and Authorization:** Guards facilitate the management of authentication and authorization, enhancing security.
+8. **Unit Testable:** Fort.js is designed to be unit-testable, enabling developers to write tests for their code, ensuring stability and maintainability.
 
-9. **Modern Development:** fortjs is built with modern development practices in mind, providing a contemporary and efficient development experience.
+9. **Authentication and Authorization:** Guards facilitate the management of authentication and authorization, enhancing security.
 
-10. **Boilerplate Reduction:** Developers can say goodbye to boilerplate code, resulting in cleaner and more maintainable codebases.
+10. **Modern Development:** fortjs is built with modern development practices in mind, providing a contemporary and efficient development experience.
 
-11. **Flexibility:** fortjs offers flexibility in how components are used, allowing developers to tailor the framework to their specific needs. You can configure almost everything.
+11. **Boilerplate Reduction:** Developers can say goodbye to boilerplate code, resulting in cleaner and more maintainable codebases.
 
-12. **Fort Architecture:** fortjs follows a well-architected design [Fort](https://github.com/ujjwalguptaofficial/fort) , promoting a structured and organized development approach. 
+12. **Flexibility:** fortjs offers flexibility in how components are used, allowing developers to tailor the framework to their specific needs. You can configure almost everything.
 
-13. **TypeScript Supported:** With native TypeScript support, fortjs empowers developers to leverage the benefits of static typing for a more robust and error-resistant codebase.
+13. **Fort Architecture:** fortjs follows a well-architected design [Fort](https://github.com/ujjwalguptaofficial/fort) , promoting a structured and organized development approach. 
+
+14. **TypeScript Supported:** With native TypeScript support, fortjs empowers developers to leverage the benefits of static typing for a more robust and error-resistant codebase.
 
 # Docs
 
