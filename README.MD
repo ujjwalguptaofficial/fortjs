@@ -2,14 +2,16 @@
  <img width="200px" src="logos/width_400.png"/>
 </p>
 
-fortjs is a lightweight and efficient web framework for [Node.js](https://nodejs.org/en/) that empowers developers to build scalable and performant applications with ease. With a focus on simplicity and speed, fortjs provides a robust foundation for creating web APIs and applications. Featuring intuitive routing, dependency injection, and a powerful middleware system, fortjs allows you to craft clean, organized architectures.
-
-fortjs goes beyond the basics by introducing reusable components such as walls, shields, and guards. Walls define the structure of your application, shields protect routes with ease, and guards provide a flexible way to manage authentication and authorization. Say goodbye to boilerplate code and welcome a fortress for building modern and efficient Node.js web applications
-
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![TEST](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml/badge.svg)](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
 [![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](http://fortjs.info/)
+
+# Fortjs
+
+fortjs is a lightweight and efficient web framework for [Node.js](https://nodejs.org/en/) that empowers developers to build scalable and performant applications with ease. With a focus on simplicity and speed, fortjs provides a robust foundation for creating web APIs and applications. Featuring intuitive routing, dependency injection, and a powerful middleware system, fortjs allows you to craft clean, organized architectures.
+
+fortjs goes beyond the basics by introducing reusable components such as walls, shields, and guards. Walls define the structure of your application, shields protect routes with ease, and guards provide a flexible way to manage authentication and authorization. Say goodbye to boilerplate code and welcome a fortress for building modern and efficient Node.js web applications
 
 # Why fortjs
 
