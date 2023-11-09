@@ -1,4 +1,4 @@
-import { Controller, route, worker, validate, textResult, HTTP_METHOD } from "fortjs";
+import { Controller, route, worker, jsonResult, validate, textResult, HTTP_METHOD } from "fortjs";
 import { User } from "../models/user";
 import { IsInt, IsNumber, IsString, } from "class-validator";
 
@@ -86,6 +86,13 @@ export class ExpectController extends Controller {
             }
         }
         return textResult("", 400);
+    }
+
+    @route('/param/{id}/{name}')
+    @validate.param(QueryType1)
+    @worker(HTTP_METHOD.Get)
+    async paramValidationTest() {
+        return jsonResult(this.param);
     }
 }
 

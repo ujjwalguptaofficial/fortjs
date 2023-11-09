@@ -112,4 +112,18 @@ describe("/expect", () => {
             done();
         })
     })
+
+    it('param', (done) => {
+        request.get('/expect/param/1/ujjwal').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res).to.have.header('content-type', 'application/json');
+            expect(res.body).to.eql({
+                id: 1,
+                name: 'ujjwal'
+            })
+            done();
+        })
+    })
+
 });
