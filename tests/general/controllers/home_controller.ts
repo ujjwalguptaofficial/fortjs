@@ -1,4 +1,4 @@
-import { Controller, viewResult, worker, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult, singleton } from "fortjs";
+import { Controller, viewResult, worker, asQuery, asParam, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult, singleton } from "fortjs";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 import { StudentService } from "../services/student_service";
@@ -126,10 +126,10 @@ export class HomeController extends Controller {
 
     @worker()
     @route("/param/{value}")
-    async getParam() {
+    async getParam(@asQuery qry, @asParam reqParam) {
         return jsonResult({
-            param: this.param,
-            query: this.query
+            param: reqParam,
+            query: qry
         });
     }
 }
