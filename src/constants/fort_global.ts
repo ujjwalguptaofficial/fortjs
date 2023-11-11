@@ -16,7 +16,7 @@ export class FortGlobal {
     port = 4000;
     viewPath;
     shouldParseCookie = true;
-    shouldParsePost = true;
+    shouldParseBody = true;
     sessionProvider: typeof GenericSessionProvider;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
@@ -89,7 +89,7 @@ export class FortGlobal {
             CookieEvaluatorWall as any
         );
 
-        if (this.shouldParsePost === true) {
+        if (this.shouldParseBody === true) {
             this.shields.unshift(
                 PostDataEvaluatorShield as any
             );

@@ -122,13 +122,13 @@ export class Fort {
     }
 
     /**
-     * Whether to parse the post data, default - true
+     * Whether to parse the http body data in post request, default - true
      *
      * @static
      * @memberof Fort
      */
-    static set shouldParsePost(value: boolean) {
-        FORT_GLOBAL.shouldParsePost = value;
+    static set shouldParseBody(value: boolean) {
+        FORT_GLOBAL.shouldParseBody = value;
     }
 
     /**
