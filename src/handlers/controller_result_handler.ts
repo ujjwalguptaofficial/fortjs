@@ -31,9 +31,7 @@ export class ControllerResultHandler extends FileHandler {
 
     onTerminationFromWall(result: HttpResult | HttpFormatResult) {
         this.controllerResult = result;
-        return this.handleFinalResult_().catch(ex => {
-            this.onErrorOccured(ex);
-        });
+        return this.handleFinalResult_();
     }
 
     private handleFinalResult_() {

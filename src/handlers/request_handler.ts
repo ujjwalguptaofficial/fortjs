@@ -155,7 +155,7 @@ export class RequestHandler extends ControllerResultHandler {
         try {
             const wallResult = await this.executeWallIncoming_();
             if (wallResult) {
-                this.onTerminationFromWall(wallResult);
+                await this.onTerminationFromWall(wallResult);
                 return;
             }
             const pathUrl = urlDetail.pathname;
