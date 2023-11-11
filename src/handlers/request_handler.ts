@@ -75,12 +75,7 @@ export class RequestHandler extends ControllerResultHandler {
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect', shieldObj);
 
                     return shieldObj.protect(...methodArgsValues).then(result => {
-                        if (result == null) {
-                            executeShieldByIndex();
-                        }
-                        else {
-                            res(this.onResultFromComponent(result));
-                        }
+                        result == null ? executeShieldByIndex() : res(this.onResultFromComponent(result));
                     }).catch(rej);
                 }
                 else {
@@ -104,12 +99,7 @@ export class RequestHandler extends ControllerResultHandler {
 
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check', guardObj);
                     guardObj.check(...methodArgsValues).then(result => {
-                        if (result == null) {
-                            executeGuardByIndex();
-                        }
-                        else {
-                            res(this.onResultFromComponent(result));
-                        }
+                        result == null ? executeGuardByIndex() : res(this.onResultFromComponent(result));
                     }).catch(rej);
                 }
                 else {
