@@ -6,8 +6,8 @@ export abstract class Wall extends Component {
 
     abstract onIncoming(...args): Promise<HttpResult | void>;
 
+    // eslint-disable-next-line
     onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args) {
-        return null;
     }
 
     // eslint-disable-next-line

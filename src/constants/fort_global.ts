@@ -7,6 +7,7 @@ import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
 import { ETAG_TYPE } from "../enums";
 import { IDtoValidator } from "../interfaces";
+import { CookieWall } from "../providers";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -82,6 +83,10 @@ class FortGlobal {
         }
         this.validator = this.validator || new DtoValidator();
         this.appSessionIdentifier = `${this.appName}_session_id`;
+
+        this.walls.unshift(
+            CookieWall as any
+        );
     }
 
 }

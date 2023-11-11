@@ -123,29 +123,6 @@ export class RequestHandler extends ControllerResultHandler {
         });
     }
 
-    private parseCookieFromRequest_() {
-        if (FORT_GLOBAL.shouldParseCookie === true) {
-            const { request } = this.componentProps;
-            const rawCookie = (request.headers[COOKIE] || request.headers["cookie"]) as string;
-            let parsedCookies;
-            try {
-                parsedCookies = parseCookie(rawCookie);
-            } catch (ex) {
-                this.onErrorOccured(ex);
-                return false;
-            }
-            const session = new FORT_GLOBAL.sessionProvider();
-            session.cookie = new CookieManager(parsedCookies);
-            session.sessionId = parsedCookies[FORT_GLOBAL.appSessionIdentifier];
-            this.componentProps.session = session;
-            this.componentProps.cookie = session.cookie;
-        }
-        else {
-            this.componentProps.cookie = new CookieManager({});
-        }
-        return true;
-    }
-
     private setPreHeader_() {
         const response = this.response;
         response.setHeader('X-Powered-By', FORT_GLOBAL.appName);
@@ -188,11 +165,15 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private runWallOutgoing_() {
-        const outgoingResults: Array<Promise<any>> = [];
-        reverseLoop(this.wallInstances, (value: Wall) => {
-            const methodArgsValues = InjectorHandler.getMethodValues(value.constructor.name, 'onOutgoing', value);
+        // check if only Cookie wall has been injected
+        if (this.wallInstances.length === 1) {
+            return promiseResolve(null);
+        }
+        const outgoingResults: Array<Promise<void>> = [];
+        reverseLoop(this.wallInstances, (wallInstance: Wall) => {
+            const methodArgsValues = InjectorHandler.getMethodValues(wallInstance.constructor.name, 'onOutgoing', wallInstance);
             methodArgsValues.shift();
-            outgoingResults.push(value.onOutgoing(this.controllerResult, ...methodArgsValues));
+            outgoingResults.push(wallInstance.onOutgoing(this.controllerResult, ...methodArgsValues) as any);
         });
         return Promise.all(outgoingResults);
     }
@@ -202,8 +183,6 @@ export class RequestHandler extends ControllerResultHandler {
         const request = this.componentProps.request;
         const urlDetail = url.parse(request.url, true);
         this.componentProps.query = urlDetail.query;
-        const isCookieValid = this.parseCookieFromRequest_();
-        if (isCookieValid === false) return;
         this.executeWallIncoming_().then(isAllowedByWalls => {
             if (isAllowedByWalls === false) return;
             const pathUrl = urlDetail.pathname;
