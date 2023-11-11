@@ -4,7 +4,7 @@ import { Controller, Wall } from "../abstracts";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { GenericGuard } from "../generics";
-import { RouteMatch } from "../types";
+import { HttpFormatResult, HttpResult, RouteMatch } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
 import { IException } from "../interfaces";
@@ -27,7 +27,7 @@ export class RequestHandler extends ControllerResultHandler {
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
-    private executeWallIncoming_(): Promise<boolean> {
+    private executeWallIncoming_(): Promise<HttpResult | HttpFormatResult> {
         return promise((res, rej) => {
             let index = 0;
             const wallLength = FORT_GLOBAL.walls.length;
@@ -41,17 +41,11 @@ export class RequestHandler extends ControllerResultHandler {
 
                     const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming', wallObj);
                     wallObj.onIncoming(...methodArgsValues).then(result => {
-                        if (result == null) {
-                            executeWallIncomingByIndex();
-                        }
-                        else {
-                            res(false);
-                            this.onTerminationFromWall(result);
-                        }
+                        result == null ? executeWallIncomingByIndex() : res(result);
                     }).catch(rej);
                 }
                 else {
-                    res(true);
+                    res(null);
                 }
             };
             executeWallIncomingByIndex();
@@ -154,29 +148,34 @@ export class RequestHandler extends ControllerResultHandler {
         return Promise.all(outgoingResults);
     }
 
-    private execute_() {
-
+    private async execute_() {
         const request = this.componentProps.request;
         const urlDetail = url.parse(request.url, true);
         this.componentProps.query = urlDetail.query;
-        this.executeWallIncoming_().then(isAllowedByWalls => {
-            if (isAllowedByWalls === false) return;
+        try {
+            const wallResult = await this.executeWallIncoming_();
+            if (wallResult) {
+                this.onTerminationFromWall(wallResult);
+                return;
+            }
             const pathUrl = urlDetail.pathname;
             const requestMethod = request.method as HTTP_METHOD;
 
             this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestMethod);
-            return this.routeMatchInfo_ == null ? () => {
-                return this.handleFileRequest(pathUrl);
-            } :
-                this.onRouteMatched_();
-        }).then(finalCallback => {
-            if (finalCallback) {
-                return this.runWallOutgoing_().then(finalCallback);
-            }
-        }).catch(ex => {
+            const finalCallback = await (
+                this.routeMatchInfo_ == null ? () => {
+                    return this.handleFileRequest(pathUrl);
+                } :
+                    this.onRouteMatched_()
+            );
+            await this.runWallOutgoing_();
+            // if (finalCallback) {
+            await finalCallback();
+            // }
+        }
+        catch (ex) {
             this.onErrorOccured(ex);
-        })
-
+        }
     }
 
 
