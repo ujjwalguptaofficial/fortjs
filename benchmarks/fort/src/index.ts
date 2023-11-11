@@ -4,6 +4,7 @@ import { routes } from "@/routes";
 export const createApp = async () => {
     Fort.routes = routes;
     Fort.shouldParseCookie = false;
+    Fort.shouldParseBody = false;
     await Fort.create();
     process.env.APP_URL = `http://localhost:${Fort.port}`;
 };
