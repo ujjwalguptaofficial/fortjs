@@ -117,7 +117,7 @@ export class RequestHandler extends ControllerResultHandler {
         response.sendDate = true;
     }
 
-    private onRouteMatched_() {
+    private async onRouteMatched_() {
         const workerInfo = this.routeMatchInfo_.workerInfo;
         this.componentProps.param = this.routeMatchInfo_.params;
         this.componentProps.controllerName = this.routeMatchInfo_.controllerName;
@@ -130,15 +130,13 @@ export class RequestHandler extends ControllerResultHandler {
         }
         else {
             this.componentProps.workerName = this.routeMatchInfo_.workerInfo.workerName;
-            return this.executeShieldsProtection_().then(shieldResult => {
-                if (shieldResult) return shieldResult;
-            }).then(shieldResult => {
-                if (shieldResult) return shieldResult;
-                return this.executeGuardsCheck_(workerInfo.guards);
-            }).then(guardResult => {
-                if (guardResult) return guardResult;
-                return this.runController_();
-            });
+            const shieldResult = await this.executeShieldsProtection_();
+            if (shieldResult) return shieldResult;
+
+            const guardResult = await this.executeGuardsCheck_(workerInfo.guards);
+            if (guardResult) return guardResult;
+
+            return this.runController_();
         }
     }
 
