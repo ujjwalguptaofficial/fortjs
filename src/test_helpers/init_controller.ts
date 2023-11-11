@@ -26,7 +26,8 @@ export const initController = (controllerInstance: Controller, data?: Controller
         param: data.param || {},
         data: data.data || {},
         file: new FileManager(data.file || {}),
-        workerName: (data as any).workerName
+        workerName: (data as any).workerName,
+        global: FORT_GLOBAL
     };
     return controllerInstance;
 };

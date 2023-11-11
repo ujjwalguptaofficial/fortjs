@@ -1,6 +1,7 @@
 import * as http from "http";
 import { SessionProvider } from "../abstracts";
 import { CookieManager, FileManager } from "../models";
+import { FortGlobal } from "../constants";
 
 export interface IComponentProp {
     request: http.IncomingMessage;
@@ -14,4 +15,5 @@ export interface IComponentProp {
     file?: FileManager;
     workerName?: string;
     controllerName?: string;
+    global: FortGlobal;
 }

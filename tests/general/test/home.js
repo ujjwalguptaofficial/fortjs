@@ -75,7 +75,7 @@ describe("/home", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('content-type', 'text/html');
-            expect(res.text).to.contains("message : Post data is invalid");
+            expect(res.text).to.contains("Post data is invalid");
             done();
         })
 
@@ -113,7 +113,7 @@ describe("/home", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(400);
             expect(res).to.have.header('custom-header-from-outgoing-wall', '*');
-            expect(res.text).to.contains('message : no xml parser configured');
+            expect(res.text).to.contains('no xml parser configured');
             done();
         })
     });

@@ -4,7 +4,7 @@ import { parseCookie } from "../helpers";
 import { CookieManager } from "../models";
 import { HttpResult } from "../types";
 
-export class CookieWall extends Wall {
+export class CookieEvaluatorWall extends Wall {
     parseCookieFromRequest() {
         const componentProps = this['componentProp_'];
         if (FORT_GLOBAL.shouldParseCookie === false) {

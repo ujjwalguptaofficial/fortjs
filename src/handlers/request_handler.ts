@@ -1,14 +1,11 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
-import { COOKIE } from "../constants";
 import { FORT_GLOBAL } from "../constants/fort_global";
-import { parseCookie, parseAndMatchRoute, promise, reverseLoop } from "../helpers";
-import { CookieManager, FileManager } from "../models";
+import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { GenericGuard } from "../generics";
 import { RouteMatch } from "../types";
 import { HTTP_METHOD } from "../enums";
-import { PostHandler } from "./post_handler";
 import { InjectorHandler } from "./injector_handler";
 import { IException } from "../interfaces";
 import { promiseResolve } from "../utils";
@@ -66,7 +63,7 @@ export class RequestHandler extends ControllerResultHandler {
     private executeShieldsProtection_(): Promise<() => void> {
         return promise((res, rej) => {
             let index = 0;
-            const shields = this.routeMatchInfo_.shields;
+            const shields = [...FORT_GLOBAL.shields, ...this.routeMatchInfo_.shields];
             const shieldLength = shields.length;
             const executeShieldByIndex = () => {
                 if (shieldLength > index) {
@@ -145,15 +142,6 @@ export class RequestHandler extends ControllerResultHandler {
             this.componentProps.workerName = this.routeMatchInfo_.workerInfo.workerName;
             return this.executeShieldsProtection_().then(shieldResult => {
                 if (shieldResult) return shieldResult;
-                return this.handlePostData().then(postResult => {
-                    this.componentProps.file = postResult[0];
-                    this.componentProps.body = postResult[1];
-                    return null;
-                }).catch(ex => {
-                    return () => {
-                        return this.onBadRequest(ex);
-                    }
-                });
             }).then(shieldResult => {
                 if (shieldResult) return shieldResult;
                 return this.executeGuardsCheck_(workerInfo.guards);
@@ -203,24 +191,14 @@ export class RequestHandler extends ControllerResultHandler {
 
     }
 
-    handlePostData() {
-        if (this.request.method === HTTP_METHOD.Get) {
-            return promiseResolve([new FileManager({}), {}]);
-        }
 
-        if (FORT_GLOBAL.shouldParsePost === true) {
-            const postHandler = new PostHandler(
-                this.request
-            );
-            return postHandler.parsePostData();
-        }
-    }
 
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
         this.componentProps = {
             request,
             response,
-            data: {}
+            data: {},
+            global: FORT_GLOBAL
         } as any;
         this.registerEvents_();
         this.setPreHeader_();
