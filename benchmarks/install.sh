@@ -14,6 +14,5 @@ cd ..
 # install fort
 cd fort
 npm install
-npm i fortjs@latest
 cd ..
 echo "Installation done!"

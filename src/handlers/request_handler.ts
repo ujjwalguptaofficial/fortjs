@@ -195,13 +195,14 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     setControllerProps_() {
-        const constructorValues = InjectorHandler.getConstructorValues(this.routeMatchInfo_.controller.name);
+        const controllerName = this.routeMatchInfo_.controller.name;
+        const constructorValues = InjectorHandler.getConstructorValues(controllerName);
         const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
 
         controllerObj['componentProp_'] = this.componentProps;
-
-        const methodArgsValues = InjectorHandler.getMethodValues(this.routeMatchInfo_.controller.name, this.routeMatchInfo_.workerInfo.workerName, controllerObj);
-        return controllerObj[this.routeMatchInfo_.workerInfo.workerName](...methodArgsValues);
+        const workerName = this.routeMatchInfo_.workerInfo.workerName;
+        const methodArgsValues = InjectorHandler.getMethodValues(controllerName, workerName, controllerObj);
+        return controllerObj[workerName](...methodArgsValues);
     }
 }
 if (FORT_GLOBAL.isProduction) {
