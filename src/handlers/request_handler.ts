@@ -57,7 +57,7 @@ export class RequestHandler extends ControllerResultHandler {
     private executeShieldsProtection_(): Promise<() => void> {
         return promise((res, rej) => {
             let index = 0;
-            const shields = [...FORT_GLOBAL.shields, ...this.routeMatchInfo_.shields];
+            const shields = FORT_GLOBAL.shields.concat(this.routeMatchInfo_.shields);
             const shieldLength = shields.length;
             const executeShieldByIndex = () => {
                 if (shieldLength > index) {
@@ -127,7 +127,9 @@ export class RequestHandler extends ControllerResultHandler {
             const shieldResult = await this.executeShieldsProtection_();
             if (shieldResult) return shieldResult;
 
-            const guardResult = await this.executeGuardsCheck_(workerInfo.guards);
+            const guardResult = await this.executeGuardsCheck_(
+                FORT_GLOBAL.guards.concat(workerInfo.guards)
+            );
             if (guardResult) return guardResult;
 
             return this.runController_();

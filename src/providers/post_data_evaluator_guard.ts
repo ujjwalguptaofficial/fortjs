@@ -1,4 +1,4 @@
-import { Shield } from "../abstracts";
+import { Guard } from "../abstracts";
 import { HTTP_METHOD, HTTP_STATUS_CODE } from "../enums";
 import { JsonHelper, promise, textResult } from "../helpers";
 import { FileManager } from "../models";
@@ -10,9 +10,9 @@ import * as Multiparty from "multiparty";
 import { MultiPartParseResult } from "../types";
 import * as http from "http";
 
-export class PostDataEvaluatorShield extends Shield {
+export class PostDataEvaluatorGuard extends Guard {
 
-    async protect() {
+    async check() {
         try {
             const postResult = await this.handlePostData();
             const componentProps = this['componentProp_'];
