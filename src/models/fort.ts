@@ -1,5 +1,5 @@
 import { ParentRoute, EtagOption, FolderMap } from "../types";
-import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper } from "../abstracts";
+import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper, Shield, Guard } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { ErrorHandler } from ".";
@@ -25,6 +25,14 @@ export class Fort {
 
     static set walls(walls: Array<typeof Wall>) {
         FORT_GLOBAL.walls = walls as any;
+    }
+
+    static set shields(shields: Array<typeof Shield>) {
+        FORT_GLOBAL.shields = shields as any;
+    }
+
+    static set guards(guards: Array<typeof Guard>) {
+        FORT_GLOBAL.guards = guards as any;
     }
 
 
