@@ -2,8 +2,9 @@ import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../e
 import { CONTENT_TYPE, SET_COOKIE } from "../constants";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import * as Negotiator from "negotiator";
-import { IComponentProp, IException, IHttpFormatResult, IHttpResult } from "../interfaces";
+import { IComponentProp, IException, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";
+import { HttpFormatResult } from "../types";
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
@@ -136,7 +137,7 @@ export class RequestHandlerHelper {
 
     protected handleFormatResult_(shouldSendFirstMatch = false) {
         const controllerResult = this.controllerResult;
-        const responseData = controllerResult.responseData as IHttpFormatResult;
+        const responseData = controllerResult.responseData as HttpFormatResult;
         const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(responseData) as MIME_TYPE[]);
         let key = Object.keys(responseData).find(qry => qry === negotiateMimeType);
         if (key != null) {

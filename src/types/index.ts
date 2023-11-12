@@ -13,5 +13,6 @@ export * from "./file_result_info";
 export * from "./route_match";
 export * from './controller_test_data';
 export * from './view_read_option';
+export * from './http_format_result';
 
 export type ErrorResultMapper = (error: any) => IHttpResult;
