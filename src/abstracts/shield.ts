@@ -1,4 +1,4 @@
-import { HttpResult } from "../types";
+import { IHttpResult } from "../interfaces";
 import { Logger } from "../models";
 import { ShieldTestData, initShield } from "../test_helpers";
 import { FORT_GLOBAL } from "../constants/fort_global";
@@ -17,7 +17,7 @@ export abstract class Shield extends Component {
         return FORT_GLOBAL.componentOption;
     }
 
-    abstract protect(...args): Promise<HttpResult | void>;
+    abstract protect(...args): Promise<IHttpResult | void>;
 
     // eslint-disable-next-line
     constructor(...args) {

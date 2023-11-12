@@ -1,6 +1,6 @@
 import { renderView } from "./render_view";
-import { HttpResult } from "../types";
-import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
+import { IHttpResult } from "../interfaces";
+import { MIME_TYPE, HTTP_STATUS_CODE, HTTP_RESULT_TYPE } from "../enums";
 
 
 export const viewResult = (viewName: string, model?: any) => {
@@ -8,7 +8,8 @@ export const viewResult = (viewName: string, model?: any) => {
         return {
             contentType: MIME_TYPE.Html,
             responseData: viewData,
-            statusCode: HTTP_STATUS_CODE.Ok
-        } as HttpResult;
+            statusCode: HTTP_STATUS_CODE.Ok,
+            type: HTTP_RESULT_TYPE.Default
+        } as IHttpResult;
     });
 };

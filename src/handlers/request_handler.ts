@@ -4,10 +4,10 @@ import { Controller, Wall } from "../abstracts";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { GenericGuard } from "../generics";
-import { HttpFormatResult, HttpResult, RouteMatch } from "../types";
+import { RouteMatch } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
-import { IException } from "../interfaces";
+import { IException, IHttpResult } from "../interfaces";
 import { promiseResolve } from "../utils";
 import { ControllerResultHandler } from "./controller_result_handler";
 
@@ -27,7 +27,7 @@ export class RequestHandler extends ControllerResultHandler {
         this.response.on('error', this.onErrorOccured.bind(this));
     }
 
-    private executeWallIncoming_(): Promise<HttpResult | HttpFormatResult> {
+    private executeWallIncoming_(): Promise<IHttpResult> {
         return promise((res, rej) => {
             let index = 0;
             const wallLength = FORT_GLOBAL.walls.length;

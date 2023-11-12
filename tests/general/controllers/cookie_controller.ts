@@ -1,4 +1,4 @@
-import { Controller, HttpCookie, worker, HTTP_METHOD, textResult, jsonResult, route, HttpResult, HTTP_STATUS_CODE } from "fortjs";
+import { Controller, HttpCookie, worker, HTTP_METHOD, textResult, jsonResult, route, HTTP_STATUS_CODE } from "fortjs";
 
 export class CookieController extends Controller {
     @worker(HTTP_METHOD.Post)

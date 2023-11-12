@@ -1,4 +1,4 @@
-import { HttpResult } from "../types";
+import { IHttpResult } from "../interfaces";
 import { Logger } from "../models";
 import { GuardTestData, initGuard } from "../test_helpers";
 import { FORT_GLOBAL } from "../constants/fort_global";
@@ -21,7 +21,7 @@ export abstract class Guard extends Component {
         return this['componentProp_'].workerName;
     }
 
-    abstract check(...args): Promise<HttpResult | void>;
+    abstract check(...args): Promise<IHttpResult | void>;
 
     get logger(): Logger {
         return FORT_GLOBAL.logger;

@@ -1,8 +1,8 @@
 import { Wall } from "../abstracts";
 import { COOKIE, FORT_GLOBAL } from "../constants";
 import { parseCookie } from "../helpers";
+import { IHttpResult } from "../interfaces";
 import { CookieManager } from "../models";
-import { HttpResult } from "../types";
 
 export class CookieEvaluatorWall extends Wall {
     parseCookieFromRequest() {
@@ -21,7 +21,7 @@ export class CookieEvaluatorWall extends Wall {
         componentProps.cookie = session.cookie;
     }
 
-    async onIncoming(): Promise<void | HttpResult> {
+    async onIncoming(): Promise<void | IHttpResult> {
         this.parseCookieFromRequest();
     }
 }

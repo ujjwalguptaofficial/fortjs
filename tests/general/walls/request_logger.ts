@@ -1,4 +1,4 @@
-import { Wall, textResult, HttpResult, assign } from "fortjs";
+import { Wall, textResult, IHttpResult, assign } from "fortjs";
 let reqCount = 0;
 export class RequestLogger extends Wall {
 
@@ -36,7 +36,9 @@ export class RequestLogger extends Wall {
         }
     }
 
-    async onOutgoing(result: HttpResult, @assign('on outgoing called') value: string) {
+    async onOutgoing(result: IHttpResult, @assign('on outgoing called') value: string) {
+        console.log("result",result);
+        result = result || textResult("");
         this.logger.log('executing request logger');
         this.response.setHeader('Custom-Header-From-Outgoing-Wall', '*');
         this.response.setHeader('injection-result', this.injectionValue + ` ${value}`);
@@ -44,7 +46,7 @@ export class RequestLogger extends Wall {
         if (result.statusCode === 202) {
             // result.statusCode = 200;
             // result.responseData = "overrided";
-            Object.assign(result,textResult("overrided"))
+            Object.assign(result, textResult("overrided"))
         }
     }
 }

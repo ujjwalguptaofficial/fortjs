@@ -1,4 +1,4 @@
-import { Guard, HttpResult, MIME_TYPE, HTTP_STATUS_CODE, assign, textResult } from "fortjs";
+import { Guard, HTTP_STATUS_CODE, assign, textResult } from "fortjs";
 import { User } from "../../models/user";
 import { validate } from "class-validator";
 
@@ -33,11 +33,7 @@ export class ModelUserGuard extends Guard {
             const error = errors[0];
             const constraint = Object.keys(error.constraints)[0];
             const errMessage = error.constraints[constraint];
-            return {
-                contentType: MIME_TYPE.Text,
-                statusCode: HTTP_STATUS_CODE.BadRequest,
-                responseData: errMessage
-            } as HttpResult;
+            return textResult(errMessage, HTTP_STATUS_CODE.BadRequest)
         }
     }
 }

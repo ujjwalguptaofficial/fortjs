@@ -1,11 +1,10 @@
-import { IException } from "../interfaces";
+import { IException, IHttpResult } from "../interfaces";
 import { htmlResult } from "../helpers";
-import { HttpResult, HttpFormatResult } from "../types";
 import { HTTP_STATUS_CODE } from "../enums";
 import { promiseResolve } from "../utils";
 
 export class ErrorHandler {
-    onServerError(ex: IException): Promise<HttpResult | HttpFormatResult> {
+    onServerError(ex: IException): Promise<IHttpResult> {
         let errMessage = `<h1>internal server error</h1>
             <h3>message : ${ex.message}</h3>`;
         if (ex.stack) {
@@ -19,7 +18,7 @@ export class ErrorHandler {
         );
     }
 
-    onBadRequest(ex: IException): Promise<HttpResult | HttpFormatResult> {
+    onBadRequest(ex: IException): Promise<IHttpResult> {
         let errMessage = `<h1>Bad Request</h1>`;
         if (ex.message) {
             errMessage += ` <h3>message : ${ex.message} </h3>`;
@@ -35,25 +34,25 @@ export class ErrorHandler {
         );
     }
 
-    onForbiddenRequest(): Promise<HttpResult | HttpFormatResult> {
+    onForbiddenRequest(): Promise<IHttpResult> {
         return promiseResolve(
             htmlResult(`<h1>Forbidden</h1>`, HTTP_STATUS_CODE.Forbidden)
         );
     }
 
-    onNotAcceptableRequest(): Promise<HttpResult | HttpFormatResult> {
+    onNotAcceptableRequest(): Promise<IHttpResult> {
         return promiseResolve(
             htmlResult(`<h1>Not Acceptable</h1>`, HTTP_STATUS_CODE.NotAcceptable)
         );
     }
 
-    onMethodNotAllowed(): Promise<HttpResult | HttpFormatResult> {
+    onMethodNotAllowed(): Promise<IHttpResult> {
         return promiseResolve(
             htmlResult(`<h1>Method Not allowed.</h1>`, HTTP_STATUS_CODE.MethodNotAllowed)
         );
     }
 
-    onNotFound(url: string): Promise<HttpResult | HttpFormatResult> {
+    onNotFound(url: string): Promise<IHttpResult> {
         return promiseResolve(
             htmlResult(`<h1>The requested resource ${url} was not found.</h1>`, HTTP_STATUS_CODE.NotFound)
         );

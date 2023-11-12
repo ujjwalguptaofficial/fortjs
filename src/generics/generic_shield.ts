@@ -1,5 +1,5 @@
 import { Shield } from "../abstracts";
-import { HttpResult } from "../types";
+import { IHttpResult } from "../interfaces";
 import { promiseResolve } from "../utils";
 
 export class GenericShield extends Shield {
@@ -7,7 +7,7 @@ export class GenericShield extends Shield {
         super();
     }
 
-    protect(...args): Promise<HttpResult> {
+    protect(...args): Promise<IHttpResult> {
         return promiseResolve(null);
     }
 }

@@ -1,7 +1,5 @@
-import { HttpResult } from './http_result';
+import { IHttpResult } from '../interfaces';
 
-export * from './http_result';
-export * from './http_format_result';
 export * from './view_engine_data';
 export * from './http_request';
 export * from './http_response';
@@ -16,4 +14,4 @@ export * from "./route_match";
 export * from './controller_test_data';
 export * from './view_read_option';
 
-export type ErrorResultMapper = (error: any) => HttpResult;
+export type ErrorResultMapper = (error: any) => IHttpResult;

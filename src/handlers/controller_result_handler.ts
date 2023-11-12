@@ -1,71 +1,71 @@
 
-import { HttpResult, HttpFormatResult } from "../types";
 import { SET_COOKIE } from "../constants";
-import { MIME_TYPE, HTTP_STATUS_CODE } from "../enums";
+import { MIME_TYPE, HTTP_STATUS_CODE, HTTP_RESULT_TYPE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { textResult } from "../helpers";
 import { promiseResolve } from "../utils";
+import { IHttpResult } from "../interfaces";
+import { FileResultInfo } from "../types";
 
 export class ControllerResultHandler extends FileHandler {
 
     private handleRedirectResult_() {
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
-            { 'Location': (this.controllerResult as HttpResult).responseData });
+            { 'Location': (this.controllerResult as IHttpResult).responseData });
         this.response.end();
         return promiseResolve(null);
     }
 
     private handleFileResult_() {
-        const result = this.controllerResult as HttpResult;
-        const parsedPath = path.parse(result.file.filePath);
-        if (result.file.shouldDownload === true) {
-            const fileName = result.file.alias == null ? parsedPath.name : result.file.alias;
+        const result = this.controllerResult as IHttpResult;
+        const fileResult = result.responseData as FileResultInfo;
+        const parsedPath = path.parse(fileResult.filePath);
+        if (fileResult.shouldDownload === true) {
+            const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;
             this.response.setHeader(
                 "content-disposition",
                 `attachment;filename=${fileName}${parsedPath.ext}`
             );
         }
-        return this.handleFileRequestFromAbsolutePath(result.file.filePath, parsedPath.ext);
+        return this.handleFileRequestFromAbsolutePath(fileResult.filePath, parsedPath.ext);
     }
 
-    onTerminationFromWall(result: HttpResult | HttpFormatResult) {
+    onTerminationFromWall(result: IHttpResult) {
         this.controllerResult = result;
         return this.handleFinalResult_();
     }
 
     private handleFinalResult_() {
-        const result = this.controllerResult;
+        const result: IHttpResult = this.controllerResult;
 
         (this.componentProps.cookie['responseCookie_']).forEach(value => {
             this.response.setHeader(SET_COOKIE, value);
         });
 
-        if ((result as HttpResult).shouldRedirect === true) {
-            return this.handleRedirectResult_();
-        }
-
-        if ((result as HttpFormatResult).responseFormat == null) {
-            if ((result as HttpResult).file == null) {
-                const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
-                const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-                if (negotiateMimeType != null) {
-                    this.endResponse_(negotiateMimeType);
+        switch (result.type) {
+            case HTTP_RESULT_TYPE.Default:
+                {
+                    const contentType = result.contentType || MIME_TYPE.Text;
+                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                    if (negotiateMimeType != null) {
+                        this.endResponse_(negotiateMimeType);
+                    }
+                    else {
+                        return this.onNotAcceptableRequest();
+                    }
                 }
-                else {
-                    return this.onNotAcceptableRequest();
-                }
-            }
-            else {
+                break;
+            case HTTP_RESULT_TYPE.Redirect:
+                return this.handleRedirectResult_();
+            case HTTP_RESULT_TYPE.File:
                 return this.handleFileResult_();
-            }
-        }
-        else {
-            return this.handleFormatResult_();
+            case HTTP_RESULT_TYPE.FormattedResult:
+                return this.handleFormatResult_();
         }
     }
 
-    onResultFromComponent(result: HttpResult | HttpFormatResult) {
+    onResultFromComponent(result: IHttpResult) {
         this.controllerResult = result || textResult("");
         return () => {
             return this.handleFinalResult_();

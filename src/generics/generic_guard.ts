@@ -1,5 +1,5 @@
 import { Guard } from "../abstracts";
-import { HttpResult } from "../types";
+import { IHttpResult } from "../interfaces";
 
 export class GenericGuard extends Guard {
 
@@ -7,7 +7,7 @@ export class GenericGuard extends Guard {
         super();
     }
 
-    check(...args): Promise<HttpResult> {
+    check(...args): Promise<IHttpResult> {
         return null;
     }
 }

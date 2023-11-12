@@ -1,12 +1,12 @@
-import { MIME_TYPE } from "../enums";
+import { HTTP_RESULT_TYPE, MIME_TYPE } from "../enums";
 import { HTTP_STATUS_CODE } from "../enums/http_status_code";
-import { HttpResult } from "../types/http_result";
+import { IHttpResult } from "../interfaces";
 
 export const redirectResult = (url: string) => {
     return {
         contentType: MIME_TYPE.Text,
         responseData: url,
         statusCode: HTTP_STATUS_CODE.Redirect,
-        shouldRedirect: true
-    } as HttpResult;
+        type: HTTP_RESULT_TYPE.Redirect
+    } as IHttpResult;
 };

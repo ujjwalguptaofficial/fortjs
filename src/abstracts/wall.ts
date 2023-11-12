@@ -1,13 +1,13 @@
-import { HttpResult, HttpFormatResult } from "../types";
+import { IHttpResult } from "../interfaces";
 import { WallTestData, initWall } from "../test_helpers";
 import { Component } from "./component";
 
 export abstract class Wall extends Component {
 
-    abstract onIncoming(...args): Promise<HttpResult | void>;
+    abstract onIncoming(...args): Promise<IHttpResult | void>;
 
     // eslint-disable-next-line
-    onOutgoing(finalResult: HttpResult | HttpFormatResult, ...args) {
+    onOutgoing(finalResult: IHttpResult, ...args) {
     }
 
     // eslint-disable-next-line

@@ -1,15 +1,14 @@
-import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD } from "../enums";
+import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../enums";
 import { CONTENT_TYPE, SET_COOKIE } from "../constants";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import * as Negotiator from "negotiator";
-import { IComponentProp, IException } from "../interfaces";
+import { IComponentProp, IException, IHttpFormatResult, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";
-import { HttpResult, HttpFormatResult } from "../types";
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
 
-    protected controllerResult: HttpResult | HttpFormatResult = {} as any;
+    protected controllerResult: IHttpResult;
 
     get request() {
         return this.componentProps.request;
@@ -111,7 +110,7 @@ export class RequestHandlerHelper {
         return this.onResultFromError_(textResult(""));
     }
 
-    private onResultFromError_(result: HttpResult | HttpFormatResult) {
+    private onResultFromError_(result: IHttpResult) {
         this.controllerResult = result;
         this.returnResultFromError_();
     }
@@ -122,26 +121,31 @@ export class RequestHandlerHelper {
             this.response.setHeader(SET_COOKIE, value);
         });
 
-        if ((result as HttpFormatResult).responseFormat == null) {
-            const contentType = (result as HttpResult).contentType || MIME_TYPE.Text;
-            const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
-            this.endResponse_(negotiateMimeType != null ? negotiateMimeType : contentType);
-        }
-        else {
-            return this.handleFormatResult_(true);
+        switch (result.type) {
+            case HTTP_RESULT_TYPE.Default:
+                {
+                    const contentType = result.contentType || MIME_TYPE.Text;
+                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                    this.endResponse_(negotiateMimeType != null ? negotiateMimeType : contentType);
+                }
+                break;
+            case HTTP_RESULT_TYPE.FormattedResult:
+                return this.handleFormatResult_();
         }
     }
 
     protected handleFormatResult_(shouldSendFirstMatch = false) {
-        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys((this.controllerResult as HttpFormatResult).responseFormat) as MIME_TYPE[]);
-        let key = Object.keys((this.controllerResult as HttpFormatResult).responseFormat).find(qry => qry === negotiateMimeType);
+        const controllerResult = this.controllerResult;
+        const responseData = controllerResult.responseData as IHttpFormatResult;
+        const negotiateMimeType = this.getContentTypeFromNegotiationHavingMultipleTypes(Object.keys(responseData) as MIME_TYPE[]);
+        let key = Object.keys(responseData).find(qry => qry === negotiateMimeType);
         if (key != null) {
-            (this.controllerResult as HttpResult).responseData = (this.controllerResult as HttpFormatResult).responseFormat[key]();
+            controllerResult.responseData = responseData[key]();
             this.endResponse_(negotiateMimeType);
         }
         else if (shouldSendFirstMatch === true) {
-            key = Object.keys((this.controllerResult as HttpFormatResult).responseFormat)[0];
-            (this.controllerResult as HttpResult).responseData = (this.controllerResult as HttpFormatResult).responseFormat[key]();
+            key = Object.keys(responseData)[0];
+            controllerResult.responseData = responseData[key]();
             this.endResponse_(negotiateMimeType);
         }
         else {
@@ -152,7 +156,7 @@ export class RequestHandlerHelper {
     protected endResponse_(negotiateMimeType: MIME_TYPE) {
 
         const data = getResultBasedOnMiMe(negotiateMimeType,
-            (this.controllerResult as HttpResult).responseData
+            (this.controllerResult).responseData
             , (type: MIME_TYPE) => {
                 negotiateMimeType = type;
             }

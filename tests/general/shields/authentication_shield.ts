@@ -1,4 +1,4 @@
-import { Shield, HttpResult, redirectResult, assign, textResult } from "fortjs";
+import { Shield, redirectResult, assign, textResult } from "fortjs";
 
 let counter = 0;
 export class AuthenticationShield extends Shield {

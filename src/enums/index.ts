@@ -4,3 +4,4 @@ export * from './http_status_code';
 export * from "./etag_type";
 export * from "./error_type";
 export * from "./data_type";
+export * from "./http_result_type";

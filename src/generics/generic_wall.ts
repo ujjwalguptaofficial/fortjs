@@ -1,11 +1,11 @@
 import { Wall } from "../abstracts";
-import { HttpResult } from "../types";
+import { IHttpResult } from "../interfaces";
 
 export class GenericWall extends Wall {
     constructor(...args) {
         super();
     }
-    onIncoming(...args): Promise<HttpResult> {
+    onIncoming(...args): Promise<IHttpResult> {
         return null;
     }
 }
