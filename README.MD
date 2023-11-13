@@ -13,6 +13,16 @@ fortjs is a lightweight and efficient web framework for [Node.js](https://nodejs
 
 fortjs goes beyond the basics by introducing reusable components such as walls, shields, and guards. Walls define the structure of your application, shields protect routes with ease, and guards provide a flexible way to manage authentication and authorization. Say goodbye to boilerplate code and welcome a fortress for building modern and efficient Node.js web applications
 
+# Benchmark
+
+Fortjs is **2x faster** than express and nestjs both.
+
+<p align="center">
+ <img src="logos/benchmark.png"/>
+</p>
+
+
+
 # Why fortjs
 
 1. **Simplicity:** fortjs embraces simplicity, making it easy for developers to understand and use.
