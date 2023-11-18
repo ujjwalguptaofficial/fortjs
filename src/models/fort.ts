@@ -27,6 +27,10 @@ export class Fort {
         FORT_GLOBAL.walls = walls as any;
     }
 
+    static get walls() {
+        return FORT_GLOBAL.walls;
+    }
+
     static set shields(shields: Array<typeof Shield>) {
         FORT_GLOBAL.shields = shields as any;
     }

@@ -17,7 +17,8 @@ export const initServer = async () => {
     Fort.port = 8080;
     Fort.routes = routes;
     Fort.resultMapper = CustomResultMapper;
-    Fort.walls = [RequestLogger, Wall1, WallWithoutOutgoing];
+    Fort.walls = [RequestLogger, Wall1];
+    Fort.walls.push(WallWithoutOutgoing);
     Fort.componentOption = MyComponentOption;
 
     Fort.folders = [{
