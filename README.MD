@@ -55,12 +55,19 @@ Fortjs is **2x faster** than express and nestjs both.
 
 # Docs
 
-https://ujjwalguptaofficial.github.io/fortjs-doc/
+https://fortjs.net/
 
 # Examples
 
-Check out repo - https://github.com/ujjwalguptaofficial/fortjs-examples
+Fortjs provides example for different scenario and tools. Check out repo - https://github.com/ujjwalguptaofficial/fortjs-examples
 
+# Help
+
+We are here to help you. Ask any question at [github discussion](https://github.com/ujjwalguptaofficial/fortjs/discussions)
+
+# Stay in touch
+
+* Author - [Ujjwal Gupta](https://twitter.com/ujjwal_kr_gupta)
 
 ## Contributors
 
