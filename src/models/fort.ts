@@ -1,5 +1,5 @@
-import { ParentRoute, EtagOption, FolderMap, TSessionStore } from "../types";
-import { Wall, ViewEngine, XmlParser, ResultMapper, Shield, Guard, Controller } from "../abstracts";
+import { ParentRoute, EtagOption, FolderMap, TSessionStore, TXmlParser } from "../types";
+import { Wall, ViewEngine, ResultMapper, Shield, Guard, Controller } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { ErrorHandler } from ".";
@@ -120,7 +120,7 @@ export class Fort {
      * @static
      * @memberof Fort
      */
-    static set xmlParser(xmlParser: typeof XmlParser) {
+    static set xmlParser(xmlParser: TXmlParser) {
         FORT_GLOBAL.xmlParser = xmlParser;
     }
 

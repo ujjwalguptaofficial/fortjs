@@ -1,13 +1,12 @@
 import { ErrorHandler, Logger } from "../models";
-import { ViewEngine, XmlParser, ComponentOption } from "../abstracts";
-import { EtagOption, FolderMap, TGuard, TSessionStore, TShield, TWall } from "../types";
-import { GenericXmlParser } from "../generics";
+import { ViewEngine, ComponentOption } from "../abstracts";
+import { EtagOption, FolderMap, TGuard, TSessionStore, TShield, TWall, TXmlParser } from "../types";
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
 import { ETAG_TYPE } from "../enums";
 import { IDtoValidator } from "../interfaces";
-import { CookieEvaluatorWall, MemorySessionStore, PostDataEvaluatorGuard } from "../providers";
+import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -32,7 +31,7 @@ export class FortGlobal {
 
     folders: FolderMap[] = [];
     appSessionIdentifier: string;
-    xmlParser: typeof XmlParser;
+    xmlParser: TXmlParser;
 
     logger: Logger;
 
@@ -50,37 +49,20 @@ export class FortGlobal {
 
     setDefault() {
 
-        if (this.viewPath == null) {
-            this.viewPath = path.join(CURRENT_PATH, "views");
-        }
-
-        if (this.logger == null) {
-            this.logger = this.logger || new Logger();
-        }
+        this.viewPath = this.viewPath || path.join(CURRENT_PATH, "views");
+        this.logger = this.logger || new Logger();
 
         this.sessionStore = this.sessionStore || MemorySessionStore;
-
-        if (this.xmlParser == null) {
-            this.xmlParser = GenericXmlParser;
-        }
-
-        if (this.viewEngine == null) {
-            this.viewEngine = new MustacheViewEngine();
-        }
-
-        if (this.appName == null) {
-            this.appName = APP_NAME;
-        }
+        this.xmlParser = this.xmlParser || BlankXmlParser;
+        this.viewEngine = this.viewEngine || new MustacheViewEngine();
+        this.appName = this.appName || APP_NAME;
 
         if (this.eTag == null) {
             this.eTag = {
                 type: ETAG_TYPE.Weak
             } as EtagOption;
         }
-
-        if (this.errorHandler == null) {
-            this.errorHandler = ErrorHandler;
-        }
+        this.errorHandler = this.errorHandler || ErrorHandler;
         this.validator = this.validator || new DtoValidator();
         this.appSessionIdentifier = `${this.appName}_session_id`;
 
