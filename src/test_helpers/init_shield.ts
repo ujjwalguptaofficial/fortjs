@@ -1,12 +1,12 @@
 
 import { initController } from "./init_controller";
-import { ControllerTestData } from "../types";
+import { IControllerTestData } from "../interfaces";
 
-export type ShieldTestData = ControllerTestData & {
+export interface IShieldTestData extends IControllerTestData {
     workerName?: string;
-};
+}
 
-export const initShield = (shieldInstance, data?: ShieldTestData) => {
-    const value: ShieldTestData = initController(shieldInstance, data) as any;
+export const initShield = (shieldInstance, data?: IShieldTestData) => {
+    const value: IShieldTestData = initController(shieldInstance, data) as any;
     return value;
 };

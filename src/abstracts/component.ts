@@ -1,15 +1,14 @@
 import { FORT_GLOBAL } from "../constants/fort_global";
-import { IComponentProp } from "../interfaces";
+import { IHttpRequest, IHttpResponse, IComponentProp } from "../interfaces";
 import { Logger } from "../models";
-import { HttpRequest, HttpResponse } from "../types";
 
 export class Component {
     get request() {
-        return this.componentProp_.request as HttpRequest;
+        return this.componentProp_.request as IHttpRequest;
     }
 
     get response() {
-        return this.componentProp_.response as HttpResponse;
+        return this.componentProp_.response as IHttpResponse;
     }
 
     get query() {

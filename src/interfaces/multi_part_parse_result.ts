@@ -1,6 +1,6 @@
 import { HttpFile } from "../models";
 
-export type MultiPartParseResult = {
+export interface IMultiPartParseResult {
     field: { [key: string]: any };
     file: { [key: string]: HttpFile };
-};
+}

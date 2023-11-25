@@ -3,10 +3,10 @@ import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
-import { RouteMatch, TGuard } from "../types";
+import { TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
-import { IException, IHttpResult } from "../interfaces";
+import { IException, IHttpResult, RouteMatch } from "../interfaces";
 import { promiseResolve } from "../utils";
 import { ControllerResultHandler } from "./controller_result_handler";
 

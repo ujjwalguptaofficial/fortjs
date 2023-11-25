@@ -1,6 +1,6 @@
 import { HTTP_METHOD } from "../enums";
 import { RouteHandler } from "../handlers";
-import { IWorkerInfo } from "../types";
+import { IWorkerInfo } from "../interfaces";
 import { wrapMethodDecorator } from "./wrap_method_decorator";
 
 export function worker(allowedMethods1?: HTTP_METHOD, allowedMethods2?: HTTP_METHOD, allowedMethods3?: HTTP_METHOD): MethodDecorator;

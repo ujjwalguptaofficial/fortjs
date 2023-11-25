@@ -1,5 +1,5 @@
-import { ViewEngineData } from "../types";
+import { IViewEngineData } from "../interfaces";
 
 export abstract class ViewEngine {
-    abstract render(value: ViewEngineData): Promise<string>;
+    abstract render(value: IViewEngineData): Promise<string>;
 }

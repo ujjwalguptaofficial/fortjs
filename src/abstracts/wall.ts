@@ -1,5 +1,5 @@
 import { IHttpResult } from "../interfaces";
-import { WallTestData, initWall } from "../test_helpers";
+import { IWallTestData, initWall } from "../test_helpers";
 import { Component } from "./component";
 
 export abstract class Wall extends Component {
@@ -15,7 +15,7 @@ export abstract class Wall extends Component {
         super();
     }
 
-    initialize(data?: WallTestData) {
+    initialize(data?: IWallTestData) {
         return initWall(this, data);
     }
 

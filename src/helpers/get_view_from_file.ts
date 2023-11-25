@@ -1,7 +1,7 @@
 import { readFile } from "fs-extra";
 import * as path from "path";
 import { FORT_GLOBAL } from "../constants/fort_global";
-import { ViewReadOption } from "../types";
+import { ViewReadOption } from "../interfaces";
 import { promiseResolve } from "../utils";
 
 const viewCache = {

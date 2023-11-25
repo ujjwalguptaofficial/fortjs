@@ -1,4 +1,4 @@
-export type ViewEngineData = {
+export interface IViewEngineData {
 
     /**
      * name of the view or path of view
@@ -13,4 +13,4 @@ export type ViewEngineData = {
      * @type {*}
      */
     model: any;
-};
+}

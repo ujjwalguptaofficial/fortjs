@@ -1,4 +1,4 @@
-import { ControllerTestData } from "../types";
+import { IControllerTestData } from "../interfaces";
 import { initController } from "../test_helpers";
 import { Component } from "./component";
 
@@ -21,7 +21,7 @@ export abstract class Controller extends Component {
         super();
     }
 
-    initialize(data?: ControllerTestData) {
+    initialize(data?: IControllerTestData) {
         initController(this, data);
     }
 

@@ -1,6 +1,6 @@
-import { HttpResponse } from "../types";
+import { IHttpResponse } from "../interfaces";
 
-export class HttpResponseStub implements HttpResponse {
+export class HttpResponseStub implements IHttpResponse {
     private headers_;
     constructor(headers) {
         this.headers_ = headers;

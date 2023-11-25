@@ -1,6 +1,6 @@
-import { HttpRequest } from "../types";
+import { IHttpRequest } from "../interfaces";
 
-export class HttpRequestStub implements HttpRequest {
+export class HttpRequestStub implements IHttpRequest {
     headers;
 
     constructor(headers) {

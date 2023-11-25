@@ -5,8 +5,7 @@ import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { textResult } from "../helpers";
 import { promiseResolve } from "../utils";
-import { IHttpResult } from "../interfaces";
-import { FileResultInfo } from "../types";
+import { IHttpResult, IFileResultInfo } from "../interfaces";
 
 export class ControllerResultHandler extends FileHandler {
 
@@ -19,7 +18,7 @@ export class ControllerResultHandler extends FileHandler {
 
     private handleFileResult_() {
         const result = this.controllerResult as IHttpResult;
-        const fileResult = result.responseData as FileResultInfo;
+        const fileResult = result.responseData as IFileResultInfo;
         const parsedPath = path.parse(fileResult.filePath);
         if (fileResult.shouldDownload === true) {
             const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;

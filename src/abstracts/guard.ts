@@ -1,6 +1,6 @@
 import { IHttpResult } from "../interfaces";
 import { Logger } from "../models";
-import { GuardTestData, initGuard } from "../test_helpers";
+import { IGuardTestData, initGuard } from "../test_helpers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { Component } from "./component";
 
@@ -36,7 +36,7 @@ export abstract class Guard extends Component {
         super();
     }
 
-    initialize(data?: GuardTestData) {
+    initialize(data?: IGuardTestData) {
         return initGuard(this, data);
     }
 }

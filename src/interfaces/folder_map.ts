@@ -1,4 +1,4 @@
-export type FolderMap = {
+export interface IFolderMap {
     alias: string;
     path: string;
-};
+}

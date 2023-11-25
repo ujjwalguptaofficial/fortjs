@@ -1,9 +1,12 @@
 
 import { initController } from "./init_controller";
-import { ControllerTestData } from "../types";
+import { IControllerTestData } from "../interfaces";
 
-export type WallTestData = ControllerTestData;
+// eslint-disable-next-line
+export interface IWallTestData extends IControllerTestData {
 
-export const initWall = (wallInstance, data?: WallTestData) => {
+}
+
+export const initWall = (wallInstance, data?: IWallTestData) => {
     return initController(wallInstance, data);
 };

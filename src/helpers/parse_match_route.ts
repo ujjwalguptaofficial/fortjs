@@ -1,9 +1,9 @@
 import { RouteHandler } from "../handlers/route_handler";
-import { RouteMatch } from "../types/route_match";
 import { HTTP_METHOD } from "../enums";
 import { removeLastSlash } from ".";
 import { RouteInfo } from "../models";
 import { compareString } from "../utils";
+import { RouteMatch } from "../interfaces";
 
 const regex1 = /{(.*)}(?!.)/;
 // for extension - e.g - {{file}}.js

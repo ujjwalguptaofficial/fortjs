@@ -1,13 +1,14 @@
-import { IWorkerInfo, TController, TShield } from ".";
+import { TController, TShield } from "../types";
 import { HTTP_METHOD } from "../enums";
+import { IWorkerInfo } from "./worker_info";
 
-export type RouteMatch = {
+export interface RouteMatch {
   controller: TController;
   workerInfo: IWorkerInfo;
   params: any;
-  shields: Array<TShield>;
+  shields: TShield[];
   allowedHttpMethod: HTTP_METHOD[];
   controllerName: string;
-};
+}
 
 

@@ -1,11 +1,11 @@
 import { ErrorHandler, Logger } from "../models";
 import { ViewEngine, ComponentOption } from "../abstracts";
-import { EtagOption, FolderMap, TErrorHandler, TGuard, TSessionStore, TShield, TWall, TXmlParser } from "../types";
+import { TErrorHandler, TGuard, TSessionStore, TShield, TWall, TXmlParser } from "../types";
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
 import { ETAG_TYPE } from "../enums";
-import { IDtoValidator } from "../interfaces";
+import { IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -27,9 +27,9 @@ export class FortGlobal {
 
     appName: string;
 
-    eTag: EtagOption;
+    eTag: IEtagOption;
 
-    folders: FolderMap[] = [];
+    folders: IFolderMap[] = [];
     appSessionIdentifier: string;
     xmlParser: TXmlParser;
 
@@ -60,7 +60,7 @@ export class FortGlobal {
         if (this.eTag == null) {
             this.eTag = {
                 type: ETAG_TYPE.Weak
-            } as EtagOption;
+            } as IEtagOption;
         }
         this.errorHandler = this.errorHandler || ErrorHandler;
         this.validator = this.validator || new DtoValidator();

@@ -1,15 +1,13 @@
-import { ParentRoute, EtagOption, FolderMap, TSessionStore, TXmlParser, TErrorHandler, TWall, TShield, TGuard } from "../types";
-import { Wall, ViewEngine, ResultMapper, Shield, Guard, Controller } from "../abstracts";
+import { TSessionStore, TXmlParser, TErrorHandler, TWall, TShield, TGuard } from "../types";
+import { ViewEngine, ResultMapper, Controller, ComponentOption } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FORT_GLOBAL } from "../constants/fort_global";
-import { ErrorHandler } from ".";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
 import { isArray } from "../utils";
 import { Logger } from "./logger";
-import { ComponentOption } from "../abstracts/component_option";
-import { IDtoValidator } from "../interfaces";
+import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute } from "../interfaces";
 
 export class Fort {
 
@@ -63,7 +61,7 @@ export class Fort {
         FORT_GLOBAL.errorHandler = value;
     }
 
-    static set routes(value: ParentRoute[]) {
+    static set routes(value: IControllerRoute[]) {
         if (value == null) {
             value = [];
         }
@@ -194,7 +192,7 @@ export class Fort {
      * @static
      * @memberof Fort
      */
-    static set folders(value: FolderMap[]) {
+    static set folders(value: IFolderMap[]) {
         value = value || [];
         if (isArray(value) === false) {
             throw new Error(`folders should be an array`);
@@ -218,7 +216,7 @@ export class Fort {
      * @static
      * @memberof Fort
      */
-    static set eTag(value: EtagOption) {
+    static set eTag(value: IEtagOption) {
         FORT_GLOBAL.eTag = value;
     }
 

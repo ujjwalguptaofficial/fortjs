@@ -1,7 +1,7 @@
-import { IWorkerInfo, ParentRoute, TGuard, TShield } from "../types";
+import { TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
-import { IRouteInfo } from "../interfaces";
+import { IRouteInfo, IControllerRoute, IWorkerInfo } from "../interfaces";
 import { getDataType } from "../helpers";
 
 const routerCollection = new Map<string, RouteInfo>();
@@ -11,7 +11,7 @@ const pushRouterIntoCollection = (route: IRouteInfo) => {
     routerCollection.set(route.controllerName, routeObj);
 };
 
-const getWorkerPattern = (parentRoute: ParentRoute, pattern: string) => {
+const getWorkerPattern = (parentRoute: IControllerRoute, pattern: string) => {
     const routeWithParent = (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
     return routeWithParent;
 };
@@ -52,7 +52,7 @@ export class RouteHandler {
 
     static defaultRouteControllerName: string;
 
-    static addToRouterCollection(value: ParentRoute) {
+    static addToRouterCollection(value: IControllerRoute) {
         const route = routerCollection.get(value.controller.name);
         if (route == null) {
             pushRouterIntoCollection({

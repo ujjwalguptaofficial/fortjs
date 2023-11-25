@@ -1,7 +1,7 @@
 
 import { CookieManager, FileManager } from "../models";
 import { FORT_GLOBAL } from "../constants/fort_global";
-import { ControllerTestData } from "../types";
+import { IControllerTestData } from "../interfaces";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
 import { Controller } from "../abstracts";
@@ -9,7 +9,7 @@ import { SessionManager } from "../utils";
 
 
 
-export const initController = (controllerInstance: Controller, data?: ControllerTestData) => {
+export const initController = (controllerInstance: Controller, data?: IControllerTestData) => {
     data = data || {};
     const parsedCookies = data.cookieValue || {};
     const headers = (data.request && data.request.headers) || {};

@@ -1,9 +1,12 @@
 
 import { initController } from "./init_controller";
-import { ControllerTestData } from "../types";
+import { IControllerTestData } from "../interfaces";
 
-export type GuardTestData = ControllerTestData;
+// eslint-disable-next-line
+export interface IGuardTestData extends IControllerTestData {
 
-export const initGuard = (guardInstance, data?: GuardTestData) => {
+}
+
+export const initGuard = (guardInstance, data?: IGuardTestData) => {
     return initController(guardInstance, data);
 };

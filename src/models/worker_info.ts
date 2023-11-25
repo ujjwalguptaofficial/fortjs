@@ -1,6 +1,7 @@
 import { HTTP_METHOD } from "../enums";
 import { joinRoute, splitRoute } from "../helpers";
-import { IWorkerInfo, TGuard } from "../types";
+import { TGuard } from "../types";
+import { IWorkerInfo } from "../interfaces";
 
 export class WorkerInfo implements IWorkerInfo {
     workerName: string;

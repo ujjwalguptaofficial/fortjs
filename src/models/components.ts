@@ -1,8 +1,8 @@
 import { RouteHandler, InjectorHandler } from "../handlers";
-import { ControllerTestData } from "../types";
+import { IControllerTestData } from "../interfaces";
 
 class ControllerListRef {
-    static getInstance(name: string, data?: ControllerTestData) {
+    static getInstance(name: string, data?: IControllerTestData) {
         const routeInfo = RouteHandler.getControllerFromName(name);
         if (routeInfo) {
             const controller = new routeInfo.controller(...InjectorHandler.getConstructorValues(name));

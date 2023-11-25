@@ -7,7 +7,7 @@ import { MIME_TYPE } from "../enums";
 import * as ContentType from "content-type";
 import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
-import { MultiPartParseResult } from "../types";
+import { IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
 
 export class PostDataEvaluatorGuard extends Guard {
@@ -44,14 +44,14 @@ export class PostDataEvaluatorGuard extends Guard {
         });
     }
 
-    private parseMultiPartData_(): Promise<MultiPartParseResult> {
+    private parseMultiPartData_(): Promise<IMultiPartParseResult> {
         return promise((res, rej) => {
             new Multiparty.Form().parse(this.request as http.IncomingMessage, (err, fields, files) => {
                 if (err) {
                     rej(err);
                 }
                 else {
-                    const result: MultiPartParseResult = {
+                    const result: IMultiPartParseResult = {
                         field: {},
                         file: {}
                     };

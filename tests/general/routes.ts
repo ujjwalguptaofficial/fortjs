@@ -3,7 +3,7 @@ import { RandomController } from "./controllers/random_controller";
 import { UserController } from "./controllers/user_controller";
 import { CookieController } from "./controllers/cookie_controller";
 import { SessionController } from "./controllers/session_controller";
-import { ParentRoute } from "fortjs";
+import { IControllerRoute } from "fortjs";
 import { DefaultController } from "./controllers/default_controller";
 import { InjectionController } from "./controllers/injection_controller";
 import { ExpectController } from "./controllers/expect_controller";
@@ -11,7 +11,7 @@ import { RouteController } from "./controllers/route_controller";
 import { WebPushController } from "./controllers/web_push_controller";
 import { EmptyController } from "./controllers/empty_controller";
 
-export const routes: ParentRoute[] = [{
+export const routes: IControllerRoute[] = [{
     controller: DefaultController,
     path: "/*"
 }, {

@@ -1,6 +1,6 @@
 import { IHttpResult } from "../interfaces";
 import { Logger } from "../models";
-import { ShieldTestData, initShield } from "../test_helpers";
+import { IShieldTestData, initShield } from "../test_helpers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { Component } from "./component";
 
@@ -24,7 +24,7 @@ export abstract class Shield extends Component {
         super();
     }
 
-    initialize(data?: ShieldTestData) {
+    initialize(data?: IShieldTestData) {
         return initShield(this, data);
     }
 }
