@@ -6,7 +6,6 @@ import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
 import { ETAG_TYPE } from "../enums";
-import { SessionManager } from "../utils";
 import { IDtoValidator } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, PostDataEvaluatorGuard } from "../providers";
 
@@ -19,7 +18,6 @@ export class FortGlobal {
     shouldParseCookie = true;
     shouldParseBody = true;
     sessionStore: TSessionStore;
-    sessionProvider = SessionManager;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
     walls: Array<typeof GenericWall> = [];
