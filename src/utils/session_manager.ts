@@ -4,7 +4,7 @@ import { CookieManager } from "../models";
 import * as getUniqId from "uniqid";
 import { TSessionStore } from "../types";
 
-export class SessionProvider {
+export class SessionManager {
 
     sessionId: string;
     protected cookie: CookieManager;
