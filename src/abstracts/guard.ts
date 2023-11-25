@@ -1,6 +1,6 @@
 import { IHttpResult } from "../interfaces";
 import { Logger } from "../models";
-import { IGuardTestData, initGuard } from "../test_helpers";
+import { IGuardTestData, initGuard } from "../helpers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { Component } from "./component";
 

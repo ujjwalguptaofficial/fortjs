@@ -1,11 +1,11 @@
 
-import { CookieManager, FileManager } from "../models";
-import { FORT_GLOBAL } from "../constants/fort_global";
-import { IControllerTestData } from "../interfaces";
+import { CookieManager, FileManager } from "../../models";
+import { FORT_GLOBAL } from "../../constants/fort_global";
+import { IControllerTestData } from "../../interfaces";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
-import { Controller } from "../abstracts";
-import { SessionManager } from "../utils";
+import { Controller } from "../../abstracts";
+import { SessionManager } from "../../utils";
 
 
 

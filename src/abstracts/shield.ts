@@ -1,6 +1,6 @@
 import { IHttpResult } from "../interfaces";
 import { Logger } from "../models";
-import { IShieldTestData, initShield } from "../test_helpers";
+import { IShieldTestData, initShield } from "../helpers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { Component } from "./component";
 

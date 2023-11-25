@@ -26,3 +26,4 @@ export * from './validate_param_guard';
 export * from './validate_body_guard';
 export * from './validate_query_shield';
 export * from './multi_format_result';
+export * from './test';

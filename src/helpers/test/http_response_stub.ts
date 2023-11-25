@@ -1,4 +1,4 @@
-import { IHttpResponse } from "../interfaces";
+import { IHttpResponse } from "../../interfaces";
 
 export class HttpResponseStub implements IHttpResponse {
     private headers_;

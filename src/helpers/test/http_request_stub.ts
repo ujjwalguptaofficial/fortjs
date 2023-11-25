@@ -1,4 +1,4 @@
-import { IHttpRequest } from "../interfaces";
+import { IHttpRequest } from "../../interfaces";
 
 export class HttpRequestStub implements IHttpRequest {
     headers;

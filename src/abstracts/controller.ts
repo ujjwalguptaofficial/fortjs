@@ -1,5 +1,5 @@
 import { IControllerTestData } from "../interfaces";
-import { initController } from "../test_helpers";
+import { initController } from "../helpers";
 import { Component } from "./component";
 
 export abstract class Controller extends Component {

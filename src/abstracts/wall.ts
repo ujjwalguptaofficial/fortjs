@@ -1,5 +1,5 @@
 import { IHttpResult } from "../interfaces";
-import { IWallTestData, initWall } from "../test_helpers";
+import { IWallTestData, initWall } from "../helpers";
 import { Component } from "./component";
 
 export abstract class Wall extends Component {

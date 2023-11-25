@@ -1,6 +1,6 @@
 
 import { initController } from "./init_controller";
-import { IControllerTestData } from "../interfaces";
+import { IControllerTestData } from "../../interfaces";
 
 export interface IShieldTestData extends IControllerTestData {
     workerName?: string;

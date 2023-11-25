@@ -1,6 +1,6 @@
 
 import { initController } from "./init_controller";
-import { IControllerTestData } from "../interfaces";
+import { IControllerTestData } from "../../interfaces";
 
 // eslint-disable-next-line
 export interface IWallTestData extends IControllerTestData {
