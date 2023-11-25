@@ -1,14 +1,14 @@
 import * as http from "http";
 import { CookieManager, FileManager } from "../models";
 import { FortGlobal } from "../constants";
-import { MemorySessionProvider } from "../extra";
+import { SessionProvider } from "../utils";
 
 export interface IComponentProp {
     request: http.IncomingMessage;
     response: http.ServerResponse;
     query: { [key: string]: any };
     body?: { [key: string]: any };
-    session: MemorySessionProvider;
+    session: SessionProvider;
     cookie: CookieManager;
     param?: { [key: string]: string };
     data: { [key: string]: any };

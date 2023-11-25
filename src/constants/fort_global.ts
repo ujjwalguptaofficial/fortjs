@@ -2,10 +2,11 @@ import { ErrorHandler, Logger } from "../models";
 import { ViewEngine, XmlParser, ComponentOption } from "../abstracts";
 import { EtagOption, FolderMap, TSessionStore } from "../types";
 import { GenericGuard, GenericShield, GenericWall, GenericXmlParser } from "../generics";
-import { MustacheViewEngine, MemorySessionProvider, DtoValidator } from "../extra";
+import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
 import { ETAG_TYPE } from "../enums";
+import { SessionProvider } from "../utils";
 import { IDtoValidator } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, PostDataEvaluatorGuard } from "../providers";
 
@@ -18,7 +19,7 @@ export class FortGlobal {
     shouldParseCookie = true;
     shouldParseBody = true;
     sessionStore: TSessionStore;
-    sessionProvider = MemorySessionProvider;
+    sessionProvider = SessionProvider;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
     walls: Array<typeof GenericWall> = [];

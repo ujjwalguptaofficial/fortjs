@@ -1,13 +1,13 @@
 import { HttpRequest, HttpResponse } from "../types";
 import { CookieManager, FileManager } from "../models";
-import { MemorySessionProvider } from "../extra";
+import { SessionProvider } from "../utils";
 
 export interface IController {
     request: HttpRequest;
     response: HttpResponse;
     query: { [key: string]: string };
     body?: { [key: string]: any };
-    session: MemorySessionProvider;
+    session: SessionProvider;
     cookie: CookieManager;
     param?: { [key: string]: string };
     data: { [key: string]: any };
