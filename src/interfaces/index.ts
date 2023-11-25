@@ -6,4 +6,5 @@ export * from './worker_info';
 export * from './component_prop';
 export * from './validator';
 export * from './http_result';
+export * from './session_store';
 

@@ -3,3 +3,4 @@ export * from './is_null';
 export * from './is_array';
 export * from './promise_resolve';
 export * from './compare_string';
+export * from './session_manager';

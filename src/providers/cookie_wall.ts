@@ -3,6 +3,7 @@ import { COOKIE, FORT_GLOBAL } from "../constants";
 import { parseCookie } from "../helpers";
 import { IHttpResult } from "../interfaces";
 import { CookieManager } from "../models";
+import { SessionManager } from "../utils";
 
 export class CookieEvaluatorWall extends Wall {
     parseCookieFromRequest() {
@@ -14,11 +15,10 @@ export class CookieEvaluatorWall extends Wall {
         const request = this.request;
         const rawCookie = (request.headers[COOKIE] || request.headers["cookie"]) as string;
         const parsedCookies = parseCookie(rawCookie);
-        const session = new FORT_GLOBAL.sessionProvider();
-        session.cookie = new CookieManager(parsedCookies);
-        session.sessionId = parsedCookies[FORT_GLOBAL.appSessionIdentifier];
+        const cookie = new CookieManager(parsedCookies);
+        const session = new SessionManager(cookie, FORT_GLOBAL.sessionStore);
         componentProps.session = session;
-        componentProps.cookie = session.cookie;
+        componentProps.cookie = cookie;
     }
 
     async onIncoming(): Promise<void | IHttpResult> {

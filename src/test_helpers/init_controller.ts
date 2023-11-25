@@ -5,6 +5,7 @@ import { ControllerTestData } from "../types";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
 import { Controller } from "../abstracts";
+import { SessionManager } from "../utils";
 
 
 
@@ -12,10 +13,11 @@ export const initController = (controllerInstance: Controller, data?: Controller
     data = data || {};
     const parsedCookies = data.cookieValue || {};
     const headers = (data.request && data.request.headers) || {};
-    const session = new FORT_GLOBAL.sessionProvider();
     const cookie = new CookieManager(parsedCookies);
-    session.cookie = cookie;
-    session.sessionId = parsedCookies[FORT_GLOBAL.appSessionIdentifier];
+    const session = new SessionManager(
+        cookie,
+        FORT_GLOBAL.sessionStore
+    );
     controllerInstance['componentProp_'] = {
         request: new HttpRequestStub(headers) as any,
         response: new HttpResponseStub(headers) as any,
