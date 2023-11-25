@@ -1,10 +1,10 @@
 import { HTTP_METHOD } from "../enums";
-import { GenericGuard } from "../generics";
+import { TGuard } from "../types";
 
 export type IWorkerInfo = {
     workerName: string;
     methodsAllowed: HTTP_METHOD[];
-    guards: Array<typeof GenericGuard>;
+    guards: Array<TGuard>;
     pattern: string;
     values: any[];
     expectedQuery?: any;

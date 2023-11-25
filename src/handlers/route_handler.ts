@@ -1,5 +1,5 @@
-import { IWorkerInfo, ParentRoute } from "../types";
-import { GenericShield, GenericGuard } from "../generics";
+import { IWorkerInfo, ParentRoute, TGuard } from "../types";
+import { GenericShield } from "../generics";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
@@ -122,7 +122,7 @@ export class RouteHandler {
         }
     }
 
-    static addGuards(guards: Array<typeof GenericGuard>, className: string, workerName: string) {
+    static addGuards(guards: Array<TGuard>, className: string, workerName: string) {
 
         const route = routerCollection.get(className);
         const pattern = workerName.toLowerCase();

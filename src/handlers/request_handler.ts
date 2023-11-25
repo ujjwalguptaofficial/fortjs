@@ -3,8 +3,7 @@ import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
-import { GenericGuard } from "../generics";
-import { RouteMatch } from "../types";
+import { RouteMatch, TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
 import { IException, IHttpResult } from "../interfaces";
@@ -80,7 +79,7 @@ export class RequestHandler extends ControllerResultHandler {
         });
     }
 
-    private executeGuardsCheck_(guards: Array<typeof GenericGuard>): Promise<() => void> {
+    private executeGuardsCheck_(guards: Array<TGuard>): Promise<() => void> {
         return promise((res, rej) => {
             let index = 0;
             const shieldLength = guards.length;
@@ -93,7 +92,7 @@ export class RequestHandler extends ControllerResultHandler {
 
                     const methodArgsValues = InjectorHandler.getMethodValues(guard.name, 'check', guardObj);
                     guardObj.check(...methodArgsValues).then(result => {
-                        result == null ? executeGuardByIndex() : res(this.onResultFromComponent(result));
+                        result == null ? executeGuardByIndex() : res(this.onResultFromComponent(result as IHttpResult));
                     }).catch(rej);
                 }
                 else {

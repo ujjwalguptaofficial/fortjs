@@ -1,4 +1,4 @@
-import { Controller } from '../abstracts';
+import { Controller, Guard } from '../abstracts';
 import { IHttpResult, ISessonStore } from '../interfaces';
 
 export * from './view_engine_data';
@@ -20,3 +20,4 @@ export type ErrorResultMapper = (error: any) => IHttpResult;
 type Class<I, Args extends any[] = any[]> = new (...args: Args) => I;
 export type TSessionStore = Class<ISessonStore, [string]>;
 export type TController = Class<Controller>;
+export type TGuard = Class<Guard>;

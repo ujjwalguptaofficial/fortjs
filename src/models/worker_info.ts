@@ -1,12 +1,11 @@
 import { HTTP_METHOD } from "../enums";
-import { GenericGuard } from "../generics";
 import { joinRoute, splitRoute } from "../helpers";
-import { IWorkerInfo } from "../types";
+import { IWorkerInfo, TGuard } from "../types";
 
 export class WorkerInfo implements IWorkerInfo {
     workerName: string;
     methodsAllowed: HTTP_METHOD[];
-    guards: Array<typeof GenericGuard>;
+    guards: Array<TGuard>;
     // pattern: string[];
     values: any[];
     expectedQuery?: any;

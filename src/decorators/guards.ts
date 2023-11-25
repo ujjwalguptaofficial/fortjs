@@ -1,10 +1,9 @@
 import { RouteHandler } from "../handlers";
-import { GenericGuard } from "../generics";
-import { Guard } from "../abstracts";
+import { TGuard } from "../types";
 
-export const guards = (...value: Array<typeof Guard>): MethodDecorator => {
+export const guards = (...value: Array<TGuard>): MethodDecorator => {
     return ((target: any, methodName: string) => {
         const className = (target.constructor.name as string);
-        RouteHandler.addGuards(value as Array<typeof GenericGuard>, className, methodName);
+        RouteHandler.addGuards(value as Array<TGuard>, className, methodName);
     });
 };
