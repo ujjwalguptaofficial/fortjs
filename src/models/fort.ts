@@ -1,4 +1,4 @@
-import { ParentRoute, EtagOption, FolderMap, TSessionStore, TXmlParser } from "../types";
+import { ParentRoute, EtagOption, FolderMap, TSessionStore, TXmlParser, TErrorHandler, TWall, TShield, TGuard } from "../types";
 import { Wall, ViewEngine, ResultMapper, Shield, Guard, Controller } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FORT_GLOBAL } from "../constants/fort_global";
@@ -22,20 +22,20 @@ export class Fort {
         return FORT_GLOBAL.logger;
     }
 
-    static set walls(walls: Array<typeof Wall>) {
-        FORT_GLOBAL.walls = walls as any;
+    static set walls(walls: TWall[]) {
+        FORT_GLOBAL.walls = walls;
     }
 
     static get walls() {
         return FORT_GLOBAL.walls;
     }
 
-    static set shields(shields: Array<typeof Shield>) {
-        FORT_GLOBAL.shields = shields as any;
+    static set shields(shields: TShield[]) {
+        FORT_GLOBAL.shields = shields;
     }
 
-    static set guards(guards: Array<typeof Guard>) {
-        FORT_GLOBAL.guards = guards as any;
+    static set guards(guards: TGuard[]) {
+        FORT_GLOBAL.guards = guards;
     }
 
 
@@ -59,7 +59,7 @@ export class Fort {
      * @static
      * @memberof Fort
      */
-    static set errorHandler(value: typeof ErrorHandler) {
+    static set errorHandler(value: TErrorHandler) {
         FORT_GLOBAL.errorHandler = value;
     }
 
