@@ -1,7 +1,7 @@
 import { ErrorHandler, Logger } from "../models";
 import { ViewEngine, XmlParser, ComponentOption } from "../abstracts";
-import { EtagOption, FolderMap, TGuard, TSessionStore, TShield } from "../types";
-import { GenericWall, GenericXmlParser } from "../generics";
+import { EtagOption, FolderMap, TGuard, TSessionStore, TShield, TWall } from "../types";
+import { GenericXmlParser } from "../generics";
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
@@ -20,7 +20,7 @@ export class FortGlobal {
     sessionStore: TSessionStore;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
-    walls: Array<typeof GenericWall> = [];
+    walls: TWall[] = [];
     errorHandler: typeof ErrorHandler;
     connectonKeepAliveTimeout?: number;
     shields: TShield[] = [];

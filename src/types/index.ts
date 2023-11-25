@@ -1,4 +1,4 @@
-import { Controller, Guard, Shield } from '../abstracts';
+import { Controller, Guard, Shield, Wall } from '../abstracts';
 import { IHttpResult, ISessonStore } from '../interfaces';
 
 export * from './view_engine_data';
@@ -22,3 +22,4 @@ export type TSessionStore = Class<ISessonStore, [string]>;
 export type TController = Class<Controller>;
 export type TGuard = Class<Guard>;
 export type TShield = Class<Shield>;
+export type TWall = Class<Wall>;
