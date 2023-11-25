@@ -29,8 +29,8 @@ export class HomeController extends Controller {
             const userService = new UserService();
             const user = userService.getUserByEmail(emailId);
             if (user != null && (this.option as MyComponentOption).timingSafeEqual(user.password, pwd)) {
-                this.session.set('userId', user.id);
-                this.session.set('emailId', emailId);
+                await this.session.set('userId', user.id);
+                await this.session.set('emailId', emailId);
                 return textResult(`Authenticated`);
             }
             else {

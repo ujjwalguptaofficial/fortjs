@@ -1,12 +1,12 @@
-import { ParentRoute, EtagOption, FolderMap } from "../types";
-import { Wall, ViewEngine, SessionProvider, XmlParser, ResultMapper, Shield, Guard } from "../abstracts";
+import { ParentRoute, EtagOption, FolderMap, TSessionStore } from "../types";
+import { Wall, ViewEngine, XmlParser, ResultMapper, Shield, Guard } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { ErrorHandler } from ".";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
-import { GenericSessionProvider, GenericController } from "../generics";
+import { GenericController } from "../generics";
 import { isArray } from "../utils";
 import { Logger } from "./logger";
 import { ComponentOption } from "../abstracts/component_option";
@@ -99,13 +99,13 @@ export class Fort {
     }
 
     /**
-     * sessionProvider class, default - MemorySessionProvider
+     * sessionStore class, default - MemorySessionStore
      *
      * @static
      * @memberof Fort
      */
-    static set sessionProvider(value: typeof SessionProvider) {
-        FORT_GLOBAL.sessionProvider = value as typeof GenericSessionProvider;
+    static set sessionStore(value: TSessionStore) {
+        FORT_GLOBAL.sessionStore = value;
     }
 
     static set resultMapper(value: typeof ResultMapper) {

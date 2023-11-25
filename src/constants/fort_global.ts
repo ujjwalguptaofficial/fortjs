@@ -1,13 +1,13 @@
 import { ErrorHandler, Logger } from "../models";
-import { ViewEngine, XmlParser, ComponentOption, Shield } from "../abstracts";
-import { EtagOption, FolderMap } from "../types";
-import { GenericGuard, GenericSessionProvider, GenericShield, GenericWall, GenericXmlParser } from "../generics";
+import { ViewEngine, XmlParser, ComponentOption } from "../abstracts";
+import { EtagOption, FolderMap, TSessionStore } from "../types";
+import { GenericGuard, GenericShield, GenericWall, GenericXmlParser } from "../generics";
 import { MustacheViewEngine, MemorySessionProvider, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import * as path from "path";
 import { ETAG_TYPE } from "../enums";
 import { IDtoValidator } from "../interfaces";
-import { CookieEvaluatorWall, PostDataEvaluatorGuard } from "../providers";
+import { CookieEvaluatorWall, MemorySessionStore, PostDataEvaluatorGuard } from "../providers";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -17,7 +17,8 @@ export class FortGlobal {
     viewPath;
     shouldParseCookie = true;
     shouldParseBody = true;
-    sessionProvider: typeof GenericSessionProvider;
+    sessionStore: TSessionStore;
+    sessionProvider = MemorySessionProvider;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
     walls: Array<typeof GenericWall> = [];
@@ -58,9 +59,7 @@ export class FortGlobal {
             this.logger = this.logger || new Logger();
         }
 
-        if (this.sessionProvider == null) {
-            this.sessionProvider = MemorySessionProvider as any;
-        }
+        this.sessionStore = this.sessionStore || MemorySessionStore;
 
         if (this.xmlParser == null) {
             this.xmlParser = GenericXmlParser;
