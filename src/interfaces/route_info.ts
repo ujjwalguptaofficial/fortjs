@@ -1,8 +1,9 @@
-import { GenericController, GenericShield } from "../generics";
+import { GenericShield } from "../generics";
 import { WorkerInfo } from "../models";
+import { TController } from "../types";
 
 export interface IRouteInfo {
-    controller: typeof GenericController;
+    controller: TController;
     controllerName: string;
     path: string;
     // workerName => WorkerInfo

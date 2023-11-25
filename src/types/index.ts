@@ -1,3 +1,4 @@
+import { Controller } from '../abstracts';
 import { IHttpResult, ISessonStore } from '../interfaces';
 
 export * from './view_engine_data';
@@ -18,3 +19,4 @@ export * from './http_format_result';
 export type ErrorResultMapper = (error: any) => IHttpResult;
 type Class<I, Args extends any[] = any[]> = new (...args: Args) => I;
 export type TSessionStore = Class<ISessonStore, [string]>;
+export type TController = Class<Controller>;

@@ -1,9 +1,9 @@
-import { IWorkerInfo } from ".";
+import { IWorkerInfo, TController } from ".";
 import { HTTP_METHOD } from "../enums";
-import { GenericController, GenericShield } from "../generics";
+import { GenericShield } from "../generics";
 
 export type RouteMatch = {
-  controller: typeof GenericController;
+  controller: TController;
   workerInfo: IWorkerInfo;
   params: any;
   shields: Array<typeof GenericShield>;

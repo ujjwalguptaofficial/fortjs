@@ -1,12 +1,11 @@
 import { ParentRoute, EtagOption, FolderMap, TSessionStore } from "../types";
-import { Wall, ViewEngine, XmlParser, ResultMapper, Shield, Guard } from "../abstracts";
+import { Wall, ViewEngine, XmlParser, ResultMapper, Shield, Guard, Controller } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
 import { FORT_GLOBAL } from "../constants/fort_global";
 import { ErrorHandler } from ".";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
-import { GenericController } from "../generics";
 import { isArray } from "../utils";
 import { Logger } from "./logger";
 import { ComponentOption } from "../abstracts/component_option";
@@ -80,6 +79,9 @@ export class Fort {
             }
         });
         if (isDefaultRouteExist === false) {
+            class GenericController extends Controller {
+
+            }
             RouteHandler.defaultRouteControllerName = GenericController.name;
             RouteHandler.addToRouterCollection({
                 controller: GenericController,
