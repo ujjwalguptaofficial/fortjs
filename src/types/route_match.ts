@@ -1,12 +1,11 @@
-import { IWorkerInfo, TController } from ".";
+import { IWorkerInfo, TController, TShield } from ".";
 import { HTTP_METHOD } from "../enums";
-import { GenericShield } from "../generics";
 
 export type RouteMatch = {
   controller: TController;
   workerInfo: IWorkerInfo;
   params: any;
-  shields: Array<typeof GenericShield>;
+  shields: Array<TShield>;
   allowedHttpMethod: HTTP_METHOD[];
   controllerName: string;
 };

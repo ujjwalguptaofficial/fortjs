@@ -68,7 +68,7 @@ export class RequestHandler extends ControllerResultHandler {
                     const methodArgsValues = InjectorHandler.getMethodValues(shield.name, 'protect', shieldObj);
 
                     return shieldObj.protect(...methodArgsValues).then(result => {
-                        result == null ? executeShieldByIndex() : res(this.onResultFromComponent(result));
+                        result == null ? executeShieldByIndex() : res(this.onResultFromComponent(result as IHttpResult));
                     }).catch(rej);
                 }
                 else {

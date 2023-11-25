@@ -1,6 +1,5 @@
-import { GenericShield } from "../generics";
 import { IRouteInfo } from "../interfaces";
-import { TController } from "../types";
+import { TController, TShield } from "../types";
 import { WorkerInfo } from "./worker_info";
 
 export class RouteInfo implements IRouteInfo {
@@ -15,7 +14,7 @@ export class RouteInfo implements IRouteInfo {
         });
     }
 
-    shields: Array<typeof GenericShield>;
+    shields: Array<TShield>;
     values: any[];
 
     pathSplitted: string[];

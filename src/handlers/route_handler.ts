@@ -1,5 +1,4 @@
-import { IWorkerInfo, ParentRoute, TGuard } from "../types";
-import { GenericShield } from "../generics";
+import { IWorkerInfo, ParentRoute, TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
 import { IRouteInfo } from "../interfaces";
@@ -75,7 +74,7 @@ export class RouteHandler {
         }
     }
 
-    static addShields(shields: Array<typeof GenericShield>, className: string) {
+    static addShields(shields: Array<TShield>, className: string) {
         const route = routerCollection.get(className);
         if (route == null) {
             pushRouterIntoCollection({

@@ -1,6 +1,5 @@
-import { GenericShield } from "../generics";
 import { WorkerInfo } from "../models";
-import { TController } from "../types";
+import { TController, TShield } from "../types";
 
 export interface IRouteInfo {
     controller: TController;
@@ -8,6 +7,6 @@ export interface IRouteInfo {
     path: string;
     // workerName => WorkerInfo
     workers: Map<string, WorkerInfo>;
-    shields: Array<typeof GenericShield>;
+    shields: Array<TShield>;
     values: any[];
 }
