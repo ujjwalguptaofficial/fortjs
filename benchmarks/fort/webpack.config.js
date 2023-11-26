@@ -46,5 +46,7 @@ module.exports = {
         libraryTarget: "commonjs2"
     },
     plugins: [new nodemonPlugin()],
-    externals: [nodeExternals()]
+    externals: [nodeExternals(), {
+        fortjs: 'fortjs'
+    }]
 };
