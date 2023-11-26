@@ -1,7 +1,7 @@
 import { DefaultController } from "@/controllers/default_controller";
-import { ParentRoute } from "fortjs";
+import { IControllerRoute } from "fortjs";
 
-export const routes: ParentRoute[] = [{
+export const routes: IControllerRoute[] = [{
     path: "/*",
     controller: DefaultController
 }];

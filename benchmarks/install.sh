@@ -11,6 +11,11 @@ cd koa
 npm install
 cd ..
 
+# install fastify
+cd fastify
+npm install
+cd ..
+
 # install fort
 cd fort
 npm install

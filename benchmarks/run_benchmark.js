@@ -56,6 +56,11 @@ const apps = [
         port: 3000
     },
     {
+        command: `cd fastify && npm run start & sleep 5`,
+        name: "Fastify",
+        port: 3001
+    },
+    {
         command: `cd koa && npm run start & sleep 5`,
         name: "KOA",
         port: 3070
