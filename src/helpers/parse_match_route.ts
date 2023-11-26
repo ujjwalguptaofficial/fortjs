@@ -61,17 +61,27 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
             }
         }
     }
-    if (matchedRoute.workerInfo == null && matchedRoute.allowedHttpMethod.length === 0) {
+    if (matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
+    matchedRoute.params = {};
     return matchedRoute;
 
 };
 
 export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {
     url = removeLastSlash(url);
+    const urlAndMethod = url + httpMethod;
+    const cache = RouteHandler.getRouteFromCache(urlAndMethod);
+    if (cache) {
+        return cache;
+    }
     const urlParts = url.split("/");
     const route = RouteHandler.findControllerFromPath(urlParts);
-    return route == null ? checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts) :
+    const result = route == null ? checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts) :
         checkRouteInWorker(route, httpMethod, urlParts);
+    if (result && Object.keys(result.params).length === 0) {
+        RouteHandler.addRouteToCache(urlAndMethod, result);
+    }
+    return result;
 }

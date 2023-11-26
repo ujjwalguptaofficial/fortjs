@@ -1,7 +1,7 @@
 import { TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
-import { IRouteInfo, IControllerRoute, IWorkerInfo } from "../interfaces";
+import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch } from "../interfaces";
 import { getDataType } from "../helpers";
 
 const routerCollection = new Map<string, RouteInfo>();
@@ -15,6 +15,8 @@ const getWorkerPattern = (parentRoute: IControllerRoute, pattern: string) => {
     const routeWithParent = (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
     return routeWithParent;
 };
+
+const routeCache = new Map<string, IRouteMatch>();
 
 export class RouteHandler {
 
@@ -267,6 +269,14 @@ export class RouteHandler {
 
     static getExpectedParam(controllerName: string, workerName: string) {
         return routerCollection.get(controllerName).workers.get(workerName).expectedParam;
+    }
+
+    static addRouteToCache(url: string, route: IRouteMatch) {
+        routeCache.set(url, route);
+    }
+
+    static getRouteFromCache(url: string) {
+        return routeCache.get(url);
     }
 
 }
