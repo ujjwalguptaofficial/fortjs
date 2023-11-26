@@ -6,13 +6,13 @@ import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
-import { IHttpResult, RouteMatch } from "../interfaces";
+import { IHttpResult, IRouteMatch } from "../interfaces";
 import { ControllerResultHandler } from "./controller_result_handler";
 
 
 export class RequestHandler extends ControllerResultHandler {
 
-    private routeMatchInfo_: RouteMatch;
+    private routeMatchInfo_: IRouteMatch;
     private wallInstances: Wall[] = [];
 
 

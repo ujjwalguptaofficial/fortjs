@@ -29,8 +29,8 @@ export class RouteHandler {
     }
 
     static findControllerFromPath(urlParts: string[]) {
-        for (const [key, controller] of routerCollection.entries()) {
-            let isMatched: boolean = false as any;
+        for (const controller of routerCollection.values()) {
+            let isMatched: boolean;
             const patternSplit = controller.pathSplitted;
             patternSplit.every((patternPart, i) => {
                 isMatched = compareString(urlParts[i], patternPart);
@@ -57,7 +57,7 @@ export class RouteHandler {
         if (route == null) {
             pushRouterIntoCollection({
                 workers: new Map(),
-                controller: value.controller as any,
+                controller: value.controller,
                 controllerName: value.controller.name,
                 path: value.path,
                 shields: [],
@@ -65,7 +65,7 @@ export class RouteHandler {
             });
         }
         else {
-            route.controller = value.controller as any;
+            route.controller = value.controller;
             route.path = value.path;
             // change pattern value since we have controller name now.
             route.workers.forEach(actionInfo => {
@@ -212,7 +212,6 @@ export class RouteHandler {
             expectedValue[prop] = getDataType(propValue);
         }
 
-        const isQuery = type === 'query';
         const pattern = workerName.toLowerCase();
         const router = routerCollection.get(className);
         const worker = new WorkerInfo({

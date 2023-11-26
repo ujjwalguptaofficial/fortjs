@@ -2,7 +2,7 @@ import { TController, TShield } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { IWorkerInfo } from "./worker_info";
 
-export interface RouteMatch {
+export interface IRouteMatch {
   controller: TController;
   workerInfo: IWorkerInfo;
   params: any;

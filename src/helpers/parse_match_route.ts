@@ -1,20 +1,20 @@
 import { RouteHandler } from "../handlers/route_handler";
 import { HTTP_METHOD } from "../enums";
-import { removeLastSlash } from ".";
+import { removeLastSlash } from "./remove_last_slash";
 import { RouteInfo } from "../models";
 import { compareString } from "../utils";
-import { RouteMatch } from "../interfaces";
+import { IRouteMatch } from "../interfaces";
 
 const regex1 = /{(.*)}(?!.)/;
 // for extension - e.g - {{file}}.js
 const regex2 = /{(.*)}\.(\w+)(?!.)/;
 
 const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts: string[]) => {
-    const matchedRoute: RouteMatch = {
+    const matchedRoute: IRouteMatch = {
         allowedHttpMethod: [],
         controller: route.controller,
         controllerName: route.controllerName
-    } as RouteMatch;
+    } as IRouteMatch;
 
     const urlPartLength = urlParts.length;
     for (const worker of route.workers.values()) {
