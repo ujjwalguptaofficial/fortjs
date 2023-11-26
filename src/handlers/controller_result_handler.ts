@@ -37,10 +37,7 @@ export class ControllerResultHandler extends FileHandler {
 
     private handleFinalResult_() {
         const result: IHttpResult = this.controllerResult;
-
-        (this.componentProps.cookie['responseCookie_']).forEach(value => {
-            this.response.setHeader(SET_COOKIE, value);
-        });
+        this.setCookie();
 
         switch (result.type) {
             case HTTP_RESULT_TYPE.Default:

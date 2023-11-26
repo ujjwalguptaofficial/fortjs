@@ -66,9 +66,11 @@ export class FortGlobal {
         this.validator = this.validator || new DtoValidator();
         this.appSessionIdentifier = `${this.appName}_session_id`;
 
-        this.walls.unshift(
-            CookieEvaluatorWall as any
-        );
+        if (this.shouldParseCookie === true) {
+            this.walls.unshift(
+                CookieEvaluatorWall as any
+            );
+        }
 
         if (this.shouldParseBody === true) {
             this.guards.unshift(

@@ -116,11 +116,16 @@ export class RequestHandlerHelper {
         this.returnResultFromError_();
     }
 
-    private returnResultFromError_() {
-        const result = this.controllerResult;
+    setCookie() {
+        if (FORT_GLOBAL.shouldParseCookie === false) return;
         (this.componentProps.cookie['responseCookie_']).forEach(value => {
             this.response.setHeader(SET_COOKIE, value);
         });
+    }
+
+    private returnResultFromError_() {
+        const result = this.controllerResult;
+        this.setCookie();
 
         switch (result.type) {
             case HTTP_RESULT_TYPE.Default:
