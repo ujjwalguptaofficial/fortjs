@@ -5,7 +5,7 @@
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![TEST](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml/badge.svg)](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
-[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](http://fortjs.info/)
+[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://fortjs.net/)
 
 # Fortjs
 

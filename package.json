@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "A lightweight Node.js framework for scalable web applications. Simplify routing, embrace reusable components like walls and shields. Build efficiently with Fort.js",
   "main": "dist/fort.js",
   "types": "dist/ts/index.d.ts",
