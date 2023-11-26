@@ -62,8 +62,8 @@ export class ControllerResultHandler extends FileHandler {
 
     onResultFromComponent(result: IHttpResult) {
         this.controllerResult = result || textResult("");
-        return () => {
-            return this.handleFinalResult_();
-        }
+        // return () => {
+        return this.handleFinalResult_;
+        // }
     }
 }

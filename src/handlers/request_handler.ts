@@ -178,9 +178,8 @@ export class RequestHandler extends ControllerResultHandler {
                     this.onRouteMatched_()
             );
             await this.runWallOutgoing_();
-            // if (finalCallback) {
-            await finalCallback();
-            // }
+            // using call to pass context, as methods are being returned mostly
+            await finalCallback.call(this);
         }
         catch (ex) {
             this.onErrorOccured(ex);
