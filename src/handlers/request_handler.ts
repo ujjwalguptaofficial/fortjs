@@ -59,10 +59,11 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private executeShieldsProtection_(): Promise<() => void> {
+        const shields = FORT_GLOBAL.shields.concat(this.routeMatchInfo_.shields);
+        const shieldLength = shields.length;
+        if (shieldLength === 0) return;
         return promise((res, rej) => {
             let index = 0;
-            const shields = FORT_GLOBAL.shields.concat(this.routeMatchInfo_.shields);
-            const shieldLength = shields.length;
             const executeShieldByIndex = () => {
                 if (shieldLength > index) {
                     const shield = shields[index++];
@@ -85,11 +86,12 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private executeGuardsCheck_(guards: Array<TGuard>): Promise<() => void> {
+        const guardLength = guards.length;
+        if (guardLength === 0) return;
         return promise((res, rej) => {
             let index = 0;
-            const shieldLength = guards.length;
             const executeGuardByIndex = () => {
-                if (shieldLength > index) {
+                if (guardLength > index) {
                     const guard = guards[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(guard.name);
                     const guardObj = new guard(...constructorArgsValues);
