@@ -4,7 +4,7 @@ export class DefaultController extends Controller {
 
     @worker()
     @route("/")
-    async index() {
+    index() {
         return textResult(
             'Hello World!'
         );

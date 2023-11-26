@@ -51,7 +51,10 @@ export class RequestHandler extends ControllerResultHandler {
         });
     }
 
-    runController_;
+    async runController_() {
+        const result = await this.setControllerProps_();
+        return this.onResultFromComponent(result);
+    }
 
     private executeShieldsProtection_(): Promise<() => void> {
         return promise((res, rej) => {
@@ -203,26 +206,4 @@ export class RequestHandler extends ControllerResultHandler {
         const methodArgsValues = InjectorHandler.getMethodValues(controllerName, workerName, controllerObj);
         return controllerObj[workerName](...methodArgsValues);
     }
-}
-if (FORT_GLOBAL.isProduction) {
-    RequestHandler.prototype.runController_ = function (this: RequestHandler) {
-        return this.setControllerProps_().then(
-            this.onResultFromComponent.bind(this)
-        );
-    };
-}
-else {
-    RequestHandler.prototype.runController_ = function (this: RequestHandler) {
-        const result = this.setControllerProps_();
-        if (Promise.resolve(result) !== result) {
-            return Promise.reject({
-                message: "Wrong implementation - worker does not return promise"
-            } as IException);
-        }
-        else {
-            return result.then(
-                this.onResultFromComponent.bind(this)
-            );
-        }
-    };
 }
