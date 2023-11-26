@@ -26,9 +26,12 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private executeWallIncoming_(): Promise<IHttpResult> {
+        const wallLength = FORT_GLOBAL.walls.length;
+        if (wallLength === 0) {
+            return;
+        }
         return promise((res, rej) => {
             let index = 0;
-            const wallLength = FORT_GLOBAL.walls.length;
             const executeWallIncomingByIndex = () => {
                 if (wallLength > index) {
                     const wall = FORT_GLOBAL.walls[index++];

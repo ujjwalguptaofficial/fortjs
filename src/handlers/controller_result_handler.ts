@@ -1,5 +1,4 @@
 
-import { SET_COOKIE } from "../constants";
 import { MIME_TYPE, HTTP_STATUS_CODE, HTTP_RESULT_TYPE } from "../enums";
 import { FileHandler } from "./file_handler";
 import * as path from 'path';

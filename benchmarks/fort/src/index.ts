@@ -6,6 +6,7 @@ export const createApp = async () => {
     Fort.shouldParseCookie = false;
     Fort.shouldParseBody = false;
     await Fort.create();
+    console.log("walls", Fort.walls);
     process.env.APP_URL = `http://localhost:${Fort.port}`;
 };
 if (process.env.NODE_ENV !== "test") {
