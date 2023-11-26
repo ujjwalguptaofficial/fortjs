@@ -202,9 +202,10 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     setControllerProps_() {
-        const controllerName = this.routeMatchInfo_.controller.name;
+        const controller = this.routeMatchInfo_.controller;
+        const controllerName = controller.name;
         const constructorValues = InjectorHandler.getConstructorValues(controllerName);
-        const controllerObj: Controller = new this.routeMatchInfo_.controller(...constructorValues);
+        const controllerObj: Controller = new controller(...constructorValues);
 
         controllerObj['componentProp_'] = this.componentProps;
         const workerName = this.routeMatchInfo_.workerInfo.workerName;

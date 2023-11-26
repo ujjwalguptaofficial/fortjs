@@ -80,6 +80,8 @@ export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {
     const route = RouteHandler.findControllerFromPath(urlParts);
     const result = route == null ? checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts) :
         checkRouteInWorker(route, httpMethod, urlParts);
+
+    // do not cache route which have params
     if (result && Object.keys(result.params).length === 0) {
         RouteHandler.addRouteToCache(urlAndMethod, result);
     }
