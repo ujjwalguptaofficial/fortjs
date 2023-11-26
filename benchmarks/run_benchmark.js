@@ -41,7 +41,7 @@ const runCommand = function (cmd, finishMessage) {
 
 const apps = [
     {
-        command: `cd fort && npm run dev & sleep 5`,
+        command: `cd fort && npm run start:prod & sleep 5`,
         name: "Fort",
         port: 4000
     },
@@ -55,11 +55,11 @@ const apps = [
         name: "Nest",
         port: 3000
     },
-    {
-        command: `cd fastify && npm run start & sleep 5`,
-        name: "Fastify",
-        port: 3001
-    },
+    // {
+    //     command: `cd fastify && npm run start & sleep 5`,
+    //     name: "Fastify",
+    //     port: 3001
+    // },
     {
         command: `cd koa && npm run start & sleep 5`,
         name: "KOA",
