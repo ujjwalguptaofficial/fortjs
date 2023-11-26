@@ -27,9 +27,7 @@ export class RequestHandler extends ControllerResultHandler {
 
     private executeWallIncoming_(): Promise<IHttpResult> {
         const wallLength = FORT_GLOBAL.walls.length;
-        if (wallLength === 0) {
-            return;
-        }
+        if (wallLength === 0) return;
         return promise((res, rej) => {
             let index = 0;
             const executeWallIncomingByIndex = () => {
@@ -59,7 +57,7 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private executeShieldsProtection_(): Promise<() => void> {
-        const shields = FORT_GLOBAL.shields.concat(this.routeMatchInfo_.shields);
+        const shields = this.routeMatchInfo_.shields;
         const shieldLength = shields.length;
         if (shieldLength === 0) return;
         return promise((res, rej) => {
@@ -136,7 +134,7 @@ export class RequestHandler extends ControllerResultHandler {
             if (shieldResult) return shieldResult;
 
             const guardResult = await this.executeGuardsCheck_(
-                FORT_GLOBAL.guards.concat(workerInfo.guards)
+                workerInfo.guards
             );
             if (guardResult) return guardResult;
 

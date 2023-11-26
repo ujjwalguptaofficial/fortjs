@@ -7,6 +7,7 @@ import * as path from "path";
 import { ETAG_TYPE } from "../enums";
 import { IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";
+import { RouteHandler } from "../handlers";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -22,8 +23,16 @@ export class FortGlobal {
     walls: TWall[] = [];
     errorHandler: TErrorHandler;
     keepAliveTimeout = 72000;
-    shields: TShield[] = [];
-    guards: TGuard[] = [];
+    private shields: TShield[] = [];
+    private guards: TGuard[] = [];
+
+    addGuards(guards: TGuard[]) {
+        this.guards = guards;
+    }
+
+    addShields(shields: TShield[]) {
+        this.shields = shields;
+    }
 
     appName: string;
 
@@ -77,6 +86,14 @@ export class FortGlobal {
                 PostDataEvaluatorGuard as any
             );
         }
+
+        // add global shields
+        RouteHandler.routerCollection.forEach((route) => {
+            route.shields = this.shields.concat(route.shields);
+            route.workers.forEach((worker) => {
+                worker.guards = this.guards.concat(worker.guards);
+            })
+        });
 
     }
 

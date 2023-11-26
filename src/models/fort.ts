@@ -29,13 +29,12 @@ export class Fort {
     }
 
     static set shields(shields: TShield[]) {
-        FORT_GLOBAL.shields = shields;
+        FORT_GLOBAL.addShields(shields);
     }
 
     static set guards(guards: TGuard[]) {
-        FORT_GLOBAL.guards = guards;
+        FORT_GLOBAL.addGuards(guards);
     }
-
 
     /**
      * port at which app will listen, default - 4000
