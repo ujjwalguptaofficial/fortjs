@@ -6,8 +6,7 @@ import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
-import { IException, IHttpResult, RouteMatch } from "../interfaces";
-import { promiseResolve } from "../utils";
+import { IHttpResult, RouteMatch } from "../interfaces";
 import { ControllerResultHandler } from "./controller_result_handler";
 
 
@@ -114,18 +113,20 @@ export class RequestHandler extends ControllerResultHandler {
     }
 
     private async onRouteMatched_() {
-        const workerInfo = this.routeMatchInfo_.workerInfo;
-        this.componentProps.param = this.routeMatchInfo_.params;
-        this.componentProps.controllerName = this.routeMatchInfo_.controllerName;
+        const routeMatchInfo = this.routeMatchInfo_;
+        const workerInfo = routeMatchInfo.workerInfo;
+        this.componentProps.param = routeMatchInfo.params;
+        this.componentProps.controllerName = routeMatchInfo.controllerName;
+
         if (workerInfo == null) {
             return () => {
                 return this.request.method === HTTP_METHOD.Options ?
-                    this.onRequestOptions(this.routeMatchInfo_.allowedHttpMethod) :
-                    this.onMethodNotAllowed(this.routeMatchInfo_.allowedHttpMethod);
+                    this.onRequestOptions(routeMatchInfo.allowedHttpMethod) :
+                    this.onMethodNotAllowed(routeMatchInfo.allowedHttpMethod);
             }
         }
         else {
-            this.componentProps.workerName = this.routeMatchInfo_.workerInfo.workerName;
+            this.componentProps.workerName = workerInfo.workerName;
             const shieldResult = await this.executeShieldsProtection_();
             if (shieldResult) return shieldResult;
 
@@ -140,8 +141,8 @@ export class RequestHandler extends ControllerResultHandler {
 
     private runWallOutgoing_() {
         // check if only Cookie wall has been injected
-        if (this.wallInstances.length === 1) {
-            return promiseResolve(null);
+        if (this.wallInstances.length === 0) {
+            return;
         }
         const outgoingResults: Array<Promise<void>> = [];
         reverseLoop(this.wallInstances, (wallInstance: Wall) => {
@@ -163,9 +164,8 @@ export class RequestHandler extends ControllerResultHandler {
                 return;
             }
             const pathUrl = urlDetail.pathname;
-            const requestMethod = request.method as HTTP_METHOD;
 
-            this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, requestMethod);
+            this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, request.method as HTTP_METHOD);
             const finalCallback = await (
                 this.routeMatchInfo_ == null ? () => {
                     return this.handleFileRequest(pathUrl);
