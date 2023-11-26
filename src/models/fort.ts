@@ -220,6 +220,16 @@ export class Fort {
         FORT_GLOBAL.eTag = value;
     }
 
+    /**
+     * keep alive timeout in millisecond for requests, default is 72000
+     *
+     * @static
+     * @memberof Fort
+     */
+    static set keepAliveTimeout(value: number) {
+        FORT_GLOBAL.keepAliveTimeout = value;
+    }
+
     static instance = new Fort();
 
     // eslint-disable-next-line
@@ -245,10 +255,10 @@ export class Fort {
                     rej(err);
                 }
             }).once('listening', () => {
-                // set default route
-                // RouteHandler.defaultRouteControllerName = RouteHandler.getDefaultRoute();
                 res();
             }).listen(FORT_GLOBAL.port);
+
+            this.instance.httpServer.keepAliveTimeout = FORT_GLOBAL.keepAliveTimeout;
         });
     }
 

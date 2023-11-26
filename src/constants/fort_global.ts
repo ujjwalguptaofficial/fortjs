@@ -21,7 +21,7 @@ export class FortGlobal {
     viewEngine: ViewEngine;
     walls: TWall[] = [];
     errorHandler: TErrorHandler;
-    connectonKeepAliveTimeout?: number;
+    keepAliveTimeout = 72000;
     shields: TShield[] = [];
     guards: TGuard[] = [];
 
