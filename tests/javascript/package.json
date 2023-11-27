@@ -6,7 +6,7 @@
   "scripts": {
     "install:lib": "node installer.js",
     "webpack": "webpack --config webpack.config.js",
-    "webpack:watch": "webpack --config webpack.config.js --watch",
+    "webpack:watch": "export NODE_OPTIONS=--openssl-legacy-provider; webpack --config webpack.config.js --watch",
     "lint": "tslint src/**/*.ts",
     "build": "export NODE_OPTIONS=--openssl-legacy-provider; npm run webpack",
     "start": "npm run webpack:watch",
