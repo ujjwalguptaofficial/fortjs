@@ -41,14 +41,14 @@ const runCommand = function (cmd, finishMessage) {
 
 const apps = [
     {
-        command: `cd fort && npm run start:prod & sleep 30`,
-        name: "Fort",
-        port: 4000
-    },
-    {
         command: `node express.js & sleep 5`,
         name: "Express",
         port: 8090
+    },
+    {
+        command: `cd fort && npm run start:prod & sleep 5`,
+        name: "Fort",
+        port: 4000
     },
     {
         command: `cd nest && npm run start:prod & sleep 5`,
