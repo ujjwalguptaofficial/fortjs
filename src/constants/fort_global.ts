@@ -3,7 +3,6 @@ import { ViewEngine, ComponentOption } from "../abstracts";
 import { TErrorHandler, TGuard, TSessionStore, TShield, TWall, TXmlParser } from "../types";
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
-import * as path from "path";
 import { ETAG_TYPE } from "../enums";
 import { IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";

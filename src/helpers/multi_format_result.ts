@@ -1,5 +1,5 @@
 
-import { HTTP_RESULT_TYPE, MIME_TYPE } from "../enums";
+import { HTTP_RESULT_TYPE } from "../enums";
 import { HTTP_STATUS_CODE } from "../enums/http_status_code";
 import { IHttpResult } from "../interfaces";
 import { HttpFormatResult } from "../types";
