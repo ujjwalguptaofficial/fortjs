@@ -13,7 +13,7 @@ describe('DefaultController', () => {
     });
 
     it('index', async () => {
-        const expectedResult = await viewResult('default/index.html', {
+        const expectedResult = await viewResult('views/default/index.html', {
             title: 'FortJs'
         });
         const result = await controller.index('FortJs');

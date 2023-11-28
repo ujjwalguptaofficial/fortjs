@@ -22,7 +22,7 @@ export class FortGlobal {
     viewEngine: ViewEngine;
     walls: TWall[] = [];
     errorHandler: TErrorHandler;
-    keepAliveTimeout = 72000;
+    keepAliveTimeout = 30000;
     private shields: TShield[] = [];
     private guards: TGuard[] = [];
 
@@ -58,7 +58,7 @@ export class FortGlobal {
 
     setDefault() {
 
-        this.viewPath = this.viewPath || path.join(CURRENT_PATH, "views");
+        this.viewPath = this.viewPath || CURRENT_PATH;
         this.logger = this.logger || new Logger();
 
         this.sessionStore = this.sessionStore || MemorySessionStore;

@@ -2,6 +2,7 @@ import { Controller, viewResult, worker, route, jsonResult, HTTP_METHOD, default
 import { ObjectID } from "mongodb";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
+
 export class DefaultController extends Controller {
 
     singleton: MySingleton;
@@ -17,7 +18,7 @@ export class DefaultController extends Controller {
         const query = this.query;
         const data = this.data;
         return new Promise((res, rej) => {
-            res(viewResult("default/index.html", { title: title }));
+            res(viewResult("views/default/index.html", { title: title }));
         });
     }
 
