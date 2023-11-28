@@ -1,11 +1,15 @@
 import { Controller, Guard, Shield, Wall, XmlParser } from '../abstracts';
-import { IHttpResult, ISessonStore } from '../interfaces';
+import { IControllerRoute, IHttpResult, ISessonStore } from '../interfaces';
 import { ErrorHandler } from '../models';
 
 export * from './http_format_result';
 
 export type ErrorResultMapper = (error: any) => IHttpResult;
 type Class<I, Args extends any[] = any[]> = new (...args: Args) => I;
+
+// support for old versions
+export type ParentRoute = IControllerRoute;
+
 export type TSessionStore = Class<ISessonStore, [string]>;
 export type TController = Class<Controller>;
 export type TGuard = Class<Guard>;
