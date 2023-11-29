@@ -1,4 +1,4 @@
-import { Controller, defaultWorker, multiTypeResult, MIME_TYPE, worker, jsonResult, route, downloadResult, textResult, HTTP_METHOD, fileResult } from "fortjs";
+import { Controller, defaultWorker, multiFormatResult, MIME_TYPE, worker, jsonResult, route, downloadResult, textResult, HTTP_METHOD, fileResult } from "fortjs";
 import * as path from "path";
 
 
@@ -6,7 +6,7 @@ export class RandomController extends Controller {
 
     @defaultWorker()
     async format() {
-        return multiTypeResult({
+        return multiFormatResult({
             [MIME_TYPE.Json]: () => {
                 return { result: "hello world" }
             },
