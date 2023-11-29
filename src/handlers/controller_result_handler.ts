@@ -1,12 +1,13 @@
 
 import { MIME_TYPE, HTTP_STATUS_CODE, HTTP_RESULT_TYPE } from "../enums";
-import { FileHandler } from "./file_handler";
 import * as path from 'path';
 import { textResult } from "../helpers";
 import { promiseResolve } from "../utils";
 import { IHttpResult, IFileResultInfo } from "../interfaces";
+import { RequestHandlerHelper } from "./request_handler_helper";
+import { FileHandler } from "./file_handler";
 
-export class ControllerResultHandler extends FileHandler {
+export class ControllerResultHandler extends RequestHandlerHelper {
 
     private handleRedirectResult_() {
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
@@ -26,7 +27,10 @@ export class ControllerResultHandler extends FileHandler {
                 `attachment;filename=${fileName}${parsedPath.ext}`
             );
         }
-        return this.handleFileRequestFromAbsolutePath(fileResult.filePath, parsedPath.ext);
+        const fileHandler = new FileHandler(this as any);
+        return fileHandler.handleFileRequestFromAbsolutePath(
+            fileResult.filePath, parsedPath.ext
+        );
     }
 
     onTerminationFromWall(result: IHttpResult) {

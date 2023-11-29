@@ -68,7 +68,7 @@ export class RequestHandlerHelper {
         });
     }
 
-    protected onNotFound() {
+    public onNotFound() {
         return new FORT_GLOBAL.errorHandler().onNotFound(this.request.url).then(data => {
             return this.onResultFromError_(data);
         });
@@ -86,7 +86,7 @@ export class RequestHandlerHelper {
     // treat it as someone comes to your fort & they start doing things 
     // which was not supposed to be done
     // then you don't follow regular rules but just throw them from anywhere
-    protected onErrorOccured(error) {
+    onErrorOccured(error) {
         if (typeof error === 'string') {
             error = {
                 message: error

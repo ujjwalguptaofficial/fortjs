@@ -8,6 +8,7 @@ import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
 import { IHttpResult, IRouteMatch } from "../interfaces";
 import { ControllerResultHandler } from "./controller_result_handler";
+import { FileHandler } from "./file_handler";
 
 
 export class RequestHandler extends ControllerResultHandler {
@@ -171,7 +172,8 @@ export class RequestHandler extends ControllerResultHandler {
             this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, request.method as HTTP_METHOD);
             const finalCallback = await (
                 this.routeMatchInfo_ == null ? () => {
-                    return this.handleFileRequest(pathUrl);
+                    const fileHandler = new FileHandler(this);
+                    return fileHandler.handleFileRequest(pathUrl);
                 } :
                     this.onRouteMatched_()
             );

@@ -1,25 +1,28 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
-import { FORT_GLOBAL } from "../constants/fort_global";
 import * as path from "path";
-import { CONTENT_TYPE } from "../constants";
-import { RequestHandlerHelper } from "./request_handler_helper";
+import { CONTENT_TYPE, FORT_GLOBAL } from "../constants";
 import * as Fs from "fs";
 import { getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
+import { RequestHandler } from "./request_handler";
 
-type FileInfo = {
+interface IFileInfo {
     folder: string,
     file: string;
-};
-export class FileHandler extends RequestHandlerHelper {
+}
+export class FileHandler {
+
+    constructor(private requestHandler: RequestHandler) {
+
+    }
 
     private getFileInfoFromUrl_(urlPath: string) {
         const splittedValue = urlPath.split("/");
         const fileInfo = {
             file: ""
-        } as FileInfo;
+        } as IFileInfo;
         if (splittedValue.length > 2 || !isNullOrEmpty(path.parse(urlPath).ext)) {
             fileInfo.folder = splittedValue[1];
             fileInfo.file = splittedValue.splice(2).join("/");
@@ -49,7 +52,7 @@ export class FileHandler extends RequestHandlerHelper {
         });
     }
 
-    protected handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
+    handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
         return this.getFileStats_(absolutePath).then(fileInfo => {
             if (fileInfo != null) {
                 if (fileInfo.isDirectory() === true) {
@@ -61,7 +64,7 @@ export class FileHandler extends RequestHandlerHelper {
                 }
             }
             else {
-                return this.onNotFound();
+                return this.requestHandler.onNotFound();
             }
         });
     }
@@ -84,14 +87,14 @@ export class FileHandler extends RequestHandlerHelper {
         return absPath;
     }
 
-    protected handleFileRequest(urlPath: string) {
+    handleFileRequest(urlPath: string) {
         const extension = path.parse(urlPath).ext;
         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
         if (absFilePath != null) {
             return this.handleFileRequestFromAbsolutePath(absFilePath, extension);
         }
         else {
-            return this.onNotFound();
+            return this.requestHandler.onNotFound();
         }
     }
 
@@ -110,26 +113,27 @@ export class FileHandler extends RequestHandlerHelper {
         return this.getFileStats_(absolutePath).then(fileInfo => {
             return fileInfo != null ?
                 this.sendFile_(absolutePath, MIME_TYPE.Html, fileInfo) :
-                this.onNotFound();
+                this.requestHandler.onNotFound();
         });
     }
 
     protected isClientHasFreshFile(lastModified: string, etagValue: string) {
-        return fresh(this.request.headers, {
+        return fresh(this.requestHandler.request.headers, {
             'etag': etagValue,
             'last-modified': lastModified
         });
     }
 
     protected sendFileAsResponse(filePath: string, mimeType: MIME_TYPE) {
-        this.response.writeHead(HTTP_STATUS_CODE.Ok, {
+        const handler = this.requestHandler;
+        handler.response.writeHead(HTTP_STATUS_CODE.Ok, {
             [CONTENT_TYPE]: mimeType
         });
         const readStream = Fs.createReadStream(filePath);
         // Handle non-existent file
-        readStream.on('error', this.onErrorOccured.bind(this));
+        readStream.on('error', handler.onErrorOccured.bind(this));
         readStream.on('open', () => {
-            readStream.pipe(this.response);
+            readStream.pipe(handler.response);
         });
     }
 
@@ -138,7 +142,7 @@ export class FileHandler extends RequestHandlerHelper {
         const eTagValue = etag(fileInfo, {
             weak: FORT_GLOBAL.eTag.type === ETAG_TYPE.Weak
         });
-        const response = this.response;
+        const response = this.requestHandler.response;
         if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
             response.statusCode = HTTP_STATUS_CODE.NotModified;
             response.end();
