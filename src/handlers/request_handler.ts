@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
-import { FORT_GLOBAL } from "../constants/fort_global";
+import { FORT_GLOBAL } from "../constants";
 import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
 import { TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
@@ -52,7 +52,7 @@ export class RequestHandler extends RequestHandlerHelper {
     }
 
     async runController_() {
-        const result = await this.setControllerProps_();
+        const result = await this.executeController();
         return this.onResultFromComponent(result);
     }
 
@@ -118,8 +118,6 @@ export class RequestHandler extends RequestHandlerHelper {
     private async onRouteMatched_() {
         const routeMatchInfo = this.routeMatchInfo_;
         const workerInfo = routeMatchInfo.workerInfo;
-        this.componentProps.param = routeMatchInfo.params;
-        this.componentProps.controllerName = routeMatchInfo.controllerName;
 
         if (workerInfo == null) {
             return () => {
@@ -128,18 +126,20 @@ export class RequestHandler extends RequestHandlerHelper {
                     this.onMethodNotAllowed(routeMatchInfo.allowedHttpMethod);
             }
         }
-        else {
-            this.componentProps.workerName = workerInfo.workerName;
-            const shieldResult = await this.executeShieldsProtection_();
-            if (shieldResult) return shieldResult;
 
-            const guardResult = await this.executeGuardsCheck_(
-                workerInfo.guards
-            );
-            if (guardResult) return guardResult;
+        this.componentProps.param = routeMatchInfo.params;
+        this.componentProps.controllerName = routeMatchInfo.controllerName;
+        this.componentProps.workerName = workerInfo.workerName;
 
-            return this.runController_();
-        }
+        const shieldResult = await this.executeShieldsProtection_();
+        if (shieldResult) return shieldResult;
+
+        const guardResult = await this.executeGuardsCheck_(
+            workerInfo.guards
+        );
+        if (guardResult) return guardResult;
+
+        return this.runController_();
     }
 
     private runWallOutgoing_() {
@@ -197,7 +197,7 @@ export class RequestHandler extends RequestHandlerHelper {
         this.execute_();
     }
 
-    setControllerProps_() {
+    executeController() {
         const controller = this.routeMatchInfo_.controller;
         const controllerName = controller.name;
         const constructorValues = InjectorHandler.getConstructorValues(controllerName);
