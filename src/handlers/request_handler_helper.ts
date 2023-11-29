@@ -1,10 +1,11 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../enums";
-import { CONTENT_TYPE, SET_COOKIE } from "../constants";
-import { FORT_GLOBAL } from "../constants/fort_global";
+import { CONTENT_TYPE, SET_COOKIE, FORT_GLOBAL } from "../constants";
 import * as Negotiator from "negotiator";
-import { IComponentProp, IException, IHttpResult } from "../interfaces";
+import { IComponentProp, IException, IFileResultInfo, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe } from "../helpers";
 import { HttpFormatResult } from "../types";
+import { parse } from "path";
+import { FileHandler } from "./file_handler";
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
@@ -176,6 +177,63 @@ export class RequestHandlerHelper {
         this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [CONTENT_TYPE]: negotiateMimeType });
         this.response.end(data);
+    }
+
+    private handleRedirectResult_() {
+        this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
+            { 'Location': (this.controllerResult as IHttpResult).responseData });
+        this.response.end();
+        return null;
+    }
+
+    private handleFileResult_() {
+        const result = this.controllerResult as IHttpResult;
+        const fileResult = result.responseData as IFileResultInfo;
+        const parsedPath = parse(fileResult.filePath);
+        if (fileResult.shouldDownload === true) {
+            const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;
+            this.response.setHeader(
+                "content-disposition",
+                `attachment;filename=${fileName}${parsedPath.ext}`
+            );
+        }
+        const fileHandler = new FileHandler(this as any);
+        return fileHandler.handleFileRequestFromAbsolutePath(
+            fileResult.filePath, parsedPath.ext
+        );
+    }
+
+    protected handleFinalResult_() {
+        const result: IHttpResult = this.controllerResult;
+        this.setCookie();
+
+        switch (result.type) {
+            case HTTP_RESULT_TYPE.Default:
+                {
+                    const contentType = result.contentType || MIME_TYPE.Text;
+                    const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
+                    if (negotiateMimeType != null) {
+                        this.endResponse_(negotiateMimeType);
+                    }
+                    else {
+                        return this.onNotAcceptableRequest();
+                    }
+                }
+                break;
+            case HTTP_RESULT_TYPE.Redirect:
+                return this.handleRedirectResult_();
+            case HTTP_RESULT_TYPE.File:
+                return this.handleFileResult_();
+            case HTTP_RESULT_TYPE.FormattedResult:
+                return this.handleFormatResult_();
+        }
+    }
+
+    onResultFromComponent(result: IHttpResult) {
+        this.controllerResult = result || textResult("");
+        // return () => {
+        return this.handleFinalResult_;
+        // }
     }
 
 }

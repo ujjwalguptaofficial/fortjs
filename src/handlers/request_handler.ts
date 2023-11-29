@@ -7,11 +7,10 @@ import { TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
 import { IHttpResult, IRouteMatch } from "../interfaces";
-import { ControllerResultHandler } from "./controller_result_handler";
 import { FileHandler } from "./file_handler";
+import { RequestHandlerHelper } from "./request_handler_helper";
 
-
-export class RequestHandler extends ControllerResultHandler {
+export class RequestHandler extends RequestHandlerHelper {
 
     private routeMatchInfo_: IRouteMatch;
     private wallInstances: Wall[] = [];
@@ -164,8 +163,8 @@ export class RequestHandler extends ControllerResultHandler {
         try {
             const wallResult = await this.executeWallIncoming_();
             if (wallResult) {
-                await this.onTerminationFromWall(wallResult);
-                return;
+                this.controllerResult = wallResult;
+                return this.handleFinalResult_();
             }
             const pathUrl = urlDetail.pathname;
 
@@ -185,8 +184,6 @@ export class RequestHandler extends ControllerResultHandler {
             this.onErrorOccured(ex);
         }
     }
-
-
 
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
         this.componentProps = {
