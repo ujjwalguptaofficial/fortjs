@@ -6,7 +6,10 @@ export class DefaultCronJobScheduler implements ITaskScheduler {
     constructor(name: string, cronTask: CronTask) {
         // Dynamically import the cron package
         const cron = require('cron');
-        this.job_ = new cron.CronJob(cronTask.expression, cronTask.task);
+        this.job_ = new cron.CronJob(cronTask.expression, async () => {
+            await cronTask.task();
+            cronTask.onComplete();
+        });
     }
 
     start() {

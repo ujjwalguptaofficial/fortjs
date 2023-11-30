@@ -27,6 +27,10 @@ export abstract class CronTask {
     stop() {
         return this.scheduler.stop();
     }
+
+    onComplete() {
+        
+    }
 }
 
 class DailyBalanceCronTask extends CronTask {
