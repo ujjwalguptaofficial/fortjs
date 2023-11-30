@@ -7,7 +7,7 @@ import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
 import { isArray } from "../utils";
 import { Logger } from "./logger";
-import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute } from "../interfaces";
+import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, ICron } from "../interfaces";
 
 export class Fort {
 
@@ -275,4 +275,7 @@ export class Fort {
         FORT_GLOBAL.validator = validator;
     }
 
+    static set crons(value: ICron[]) {
+        FORT_GLOBAL.crons = value;
+    }
 }

@@ -18,3 +18,4 @@ export type TWall = Class<Wall>;
 export type TXmlParser = Class<XmlParser, []>;
 export type TErrorHandler = Class<ErrorHandler, []>;
 export type TTaskScheduler = Class<ITaskScheduler, [CronTask]>;
+export type TCronTask = Class<CronTask>;
