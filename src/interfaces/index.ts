@@ -19,5 +19,6 @@ export * from "./parent_route";
 export * from "./route_match";
 export * from "./session_value";
 export * from "./view_read_option";
+export * from "./cron_manager";
 
 
