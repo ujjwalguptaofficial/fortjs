@@ -5,7 +5,7 @@ export interface ITaskScheduler {
     stop();
 }
 
-export interface ISchedule {
+export interface IScheduleTaskInput {
     name?: string;
     expression: string;
     task: TScheduleTask

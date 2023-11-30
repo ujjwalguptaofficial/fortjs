@@ -4,7 +4,7 @@ import { TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, T
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import { ETAG_TYPE } from "../enums";
-import { ISchedule, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
+import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";
 import { RouteHandler } from "../handlers";
 import { scheduler } from "../utils";
@@ -48,7 +48,7 @@ export class FortGlobal {
     logger: Logger;
 
     validator: IDtoValidator;
-    crons: ISchedule[] = [];
+    crons: IScheduleTaskInput[] = [];
 
     get isDevelopment() {
         return isDevelopment;

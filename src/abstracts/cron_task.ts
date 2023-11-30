@@ -14,7 +14,7 @@ export abstract class ScheduleTask {
         );
     }
 
-    abstract task(): Promise<any>;
+    abstract execute(): Promise<any>;
 
     protected scheduleTask() {
         return this.taskScheduler_.start();

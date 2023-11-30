@@ -7,7 +7,7 @@ import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
 import { TaskSchedulerManager, isArray } from "../utils";
 import { Logger } from "./logger";
-import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, ISchedule } from "../interfaces";
+import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, IScheduleTaskInput } from "../interfaces";
 
 export class Fort {
 

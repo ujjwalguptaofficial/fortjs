@@ -1,5 +1,5 @@
 import { FORT_GLOBAL } from "../constants";
-import { ISchedule } from "../interfaces";
+import { IScheduleTaskInput } from "../interfaces";
 
 export class TaskSchedulerManager {
     start(name: string) {
@@ -7,13 +7,21 @@ export class TaskSchedulerManager {
         if (!cron) {
             throw new Error(`Cron task ${name} does not exist`);
         }
+        this.startTask_(cron);
+    }
+
+    private startTask_(cron: IScheduleTaskInput) {
+        const task = new cron.task(cron.name, cron.expression);
+        task.start();
     }
 
     startAll() {
-
+        FORT_GLOBAL.crons.forEach(cron => {
+            this.startTask_(cron);
+        });
     }
 
-    static add(...values: ISchedule[]) {
+    static add(...values: IScheduleTaskInput[]) {
         FORT_GLOBAL.crons = [...FORT_GLOBAL.crons, ...values];
     }
 }

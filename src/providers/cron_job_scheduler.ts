@@ -1,13 +1,14 @@
-import { CronTask, ITaskScheduler } from "../interfaces";
+import { ScheduleTask } from "../abstracts";
+import { ITaskScheduler } from "../interfaces";
 
 export class DefaultCronJobScheduler implements ITaskScheduler {
     private job_;
 
-    constructor(name: string, cronTask: CronTask) {
+    constructor(name: string, cronTask: ScheduleTask) {
         // Dynamically import the cron package
         const cron = require('cron');
         this.job_ = new cron.CronJob(cronTask.expression, async () => {
-            await cronTask.task();
+            await cronTask.execute();
             cronTask.onComplete();
         });
     }
