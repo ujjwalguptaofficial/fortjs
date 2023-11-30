@@ -63,7 +63,6 @@
     "multiparty": "^4.2.3",
     "mustache": "^4.2.0",
     "negotiator": "^0.6.3",
-    "node-cron": "^3.0.3",
     "uniqid": "^5.4.0"
   }
 }

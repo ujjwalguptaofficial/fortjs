@@ -24,4 +24,13 @@ export class TaskSchedulerManager {
     static add(...values: IScheduleTaskInput[]) {
         FORT_GLOBAL.crons = [...FORT_GLOBAL.crons, ...values];
     }
+
+    execute(name: string) {
+        const cron = FORT_GLOBAL.crons.find(q => q.name === name);
+        if (!cron) {
+            throw new Error(`Cron task ${name} does not exist`);
+        }
+
+        return new cron.task(cron.name, cron.expression).execute();
+    }
 }
