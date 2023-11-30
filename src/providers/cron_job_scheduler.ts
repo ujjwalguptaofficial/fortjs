@@ -4,8 +4,9 @@ import { ITaskScheduler } from "../interfaces";
 export class DefaultCronJobScheduler implements ITaskScheduler {
     private job_;
 
-    constructor(name: string, cronTask: ScheduleTask) {
+    constructor(cronTask: ScheduleTask) {
         // Dynamically import the cron package
+        // eslint-disable-next-line
         const cron = require('cron');
         this.job_ = new cron.CronJob(cronTask.expression, async () => {
             await cronTask.execute();

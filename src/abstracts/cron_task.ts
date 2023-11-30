@@ -32,6 +32,7 @@ export abstract class ScheduleTask {
         return this.haltTask();
     }
 
+    // eslint-disable-next-line
     onComplete() {
 
     }
