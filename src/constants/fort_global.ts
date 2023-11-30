@@ -4,10 +4,10 @@ import { TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, T
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import { ETAG_TYPE } from "../enums";
-import { ICron, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
+import { ISchedule, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";
 import { RouteHandler } from "../handlers";
-import { CronJobManager } from "../utils";
+import { scheduler } from "../utils";
 import { DefaultCronJobScheduler } from "../providers/cron_job_scheduler";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -24,7 +24,7 @@ export class FortGlobal {
     walls: TWall[] = [];
     errorHandler: TErrorHandler;
     cronJobScheduler: TTaskScheduler = DefaultCronJobScheduler;
-    cronJobManager = new CronJobManager();
+    cronJobManager = new scheduler();
     keepAliveTimeout = 30000;
     private shields: TShield[] = [];
     private guards: TGuard[] = [];
@@ -48,7 +48,7 @@ export class FortGlobal {
     logger: Logger;
 
     validator: IDtoValidator;
-    crons: ICron[];
+    crons: ISchedule[] = [];
 
     get isDevelopment() {
         return isDevelopment;

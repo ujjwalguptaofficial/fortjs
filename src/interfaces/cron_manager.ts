@@ -1,12 +1,12 @@
-import { TCronTask } from "../types";
+import { TScheduleTask } from "../types";
 
 export interface ITaskScheduler {
     start();
     stop();
 }
 
-export interface ICron {
+export interface ISchedule {
     name?: string;
     expression: string;
-    task: TCronTask
+    task: TScheduleTask
 }

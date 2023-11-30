@@ -5,9 +5,9 @@ import { FORT_GLOBAL } from "../constants/fort_global";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
-import { isArray } from "../utils";
+import { TaskSchedulerManager, isArray } from "../utils";
 import { Logger } from "./logger";
-import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, ICron } from "../interfaces";
+import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, ISchedule } from "../interfaces";
 
 export class Fort {
 
@@ -275,7 +275,5 @@ export class Fort {
         FORT_GLOBAL.validator = validator;
     }
 
-    static set crons(value: ICron[]) {
-        FORT_GLOBAL.crons = value;
-    }
+    static scheduler = new TaskSchedulerManager();
 }
