@@ -3,10 +3,7 @@ import { IScheduleTaskInput } from "../interfaces";
 
 export class TaskSchedulerManager {
     start(name: string) {
-        const cron = FORT_GLOBAL.crons.find(q => q.name === name);
-        if (!cron) {
-            throw new Error(`Cron task ${name} does not exist`);
-        }
+        const cron = this.getTask(name);
         this.startTask_(cron);
     }
 
@@ -26,11 +23,15 @@ export class TaskSchedulerManager {
     }
 
     execute(name: string) {
+        const cron = this.getTask(name);
+        return new cron.task(cron.name, cron.expression).execute();
+    }
+
+    getTask(name: string) {
         const cron = FORT_GLOBAL.crons.find(q => q.name === name);
         if (!cron) {
             throw new Error(`Cron task ${name} does not exist`);
         }
-
-        return new cron.task(cron.name, cron.expression).execute();
+        return cron;
     }
 }
