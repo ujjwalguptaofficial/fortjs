@@ -266,6 +266,7 @@ export class Fort {
     }
 
     static destroy(): Promise<void> {
+        this.scheduler.stopAll();
         return promise((res) => {
             this.instance.httpServer.close(res);
         });
