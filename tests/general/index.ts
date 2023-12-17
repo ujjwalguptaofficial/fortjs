@@ -33,7 +33,7 @@ export const initServer = async () => {
         path: contentsPath
     }];
     Fort.scheduler.add({
-        expression: "*/1 * * * *",
+        expression: "*/1 * * * * *",
         task: CounterScheduler,
         name: "Counter"
     });

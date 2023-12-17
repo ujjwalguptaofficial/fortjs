@@ -1,5 +1,6 @@
 import { initServer } from "..";
 import { viewResult, Fort, textResult } from "fortjs";
+import { CounterScheduler } from "./counter";
 
 describe("counter scheduler", () => {
     beforeAll(async () => {
@@ -33,6 +34,18 @@ describe("counter scheduler", () => {
     it("value check", async () => {
         const task = Fort.scheduler.getTask(taskName);
         expect(task['counter']).toEqual(0);
+    })
+
+    it("value check after 5 second", async () => {
+        const task = Fort.scheduler.getTask<CounterScheduler>(taskName);
+        await new Promise((res) => {
+            setTimeout(res, 2000);
+        })
+        expect(task.counter).toEqual(2);
+        await new Promise((res) => {
+            setTimeout(res, 2000);
+        })
+        expect(task.counter).toEqual(4);
     })
 
     afterAll(() => {
