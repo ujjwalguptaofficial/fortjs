@@ -5,5 +5,8 @@ export class CounterScheduler extends ScheduleTask {
 
     async execute(): Promise<any> {
         this.counter++;
+        if (this.counter == 5) {
+            throw "Error thrown on 5";
+        }
     }
 }

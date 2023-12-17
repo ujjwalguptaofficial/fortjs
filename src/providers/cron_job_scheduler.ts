@@ -1,4 +1,5 @@
 import { ScheduleTask } from "../abstracts";
+import { FORT_GLOBAL } from "../constants";
 import { ITaskScheduler } from "../interfaces";
 import { CronJob } from "cron";
 
@@ -9,7 +10,12 @@ export class DefaultCronJobScheduler implements ITaskScheduler {
         // Dynamically import the cron package
         // eslint-disable-next-line
         this.job_ = new CronJob(cronTask.expression, async () => {
-            await cronTask.execute();
+            try {
+                await cronTask.execute();
+            }
+            catch (ex) {
+                FORT_GLOBAL.logger.error(ex);
+            }
             cronTask.onComplete();
         });
     }

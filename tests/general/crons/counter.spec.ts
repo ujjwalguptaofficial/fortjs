@@ -1,7 +1,10 @@
 import { initServer } from "..";
 import { viewResult, Fort, textResult } from "fortjs";
 import { CounterScheduler } from "./counter";
+// import { } from "jest;
 
+// jest.
+// jest.sp
 describe("counter scheduler", () => {
     beforeAll(async () => {
         await initServer();
@@ -46,6 +49,17 @@ describe("counter scheduler", () => {
             setTimeout(res, 2000);
         })
         expect(task.counter).toEqual(4);
+    })
+
+    it("check for error", async () => {
+        const logSpy = jest.spyOn(Fort.logger, "error");
+        const task = Fort.scheduler.getTask<CounterScheduler>(taskName);
+        await new Promise((res) => {
+            setTimeout(res, 2000);
+        })
+        expect(task.counter).toEqual(6);
+        expect(logSpy).toHaveBeenCalledWith('Error thrown on 5');
+        logSpy.mockRestore();
     })
 
     afterAll(() => {
