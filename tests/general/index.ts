@@ -8,6 +8,7 @@ import { MyComponentOption } from "./extra/my_component_option";
 import { WallWithoutOutgoing } from "./walls/wall_without_outgoing";
 import { Wall1 } from "./walls/wall1";
 import { RequestLogger } from "./walls/request_logger";
+import { CounterScheduler } from "./crons/counter";
 
 const contentsPath = Path.join(__dirname, "../contents");
 // const staticFolderPath = Path.join(__dirname, "../static");
@@ -31,6 +32,12 @@ export const initServer = async () => {
         alias: "/",
         path: contentsPath
     }];
+    Fort.scheduler.add({
+        expression: "*/1 * * * *",
+        task: CounterScheduler,
+        name: "Counter"
+    });
+    Fort.scheduler.startAll();
     await Fort.create();
 };
 

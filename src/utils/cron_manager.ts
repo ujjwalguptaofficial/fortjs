@@ -47,7 +47,6 @@ export class TaskSchedulerManager {
 
     getTask<T = ScheduleTask>(name: string) {
         const cron = tasks.get(name);
-        console.log("tasks", tasks);
         if (!cron) {
             throw new Error(`Cron task ${name} does not exist`);
         }
