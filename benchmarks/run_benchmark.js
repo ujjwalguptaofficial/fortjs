@@ -68,7 +68,7 @@ const apps = [
     {
         command: `cd adonis && npm run start:prod & sleep 5`,
         name: "ADONIS",
-        port: 3333
+        port: 3001
     },
 ]
 const runTest = async (index = 0) => {
