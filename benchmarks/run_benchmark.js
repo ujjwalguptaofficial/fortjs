@@ -65,6 +65,11 @@ const apps = [
         name: "KOA",
         port: 3070
     },
+    {
+        command: `cd adonis && npm run start:prod & sleep 5`,
+        name: "ADONIS",
+        port: 3333
+    },
 ]
 const runTest = async (index = 0) => {
     if (index >= apps.length) {
