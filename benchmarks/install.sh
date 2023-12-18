@@ -20,4 +20,10 @@ cd ..
 cd fort
 npm install
 cd ..
+
+# install adonis
+cd adonis
+npm install
+cd ..
+
 echo "Installation done!"
