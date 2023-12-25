@@ -26,7 +26,7 @@
     "buildpack": "npm run lint && npm run webpack && npm pack",
     "build:test": "npm run build && npm pack && npm run test",
     "deploy": "npm run build:prod && npm run test",
-    "test": "node test_runner.js",
+    "test": "node tests/test_runner.js",
     "prepublishOnly": "npm run deploy",
     "benchmark": "cd benchmarks && npm run install:benchmark"
   },
