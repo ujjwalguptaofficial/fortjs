@@ -5,7 +5,7 @@ import { FORT_GLOBAL } from "../constants/fort_global";
 import * as http from "http";
 import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
-import { isArray } from "../utils";
+import { TaskSchedulerManager, isArray } from "../utils";
 import { Logger } from "./logger";
 import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute } from "../interfaces";
 
@@ -266,6 +266,7 @@ export class Fort {
     }
 
     static destroy(): Promise<void> {
+        this.scheduler.stopAll();
         return promise((res) => {
             this.instance.httpServer.close(res);
         });
@@ -275,4 +276,5 @@ export class Fort {
         FORT_GLOBAL.validator = validator;
     }
 
+    static scheduler = new TaskSchedulerManager();
 }

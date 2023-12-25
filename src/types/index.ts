@@ -1,5 +1,5 @@
-import { Controller, Guard, Shield, Wall, XmlParser } from '../abstracts';
-import { IControllerRoute, IHttpResult, ISessonStore } from '../interfaces';
+import { Controller, ScheduleTask, Guard, Shield, Wall, XmlParser } from '../abstracts';
+import { IControllerRoute, IHttpResult, ISessonStore, ITaskScheduler } from '../interfaces';
 import { ErrorHandler } from '../models';
 
 export * from './http_format_result';
@@ -17,3 +17,5 @@ export type TShield = Class<Shield>;
 export type TWall = Class<Wall>;
 export type TXmlParser = Class<XmlParser, []>;
 export type TErrorHandler = Class<ErrorHandler, []>;
+export type TTaskScheduler = Class<ITaskScheduler, [ScheduleTask]>;
+export type TScheduleTask = Class<ScheduleTask>;

@@ -6,3 +6,4 @@ export * from './wall';
 export * from "./xml_parser";
 export * from './result_mapper';
 export * from "./component_option";
+export * from "./cron_task";
