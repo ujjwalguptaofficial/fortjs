@@ -44,7 +44,6 @@
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
-    "cron": "^3.1.6",
     "cross-env": "^6.0.3",
     "eslint": "^8.35.0",
     "eslint-plugin-security": "^1.7.1",
@@ -63,6 +62,7 @@
     "multiparty": "^4.2.3",
     "mustache": "^4.2.0",
     "negotiator": "^0.6.3",
-    "uniqid": "^5.4.0"
+    "uniqid": "^5.4.0",
+    "cron": "^3.1.6"
   }
 }
