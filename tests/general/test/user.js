@@ -190,6 +190,14 @@ describe("/user", () => {
         })
     })
 
+    it("user profile invalid page", (done) => {
+        request.get('/user/profiles/me').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
+            done();
+        })
+    })
+
     it("/thrown by guard using header", (done) => {
         const body = {
             throwexceptionbyguard: 'true'
@@ -218,6 +226,15 @@ describe("/user", () => {
 
     it("/user after logout", (done) => {
         request.get('/user/').redirects(0).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(302);
+            expect(res).to.have.header('location', '/default/login');
+            done();
+        })
+    })
+
+    it("user profile unauthenticated page", (done) => {
+        request.get('/user/profile/me').redirects(0).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(302);
             expect(res).to.have.header('location', '/default/login');
