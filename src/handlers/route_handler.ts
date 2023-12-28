@@ -84,15 +84,15 @@ export class RouteHandler {
         const partialRoutes = value.children && value.children.map(item => {
             const controllerName = item.controller.name
             const childController = routerCollection.get(controllerName);
-            if (childController) {
-                childController.path = item.path;
-                const controllerRoutePath = `${value.path}/${item.path}`
-                childController.workers.forEach(worker => {
-                    worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
-                });
-                childController.shields = route.shields;
-                childController.controller = item.controller;
-            }
+            childController.path = item.path;
+            const controllerRoutePath = `${value.path}/${item.path}`
+            childController.workers.forEach(worker => {
+                worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
+            });
+            childController.shields.unshift(
+                ...route.shields
+            );
+            childController.controller = item.controller;
             return {
                 controllerName: controllerName,
                 path: item.path
