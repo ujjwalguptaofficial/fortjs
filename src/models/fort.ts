@@ -69,6 +69,10 @@ export class Fort {
         value.forEach(route => {
             // route.path = removeFirstSlash(route.path);
             route.path = removeLastSlash(route.path);
+            route.children && route.children.forEach(childrenRoute => {
+                childrenRoute.path = removeFirstSlash(childrenRoute.path);
+                childrenRoute.path = removeLastSlash(childrenRoute.path);
+            });
             RouteHandler.addToRouterCollection(route);
             if (route.path === "/*") {
                 RouteHandler.defaultRouteControllerName = route.controller.name;

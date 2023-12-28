@@ -11,8 +11,8 @@ const pushRouterIntoCollection = (route: IRouteInfo) => {
     routerCollection.set(route.controllerName, routeObj);
 };
 
-const getWorkerPattern = (parentRoute: IRouteInfo, pattern: string) => {
-    const routeWithParent = (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
+const getWorkerPattern = (controllerPath: string, pattern: string) => {
+    const routeWithParent = (isNull(controllerPath) || controllerPath === "/*") ? pattern : `${controllerPath}${pattern}`;
     return routeWithParent;
 };
 
@@ -36,7 +36,8 @@ function findControllerChildren(urlParts: string[], routes: IRouteInfoChildren[]
         const isMatched = isControllerMatched(controller, urlParts);
         if (isMatched === true) {
             const childController: RouteInfo = findControllerChildren(
-                urlParts.slice(0, controller.pathSplitted.length - 1), controller.partialRoutes
+                urlParts.slice(controller.pathSplitted.length),
+                controller.partialRoutes
             );
             return childController || controller;
         }
@@ -60,7 +61,7 @@ export class RouteHandler {
             const isMatched = isControllerMatched(controller, urlParts);
             if (isMatched === true) {
                 const childController = findControllerChildren(
-                    urlParts.slice(0, controller.pathSplitted.length - 1),
+                    urlParts.slice(controller.pathSplitted.length),
                     controller.partialRoutes
                 );
                 return childController || controller;
@@ -80,6 +81,22 @@ export class RouteHandler {
 
     static addToRouterCollection(value: IControllerRoute) {
         const route = routerCollection.get(value.controller.name);
+        const partialRoutes = value.children && value.children.map(item => {
+            const controllerName = item.controller.name
+            const controller = routerCollection.get(controllerName);
+            if (controller) {
+                controller.path = item.path;
+                const controllerRoutePath = `${value.path}/${item.path}`
+                controller.workers.forEach(worker => {
+                    worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
+                });
+                controller.controller = item.controller;
+            }
+            return {
+                controllerName: controllerName,
+                path: item.path
+            }
+        });
         if (route == null) {
             pushRouterIntoCollection({
                 workers: new Map(),
@@ -87,15 +104,17 @@ export class RouteHandler {
                 controllerName: value.controller.name,
                 path: value.path,
                 shields: [],
-                values: []
+                values: [],
+                partialRoutes: partialRoutes
             });
         }
         else {
             route.controller = value.controller;
             route.path = value.path;
+            route.partialRoutes = partialRoutes
             // change pattern value since we have controller name now.
-            route.workers.forEach(actionInfo => {
-                actionInfo.pattern = getWorkerPattern(value as any, actionInfo.pattern);
+            route.workers.forEach(worker => {
+                worker.pattern = getWorkerPattern(value.path, worker.pattern);
             })
         }
     }
@@ -136,12 +155,12 @@ export class RouteHandler {
         else {
             const savedAction = route.workers.get(workerName);
             if (savedAction == null) {
-                newWorker.pattern = getWorkerPattern(route, newWorker.pattern);
+                newWorker.pattern = getWorkerPattern(route.path, newWorker.pattern);
                 route.workers.set(workerName, new WorkerInfo(newWorker));
             }
             else {
                 savedAction.methodsAllowed = newWorker.methodsAllowed;
-                savedAction.pattern = getWorkerPattern(route, savedAction.pattern);
+                savedAction.pattern = getWorkerPattern(route.path, savedAction.pattern);
                 // route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
         }
@@ -212,7 +231,7 @@ export class RouteHandler {
         }
         else {
             const savedAction = route.workers.get(workerName);
-            const workerRouteWithController = getWorkerPattern(route, pattern);
+            const workerRouteWithController = getWorkerPattern(route.path, pattern);
             if (savedAction == null) {
                 route.workers.set(
                     workerName,
