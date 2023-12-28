@@ -6,12 +6,11 @@ Thing that should not be change -
 
 1. package.json
 2. ignore files like - gitignore, npmignore
-3. travis config
+3. Github Action config
 4. license
 5. webpack config
 6. tsconfig
-7. tslint 
-8. do not commit anything in dist folder        
+7. eslint       
 
 These are the files which contains some config & makes the fortjs bug free thats why we dont want user to change as thing may become messy. But we understand that sometimes you need to change these things, so in that case please give a description files name with reason of why you need to change in the pull request.
 
@@ -19,7 +18,7 @@ These are the files which contains some config & makes the fortjs bug free thats
 
 If you find some mistakes ( anything like spelling or design etc.) or want to improve the docs. Please feel free to send the PR. 
 
-Our documentation is on another repo - https://github.com/ujjwalguptaofficial/fortjs.docs . So please have a look at contrubuting guidelines.
+Our documentation is on another repo - https://github.com/ujjwalguptaofficial/fortjs-doc . So please have a look at contrubuting guidelines.
 
 ## Learning Contribution
 
@@ -33,17 +32,19 @@ If you have anything that helps users learn fortjs and you want them to list on 
 
 ## Setup
 
-Setting up fortjs in your local is very easy - 
+Setting up Fort.js locally is straightforward:
 
-* Just fork and clone from your repo list or just clone from fortjs repos
-* Run npm install - this will install all dependencies
-* There are multiple commands that you can see in package.json.
+1. Fork and clone the repository from your list or directly clone the Fort.js repository.
+2. Run `npm install` to install all dependencies.
+3. Explore various commands available in the `package.json` file.
 
-#### Commands
+### Commands
 
-* lint - Run linter for every codes
-* build - build the codes & create a bundle
-* deploy - This is used when some new version is to be deployed.   
+- `lint`: Run the linter for all code.
+- `build`: Build the code and create a bundle.
+- `build:test`: Build the code and run tests.
+- `test`: Run the tests.
+- `deploy`: Use this command when deploying a new version.
 
 ## Submitting Changes
 
@@ -59,4 +60,4 @@ Some things that will increase the chance that your pull request is accepted:
 
 ## Discussions
 
-You can discuss on [Gitter](https://gitter.im/fortjs/Lobby).
+Use Github discussions for any communication - https://github.com/ujjwalguptaofficial/fortjs/discussions
