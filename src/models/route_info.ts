@@ -1,4 +1,4 @@
-import { IRouteInfo } from "../interfaces";
+import { IRouteInfo, IRouteInfoChildren } from "../interfaces";
 import { TController, TShield } from "../types";
 import { WorkerInfo } from "./worker_info";
 
@@ -16,6 +16,7 @@ export class RouteInfo implements IRouteInfo {
 
     shields: Array<TShield>;
     values: any[];
+    partialRoutes: IRouteInfoChildren[];
 
     pathSplitted: string[];
 
@@ -26,6 +27,7 @@ export class RouteInfo implements IRouteInfo {
         this.shields = value.shields;
         this.values = value.values;
         this.workers = value.workers as any;
+        this.partialRoutes = value.partialRoutes;
     }
 
     set path(value) {

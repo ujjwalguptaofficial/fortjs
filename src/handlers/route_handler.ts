@@ -1,7 +1,7 @@
 import { TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
-import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch } from "../interfaces";
+import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch, IRouteInfoChildren } from "../interfaces";
 import { getDataType } from "../helpers";
 
 const routerCollection = new Map<string, RouteInfo>();
@@ -11,12 +11,37 @@ const pushRouterIntoCollection = (route: IRouteInfo) => {
     routerCollection.set(route.controllerName, routeObj);
 };
 
-const getWorkerPattern = (parentRoute: IControllerRoute, pattern: string) => {
+const getWorkerPattern = (parentRoute: IRouteInfo, pattern: string) => {
     const routeWithParent = (isNull(parentRoute.path) || parentRoute.path === "/*") ? pattern : `${parentRoute.path}${pattern}`;
     return routeWithParent;
 };
 
 const routeCache = new Map<string, IRouteMatch>();
+
+function isControllerMatched(controller: RouteInfo, urlParts: string[]) {
+    let isMatched: boolean;
+    const patternSplit = controller.pathSplitted;
+    patternSplit.every((patternPart, i) => {
+        isMatched = compareString(urlParts[i], patternPart);
+        return isMatched;
+    });
+    return isMatched;
+}
+
+function findControllerChildren(urlParts: string[], routes: IRouteInfoChildren[]) {
+    if (!routes) return;
+    for (const index in routes) {
+        const d = routes[index];
+        const controller = RouteHandler.getControllerFromName(d.controllerName);
+        const isMatched = isControllerMatched(controller, urlParts);
+        if (isMatched === true) {
+            const childController: RouteInfo = findControllerChildren(
+                urlParts.slice(0, controller.pathSplitted.length - 1), controller.partialRoutes
+            );
+            return childController || controller;
+        }
+    }
+}
 
 export class RouteHandler {
 
@@ -32,14 +57,13 @@ export class RouteHandler {
 
     static findControllerFromPath(urlParts: string[]) {
         for (const controller of routerCollection.values()) {
-            let isMatched: boolean;
-            const patternSplit = controller.pathSplitted;
-            patternSplit.every((patternPart, i) => {
-                isMatched = compareString(urlParts[i], patternPart);
-                return isMatched;
-            });
+            const isMatched = isControllerMatched(controller, urlParts);
             if (isMatched === true) {
-                return controller;
+                const childController = findControllerChildren(
+                    urlParts.slice(0, controller.pathSplitted.length - 1),
+                    controller.partialRoutes
+                );
+                return childController || controller;
             }
         }
     }
@@ -71,7 +95,7 @@ export class RouteHandler {
             route.path = value.path;
             // change pattern value since we have controller name now.
             route.workers.forEach(actionInfo => {
-                actionInfo.pattern = getWorkerPattern(value, actionInfo.pattern);
+                actionInfo.pattern = getWorkerPattern(value as any, actionInfo.pattern);
             })
         }
     }

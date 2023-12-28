@@ -82,7 +82,8 @@ export class Fort {
             RouteHandler.defaultRouteControllerName = GenericController.name;
             RouteHandler.addToRouterCollection({
                 controller: GenericController,
-                path: "/*"
+                path: "/*",
+                children: null
             });
         }
     }

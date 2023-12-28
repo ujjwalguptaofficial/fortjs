@@ -9,4 +9,10 @@ export interface IRouteInfo {
     workers: Map<string, WorkerInfo>;
     shields: Array<TShield>;
     values: any[];
+    partialRoutes?: IRouteInfoChildren[];
+}
+
+export interface IRouteInfoChildren {
+    controllerName: string;
+    path: string;
 }

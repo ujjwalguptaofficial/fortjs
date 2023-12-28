@@ -77,9 +77,9 @@ export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {
         return cache;
     }
     const urlParts = url.split("/");
-    const route = RouteHandler.findControllerFromPath(urlParts);
-    const result = route == null ? checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts) :
-        checkRouteInWorker(route, httpMethod, urlParts);
+    const controllerRoute = RouteHandler.findControllerFromPath(urlParts);
+    const result = controllerRoute == null ? checkRouteInWorker(RouteHandler.defaultRoute, httpMethod, urlParts) :
+        checkRouteInWorker(controllerRoute, httpMethod, urlParts);
 
     // do not cache route which have params
     if (result && Object.keys(result.params).length === 0) {
