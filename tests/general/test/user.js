@@ -173,8 +173,17 @@ describe("/user", () => {
         })
     })
 
-    it("/getprofile", (done) => {
+    it("/getprofile without profile", (done) => {
         request.get('/user/profile/me').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(401);
+            expect(res.text).to.be.eql("expect profile in query");
+            done();
+        })
+    })
+
+    it("/getprofile with profile", (done) => {
+        request.get('/user/profile/me?isProfile=true').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             const user = {
