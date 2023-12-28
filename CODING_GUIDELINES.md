@@ -1,13 +1,13 @@
 # Coding Guidelines
 
-We follow strict set of coding guidelines and use linter to make sure no mistake is done. We have inherited our coding guidelines fom google es6 guidelines.
+We adhere to a strict set of coding guidelines and utilize a linter to ensure code quality. Our coding guidelines are inherited from Google ES6 guidelines.
 
 ## Naming
 
-* Class Name must be in PascalCase.
-* Class public or protect member should be in camelCase.
-* Class private member should be in camelCase having '_' in the end.
-* A file name should be in snake case.
+- Class names must be in PascalCase.
+- Public or protected class members should be in camelCase.
+- Private class members should be in camelCase with '_' at the end.
+- File names should be in snake_case.
 
 ## TypeScript Guidelines
 
