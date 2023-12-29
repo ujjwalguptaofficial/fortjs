@@ -8,5 +8,4 @@ export class Router {
     get routesAsArray() {
         return RouteHandler.routesAsArray;
     }
-
 }
