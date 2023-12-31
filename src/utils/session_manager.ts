@@ -29,7 +29,7 @@ export class SessionManager {
         });
     }
 
-    protected destroySession() {
+    private destroy_() {
         const cookie = this.cookie.getCookie(FORT_GLOBAL.appSessionIdentifier);
         cookie.httpOnly = true;
         cookie.path = "/";
@@ -69,6 +69,6 @@ export class SessionManager {
         // remove session values
         await this.sessionStore.clear();
         // expire cookie in browser
-        this.destroySession();
+        this.destroy_();
     }
 }
