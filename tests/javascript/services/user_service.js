@@ -1,32 +1,33 @@
-import {
-    User
-} from "../models/user";
 
-const store = {
-    users: [{
-        id: 1,
-        name: "ujjwal",
-        address: "bhubaneswar india",
-        emailId: "ujjwal@mg.com",
-        gender: "male",
-        password: "admin"
-    }]
-}
 
 export class UserService {
+
+    constructor() {
+        this.store = {
+            users: [{
+                id: 1,
+                name: "ujjwal",
+                address: "bhubaneswar india",
+                emailId: "ujjwal@mg.com",
+                gender: "male",
+                password: "admin"
+            }]
+        };
+    }
+
     getUsers() {
-        return store.users;
+        return this.store.users;
     }
 
     addUser(user) {
-        const lastUser = store.users[store.users.length - 1];
+        const lastUser = this.store.users[this.store.users.length - 1];
         user.id = lastUser == null ? 1 : lastUser.id + 1;
-        store.users.push(user);
+        this.store.users.push(user);
         return user;
     }
 
     updateUser(user) {
-        const existingUser = store.users.find(qry => qry.id === user.id);
+        const existingUser = this.store.users.find(qry => qry.id === user.id);
         if (existingUser != null) {
             existingUser.name = user.name;
             existingUser.address = user.address;
@@ -38,11 +39,11 @@ export class UserService {
     }
 
     getUser(id) {
-        return store.users.find(user => user.id === id);
+        return this.store.users.find(user => user.id === id);
     }
 
     removeUser(id) {
-        const index = store.users.findIndex(user => user.id === id);
-        store.users.splice(index, 1);
+        const index = this.store.users.findIndex(user => user.id === id);
+        this.store.users.splice(index, 1);
     }
 }

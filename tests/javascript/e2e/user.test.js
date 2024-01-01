@@ -2,7 +2,6 @@ import axios from "axios";
 import { createApp } from "../index";
 import { Fort } from "fortjs";
 
-
 describe('/user', () => {
 
     let httpRequest;
@@ -71,6 +70,17 @@ describe('/user', () => {
         expect(response.headers['content-type']).toEqual('application/json');
 
         expect(response.data).toEqual({ id: 2, ...user });
+    });
+
+    it('/get all users length after adding user', async () => {
+        const response = await httpRequest.get('/', {
+            headers: {
+                accept: 'application/json'
+            }
+        });
+        expect(response.status).toEqual(200);
+        expect(response.headers['content-type']).toEqual('application/json');
+        expect(response.data.length).toEqual(2);
     });
 
     it('/update user', async () => {

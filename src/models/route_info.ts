@@ -18,7 +18,9 @@ export class RouteInfo implements IRouteInfo {
     values: any[];
     partialRoutes: IRouteInfoChildren[];
 
-    pathSplitted: string[] = [];
+
+    pathSplitted: string[];
+    path_: string;
 
     constructor(value: IRouteInfo) {
         this.controllerName = value.controllerName;
@@ -31,8 +33,13 @@ export class RouteInfo implements IRouteInfo {
     }
 
     set path(value) {
+        this.path_ = value;
         if (value) {
             this.pathSplitted = value.split("/");
         }
+    }
+
+    get path() {
+        return this.path_;
     }
 }
