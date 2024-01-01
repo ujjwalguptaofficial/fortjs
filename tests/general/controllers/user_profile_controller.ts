@@ -14,7 +14,7 @@ export class UserProfileController extends Controller {
     }
 }
 
-// @shields(UserProfileNestedShield)
+@shields(UserProfileNestedShield)
 export class UserProfileNestedController extends Controller {
 
     @worker()

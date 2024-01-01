@@ -74,7 +74,7 @@ describe("wall test", () => {
             expect(res).to.have.header('custom-header-from-incoming-wall', '*');
             expect(res).to.have.header('injection-result', 'wall constructor onIncoming called on outgoing called');
             expect(res).to.have.header('wall-without-outgoing-wall', '*');
-            expect(res.body).haveOwnProperty('reqCount').equal(122);
+            expect(res.body).haveOwnProperty('reqCount').equal(126);
             done();
         })
     })

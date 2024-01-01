@@ -84,7 +84,8 @@ export class RouteHandler {
             const controllerName = child.controller.name
             const savedRoute = routerCollection.get(controllerName);
             savedRoute.path = child.path;
-            const controllerRoutePath = `${route.path}/${child.path}`
+            const controllerRoutePath = `${route.path}/${child.path}`;
+            child.path = controllerRoutePath;
             savedRoute.workers.forEach(worker => {
                 worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
             });

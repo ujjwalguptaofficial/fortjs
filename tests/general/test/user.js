@@ -207,6 +207,51 @@ describe("/user", () => {
         })
     })
 
+    it("/getnestedprofile without profile", (done) => {
+        request.get('/user/profile/nested/me').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(401);
+            expect(res.text).to.be.eql("expect profile in query");
+            done();
+        })
+    })
+
+    it("/getnestedprofile with profile and without nested", (done) => {
+        request.get('/user/profile/nested/me?isProfile=true').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(401);
+            expect(res.text).to.be.eql("expect isNested in query");
+            done();
+        })
+    })
+
+    it("/getprofile with profile", (done) => {
+        request.get('/user/profile/nested/me?isProfile=true&isNested=true').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            const user = {
+                id: 1,
+                name: 'ujjwal',
+                address: 'bhubaneswar india',
+                emailId: 'ujjwal@mg.com',
+                gender: 'male',
+                password: 'admin'
+            }
+            expect(res.body).to.be.eql({
+                nestedProfile: user
+            });
+            done();
+        })
+    })
+
+    it("user nested profile invalid page", (done) => {
+        request.get('/user/profile/nesteds/me').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
+            done();
+        })
+    })
+
     it("/thrown by guard using header", (done) => {
         const body = {
             throwexceptionbyguard: 'true'
