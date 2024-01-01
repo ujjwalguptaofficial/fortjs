@@ -7,3 +7,11 @@ export class UserProfileShield extends Shield {
         }
     }
 }
+
+export class UserProfileNestedShield extends Shield {
+    async protect(@asQuery query): Promise<void | IHttpResult> {
+        if (!query.isNested) {
+            return textResult("expect isNested in query", 401);
+        }
+    }
+}

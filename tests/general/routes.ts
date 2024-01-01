@@ -10,7 +10,7 @@ import { ExpectController } from "./controllers/expect_controller";
 import { RouteController } from "./controllers/route_controller";
 import { WebPushController } from "./controllers/web_push_controller";
 import { EmptyController } from "./controllers/empty_controller";
-import { UserProfileController } from "./controllers/user_profile_controller";
+import { UserProfileController, UserProfileNestedController } from "./controllers/user_profile_controller";
 
 export const routes: IControllerRoute[] = [{
     controller: DefaultController,
@@ -27,7 +27,13 @@ export const routes: IControllerRoute[] = [{
     children: [
         {
             controller: UserProfileController,
-            path: "/profile"
+            path: "/profile",
+            children: [
+                {
+                    controller: UserProfileNestedController,
+                    path: "/nested"
+                }
+            ]
         }
     ]
 }, {

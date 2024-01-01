@@ -79,18 +79,17 @@ export class RouteHandler {
 
     static defaultRouteControllerName: string;
 
-    static addToRouterCollection(value: IControllerRoute) {
-        const route = routerCollection.get(value.controller.name);
-        const partialRoutes = value.children && value.children.map(item => {
+    static getPartialRoutes(route: IControllerRoute, savedRoute: RouteInfo) {
+        return route.children && route.children.map(item => {
             const controllerName = item.controller.name
             const childController = routerCollection.get(controllerName);
             childController.path = item.path;
-            const controllerRoutePath = `${value.path}/${item.path}`
+            const controllerRoutePath = `${route.path}/${item.path}`
             childController.workers.forEach(worker => {
                 worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
             });
             childController.shields.unshift(
-                ...route.shields
+                ...savedRoute.shields
             );
             childController.controller = item.controller;
             return {
@@ -98,24 +97,31 @@ export class RouteHandler {
                 path: item.path
             }
         });
+    }
+
+    static addToRouterCollection(inputRoute: IControllerRoute) {
+        const route = routerCollection.get(inputRoute.controller.name);
+        const partialRoutes = RouteHandler.getPartialRoutes(
+            inputRoute, route
+        )
         if (route == null) {
             pushRouterIntoCollection({
                 workers: new Map(),
-                controller: value.controller,
-                controllerName: value.controller.name,
-                path: value.path,
+                controller: inputRoute.controller,
+                controllerName: inputRoute.controller.name,
+                path: inputRoute.path,
                 shields: [],
                 values: [],
                 partialRoutes: partialRoutes
             });
         }
         else {
-            route.controller = value.controller;
-            route.path = value.path;
+            route.controller = inputRoute.controller;
+            route.path = inputRoute.path;
             route.partialRoutes = partialRoutes
             // change pattern value since we have controller name now.
             route.workers.forEach(worker => {
-                worker.pattern = getWorkerPattern(value.path, worker.pattern);
+                worker.pattern = getWorkerPattern(inputRoute.path, worker.pattern);
             })
         }
     }

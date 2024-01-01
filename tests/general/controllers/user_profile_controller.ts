@@ -1,6 +1,6 @@
 import { Controller, worker, route, jsonResult, singleton, shields } from "fortjs";
 import { UserService } from "../services/user_service";
-import { UserProfileShield } from "../shields/user_profile_shield";
+import { UserProfileNestedShield, UserProfileShield } from "../shields/user_profile_shield";
 
 @shields(UserProfileShield)
 export class UserProfileController extends Controller {
