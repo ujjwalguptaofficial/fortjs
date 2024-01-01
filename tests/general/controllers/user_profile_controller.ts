@@ -13,3 +13,17 @@ export class UserProfileController extends Controller {
         return jsonResult(user);
     }
 }
+
+// @shields(UserProfileNestedShield)
+export class UserProfileNestedController extends Controller {
+
+    @worker()
+    @route('/me')
+    async getMe(@singleton(UserService) userService: UserService) {
+        const userId = await this.session.get('userId');
+        const user = userService.getUser(userId);
+        return jsonResult({
+            nestedProfile: user
+        });
+    }
+}

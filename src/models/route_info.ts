@@ -18,7 +18,7 @@ export class RouteInfo implements IRouteInfo {
     values: any[];
     partialRoutes: IRouteInfoChildren[];
 
-    pathSplitted: string[];
+    pathSplitted: string[] = [];
 
     constructor(value: IRouteInfo) {
         this.controllerName = value.controllerName;
