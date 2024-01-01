@@ -1,8 +1,5 @@
 import { isNullOrEmpty } from "../utils";
 
- 
-
-
 export const parseCookie = (cookie: string): { [key: string]: string } => {
     const value = {};
     if (!isNullOrEmpty(cookie)) {

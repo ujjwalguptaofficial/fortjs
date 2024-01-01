@@ -26,10 +26,7 @@ export class RequestHandlerHelper {
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
         const negotiator = new Negotiator(this.request);
-        let availableTypes: MIME_TYPE[] = this.getAvailableTypes_(type);
-        if (availableTypes == null) {
-            availableTypes = [type];
-        }
+        const availableTypes: MIME_TYPE[] = this.getAvailableTypes_(type) || [type];
         return negotiator.mediaType(availableTypes) as MIME_TYPE;
     }
 
