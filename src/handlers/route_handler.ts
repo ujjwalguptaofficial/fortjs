@@ -44,6 +44,30 @@ function findControllerChildren(urlParts: string[], routes: IRouteInfoChildren[]
     }
 }
 
+function getPartialRoutes(route: IControllerRoute, parentRoute: RouteInfo) {
+    return route.children && route.children.map(child => {
+        const controllerName = child.controller.name
+        const savedRoute = routerCollection.get(controllerName);
+        savedRoute.path = child.path;
+        const controllerRoutePath = `${route.path}/${child.path}`;
+        child.path = controllerRoutePath;
+        savedRoute.workers.forEach(worker => {
+            worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
+        });
+        savedRoute.shields.unshift(
+            ...parentRoute.shields
+        );
+        savedRoute.controller = child.controller;
+        savedRoute.partialRoutes = getPartialRoutes(
+            child, savedRoute
+        )
+        return {
+            controllerName: controllerName,
+            path: child.path
+        }
+    });
+}
+
 export class RouteHandler {
 
     static get routerCollection() {
@@ -79,33 +103,9 @@ export class RouteHandler {
 
     static defaultRouteControllerName: string;
 
-    static getPartialRoutes(route: IControllerRoute, parentRoute: RouteInfo) {
-        return route.children && route.children.map(child => {
-            const controllerName = child.controller.name
-            const savedRoute = routerCollection.get(controllerName);
-            savedRoute.path = child.path;
-            const controllerRoutePath = `${route.path}/${child.path}`;
-            child.path = controllerRoutePath;
-            savedRoute.workers.forEach(worker => {
-                worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
-            });
-            savedRoute.shields.unshift(
-                ...parentRoute.shields
-            );
-            savedRoute.controller = child.controller;
-            savedRoute.partialRoutes = RouteHandler.getPartialRoutes(
-                child, savedRoute
-            )
-            return {
-                controllerName: controllerName,
-                path: child.path
-            }
-        });
-    }
-
     static addToRouterCollection(inputRoute: IControllerRoute) {
         const route = routerCollection.get(inputRoute.controller.name);
-        const partialRoutes = RouteHandler.getPartialRoutes(
+        const partialRoutes = getPartialRoutes(
             inputRoute, route
         )
         if (route == null) {
