@@ -79,22 +79,25 @@ export class RouteHandler {
 
     static defaultRouteControllerName: string;
 
-    static getPartialRoutes(route: IControllerRoute, savedRoute: RouteInfo) {
-        return route.children && route.children.map(item => {
-            const controllerName = item.controller.name
-            const childController = routerCollection.get(controllerName);
-            childController.path = item.path;
-            const controllerRoutePath = `${route.path}/${item.path}`
-            childController.workers.forEach(worker => {
+    static getPartialRoutes(route: IControllerRoute, parentRoute: RouteInfo) {
+        return route.children && route.children.map(child => {
+            const controllerName = child.controller.name
+            const savedRoute = routerCollection.get(controllerName);
+            savedRoute.path = child.path;
+            const controllerRoutePath = `${route.path}/${child.path}`
+            savedRoute.workers.forEach(worker => {
                 worker.pattern = getWorkerPattern(controllerRoutePath, worker.pattern);
             });
-            childController.shields.unshift(
-                ...savedRoute.shields
+            savedRoute.shields.unshift(
+                ...parentRoute.shields
             );
-            childController.controller = item.controller;
+            savedRoute.controller = child.controller;
+            savedRoute.partialRoutes = RouteHandler.getPartialRoutes(
+                child, savedRoute
+            )
             return {
                 controllerName: controllerName,
-                path: item.path
+                path: child.path
             }
         });
     }
