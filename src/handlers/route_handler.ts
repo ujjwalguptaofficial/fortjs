@@ -28,16 +28,19 @@ function isControllerMatched(controller: RouteInfo, urlParts: string[]) {
     return isMatched;
 }
 
-function findControllerChildren(urlParts: string[], routes: IRouteInfoChildren[]) {
-    if (!routes) return;
-    for (const index in routes) {
-        const d = routes[index];
+function findControllerChildren(urlParts: string[], parentController: RouteInfo) {
+    const childRoutes = parentController.partialRoutes;
+    if (!childRoutes) return;
+    urlParts = urlParts.slice(parentController.pathSplitted.length)
+
+    for (const index in childRoutes) {
+        const d = childRoutes[index];
         const controller = RouteHandler.getControllerFromName(d.controllerName);
         const isMatched = isControllerMatched(controller, urlParts);
         if (isMatched === true) {
             const childController: RouteInfo = findControllerChildren(
-                urlParts.slice(controller.pathSplitted.length),
-                controller.partialRoutes
+                urlParts,
+                controller
             );
             return childController || controller;
         }
@@ -85,8 +88,8 @@ export class RouteHandler {
             const isMatched = isControllerMatched(controller, urlParts);
             if (isMatched === true) {
                 const childController = findControllerChildren(
-                    urlParts.slice(controller.pathSplitted.length),
-                    controller.partialRoutes
+                    urlParts,
+                    controller
                 );
                 return childController || controller;
             }
