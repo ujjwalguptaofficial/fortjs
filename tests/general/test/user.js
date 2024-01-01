@@ -207,6 +207,14 @@ describe("/user", () => {
         })
     })
 
+    it("user profile invalid worker", (done) => {
+        request.get('/user/profile/mes').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
+            done();
+        })
+    })
+
     it("/getnestedprofile without profile", (done) => {
         request.get('/user/profile/nested/me').end((err, res) => {
             expect(err).to.be.null;
@@ -246,6 +254,14 @@ describe("/user", () => {
 
     it("user nested profile invalid page", (done) => {
         request.get('/user/profile/nesteds/me').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(404);
+            done();
+        })
+    })
+
+    it("user nested profile invalid end point", (done) => {
+        request.get('/user/profile/nested/mes').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(404);
             done();
