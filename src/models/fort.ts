@@ -65,10 +65,20 @@ export class Fort {
             value = [];
         }
         let isDefaultRouteExist = false;
+
+        function addChildRoute(route: IControllerRoute) {
+            route.children && route.children.forEach(childrenRoute => {
+                childrenRoute.path = removeFirstSlash(childrenRoute.path);
+                childrenRoute.path = removeLastSlash(childrenRoute.path);
+                addChildRoute(childrenRoute);
+            });
+        }
+
         // removing / from routes
         value.forEach(route => {
             // route.path = removeFirstSlash(route.path);
             route.path = removeLastSlash(route.path);
+            addChildRoute(route);
             RouteHandler.addToRouterCollection(route);
             if (route.path === "/*") {
                 RouteHandler.defaultRouteControllerName = route.controller.name;
@@ -82,7 +92,8 @@ export class Fort {
             RouteHandler.defaultRouteControllerName = GenericController.name;
             RouteHandler.addToRouterCollection({
                 controller: GenericController,
-                path: "/*"
+                path: "/*",
+                children: null
             });
         }
     }

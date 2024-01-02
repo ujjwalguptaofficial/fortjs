@@ -10,6 +10,7 @@ import { ExpectController } from "./controllers/expect_controller";
 import { RouteController } from "./controllers/route_controller";
 import { WebPushController } from "./controllers/web_push_controller";
 import { EmptyController } from "./controllers/empty_controller";
+import { UserProfileController, UserProfileNestedController } from "./controllers/user_profile_controller";
 
 export const routes: IControllerRoute[] = [{
     controller: DefaultController,
@@ -22,7 +23,19 @@ export const routes: IControllerRoute[] = [{
     path: "/random"
 }, {
     controller: UserController,
-    path: "/user"
+    path: "/user",
+    children: [
+        {
+            controller: UserProfileController,
+            path: "/profile",
+            children: [
+                {
+                    controller: UserProfileNestedController,
+                    path: "/nested"
+                }
+            ]
+        }
+    ]
 }, {
     controller: CookieController,
     path: "/cookie/"

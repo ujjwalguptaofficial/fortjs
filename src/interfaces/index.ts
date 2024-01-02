@@ -15,7 +15,7 @@ export * from "./folder_map";
 export * from "./http_response";
 export * from "./view_engine_data";
 export * from "./multi_part_parse_result";
-export * from "./parent_route";
+export * from "./controller_route";
 export * from "./route_match";
 export * from "./session_value";
 export * from "./view_read_option";

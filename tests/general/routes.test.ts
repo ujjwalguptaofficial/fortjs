@@ -11,7 +11,8 @@ describe('DefaultController', () => {
         const router = new Router();
         const routesAsArray = router.routesAsArray;
         expect(routesAsArray).toHaveLength(
-            routes.length
+            routes.length + 2
+            // +2 due to nested child
         );
         const controllerName = "HomeController";
         const controller = routesAsArray.find(q => q.controllerName === controllerName);
