@@ -34,9 +34,7 @@ export class RouteInfo implements IRouteInfo {
 
     set path(value) {
         this.path_ = value;
-        if (value) {
-            this.pathSplitted = value.split("/");
-        }
+        this.pathSplitted = value ? value.split("/") : [];
     }
 
     get path() {
