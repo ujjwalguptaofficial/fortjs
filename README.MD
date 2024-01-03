@@ -20,7 +20,7 @@ fortjs goes beyond the basics by introducing reusable components such as walls, 
 Fortjs is **3x faster** than express and nestjs both.
 
 <p align="center">
- <img src="logos/benchmark_18_12_2023.png"/>
+ <img src="logos/benchmark_3_jan_2024.png"/>
 </p>
 
 Check live test on [GITHUB CI](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/benchmark.yml)
