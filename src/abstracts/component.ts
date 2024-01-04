@@ -37,4 +37,20 @@ export class Component {
 
     private componentProp_: IComponentProp;
 
+    middleware(middleware) {
+        return {
+            execute: () => {
+                return new Promise<void>((res, rej) => {
+                    middleware(this.request, this.response, (err) => {
+                        if (err) {
+                            rej(err)
+                        }
+                        else {
+                            res();
+                        }
+                    });
+                });
+            }
+        }
+    }
 }
