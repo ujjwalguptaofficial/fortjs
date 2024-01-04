@@ -1,10 +1,7 @@
 import { initServer } from "..";
-import { viewResult, Fort, textResult } from "fortjs";
+import { Fort } from "fortjs";
 import { CounterScheduler } from "./counter";
-// import { } from "jest;
 
-// jest.
-// jest.sp
 describe("counter scheduler", () => {
     beforeAll(async () => {
         await initServer();

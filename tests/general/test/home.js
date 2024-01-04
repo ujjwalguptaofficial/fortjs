@@ -201,13 +201,13 @@ describe("/home", () => {
             request.get('/setSingletonValue?value=' + value).end((err, res) => {
                 expect(err).to.be.null;
                 expect(res).to.have.status(200);
-            })
 
-            request.get('/getSingletonValue').end((err, res) => {
-                expect(err).to.be.null;
-                expect(res).to.have.status(200);
-                expect(res.text).to.be.equal(value);
-                done();
+                request.get('/getSingletonValue').end((err, res) => {
+                    expect(err).to.be.null;
+                    expect(res).to.have.status(200);
+                    expect(res.text).to.be.equal(value);
+                    done();
+                })
             })
         })
     })
