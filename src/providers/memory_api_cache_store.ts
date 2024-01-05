@@ -1,8 +1,7 @@
 import { ICacheData, ICacheStore } from "../interfaces";
-
 const store = new Map<string, ICacheData>();
 
-export class MempryAPICacheStore implements ICacheStore {
+export class MemoryCacheStore implements ICacheStore {
 
     async set(option: ICacheData) {
         store.set(option.key, option);

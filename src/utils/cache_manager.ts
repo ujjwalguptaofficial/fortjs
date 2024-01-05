@@ -1,9 +1,9 @@
-import { ICacheData, ICacheOptionStore } from "../interfaces";
-import { MempryAPICacheStore } from "../providers";
+import { ICacheData } from "../interfaces";
+import { MemoryCacheStore } from "../providers";
 
-export class APICacheManager {
+export class CacheManager {
 
-    constructor(public cacheStore: MempryAPICacheStore) {
+    constructor(public cacheStore: MemoryCacheStore) {
 
     }
 
@@ -20,10 +20,14 @@ export class APICacheManager {
         const value = await this.cacheStore.get(key);
         if (value) {
             if (new Date().getTime() - value.expiry > 0) {
-                await this.cacheStore.delete(key);
+                await this.delete(key);
                 return;
             }
             return value;
         }
+    }
+
+    async delete(key: string) {
+        return this.cacheStore.delete(key);
     }
 }

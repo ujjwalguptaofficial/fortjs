@@ -1,5 +1,5 @@
 import { Controller, ScheduleTask, Guard, Shield, Wall, XmlParser } from '../abstracts';
-import { IControllerRoute, IHttpResult, ISessonStore, ITaskScheduler } from '../interfaces';
+import { ICacheStore, IControllerRoute, IHttpResult, ISessonStore, ITaskScheduler } from '../interfaces';
 import { ErrorHandler } from '../models';
 
 export * from './http_format_result';
@@ -12,6 +12,7 @@ export type ParentRoute = IControllerRoute;
 export type TComponentQuery = { [key: string]: any };
 
 export type TSessionStore = Class<ISessonStore, [string]>;
+export type TCacheStore = Class<ICacheStore, []>;
 export type TController = Class<Controller>;
 export type TGuard = Class<Guard>;
 export type TShield = Class<Shield>;

@@ -5,3 +5,4 @@ export * from './promise_resolve';
 export * from './compare_string';
 export * from './session_manager';
 export * from './cron_manager';
+export * from './cache_manager';
