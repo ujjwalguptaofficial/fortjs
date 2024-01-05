@@ -2,11 +2,12 @@ import * as http from "http";
 import { CookieManager, FileManager } from "../models";
 import { FortGlobal } from "../constants";
 import { SessionManager } from "../utils";
+import { TComponentQuery } from "../types";
 
 export interface IComponentProp {
     request: http.IncomingMessage;
     response: http.ServerResponse;
-    query: { [key: string]: any };
+    query: TComponentQuery;
     body?: { [key: string]: any };
     session: SessionManager;
     cookie: CookieManager;

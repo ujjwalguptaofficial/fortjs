@@ -1,8 +1,9 @@
-import { RouteHandler } from "../handlers";
-import { TGuard } from "../types";
+import { TComponentQuery } from "../types";
 
 interface ICacheOption {
-    key?: string
+    key?: string;
+    query: TComponentQuery;
+    param: TComponentQuery;
 }
 /**
  * 
@@ -11,7 +12,7 @@ interface ICacheOption {
  * @param {ICacheOption} option
  * @return {*}  {MethodDecorator}
  */
-const cacheFor = (ttl: number, option?: ICacheOption): MethodDecorator => {
+const cacheFor = (ttl: number, option: ICacheOption = {} as any): MethodDecorator => {
     return ((target: any, methodName: string) => {
         const className = (target.constructor.name as string);
         // RouteHandler.addGuards(value as Array<TGuard>, className, methodName);

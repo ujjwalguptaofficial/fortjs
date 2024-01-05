@@ -9,6 +9,7 @@ type Class<I, Args extends any[] = any[]> = new (...args: Args) => I;
 
 // support for old versions
 export type ParentRoute = IControllerRoute;
+export type TComponentQuery = { [key: string]: any };
 
 export type TSessionStore = Class<ISessonStore, [string]>;
 export type TController = Class<Controller>;
