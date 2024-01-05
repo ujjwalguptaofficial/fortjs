@@ -1,10 +1,5 @@
-import { TComponentQuery } from "../types";
+import { ICacheOption } from "../interfaces";
 
-interface ICacheOption {
-    key?: string;
-    query: TComponentQuery;
-    param: TComponentQuery;
-}
 /**
  * 
  *

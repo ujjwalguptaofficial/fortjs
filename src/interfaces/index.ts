@@ -20,5 +20,6 @@ export * from "./route_match";
 export * from "./session_value";
 export * from "./view_read_option";
 export * from "./task_scheduler";
+export * from "./api_cache_option";
 
 

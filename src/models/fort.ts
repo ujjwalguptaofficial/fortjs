@@ -288,4 +288,6 @@ export class Fort {
     }
 
     static scheduler = new TaskSchedulerManager();
+
+    static cache = false;
 }

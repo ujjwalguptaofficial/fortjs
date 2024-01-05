@@ -1,7 +1,7 @@
 import { TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
-import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch, IRouteInfoChildren } from "../interfaces";
+import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch } from "../interfaces";
 import { getDataType } from "../helpers";
 
 const routerCollection = new Map<string, RouteInfo>();
