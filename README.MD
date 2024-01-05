@@ -11,8 +11,6 @@
 
 fortjs is a lightweight and efficient web framework for [Node.js](https://nodejs.org/en/) that empowers developers to build scalable and performant applications with ease. With a focus on simplicity and speed, fortjs provides a robust foundation for creating web APIs and applications. Featuring intuitive routing, dependency injection, and a powerful middleware system, fortjs allows you to craft clean, organized architectures.
 
-fortjs goes beyond the basics by introducing reusable components such as walls, shields, and guards. Walls define the structure of your application, shields protect routes with ease, and guards provide a flexible way to manage authentication and authorization. Say goodbye to boilerplate code and welcome a fortress for building modern and efficient Node.js web applications
-
 # Benchmark
 
 [![BENCHMARK](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/benchmark.yml/badge.svg)](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/benchmark.yml)
@@ -24,6 +22,14 @@ Fortjs is **3x faster** than express and nestjs both.
 </p>
 
 Check live test on [GITHUB CI](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/benchmark.yml)
+
+# Author's Note
+
+While Node.js is undeniably powerful, its available frameworks and ecosystem often lead developers to focus solely on building the application, neglecting considerations for long-term maintainability and code cleanliness. The resulting codebase can be challenging for new team members to grasp.
+
+In contrast, ecosystems like Java and C# offer robust frameworks that facilitate the creation of more maintainable applications. These ecosystems enable new employees to work on the product with relative ease, even without an in-depth understanding of the entire codebase.
+
+Fort.js aims to address this issue by leveraging modern JavaScript and TypeScript. It provides simple APIs and adopts the Fort architecture, which promotes modularity through components without compromising performance (reportedly 3 times faster than Express.js).
 
 # Why fortjs
 
