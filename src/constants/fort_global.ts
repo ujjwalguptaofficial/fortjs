@@ -5,7 +5,7 @@ import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import { ETAG_TYPE } from "../enums";
 import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
-import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard, MemoryCacheStore } from "../providers";
+import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard, MemoryCacheStore, CacheGuard } from "../providers";
 import { RouteHandler } from "../handlers";
 import { DefaultCronJobScheduler } from "../providers/cron_job_scheduler";
 import { CacheWall } from "../providers/cache_wall";
@@ -91,6 +91,7 @@ export class FortGlobal {
             this.walls.push(
                 CacheWall
             );
+            this.guards.push(CacheGuard)
         }
 
         if (this.shouldParseBody === true) {
@@ -99,11 +100,15 @@ export class FortGlobal {
             );
         }
 
+        const shouldEnableCache = this.shouldEnableCache;
         // add global shields
         RouteHandler.routerCollection.forEach((route) => {
             route.shields = this.shields.concat(route.shields);
             route.workers.forEach((worker) => {
                 worker.guards = this.guards.concat(worker.guards);
+                if (shouldEnableCache === true) {
+                    worker.guards.push(CacheGuard)
+                }
             })
         });
     }
