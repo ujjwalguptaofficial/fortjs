@@ -1,7 +1,7 @@
 import { TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
-import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch } from "../interfaces";
+import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch, ICacheOption, ICacheOptionStored } from "../interfaces";
 import { getDataType } from "../helpers";
 
 const routerCollection = new Map<string, RouteInfo>();
@@ -312,6 +312,49 @@ export class RouteHandler {
                 savedAction.expectedQuery = worker.expectedQuery;
                 savedAction.expectedBody = worker.expectedBody;
                 savedAction.expectedParam = worker.expectedParam;
+            }
+        }
+    }
+
+    static addCache(cacheOption: ICacheOptionStored, className: string, workerName: string) {
+        const route = routerCollection.get(className);
+        const pattern = workerName.toLowerCase();
+        if (route == null) {
+            pushRouterIntoCollection({
+                workers: new Map([
+                    [workerName, new WorkerInfo({
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: [],
+                        cache: cacheOption
+                    })]
+                ]),
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            const savedAction = route.workers.get(workerName);
+            if (savedAction == null) {
+                route.workers.set(
+                    workerName,
+                    new WorkerInfo({
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: [],
+                        cache: cacheOption
+                    })
+                );
+            }
+            else {
+                savedAction.cache = cacheOption;
             }
         }
     }

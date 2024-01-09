@@ -1,3 +1,4 @@
+import { RouteHandler } from "../handlers";
 import { ICacheOption } from "../interfaces";
 
 /**
@@ -10,8 +11,11 @@ import { ICacheOption } from "../interfaces";
 const cacheFor = (ttl: number, option: ICacheOption = {} as any): MethodDecorator => {
     return ((target: any, methodName: string) => {
         const className = (target.constructor.name as string);
-        // RouteHandler.addGuards(value as Array<TGuard>, className, methodName);
+        RouteHandler.addCache({
+            param: option.param,
+            query: option.query,
+            ttl,
+            key: option.key || className + "_" + methodName
+        }, className, methodName);
     });
 };
-
-cacheFor(500);

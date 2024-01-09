@@ -1,5 +1,6 @@
 import { HTTP_METHOD } from "../enums";
 import { TGuard } from "../types";
+import { ICacheOptionStored } from "./api_cache_option";
 
 export type IWorkerInfo = {
     workerName: string;
@@ -9,4 +10,5 @@ export type IWorkerInfo = {
     values: any[];
     expectedQuery?: any;
     expectedBody?: any;
+    cache?: ICacheOptionStored;
 };

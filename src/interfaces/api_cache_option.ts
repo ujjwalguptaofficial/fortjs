@@ -6,6 +6,10 @@ export interface ICacheOption {
     param: TComponentQuery;
 }
 
+export interface ICacheOptionStored extends ICacheOption {
+    ttl: number;
+}
+
 export interface ICacheStore {
     set(option: ICacheData): Promise<void>;
     get(key: string): Promise<ICacheData>;
