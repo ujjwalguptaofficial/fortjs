@@ -3,7 +3,7 @@ import { MemoryCacheStore } from "../providers";
 
 export class CacheManager {
 
-    constructor(public cacheStore: MemoryCacheStore) {
+    constructor(private cacheStore_: MemoryCacheStore) {
 
     }
 
@@ -13,11 +13,11 @@ export class CacheManager {
             expiry: new Date().getTime() + ttl * 1000,
             key: key
         } as ICacheData;
-        await this.cacheStore.set(cacheData);
+        await this.cacheStore_.set(cacheData);
     }
 
     async get(key: string) {
-        const value = await this.cacheStore.get(key);
+        const value = await this.cacheStore_.get(key);
         if (value) {
             if (new Date().getTime() - value.expiry > 0) {
                 await this.delete(key);
@@ -28,6 +28,6 @@ export class CacheManager {
     }
 
     async delete(key: string) {
-        return this.cacheStore.delete(key);
+        return this.cacheStore_.delete(key);
     }
 }

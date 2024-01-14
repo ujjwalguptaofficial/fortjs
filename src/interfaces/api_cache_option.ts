@@ -3,8 +3,8 @@ import { IHttpResult } from "./http_result";
 
 export interface ICacheOption {
     key?: string;
-    query: TComponentQuery;
-    param: TComponentQuery;
+    query?: TComponentQuery;
+    param?: TComponentQuery;
 }
 
 export interface ICacheOptionStored extends ICacheOption {
