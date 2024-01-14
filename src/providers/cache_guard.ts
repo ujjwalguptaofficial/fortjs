@@ -6,6 +6,7 @@ export class CacheGuard extends Guard {
         // get cache condition from routes
         const componentProp = this['componentProp_']
         const cacheInfo = componentProp.workerInfo.cache;
+        if (!cacheInfo) return;
         const cacheData = await componentProp.cache.get(cacheInfo.key);
         // and check if condition exist
         if (cacheData) {
