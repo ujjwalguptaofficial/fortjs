@@ -3,6 +3,7 @@ import { IHttpResult } from "../interfaces";
 
 export class CacheGuard extends Guard {
     async check(...args: any[]): Promise<void | IHttpResult> {
+        const cache = this['componentProp_'].workerInfo.cache;
         // get cache condition from routes
         // and check if condition exist
 

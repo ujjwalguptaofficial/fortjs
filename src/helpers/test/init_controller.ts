@@ -31,7 +31,9 @@ export const initController = (controllerInstance: Controller, data?: IControlle
         param: data.param || {},
         data: data.data || {},
         file: new FileManager(data.file || {}),
-        workerName: (data as any).workerName,
+        workerInfo: {
+            workerName: (data as any).workerName
+        } as any,
         global: FORT_GLOBAL,
         cache: cacheManager
     };

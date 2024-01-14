@@ -18,7 +18,7 @@ export abstract class Guard extends Component {
     }
 
     get workerName() {
-        return this['componentProp_'].workerName;
+        return this['componentProp_'].workerInfo.workerName;
     }
 
     abstract check(...args): Promise<IHttpResult | void>;

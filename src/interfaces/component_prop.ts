@@ -4,6 +4,7 @@ import { FortGlobal } from "../constants";
 import { SessionManager } from "../utils";
 import { TComponentQuery } from "../types";
 import { CacheManager } from "../utils/cache_manager";
+import { IWorkerInfo } from "./worker_info";
 
 export interface IComponentProp {
     request: http.IncomingMessage;
@@ -15,8 +16,8 @@ export interface IComponentProp {
     param?: { [key: string]: string };
     data: { [key: string]: any };
     file?: FileManager;
-    workerName?: string;
     controllerName?: string;
     global: FortGlobal;
     cache: CacheManager;
+    workerInfo?: IWorkerInfo;
 }

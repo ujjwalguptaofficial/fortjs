@@ -129,11 +129,10 @@ export class RequestHandler extends RequestHandlerHelper {
 
         this.componentProps.param = routeMatchInfo.params;
         this.componentProps.controllerName = routeMatchInfo.controllerName;
-        this.componentProps.workerName = workerInfo.workerName;
+        this.componentProps.workerInfo = workerInfo;
 
         const shieldResult = await this.executeShieldsProtection_();
         if (shieldResult) return shieldResult;
-
         const guardResult = await this.executeGuardsCheck_(
             workerInfo.guards
         );
