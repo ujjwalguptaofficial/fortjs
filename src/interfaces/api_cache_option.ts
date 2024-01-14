@@ -1,4 +1,5 @@
 import { TComponentQuery } from "../types";
+import { IHttpResult } from "./http_result";
 
 export interface ICacheOption {
     key?: string;
@@ -19,5 +20,5 @@ export interface ICacheStore {
 export interface ICacheData {
     key: string;
     expiry: number;
-    data: any;
+    data: IHttpResult;
 }

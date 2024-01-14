@@ -4,11 +4,12 @@ import { TCacheStore, TErrorHandler, TGuard, TSessionStore, TShield, TTaskSchedu
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import { ETAG_TYPE } from "../enums";
-import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
+import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap, ICacheStore } from "../interfaces";
 import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard, MemoryCacheStore, CacheGuard } from "../providers";
 import { RouteHandler } from "../handlers";
 import { DefaultCronJobScheduler } from "../providers/cron_job_scheduler";
 import { CacheWall } from "../providers/cache_wall";
+import { CacheManager } from "../utils";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -20,7 +21,7 @@ export class FortGlobal {
     shouldEnableCache = false;
     shouldParseBody = true;
     sessionStore: TSessionStore;
-    cacheStore: TCacheStore;
+    cacheStore: ICacheStore;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
     walls: TWall[] = [];
@@ -60,6 +61,7 @@ export class FortGlobal {
     }
 
     componentOption = new ComponentOption();
+    cacheManager: CacheManager;
 
     setDefault() {
 
@@ -67,7 +69,7 @@ export class FortGlobal {
         this.logger = this.logger || new Logger();
 
         this.sessionStore = this.sessionStore || MemorySessionStore;
-        this.cacheStore = this.cacheStore || MemoryCacheStore;
+        this.cacheStore = this.cacheStore || new MemoryCacheStore();
         this.xmlParser = this.xmlParser || BlankXmlParser;
         this.viewEngine = this.viewEngine || new MustacheViewEngine();
         this.appName = this.appName || APP_NAME;
@@ -91,7 +93,10 @@ export class FortGlobal {
             this.walls.push(
                 CacheWall
             );
-            this.guards.push(CacheGuard)
+            this.guards.push(CacheGuard);
+            this.cacheManager = new CacheManager(
+                this.cacheStore
+            );
         }
 
         if (this.shouldParseBody === true) {

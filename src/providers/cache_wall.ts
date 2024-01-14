@@ -5,11 +5,7 @@ import { CacheManager } from "../utils/cache_manager";
 
 export class CacheWall extends Wall {
     async onIncoming(): Promise<void | IHttpResult> {
-        const cacheManager = new CacheManager(
-            new FORT_GLOBAL.cacheStore()
-        );
-        const componentProps = this['componentProp_'];
-        componentProps.cache = cacheManager;
+        this['componentProp_'].cache = FORT_GLOBAL.cacheManager;
     }
 
     onOutgoing(finalResult: IHttpResult, ...args: any[]): void {

@@ -18,9 +18,6 @@ export const initController = (controllerInstance: Controller, data?: IControlle
         cookie,
         FORT_GLOBAL.sessionStore
     );
-    const cacheManager = new CacheManager(
-        new FORT_GLOBAL.cacheStore()
-    );
     controllerInstance['componentProp_'] = {
         request: new HttpRequestStub(headers) as any,
         response: new HttpResponseStub(headers) as any,
@@ -35,7 +32,7 @@ export const initController = (controllerInstance: Controller, data?: IControlle
             workerName: (data as any).workerName
         } as any,
         global: FORT_GLOBAL,
-        cache: cacheManager
+        cache: FORT_GLOBAL.cacheManager
     };
     return controllerInstance;
 };
