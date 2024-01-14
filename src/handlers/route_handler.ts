@@ -264,7 +264,7 @@ export class RouteHandler {
         }
     }
 
-    static addExpected(type: string, className: string, workerName: string, expectedValue: any) {
+    static addExpected(type: "body" | "query" | "param", className: string, workerName: string, expectedValue: any) {
 
         for (const prop in expectedValue) {
             const propValue = expectedValue[prop];
@@ -357,18 +357,6 @@ export class RouteHandler {
                 savedAction.cache = cacheOption;
             }
         }
-    }
-
-    static getExpectedQuery(controllerName: string, workerName: string) {
-        return routerCollection.get(controllerName).workers.get(workerName).expectedQuery;
-    }
-
-    static getExpectedBody(controllerName: string, workerName: string) {
-        return routerCollection.get(controllerName).workers.get(workerName).expectedBody;
-    }
-
-    static getExpectedParam(controllerName: string, workerName: string) {
-        return routerCollection.get(controllerName).workers.get(workerName).expectedParam;
     }
 
     static addRouteToCache(url: string, route: IRouteMatch) {

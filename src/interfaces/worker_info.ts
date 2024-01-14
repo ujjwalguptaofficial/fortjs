@@ -10,5 +10,6 @@ export type IWorkerInfo = {
     values: any[];
     expectedQuery?: any;
     expectedBody?: any;
+    expectedParam?: any;
     cache?: ICacheOptionStored;
 };

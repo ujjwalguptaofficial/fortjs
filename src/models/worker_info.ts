@@ -22,6 +22,7 @@ export class WorkerInfo implements IWorkerInfo {
         this.values = value.values;
         this.expectedQuery = value.expectedQuery;
         this.expectedBody = value.expectedBody;
+        this.expectedParam = value.expectedParam;
         this.pattern = value.pattern;
         this.cache = value.cache;
     }
