@@ -1,4 +1,5 @@
 import { Guard } from "../abstracts";
+import { FROM_CACHE } from "../constants";
 import { IHttpResult } from "../interfaces";
 
 export class CacheGuard extends Guard {
@@ -11,6 +12,7 @@ export class CacheGuard extends Guard {
         // and check if condition exist
         if (cacheData) {
             // then return cache result
+            this.data[FROM_CACHE] = true;
             return cacheData.data;
         }
     }

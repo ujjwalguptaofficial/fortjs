@@ -1,5 +1,5 @@
 import { Wall } from "../abstracts";
-import { FORT_GLOBAL } from "../constants";
+import { FORT_GLOBAL, FROM_CACHE } from "../constants";
 import { IHttpResult } from "../interfaces";
 
 function isCacheable(cacheConditionData, data2) {
@@ -19,6 +19,7 @@ export class CacheWall extends Wall {
     }
 
     onOutgoing(finalResult: IHttpResult): void {
+        if (this.data[FROM_CACHE]) return;
         // get cache condition from routes
         const componentProp = this['componentProp_']
         const cacheInfo = componentProp.workerInfo?.cache;
