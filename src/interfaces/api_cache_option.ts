@@ -13,12 +13,12 @@ export interface ICacheOptionStored extends ICacheOption {
 
 export interface ICacheStore {
     set(option: ICacheData): Promise<void>;
-    get(key: string): Promise<ICacheData>;
-    delete(key: string): Promise<boolean>;
+    get(key: any): Promise<ICacheData>;
+    delete(key: any): Promise<boolean>;
 }
 
 export interface ICacheData {
-    key: string;
+    key: any;
     expiry: number;
     data: IHttpResult;
 }

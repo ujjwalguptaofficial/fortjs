@@ -35,6 +35,10 @@ export class Component {
         return FORT_GLOBAL.componentOption;
     }
 
+    get cache() {
+        return this.componentProp_.cache;
+    }
+
     private componentProp_: IComponentProp;
 
 }

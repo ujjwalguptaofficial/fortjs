@@ -24,6 +24,7 @@ require('./injection');
 require('./expect');
 require('./routes');
 require('./wall');
+require('./cache');
 // describe('exit', () => {
 //     it('after', () => {
 //         process.exit(0);

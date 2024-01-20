@@ -1,6 +1,6 @@
 import { ICacheData, ICacheStore } from "../interfaces";
-const store = new Map<string, ICacheData>();
 
+const store = new Map<any, ICacheData>();
 export class MemoryCacheStore implements ICacheStore {
 
     async set(option: ICacheData) {
