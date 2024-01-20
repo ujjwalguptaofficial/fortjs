@@ -8,7 +8,7 @@ import { ICacheOption } from "../interfaces";
  * @param {ICacheOption} option
  * @return {*}  {MethodDecorator}
  */
-const cacheFor = (ttl: number, option: ICacheOption = {} as any): MethodDecorator => {
+export const cacheFor = (ttl: number, option: ICacheOption = {} as any): MethodDecorator => {
     return ((target: any, methodName: string) => {
         const className = (target.constructor.name as string);
         RouteHandler.addCache({

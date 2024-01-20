@@ -1,4 +1,4 @@
-import { Controller, http, worker, HTTP_METHOD, textResult, jsonResult, route, HTTP_STATUS_CODE } from "fortjs";
+import { Controller, http, cacheFor, HTTP_METHOD, textResult, jsonResult, route, HTTP_STATUS_CODE } from "fortjs";
 
 export class CacheController extends Controller {
 
@@ -25,5 +25,32 @@ export class CacheController extends Controller {
         return jsonResult({
             data: value
         });
+    }
+
+    fruits = ['Apple', 'Mango', 'Banana'];
+
+    @cacheFor(1)
+    @http.get("/fruits")
+    async getFruits() {
+        return jsonResult({
+            data: this.fruits
+        })
+    }
+
+    @http.get("/fruits-without-cache")
+    async getFruitsWithoutCache() {
+        return jsonResult({
+            data: this.fruits
+        })
+    }
+
+    @cacheFor(1)
+    @http.post("/fruits")
+    async addFruits() {
+        const { fruits } = this.body;
+        this.fruits = fruits;
+        return jsonResult({
+            data: this.fruits
+        })
     }
 }

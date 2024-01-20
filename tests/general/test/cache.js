@@ -134,4 +134,45 @@ describe("/user", () => {
             })
         }, 1000);
     })
+
+    it("cache fruits", (done) => {
+        request.get('/cache/fruits').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            request.get('/cache/fruits-without-cache').end((_, response) => {
+                expect(res.body).to.be.eql({
+                    data: response.body.data
+                })
+                done();
+            });
+        })
+    })
+
+    it("cache fruits check after updating fruits value", (done) => {
+        const fruits = ['Apple'];
+        request.post('/cache/fruits').send({
+            fruits: fruits
+        }).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            request.get('/cache/fruits').end((_, response) => {
+                expect(response.body).to.be.not.eql({
+                    data: fruits
+                })
+                done();
+            });
+        })
+    })
+
+    it("expire cache fruits and check new fruits value", (done) => {
+        const fruits = ['Apple'];
+        setTimeout(() => {
+            request.get('/cache/fruits').end((_, response) => {
+                expect(response.body).to.be.not.eql({
+                    data: fruits
+                })
+                done();
+            });
+        }, 1000);
+    })
 });
