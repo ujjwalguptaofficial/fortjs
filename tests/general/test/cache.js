@@ -19,6 +19,16 @@ describe("/user", () => {
         })
     })
 
+    it("check cache size", (done) => {
+        request.delete('/cache/count').end((_, response) => {
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.be.eql({
+                data: 0
+            });
+            done();
+        });
+    })
+
     it("/add cache", (done) => {
         request.post('/cache/add').send({
             key: "Hello",
@@ -56,6 +66,16 @@ describe("/user", () => {
         })
     })
 
+    it("check cache size", (done) => {
+        request.delete('/cache/count').end((_, response) => {
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.be.eql({
+                data: 1
+            });
+            done();
+        });
+    })
+
     it("/get cache for saved data", (done) => {
         request.post('/cache/get').send({
             key: "Hello"
@@ -80,6 +100,16 @@ describe("/user", () => {
             })
             done();
         })
+    })
+
+    it("check cache size", (done) => {
+        request.delete('/cache/count').end((_, response) => {
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.be.eql({
+                data: 0
+            });
+            done();
+        });
     })
 
     it("/get cache for deleted data", (done) => {
@@ -120,6 +150,16 @@ describe("/user", () => {
         })
     })
 
+    it("check cache size", (done) => {
+        request.delete('/cache/count').end((_, response) => {
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.be.eql({
+                data: 1
+            });
+            done();
+        });
+    })
+
     it("/check after 1 second", (done) => {
         setTimeout(() => {
             request.post('/cache/get').send({
@@ -133,6 +173,16 @@ describe("/user", () => {
                 done();
             })
         }, 1000);
+    })
+
+    it("check cache size", (done) => {
+        request.delete('/cache/count').end((_, response) => {
+            expect(response.status).to.be.equal(200);
+            expect(response.body).to.be.eql({
+                data: 0
+            });
+            done();
+        });
     })
 
     it("cache fruits", (done) => {
@@ -174,5 +224,16 @@ describe("/user", () => {
                 done();
             });
         }, 1000);
+    })
+
+    it("get cache store", (done) => {
+        request.put('/cache/store').end((_, response) => {
+            expect(response.status).to.be.equal(200);
+            const store = response.body.data;
+            const storeKeys = Object.keys(store);
+            expect(storeKeys.length).to.be.eql(1);
+            expect(storeKeys).to.be.eql(["CacheController_getFruits"]);
+            done();
+        });
     })
 });

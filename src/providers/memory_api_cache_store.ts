@@ -14,4 +14,12 @@ export class MemoryCacheStore implements ICacheStore {
     async delete(key: string) {
         return store.delete(key);
     }
+
+    count() {
+        return store.size;
+    }
+
+    store() {
+        return store;
+    }
 }

@@ -53,4 +53,25 @@ export class CacheController extends Controller {
             data: this.fruits
         })
     }
+
+    @cacheFor(1)
+    @http.delete("/count")
+    async getCacheCountFromStore() {
+        return jsonResult({
+            data: this.cache['cacheStore_'].count()
+        })
+    }
+
+    @cacheFor(1)
+    @http.put("/store")
+    async getCacheStore() {
+        const map = this.cache['cacheStore_'].store();
+        let obj = Array.from(map).reduce((obj, [key, value]) => (
+            Object.assign(obj, { [key]: value }) // Be careful! Maps can have non-String keys; object literals can't.
+        ), {});
+        // console.log("map", obj);
+        return jsonResult({
+            data: obj
+        })
+    }
 }
