@@ -19,6 +19,7 @@ export class CacheWall extends Wall {
     }
 
     onOutgoing(finalResult: IHttpResult): void {
+        // return if request is exited from cache guard
         if (this.data[FROM_CACHE]) return;
         // get cache condition from routes
         const componentProp = this['componentProp_']
