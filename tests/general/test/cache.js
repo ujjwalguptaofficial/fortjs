@@ -44,6 +44,31 @@ describe("/user", () => {
         })
     })
 
+    it("/update cache", (done) => {
+        request.post('/cache/add').send({
+            key: "Hello",
+            value: "Fortjs"
+        }).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.text).to.be.eql("Ok")
+            done();
+        })
+    })
+
+    it("/get cache for saved data", (done) => {
+        request.post('/cache/get').send({
+            key: "Hello"
+        }).end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.eql({
+                value: "Fortjs"
+            })
+            done();
+        })
+    })
+
     it("/delete cache for saved data", (done) => {
         request.post('/cache/delete').send({
             key: "Hello"
