@@ -68,9 +68,9 @@ export class PostDataEvaluatorGuard extends Guard {
     }
 
     async parsePostData() {
-        let contentType = this.request.headers[CONTENT_TYPE] || this.request.headers["content-type"];
+        let contentType = this.request.headers["content-type"];
         if (contentType != null) {
-            contentType = ContentType.parse(contentType as string).type;
+            contentType = ContentType.parse(this.request).type;
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
             const multipartyResult = await this.parseMultiPartData_();
