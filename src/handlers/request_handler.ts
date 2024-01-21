@@ -3,7 +3,7 @@ import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
 import { FORT_GLOBAL } from "../constants";
 import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
-import { TGuard } from "../types";
+import { TComponentQuery, TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
 import { IHttpResult, IRouteMatch } from "../interfaces";
@@ -129,11 +129,10 @@ export class RequestHandler extends RequestHandlerHelper {
 
         this.componentProps.param = routeMatchInfo.params;
         this.componentProps.controllerName = routeMatchInfo.controllerName;
-        this.componentProps.workerName = workerInfo.workerName;
+        this.componentProps.workerInfo = workerInfo;
 
         const shieldResult = await this.executeShieldsProtection_();
         if (shieldResult) return shieldResult;
-
         const guardResult = await this.executeGuardsCheck_(
             workerInfo.guards
         );
@@ -159,7 +158,7 @@ export class RequestHandler extends RequestHandlerHelper {
     private async execute_() {
         const request = this.componentProps.request;
         const urlDetail = url.parse(request.url, true);
-        this.componentProps.query = urlDetail.query;
+        this.componentProps.query = urlDetail.query as TComponentQuery;
         try {
             const wallResult = await this.executeWallIncoming_();
             if (wallResult) {

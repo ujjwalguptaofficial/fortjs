@@ -38,6 +38,7 @@ export const initServer = async () => {
         name: "Counter"
     });
     Fort.scheduler.startAll();
+    Fort.shouldEnableCache = true;
     await Fort.create();
 };
 

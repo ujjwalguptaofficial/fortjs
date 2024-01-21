@@ -1,7 +1,7 @@
 import { TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
-import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch, IRouteInfoChildren } from "../interfaces";
+import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch, ICacheOption, ICacheOptionStored } from "../interfaces";
 import { getDataType } from "../helpers";
 
 const routerCollection = new Map<string, RouteInfo>();
@@ -264,7 +264,7 @@ export class RouteHandler {
         }
     }
 
-    static addExpected(type: string, className: string, workerName: string, expectedValue: any) {
+    static addExpected(type: "body" | "query" | "param", className: string, workerName: string, expectedValue: any) {
 
         for (const prop in expectedValue) {
             const propValue = expectedValue[prop];
@@ -316,16 +316,47 @@ export class RouteHandler {
         }
     }
 
-    static getExpectedQuery(controllerName: string, workerName: string) {
-        return routerCollection.get(controllerName).workers.get(workerName).expectedQuery;
-    }
-
-    static getExpectedBody(controllerName: string, workerName: string) {
-        return routerCollection.get(controllerName).workers.get(workerName).expectedBody;
-    }
-
-    static getExpectedParam(controllerName: string, workerName: string) {
-        return routerCollection.get(controllerName).workers.get(workerName).expectedParam;
+    static addCache(cacheOption: ICacheOptionStored, className: string, workerName: string) {
+        const route = routerCollection.get(className);
+        const pattern = workerName.toLowerCase();
+        if (route == null) {
+            pushRouterIntoCollection({
+                workers: new Map([
+                    [workerName, new WorkerInfo({
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: [],
+                        cache: cacheOption
+                    })]
+                ]),
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            const savedAction = route.workers.get(workerName);
+            if (savedAction == null) {
+                route.workers.set(
+                    workerName,
+                    new WorkerInfo({
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: [],
+                        cache: cacheOption
+                    })
+                );
+            }
+            else {
+                savedAction.cache = cacheOption;
+            }
+        }
     }
 
     static addRouteToCache(url: string, route: IRouteMatch) {

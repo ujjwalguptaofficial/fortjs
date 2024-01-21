@@ -5,7 +5,7 @@ import { IControllerTestData } from "../../interfaces";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
 import { Controller } from "../../abstracts";
-import { SessionManager } from "../../utils";
+import { SessionManager, CacheManager } from "../../utils";
 
 
 
@@ -28,8 +28,11 @@ export const initController = (controllerInstance: Controller, data?: IControlle
         param: data.param || {},
         data: data.data || {},
         file: new FileManager(data.file || {}),
-        workerName: (data as any).workerName,
-        global: FORT_GLOBAL
+        workerInfo: {
+            workerName: (data as any).workerName
+        } as any,
+        global: FORT_GLOBAL,
+        cache: FORT_GLOBAL.cacheManager
     };
     return controllerInstance;
 };

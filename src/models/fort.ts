@@ -288,4 +288,8 @@ export class Fort {
     }
 
     static scheduler = new TaskSchedulerManager();
+
+    static set shouldEnableCache(value: boolean) {
+        FORT_GLOBAL.shouldEnableCache = value
+    }
 }

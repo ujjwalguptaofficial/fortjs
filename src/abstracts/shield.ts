@@ -6,7 +6,7 @@ import { Component } from "./component";
 
 export abstract class Shield extends Component {
     get workerName() {
-        return this['componentProp_'].workerName;
+        return this['componentProp_'].workerInfo.workerName;
     }
 
     get logger(): Logger {

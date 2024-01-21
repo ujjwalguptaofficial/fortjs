@@ -1,13 +1,15 @@
 import { ErrorHandler, Logger } from "../models";
 import { ViewEngine, ComponentOption } from "../abstracts";
-import { TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, TXmlParser } from "../types";
+import { TCacheStore, TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, TXmlParser } from "../types";
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import { ETAG_TYPE } from "../enums";
-import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap } from "../interfaces";
-import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard } from "../providers";
+import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap, ICacheStore } from "../interfaces";
+import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard, MemoryCacheStore, CacheGuard } from "../providers";
 import { RouteHandler } from "../handlers";
 import { DefaultCronJobScheduler } from "../providers/cron_job_scheduler";
+import { CacheWall } from "../providers/cache_wall";
+import { CacheManager } from "../utils";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
@@ -16,8 +18,10 @@ export class FortGlobal {
     port = 4000;
     viewPath;
     shouldParseCookie = true;
+    shouldEnableCache = false;
     shouldParseBody = true;
     sessionStore: TSessionStore;
+    cacheStore: ICacheStore;
     sessionTimeOut = 60;
     viewEngine: ViewEngine;
     walls: TWall[] = [];
@@ -57,6 +61,7 @@ export class FortGlobal {
     }
 
     componentOption = new ComponentOption();
+    cacheManager: CacheManager;
 
     setDefault() {
 
@@ -64,6 +69,7 @@ export class FortGlobal {
         this.logger = this.logger || new Logger();
 
         this.sessionStore = this.sessionStore || MemorySessionStore;
+        this.cacheStore = this.cacheStore || new MemoryCacheStore();
         this.xmlParser = this.xmlParser || BlankXmlParser;
         this.viewEngine = this.viewEngine || new MustacheViewEngine();
         this.appName = this.appName || APP_NAME;
@@ -79,7 +85,17 @@ export class FortGlobal {
 
         if (this.shouldParseCookie === true) {
             this.walls.unshift(
-                CookieEvaluatorWall as any
+                CookieEvaluatorWall
+            );
+        }
+
+        if (this.shouldEnableCache === true) {
+            this.walls.push(
+                CacheWall
+            );
+            this.guards.push(CacheGuard);
+            this.cacheManager = new CacheManager(
+                this.cacheStore
             );
         }
 
@@ -89,14 +105,17 @@ export class FortGlobal {
             );
         }
 
+        const shouldEnableCache = this.shouldEnableCache;
         // add global shields
         RouteHandler.routerCollection.forEach((route) => {
             route.shields = this.shields.concat(route.shields);
             route.workers.forEach((worker) => {
                 worker.guards = this.guards.concat(worker.guards);
+                if (shouldEnableCache === true) {
+                    worker.guards.push(CacheGuard)
+                }
             })
         });
-
     }
 
 }

@@ -1,7 +1,7 @@
 import { HTTP_METHOD } from "../enums";
 import { joinRoute, splitRoute } from "../helpers";
 import { TGuard } from "../types";
-import { IWorkerInfo } from "../interfaces";
+import { ICacheOptionStored, IWorkerInfo } from "../interfaces";
 
 export class WorkerInfo implements IWorkerInfo {
     workerName: string;
@@ -13,6 +13,7 @@ export class WorkerInfo implements IWorkerInfo {
     expectedBody?: any;
     expectedParam?: any;
     patternSplitted: string[];
+    cache: ICacheOptionStored;
 
     constructor(value: IWorkerInfo) {
         this.workerName = value.workerName;
@@ -21,7 +22,9 @@ export class WorkerInfo implements IWorkerInfo {
         this.values = value.values;
         this.expectedQuery = value.expectedQuery;
         this.expectedBody = value.expectedBody;
+        this.expectedParam = value.expectedParam;
         this.pattern = value.pattern;
+        this.cache = value.cache;
     }
 
     set pattern(value: string) {
