@@ -2,13 +2,11 @@ import { ErrorHandler, Logger } from "../models";
 import { ViewEngine, ComponentOption } from "../abstracts";
 import { TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, TXmlParser } from "../types";
 import { MustacheViewEngine, DtoValidator } from "../extra";
-import { APP_NAME, CURRENT_PATH } from "./index";
+import { APP_NAME, CURRENT_PATH } from "../constants";
 import { ETAG_TYPE } from "../enums";
 import { IScheduleTaskInput, IDtoValidator, IEtagOption, IFolderMap, ICacheStore } from "../interfaces";
-import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard, MemoryCacheStore, CacheGuard } from "../providers";
+import { CookieEvaluatorWall, MemorySessionStore, BlankXmlParser, PostDataEvaluatorGuard, MemoryCacheStore, CacheGuard, CacheWall, DefaultCronJobScheduler } from "../providers";
 import { RouteHandler } from "../handlers";
-import { DefaultCronJobScheduler } from "../providers/cron_job_scheduler";
-import { CacheWall } from "../providers/cache_wall";
 import { CacheManager } from "../utils";
 
 const isDevelopment = process.env.NODE_ENV === 'development';
