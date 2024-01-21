@@ -227,12 +227,4 @@ export class RequestHandlerHelper {
                 return this.handleFormatResult_();
         }
     }
-
-    onResultFromComponent(result: IHttpResult) {
-        this.controllerResult = result || textResult("");
-        // return () => {
-        return this.handleFinalResult_;
-        // }
-    }
-
 }

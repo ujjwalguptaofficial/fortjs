@@ -2,7 +2,7 @@ import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
 import { FORT_GLOBAL } from "../constants";
-import { parseAndMatchRoute, promise, reverseLoop } from "../helpers";
+import { parseAndMatchRoute, promise, reverseLoop, textResult } from "../helpers";
 import { TComponentQuery, TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
 import { InjectorHandler } from "./injector_handler";
@@ -206,5 +206,12 @@ export class RequestHandler extends RequestHandlerHelper {
         const workerName = this.routeMatchInfo_.workerInfo.workerName;
         const methodArgsValues = InjectorHandler.getMethodValues(controllerName, workerName, controllerObj);
         return controllerObj[workerName](...methodArgsValues);
+    }
+
+    onResultFromComponent(result: IHttpResult) {
+        this.controllerResult = result || textResult("");
+        // return () => {
+        return this.handleFinalResult_;
+        // }
     }
 }
