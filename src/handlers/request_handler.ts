@@ -26,13 +26,14 @@ export class RequestHandler extends RequestHandlerHelper {
     }
 
     private executeWallIncoming_(): Promise<IHttpResult> {
-        const wallLength = FORT_GLOBAL.walls.length;
+        const walls = FORT_GLOBAL.walls;
+        const wallLength = walls.length;
         if (wallLength === 0) return;
         return promise((res, rej) => {
             let index = 0;
             const executeWallIncomingByIndex = () => {
                 if (wallLength > index) {
-                    const wall = FORT_GLOBAL.walls[index++];
+                    const wall = walls[index++];
                     const constructorArgsValues = InjectorHandler.getConstructorValues(wall.name);
                     const wallObj = new wall(...constructorArgsValues);
                     wallObj['componentProp_'] = this.componentProps;
