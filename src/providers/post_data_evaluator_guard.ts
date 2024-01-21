@@ -2,9 +2,8 @@ import { Guard } from "../abstracts";
 import { HTTP_METHOD, HTTP_STATUS_CODE } from "../enums";
 import { JsonHelper, promise, textResult } from "../helpers";
 import { FileManager } from "../models";
-import { CONTENT_TYPE } from "../constants";
 import { MIME_TYPE } from "../enums";
-import * as ContentType from "content-type";
+import ContentType from "fast-content-type-parse";
 import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
 import { IMultiPartParseResult } from "../interfaces";
@@ -70,7 +69,7 @@ export class PostDataEvaluatorGuard extends Guard {
     async parsePostData() {
         let contentType = this.request.headers["content-type"];
         if (contentType != null) {
-            contentType = ContentType.parse(this.request).type;
+            contentType = ContentType.parse(contentType).type;
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
             const multipartyResult = await this.parseMultiPartData_();

@@ -55,9 +55,9 @@
   },
   "dependencies": {
     "class-validator": "^0.14.1",
-    "content-type": "^1.0.5",
     "cron": "^3.1.6",
     "etag": "^1.8.1",
+    "fast-content-type-parse": "^1.1.0",
     "fresh": "^0.5.2",
     "fs-extra": "^11.2.0",
     "multiparty": "^4.2.3",
