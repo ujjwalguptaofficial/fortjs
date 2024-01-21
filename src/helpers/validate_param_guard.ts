@@ -1,5 +1,4 @@
 import { Guard } from "../abstracts";
-import { RouteHandler } from "../handlers";
 import { executeValidate } from "./execute_validate";
 
 export class ValidateParamGuard extends Guard {

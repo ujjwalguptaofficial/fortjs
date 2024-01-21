@@ -54,15 +54,15 @@
     "webpack-node-externals": "^2.5.0"
   },
   "dependencies": {
-    "class-validator": "^0.14.0",
+    "class-validator": "^0.14.1",
     "content-type": "^1.0.5",
+    "cron": "^3.1.6",
     "etag": "^1.8.1",
     "fresh": "^0.5.2",
-    "fs-extra": "^9.0.0",
+    "fs-extra": "^11.2.0",
     "multiparty": "^4.2.3",
     "mustache": "^4.2.0",
     "negotiator": "^0.6.3",
-    "uniqid": "^5.4.0",
-    "cron": "^3.1.6"
+    "uniqid": "^5.4.0"
   }
 }

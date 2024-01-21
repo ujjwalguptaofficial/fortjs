@@ -1,6 +1,6 @@
 import { ErrorHandler, Logger } from "../models";
 import { ViewEngine, ComponentOption } from "../abstracts";
-import { TCacheStore, TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, TXmlParser } from "../types";
+import { TErrorHandler, TGuard, TSessionStore, TShield, TTaskScheduler, TWall, TXmlParser } from "../types";
 import { MustacheViewEngine, DtoValidator } from "../extra";
 import { APP_NAME, CURRENT_PATH } from "./index";
 import { ETAG_TYPE } from "../enums";
