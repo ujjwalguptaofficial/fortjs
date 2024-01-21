@@ -5,7 +5,7 @@ import { promiseResolve } from "../utils";
 
 export class ErrorHandler {
     onServerError(ex: IException): Promise<IHttpResult> {
-        let errMessage = `<h1>internal server error</h1>
+        let errMessage = `<h1>Internal Server Error</h1>
             <h3>message : ${ex.message}</h3>`;
         if (ex.stack) {
             errMessage += `<p><b>stacktrace:</b> ${ex.stack}</p>`;

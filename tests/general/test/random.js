@@ -62,7 +62,7 @@ describe("/random", () => {
         request.post('/random/throw').end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(500);
-            expect(removeSpaceAndNewLine(res.text)).to.be.eql('<h1>internalservererror</h1><h3>message:throwtest</h3>');
+            expect(removeSpaceAndNewLine(res.text)).to.be.eql('<h1>InternalServerError</h1><h3>message:throwtest</h3>');
             done();
         })
     })
