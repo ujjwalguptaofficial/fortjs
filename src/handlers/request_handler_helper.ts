@@ -2,14 +2,12 @@ import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../e
 import { CONTENT_TYPE, SET_COOKIE, FORT_GLOBAL } from "../constants";
 import * as Negotiator from "negotiator";
 import { IComponentProp, IException, IFileResultInfo, IHttpResult } from "../interfaces";
-import { textResult, getResultBasedOnMiMe } from "../helpers";
+import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes } from "../helpers";
 import { HttpFormatResult } from "../types";
 import { parse } from "path";
 import { FileHandler } from "./file_handler";
 
-const jsonMimeType = [MIME_TYPE.Json, MIME_TYPE.Xml];
-const textMimeType = [MIME_TYPE.Text, MIME_TYPE.Html, MIME_TYPE.Js,
-MIME_TYPE.Css, MIME_TYPE.Rtf, MIME_TYPE.Csv];
+const mimeTypeMap = new Map<string, string>();
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
@@ -25,29 +23,14 @@ export class RequestHandlerHelper {
     }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
-        const negotiator = new Negotiator(this.request);
-        const availableTypes: MIME_TYPE[] = this.getAvailableTypes_(type) || [type];
-        return negotiator.mediaType(availableTypes) as MIME_TYPE;
+        return this.getContentTypeFromNegotiationHavingMultipleTypes(
+            getAvailableMimeTypes(type) || [type]
+        );
     }
 
     protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]) {
         const negotiator = new Negotiator(this.request);
         return negotiator.mediaType(types) as MIME_TYPE;
-    }
-
-    private getAvailableTypes_(type: MIME_TYPE) {
-        switch (type) {
-            case MIME_TYPE.Json:
-            case MIME_TYPE.Xml:
-                return jsonMimeType;
-            case MIME_TYPE.Html:
-            case MIME_TYPE.Css:
-            case MIME_TYPE.Csv:
-            case MIME_TYPE.Js:
-            case MIME_TYPE.Rtf:
-            case MIME_TYPE.Text:
-                return textMimeType;
-        }
     }
 
     protected onBadRequest(error) {
