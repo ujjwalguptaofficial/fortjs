@@ -323,4 +323,13 @@ describe("/user", () => {
             done();
         })
     })
+
+    it("/pass invalid regex", (done) => {
+        request.get('/user/+CSCOE').end((err, res) => {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res.text).to.be.contains("Invalid regular expression: /^+CSCOE$/: Nothing to repeat");
+            done();
+        })
+    })
 });
