@@ -4,7 +4,7 @@ import { ERROR_TYPE } from "../enums/error_type";
 
 export let renderView: (viewName: string, model?: any) => Promise<string>;
 
-if (FORT_GLOBAL.isProduction === true) {
+if (process.env.NODE_ENV === "production") {
     renderView = (viewName: string, model?: any) => {
         return FORT_GLOBAL.viewEngine.render({
             view: viewName,
