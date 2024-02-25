@@ -1,6 +1,6 @@
 import { IHttpResult } from "./http_result";
 
-export interface IDtoValidator {
+export interface IDTOValidator {
     validate(dtoInstance: any): Promise<any>;
     getErrorResult(error: any): IHttpResult;
 }

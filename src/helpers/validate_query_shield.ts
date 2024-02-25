@@ -6,7 +6,7 @@ export class ValidateQueryShield extends Shield {
         const componentProp = this['componentProp_'];
         const expectedQuery = componentProp.workerInfo.expectedQuery;
         if (expectedQuery == null) return;
-        const validationResult = await executeValidate(expectedQuery, this.query);
+        const validationResult = await executeValidate(componentProp.global.validator, expectedQuery, this.query);
         if (validationResult.error) {
             return validationResult.error;
         }

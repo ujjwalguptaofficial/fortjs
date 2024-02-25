@@ -1,5 +1,5 @@
 import { ValidatorOptions, validate } from "class-validator";
-import { IDtoValidator } from "../interfaces";
+import { IDTOValidator } from "../interfaces";
 import { ErrorResultMapper } from "../types";
 import { jsonResult } from "../helpers";
 import { HTTP_STATUS_CODE } from "../enums";
@@ -13,7 +13,7 @@ const defaultErrorResultMapper = (validationResult) => {
     }, HTTP_STATUS_CODE.BadRequest);
 };
 
-export class DtoValidator implements IDtoValidator {
+export class DtoValidator implements IDTOValidator {
 
     validatorOption: ValidatorOptions;
     getErrorResult: ErrorResultMapper;

@@ -6,7 +6,9 @@ export class ValidateBodyGuard extends Guard {
         const componentProp = this['componentProp_'];
         const expectedBody = componentProp.workerInfo.expectedBody;
         if (expectedBody == null) return;
-        const validationResult = await executeValidate(expectedBody, this.body);
+        const validationResult = await executeValidate(
+            componentProp.global.validator, expectedBody, this.body
+        );
         if (validationResult.error) {
             return validationResult.error;
         }
