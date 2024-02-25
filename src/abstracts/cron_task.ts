@@ -1,4 +1,4 @@
-import { FORT_GLOBAL } from "../constants";
+import { FortGlobal } from "../constants";
 import { ITaskScheduler } from "../interfaces";
 
 export abstract class ScheduleTask {
@@ -6,10 +6,10 @@ export abstract class ScheduleTask {
     name: string;
     expression: string;
 
-    constructor(name: string, expression: string) {
+    constructor(name: string, expression: string, private appGlobal_: FortGlobal) {
         this.name = name || this.constructor.name;
         this.expression = expression;
-        this.taskScheduler_ = new FORT_GLOBAL.cronJobScheduler(
+        this.taskScheduler_ = new appGlobal_.cronJobScheduler(
             this
         );
     }

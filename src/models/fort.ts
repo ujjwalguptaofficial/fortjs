@@ -287,7 +287,7 @@ export class Fort {
         FORT_GLOBAL.validator = validator;
     }
 
-    static scheduler = new TaskSchedulerManager();
+    static scheduler = new TaskSchedulerManager(FORT_GLOBAL);
 
     static set useCache(value: boolean) {
         FORT_GLOBAL.shouldEnableCache = value

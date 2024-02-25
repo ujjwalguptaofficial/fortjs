@@ -1,5 +1,5 @@
 import { ScheduleTask } from "../abstracts";
-import { FORT_GLOBAL } from "../constants";
+import { FortGlobal } from "../constants";
 import { IScheduleTaskInput } from "../interfaces";
 
 interface IScheduleTaskStarted {
@@ -9,13 +9,18 @@ interface IScheduleTaskStarted {
 const tasks = new Map<string, IScheduleTaskStarted>;
 
 export class TaskSchedulerManager {
+
+    constructor(private global_: FortGlobal) {
+
+    }
+
     start(name: string) {
         const cron = this.getTaskInputByName(name);
         this.startTask_(cron);
     }
 
     private startTask_(cron: IScheduleTaskInput) {
-        const task = new cron.task(cron.name, cron.expression);
+        const task = new cron.task(cron.name, cron.expression, this.global_);
         task.start();
         tasks.set(cron.name, {
             task: task
@@ -23,13 +28,13 @@ export class TaskSchedulerManager {
     }
 
     startAll() {
-        FORT_GLOBAL.crons.forEach(cron => {
+        this.global_.crons.forEach(cron => {
             this.startTask_(cron);
         });
     }
 
     add(...values: IScheduleTaskInput[]) {
-        FORT_GLOBAL.crons = [...FORT_GLOBAL.crons, ...values];
+        this.global_.crons = [...this.global_.crons, ...values];
     }
 
     execute(name: string) {
@@ -38,7 +43,7 @@ export class TaskSchedulerManager {
     }
 
     getTaskInputByName(name: string) {
-        const cron = FORT_GLOBAL.crons.find(q => q.name === name);
+        const cron = this.global_.crons.find(q => q.name === name);
         if (!cron) {
             throw new Error(`Cron task ${name} is not registered.`);
         }
