@@ -7,7 +7,7 @@ import { ERROR_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
 import { TaskSchedulerManager, isArray } from "../utils";
 import { Logger } from "./logger";
-import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute } from "../interfaces";
+import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, ICacheStore } from "../interfaces";
 
 export class Fort {
 
@@ -291,5 +291,9 @@ export class Fort {
 
     static set useCache(value: boolean) {
         FORT_GLOBAL.shouldEnableCache = value
+    }
+
+    static set cacheStore(store: ICacheStore) {
+        FORT_GLOBAL.cacheStore = store;
     }
 }
