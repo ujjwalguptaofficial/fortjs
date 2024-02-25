@@ -1,5 +1,5 @@
 import { Wall } from "../abstracts";
-import { FORT_GLOBAL, FROM_CACHE } from "../constants";
+import { FROM_CACHE } from "../constants";
 import { IHttpResult } from "../interfaces";
 
 function isCacheable(cacheConditionData, data2) {
@@ -15,7 +15,7 @@ function isCacheable(cacheConditionData, data2) {
 
 export class CacheWall extends Wall {
     async onIncoming(): Promise<void | IHttpResult> {
-        this['componentProp_'].cache =  FORT_GLOBAL.cacheManager;
+        this['componentProp_'].cache = this['componentProp_'].global.cacheManager;
     }
 
     onOutgoing(finalResult: IHttpResult): void {

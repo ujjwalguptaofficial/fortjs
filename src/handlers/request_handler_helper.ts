@@ -7,8 +7,6 @@ import { HttpFormatResult } from "../types";
 import { parse } from "path";
 import { FileHandler } from "./file_handler";
 
-const mimeTypeMap = new Map<string, string>();
-
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
 
