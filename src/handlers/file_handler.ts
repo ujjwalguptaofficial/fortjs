@@ -1,6 +1,6 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
 import * as path from "path";
-import { CONTENT_TYPE, FORT_GLOBAL } from "../constants";
+import { CONTENT_TYPE } from "../constants";
 import * as Fs from "fs";
 import { getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
@@ -71,8 +71,8 @@ export class FileHandler {
 
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
         const fileInfo = this.getFileInfoFromUrl_(urlPath);
-        const getAbsPath = function () {
-            const folder = FORT_GLOBAL.folders.find(qry => qry.alias === fileInfo.folder);
+        const getAbsPath = () => {
+            const folder = this.requestHandler.config.folders.find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
                 return path.join(folder.path, fileInfo.file);
             }
@@ -140,7 +140,7 @@ export class FileHandler {
     sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
         const lastModified = fileInfo.mtime.toUTCString();
         const eTagValue = etag(fileInfo, {
-            weak: FORT_GLOBAL.eTag.type === ETAG_TYPE.Weak
+            weak: this.requestHandler.config.eTag.type === ETAG_TYPE.Weak
         });
         const response = this.requestHandler.response;
         if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
