@@ -284,8 +284,15 @@ export class App {
 
     destroy(): Promise<void> {
         this.scheduler.stopAll();
-        return promise((res) => {
-            this.httpServer.close(res);
+        return promise((res, rej) => {
+            this.httpServer.close((err: any) => {
+                if (err) {
+                    rej(err);
+                }
+                else {
+                    res();
+                }
+            });
         });
     }
 
