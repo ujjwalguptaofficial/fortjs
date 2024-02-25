@@ -1,4 +1,3 @@
-import { FORT_GLOBAL } from "../constants/fort_global";
 import { IHttpRequest, IHttpResponse, IComponentProp } from "../interfaces";
 import { Logger } from "../models";
 
@@ -28,11 +27,11 @@ export class Component {
     }
 
     get logger(): Logger {
-        return FORT_GLOBAL.logger;
+        return this.componentProp_.global.logger;
     }
 
     get option() {
-        return FORT_GLOBAL.componentOption;
+        return this.componentProp_.global.componentOption;
     }
 
     get cache() {
