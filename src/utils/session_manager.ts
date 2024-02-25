@@ -1,8 +1,7 @@
-import { FORT_GLOBAL } from "../constants";
+import { FortGlobal } from "../constants";
 import { ISessonStore } from "../interfaces";
 import { CookieManager } from "../models";
 import * as getUniqId from "uniqid";
-import { TSessionStore } from "../types";
 
 export class SessionManager {
 
@@ -10,27 +9,28 @@ export class SessionManager {
     protected cookie: CookieManager;
     sessionStore: ISessonStore;
 
-    constructor(cookie: CookieManager, sessionStore: TSessionStore) {
-        this.sessionId = cookie.cookieCollection[FORT_GLOBAL.appSessionIdentifier];
-        this.sessionStore = new sessionStore(this.sessionId);
+    constructor(cookie: CookieManager, private appGlobal_: FortGlobal) {
+        this.sessionId = cookie.cookieCollection[appGlobal_.appSessionIdentifier];
+        this.sessionStore = new appGlobal_.sessionStore(this.sessionId);
         this.cookie = cookie;
     }
 
     protected createSession(sessionId?) {
         const now = new Date();
         this.sessionId = sessionId != null ? sessionId : getUniqId();
+        const appGlobal = this.appGlobal_;
         this.cookie.addCookie({
-            name: FORT_GLOBAL.appSessionIdentifier,
+            name: appGlobal.appSessionIdentifier,
             value: this.sessionId,
             httpOnly: true,
             path: "/",
-            expires: new Date(now.setMinutes(now.getMinutes() + FORT_GLOBAL.sessionTimeOut)),
-            maxAge: FORT_GLOBAL.sessionTimeOut * 60
+            expires: new Date(now.setMinutes(now.getMinutes() + appGlobal.sessionTimeOut)),
+            maxAge: appGlobal.sessionTimeOut * 60
         });
     }
 
     private destroy_() {
-        const cookie = this.cookie.getCookie(FORT_GLOBAL.appSessionIdentifier);
+        const cookie = this.cookie.getCookie(this.appGlobal_.appSessionIdentifier);
         cookie.httpOnly = true;
         cookie.path = "/";
         this.cookie.removeCookie(cookie);

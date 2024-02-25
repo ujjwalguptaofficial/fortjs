@@ -17,7 +17,7 @@ export class CookieEvaluatorWall extends Wall {
         const rawCookie = (request.headers[COOKIE] || request.headers["cookie"]) as string;
         const parsedCookies = parseCookie(rawCookie);
         const cookie = new CookieManager(parsedCookies);
-        const session = new SessionManager(cookie, appGlobal.sessionStore);
+        const session = new SessionManager(cookie, appGlobal);
         componentProps.session = session;
         componentProps.cookie = cookie;
     }

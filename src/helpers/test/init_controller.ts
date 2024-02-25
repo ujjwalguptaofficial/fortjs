@@ -5,9 +5,7 @@ import { IControllerTestData } from "../../interfaces";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
 import { Controller } from "../../abstracts";
-import { SessionManager, CacheManager } from "../../utils";
-
-
+import { SessionManager } from "../../utils";
 
 export const initController = (controllerInstance: Controller, data?: IControllerTestData) => {
     data = data || {};
@@ -16,7 +14,7 @@ export const initController = (controllerInstance: Controller, data?: IControlle
     const cookie = new CookieManager(parsedCookies);
     const session = new SessionManager(
         cookie,
-        FORT_GLOBAL.sessionStore
+        FORT_GLOBAL
     );
     controllerInstance['componentProp_'] = {
         request: new HttpRequestStub(headers) as any,
