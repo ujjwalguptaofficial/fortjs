@@ -1,11 +1,12 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../enums";
-import { CONTENT_TYPE, SET_COOKIE, FortGlobal } from "../constants";
+import { CONTENT_TYPE, SET_COOKIE } from "../constants";
 import * as Negotiator from "negotiator";
 import { IComponentProp, IException, IFileResultInfo, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes } from "../helpers";
 import { HttpFormatResult } from "../types";
 import { parse } from "path";
 import { FileHandler } from "./file_handler";
+import { App } from "../models";
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
@@ -20,7 +21,7 @@ export class RequestHandlerHelper {
         return this.componentProps.response;
     }
 
-    constructor(public config: FortGlobal) {
+    constructor(public config: App) {
 
     }
 

@@ -15,7 +15,7 @@ function isCacheable(cacheConditionData, data2) {
 
 export class CacheWall extends Wall {
     async onIncoming(): Promise<void | IHttpResult> {
-        this['componentProp_'].cache = this['componentProp_'].global.cacheManager;
+        this['componentProp_'].cache = this['componentProp_'].global['cacheManager_'];
     }
 
     onOutgoing(finalResult: IHttpResult): void {

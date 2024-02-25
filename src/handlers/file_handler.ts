@@ -72,7 +72,7 @@ export class FileHandler {
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
         const fileInfo = this.getFileInfoFromUrl_(urlPath);
         const getAbsPath = () => {
-            const folder = this.requestHandler.config.folders.find(qry => qry.alias === fileInfo.folder);
+            const folder = this.requestHandler.config['folders_'].find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
                 return path.join(folder.path, fileInfo.file);
             }

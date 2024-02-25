@@ -1,6 +1,5 @@
-import { FortGlobal } from "../constants";
 import { ISessonStore } from "../interfaces";
-import { CookieManager } from "../models";
+import { App, CookieManager } from "../models";
 import * as getUniqId from "uniqid";
 
 export class SessionManager {
@@ -9,8 +8,8 @@ export class SessionManager {
     protected cookie: CookieManager;
     sessionStore: ISessonStore;
 
-    constructor(cookie: CookieManager, private appGlobal_: FortGlobal) {
-        this.sessionId = cookie.cookieCollection[appGlobal_.appSessionIdentifier];
+    constructor(cookie: CookieManager, private appGlobal_: App) {
+        this.sessionId = cookie.cookieCollection[appGlobal_['appSessionIdentifier_']];
         this.sessionStore = new appGlobal_.sessionStore(this.sessionId);
         this.cookie = cookie;
     }
@@ -20,7 +19,7 @@ export class SessionManager {
         this.sessionId = sessionId != null ? sessionId : getUniqId();
         const appGlobal = this.appGlobal_;
         this.cookie.addCookie({
-            name: appGlobal.appSessionIdentifier,
+            name: appGlobal['appSessionIdentifier_'],
             value: this.sessionId,
             httpOnly: true,
             path: "/",
@@ -30,7 +29,7 @@ export class SessionManager {
     }
 
     private destroy_() {
-        const cookie = this.cookie.getCookie(this.appGlobal_.appSessionIdentifier);
+        const cookie = this.cookie.getCookie(this.appGlobal_['appSessionIdentifier_']);
         cookie.httpOnly = true;
         cookie.path = "/";
         this.cookie.removeCookie(cookie);

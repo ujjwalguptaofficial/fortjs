@@ -31,7 +31,7 @@ export class Component {
     }
 
     get option() {
-        return this.componentProp_.global.componentOption;
+        return this.componentProp_.global['componentOption_'];
     }
 
     get cache() {

@@ -12,7 +12,7 @@ import { CacheManager } from "../utils";
 const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === "production";
 
-export class FortGlobal {
+class FortGlobal {
     port = 4000;
     viewPath;
     shouldParseCookie = true;
@@ -118,4 +118,4 @@ export class FortGlobal {
 
 }
 
-export const FORT_GLOBAL = new FortGlobal();
+// export const FORT_GLOBAL = new FortGlobal();
