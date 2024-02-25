@@ -273,7 +273,7 @@ export class Fort {
     }
 
     static onNewRequest(request, response) {
-        new RequestHandler().handle(request, response);
+        new RequestHandler(FORT_GLOBAL).handle(request, response);
     }
 
     static destroy(): Promise<void> {

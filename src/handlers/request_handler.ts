@@ -1,7 +1,6 @@
 import * as http from "http";
 import * as url from 'url';
 import { Controller, Wall } from "../abstracts";
-import { FORT_GLOBAL } from "../constants";
 import { parseAndMatchRoute, promise, reverseLoop, textResult } from "../helpers";
 import { TComponentQuery, TGuard } from "../types";
 import { HTTP_METHOD } from "../enums";
@@ -25,7 +24,7 @@ export class RequestHandler extends RequestHandlerHelper {
     }
 
     private executeWallIncoming_(): Promise<IHttpResult> {
-        const walls = FORT_GLOBAL.walls;
+        const walls = this.config.walls;
         const wallLength = walls.length;
         if (wallLength === 0) return;
         return promise((res, rej) => {
@@ -110,7 +109,7 @@ export class RequestHandler extends RequestHandlerHelper {
 
     private setPreHeader_() {
         const response = this.response;
-        response.setHeader('X-Powered-By', FORT_GLOBAL.appName);
+        response.setHeader('X-Powered-By', this.config.appName);
         response.setHeader('Vary', 'Accept-Encoding');
         response.sendDate = true;
     }
@@ -191,7 +190,7 @@ export class RequestHandler extends RequestHandlerHelper {
             request,
             response,
             data: {},
-            global: FORT_GLOBAL
+            global: this.config
         } as any;
         this.registerEvents_();
         this.setPreHeader_();

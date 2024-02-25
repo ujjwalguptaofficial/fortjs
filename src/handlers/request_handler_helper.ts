@@ -1,5 +1,5 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../enums";
-import { CONTENT_TYPE, SET_COOKIE, FORT_GLOBAL } from "../constants";
+import { CONTENT_TYPE, SET_COOKIE, FortGlobal } from "../constants";
 import * as Negotiator from "negotiator";
 import { IComponentProp, IException, IFileResultInfo, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes } from "../helpers";
@@ -20,7 +20,9 @@ export class RequestHandlerHelper {
         return this.componentProps.response;
     }
 
-    public config = FORT_GLOBAL;
+    constructor(public config: FortGlobal) {
+
+    }
 
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
         return this.getContentTypeFromNegotiationHavingMultipleTypes(
