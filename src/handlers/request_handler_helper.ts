@@ -20,6 +20,8 @@ export class RequestHandlerHelper {
         return this.componentProps.response;
     }
 
+    public config = FORT_GLOBAL;
+
     protected getContentTypeFromNegotiation(type: MIME_TYPE) {
         return this.getContentTypeFromNegotiationHavingMultipleTypes(
             getAvailableMimeTypes(type) || [type]
@@ -32,31 +34,31 @@ export class RequestHandlerHelper {
     }
 
     protected onBadRequest(error) {
-        return new FORT_GLOBAL.errorHandler().onBadRequest(error).then(data => {
+        return new this.config.errorHandler().onBadRequest(error).then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     protected onForbiddenRequest() {
-        return new FORT_GLOBAL.errorHandler().onForbiddenRequest().then(data => {
+        return new this.config.errorHandler().onForbiddenRequest().then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     protected onNotAcceptableRequest() {
-        return new FORT_GLOBAL.errorHandler().onNotAcceptableRequest().then(data => {
+        return new this.config.errorHandler().onNotAcceptableRequest().then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     public onNotFound() {
-        return new FORT_GLOBAL.errorHandler().onNotFound(this.request.url).then(data => {
+        return new this.config.errorHandler().onNotFound(this.request.url).then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
-        return new FORT_GLOBAL.errorHandler().onMethodNotAllowed().then(data => {
+        return new this.config.errorHandler().onMethodNotAllowed().then(data => {
             this.response.setHeader("Allow", allowedMethods.join(","));
             return this.onResultFromError_(data);
         });
@@ -73,7 +75,7 @@ export class RequestHandlerHelper {
                 message: error
             } as IException;
         }
-        return new FORT_GLOBAL.errorHandler().onServerError(error).then(data => {
+        return new this.config.errorHandler().onServerError(error).then(data => {
             this.controllerResult = data;
             return this.returnResultFromError_();
         }).catch(ex => {
@@ -98,7 +100,7 @@ export class RequestHandlerHelper {
     }
 
     setCookie() {
-        if (FORT_GLOBAL.shouldParseCookie === false) return;
+        if (this.config.shouldParseCookie === false) return;
         (this.componentProps.cookie['responseCookie_']).forEach(value => {
             this.response.setHeader(SET_COOKIE, value);
         });

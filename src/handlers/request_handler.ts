@@ -15,8 +15,6 @@ export class RequestHandler extends RequestHandlerHelper {
     private routeMatchInfo_: IRouteMatch;
     private wallInstances: Wall[] = [];
 
-    public config = FORT_GLOBAL;
-
     private registerEvents_() {
         this.request.on('error', (err) => {
             this.onBadRequest(err).catch(ex => {
