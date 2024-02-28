@@ -1,13 +1,10 @@
 
-import { CookieManager, FileManager } from "../../models";
-import { FORT_GLOBAL } from "../../constants/fort_global";
+import { CookieManager, FileManager, Fort } from "../../models";
 import { IControllerTestData } from "../../interfaces";
 import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
 import { Controller } from "../../abstracts";
-import { SessionManager, CacheManager } from "../../utils";
-
-
+import { SessionManager } from "../../utils";
 
 export const initController = (controllerInstance: Controller, data?: IControllerTestData) => {
     data = data || {};
@@ -16,7 +13,7 @@ export const initController = (controllerInstance: Controller, data?: IControlle
     const cookie = new CookieManager(parsedCookies);
     const session = new SessionManager(
         cookie,
-        FORT_GLOBAL.sessionStore
+        Fort
     );
     controllerInstance['componentProp_'] = {
         request: new HttpRequestStub(headers) as any,
@@ -31,8 +28,8 @@ export const initController = (controllerInstance: Controller, data?: IControlle
         workerInfo: {
             workerName: (data as any).workerName
         } as any,
-        global: FORT_GLOBAL,
-        cache: FORT_GLOBAL.cacheManager
+        global: Fort,
+        cache: Fort['cacheManager_']
     };
     return controllerInstance;
 };

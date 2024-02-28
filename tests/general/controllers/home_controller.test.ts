@@ -7,7 +7,6 @@ import { StudentService } from "../services/student_service";
 import { EmployeeService } from "../services/employee_service";
 
 describe('HomeController', () => {
-    let app: Fort;
     let controller: HomeController;
     const singleton = new MySingleton();
     beforeAll(async () => {

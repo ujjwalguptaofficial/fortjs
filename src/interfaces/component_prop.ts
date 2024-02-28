@@ -1,6 +1,5 @@
 import * as http from "http";
-import { CookieManager, FileManager } from "../models";
-import { FortGlobal } from "../constants";
+import { App, CookieManager, FileManager } from "../models";
 import { SessionManager } from "../utils";
 import { TComponentQuery } from "../types";
 import { CacheManager } from "../utils/cache_manager";
@@ -17,7 +16,7 @@ export interface IComponentProp {
     data: { [key: string]: any };
     file?: FileManager;
     controllerName?: string;
-    global: FortGlobal;
+    global: App;
     cache: CacheManager;
     workerInfo?: IWorkerInfo;
 }

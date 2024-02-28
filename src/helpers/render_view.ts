@@ -1,12 +1,12 @@
-import { FORT_GLOBAL } from "../constants/fort_global";
 import { LogHelper } from "./log_helper";
 import { ERROR_TYPE } from "../enums/error_type";
+import { Fort } from "../models";
 
 export let renderView: (viewName: string, model?: any) => Promise<string>;
 
-if (FORT_GLOBAL.isProduction === true) {
+if (process.env.NODE_ENV === "production") {
     renderView = (viewName: string, model?: any) => {
-        return FORT_GLOBAL.viewEngine.render({
+        return Fort['viewEngine_'].render({
             view: viewName,
             model
         });
@@ -14,10 +14,10 @@ if (FORT_GLOBAL.isProduction === true) {
 }
 else {
     renderView = (viewName: string, model?: any) => {
-        if (FORT_GLOBAL.viewEngine == null) {
+        if (Fort['viewEngine_'] == null) {
             new LogHelper(ERROR_TYPE.UndefinedViewEngine).throw();
         }
-        return FORT_GLOBAL.viewEngine.render({
+        return Fort['viewEngine_'].render({
             view: viewName,
             model
         });

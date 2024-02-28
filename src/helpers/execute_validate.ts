@@ -1,8 +1,6 @@
-import { FORT_GLOBAL } from "../constants";
+import { IDTOValidator } from "../interfaces";
 
-
-export const executeValidate = async (dtoClass, data) => {
-    const validator = FORT_GLOBAL.validator;
+export const executeValidate = async (validator: IDTOValidator, dtoClass, data) => {
     const dtoInstance = new dtoClass(data);
     if (Object.keys(dtoInstance).length === 0) {
         Object.assign(dtoInstance, data);

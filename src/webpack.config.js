@@ -2,6 +2,10 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const banner = require('./license');
 const { BannerPlugin } = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
+
+
+const isProd = process.env.NODE_ENV === "production"
 
 module.exports = [{
     name: "fort",
@@ -11,13 +15,13 @@ module.exports = [{
     devtool: 'source-map',
     output: {
         path: path.join(__dirname, "./../dist"),
-        filename: "fort.js",
+        filename: isProd ? "fort.prod.js" : "fort.js",
         libraryTarget: "commonjs2"
     },
     optimization: {
         // We no not want to minimize our code.
         minimize: false,
-        nodeEnv: false
+        // nodeEnv: false
     },
     node: {
         global: false,
@@ -37,7 +41,12 @@ module.exports = [{
         extensions: ['.ts']
     },
     plugins: [
-        new BannerPlugin(banner)
+        new BannerPlugin(banner),
+        new CopyPlugin({
+            patterns: [
+                { from: 'build_helper/npm.export.js', to: '' },
+            ],
+        }),
     ],
     externals: [nodeExternals()]
 }];

@@ -1,66 +1,124 @@
-import { TSessionStore, TXmlParser, TErrorHandler, TWall, TShield, TGuard } from "../types";
+import { TSessionStore, TXmlParser, TErrorHandler, TWall, TShield, TGuard, TTaskScheduler } from "../types";
 import { ViewEngine, ResultMapper, Controller, ComponentOption } from "../abstracts";
 import { RouteHandler, RequestHandler } from "../handlers";
-import { FORT_GLOBAL } from "../constants/fort_global";
 import * as http from "http";
-import { ERROR_TYPE } from "../enums";
+import { ERROR_TYPE, ETAG_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
-import { TaskSchedulerManager, isArray } from "../utils";
+import { CacheManager, TaskSchedulerManager, isArray } from "../utils";
 import { Logger } from "./logger";
-import { IDtoValidator, IEtagOption, IFolderMap, IControllerRoute, ICacheStore } from "../interfaces";
+import { IDTOValidator, IEtagOption, IFolderMap, IControllerRoute, ICacheStore, IScheduleTaskInput } from "../interfaces";
+import { APP_NAME, CURRENT_PATH } from "../constants";
+import { BlankXmlParser, CacheGuard, CacheWall, CookieEvaluatorWall, DefaultCronJobScheduler, MemoryCacheStore, MemorySessionStore, PostDataEvaluatorGuard } from "../providers";
+import { DtoValidator, MustacheViewEngine } from "../extra";
+import { ErrorHandler } from "./error_handler";
 
-export class Fort {
+export class App {
+    private logger_: Logger;
+    private viewEngine_: ViewEngine;
 
-    static set logger(value) {
-        FORT_GLOBAL.logger = typeof value === 'function' ? new (this as any).value() :
+    /**
+     * sessionStore class, default - MemorySessionStore
+     *
+     * @type {TSessionStore}
+     * @memberof App
+     */
+    sessionStore: TSessionStore;
+
+    /**
+     * XmlParser class - used to parse the xml 
+     *
+     * @type {TXmlParser}
+     * @memberof App
+     */
+    xmlParser: TXmlParser;
+
+    /**
+     * Whether to parse cookie or not, default - true
+     * If false, then session wont work.
+     *
+     * @type {boolean}
+     * @memberof App
+     */
+    shouldParseCookie = true;
+
+    /**
+     * Whether to parse the http body data in post request, default - true
+     *
+     * @type {boolean}
+     * @memberof App
+     */
+    shouldParseBody = true;
+
+    /**
+     * session timeout in minute - default is 60 minute
+     *
+     * @type {number}
+     * @memberof App
+     */
+    sessionTimeOut = 60;
+
+    /**
+     *  name of application - default is fort. Visible in header and cookie.
+     * Change name if you dont want any one to know the framework name.
+     *
+     * @type {string}
+     * @memberof App
+     */
+    appName: string;
+
+    /**
+     * Views folder location. By default it is - views.
+     *
+     * @type {string}
+     * @memberof App
+     */
+    viewPath: string;
+
+    private componentOption_ = new ComponentOption();
+    private cacheManager_: CacheManager;
+    walls: TWall[] = [];
+
+    /**
+     * keep alive timeout in millisecond for requests, default is 72000
+     *
+     * @memberof App
+     */
+    keepAliveTimeout = 30000;
+
+    /**
+     * eTag Settings
+     *
+     * @type {IEtagOption}
+     * @memberof App
+     */
+    eTag: IEtagOption;
+
+    private folders_: IFolderMap[] = [];
+
+    set logger(value) {
+        this.logger_ = typeof value === 'function' ? new (this as any).value() :
             value;
     }
 
-    static get logger(): Logger {
-        return FORT_GLOBAL.logger;
+    get logger(): Logger {
+        return this.logger_;
     }
 
-    static set walls(walls: TWall[]) {
-        FORT_GLOBAL.walls = walls;
-    }
-
-    static get walls() {
-        return FORT_GLOBAL.walls;
-    }
-
-    static set shields(shields: TShield[]) {
-        FORT_GLOBAL.addShields(shields);
-    }
-
-    static set guards(guards: TGuard[]) {
-        FORT_GLOBAL.addGuards(guards);
-    }
+    shields: TShield[] = [];
+    guards: TGuard[] = [];
 
     /**
      * port at which app will listen, default - 4000
      *
-     * @static
-     * @memberof Fort
+     * @private
+     * @memberof App
      */
-    static set port(value: number) {
-        FORT_GLOBAL.port = value;
-    }
+    port = 4000;
 
-    static get port() {
-        return FORT_GLOBAL.port;
-    }
+    errorHandler: TErrorHandler;
+    private appSessionIdentifier_: string;
 
-    /**
-     * typeof ErrorHandler
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set errorHandler(value: TErrorHandler) {
-        FORT_GLOBAL.errorHandler = value;
-    }
-
-    static set routes(value: IControllerRoute[]) {
+    set routes(value: IControllerRoute[]) {
         if (value == null) {
             value = [];
         }
@@ -101,108 +159,28 @@ export class Fort {
     /**
      * view engine use to render the view
      *
-     * @static
+     * @
      * @memberof Fort
      */
-    static set viewEngine(value: typeof ViewEngine) {
-        FORT_GLOBAL.viewEngine = new (value as any)();
+    set viewEngine(value: typeof ViewEngine) {
+        this.viewEngine_ = new (value as any)();
     }
 
-    /**
-     * sessionStore class, default - MemorySessionStore
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set sessionStore(value: TSessionStore) {
-        FORT_GLOBAL.sessionStore = value;
-    }
-
-    static set resultMapper(value: typeof ResultMapper) {
+    set resultMapper(value: typeof ResultMapper) {
         setResultMapper(value);
     }
 
-    /**
-     * XmlParser class - used to parse the xml 
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set xmlParser(xmlParser: TXmlParser) {
-        FORT_GLOBAL.xmlParser = xmlParser;
-    }
-
-    /**
-     * Whether to parse cookie or not, default - true
-     * If false, then session wont work.
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set shouldParseCookie(value: boolean) {
-        FORT_GLOBAL.shouldParseCookie = value;
-    }
-
-    /**
-     * Whether to parse the http body data in post request, default - true
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set shouldParseBody(value: boolean) {
-        FORT_GLOBAL.shouldParseBody = value;
-    }
-
-    /**
-     * session timeout in minute - default is 60 minute
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set sessionTimeOut(value: number) {
-        FORT_GLOBAL.sessionTimeOut = value;
-    }
-
-    /**
-     * name of application - default is fort. Visible in header and cookie.
-     * Change name if you dont want any one to know the framework name.
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set appName(value: string) {
-        FORT_GLOBAL.appName = value;
-    }
-
-    /**
-     * Views folder location. By default it is - views.
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set viewPath(value: string) {
-        FORT_GLOBAL.viewPath = value;
-    }
-
-    static set componentOption(value: typeof ComponentOption) {
-        FORT_GLOBAL.componentOption = new value();
-    }
-
-    static get httpServer() {
-        return Fort.instance.httpServer;
-    }
-
-    static set httpServer(value: http.Server) {
-        Fort.instance.httpServer = value;
+    set componentOption(value: typeof ComponentOption) {
+        this.componentOption_ = new value();
     }
 
     /**
      * folders which should be visible to requests. By default nothing is allowed.
      *
-     * @static
+     * @
      * @memberof Fort
      */
-    static set folders(value: IFolderMap[]) {
+    set folders(value: IFolderMap[]) {
         value = value || [];
         if (isArray(value) === false) {
             throw new Error(`folders should be an array`);
@@ -217,48 +195,76 @@ export class Fort {
             }
         });
 
-        FORT_GLOBAL.folders = value;
+        this.folders_ = value;
     }
 
-    /**
-     * eTag Settings
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set eTag(value: IEtagOption) {
-        FORT_GLOBAL.eTag = value;
-    }
+    httpServer: http.Server;
 
-    /**
-     * keep alive timeout in millisecond for requests, default is 72000
-     *
-     * @static
-     * @memberof Fort
-     */
-    static set keepAliveTimeout(value: number) {
-        FORT_GLOBAL.keepAliveTimeout = value;
-    }
+    create(): Promise<void> {
+        const setDefault = () => {
 
-    static instance = new Fort();
+            this.viewPath = this.viewPath || CURRENT_PATH;
+            this.logger = this.logger || new Logger();
 
-    // eslint-disable-next-line
-    private constructor() {
+            this.sessionStore = this.sessionStore || MemorySessionStore;
+            this.cacheStore = this.cacheStore || new MemoryCacheStore();
+            this.xmlParser = this.xmlParser || BlankXmlParser;
+            this.viewEngine_ = this.viewEngine_ || new MustacheViewEngine();
+            this.appName = this.appName || APP_NAME;
 
-    }
+            if (this.eTag == null) {
+                this.eTag = {
+                    type: ETAG_TYPE.Weak
+                } as IEtagOption;
+            }
+            this.errorHandler = this.errorHandler || ErrorHandler;
+            this.validator = this.validator || new DtoValidator();
+            this.appSessionIdentifier_ = `${this.appName}_session_id`;
 
-    private httpServer: http.Server;
+            if (this.shouldParseCookie === true) {
+                this.walls.unshift(
+                    CookieEvaluatorWall
+                );
+            }
 
-    static create(): Promise<void> {
-        FORT_GLOBAL.setDefault();
+            if (this.useCache === true) {
+                this.walls.push(
+                    CacheWall
+                );
+                this.guards.push(CacheGuard);
+                this.cacheManager_ = new CacheManager(
+                    this.cacheStore
+                );
+            }
 
-        if (this.instance.httpServer != null) {
+            if (this.shouldParseBody === true) {
+                this.guards.unshift(
+                    PostDataEvaluatorGuard as any
+                );
+            }
+
+            const shouldEnableCache = this.useCache;
+            // add global shields
+            RouteHandler.routerCollection.forEach((route) => {
+                route.shields = this.shields.concat(route.shields);
+                route.workers.forEach((worker) => {
+                    worker.guards = this.guards.concat(worker.guards);
+                    if (shouldEnableCache === true) {
+                        worker.guards.push(CacheGuard)
+                    }
+                })
+            });
+        }
+
+        setDefault();
+
+        if (this.httpServer != null) {
             return;
         }
         return promise((res, rej) => {
-            this.instance.httpServer = http.createServer(Fort.onNewRequest).once("error", (err) => {
+            this.httpServer = http.createServer(this.onNewRequest).once("error", (err) => {
                 if ((err as any).code === 'EADDRINUSE') {
-                    const error = new LogHelper(ERROR_TYPE.PortInUse, FORT_GLOBAL.port).get();
+                    const error = new LogHelper(ERROR_TYPE.PortInUse, this.port).get();
                     rej(error);
                 }
                 else {
@@ -266,34 +272,36 @@ export class Fort {
                 }
             }).once('listening', () => {
                 res();
-            }).listen(FORT_GLOBAL.port);
+            }).listen(this.port);
 
-            this.instance.httpServer.keepAliveTimeout = FORT_GLOBAL.keepAliveTimeout;
+            this.httpServer.keepAliveTimeout = this.keepAliveTimeout;
         });
     }
 
-    static onNewRequest(request, response) {
-        new RequestHandler().handle(request, response);
+    onNewRequest = (request, response) => {
+        new RequestHandler(this).handle(request, response);
     }
 
-    static destroy(): Promise<void> {
+    destroy(): Promise<void> {
         this.scheduler.stopAll();
-        return promise((res) => {
-            this.instance.httpServer.close(res);
+        return promise((res, rej) => {
+            this.httpServer.close((err: any) => {
+                if (err) {
+                    rej(err);
+                }
+                else {
+                    res();
+                }
+            });
         });
     }
 
-    static set validator(validator: IDtoValidator) {
-        FORT_GLOBAL.validator = validator;
-    }
-
-    static scheduler = new TaskSchedulerManager();
-
-    static set useCache(value: boolean) {
-        FORT_GLOBAL.shouldEnableCache = value
-    }
-
-    static set cacheStore(store: ICacheStore) {
-        FORT_GLOBAL.cacheStore = store;
-    }
+    validator: IDTOValidator;
+    crons: IScheduleTaskInput[] = [];
+    scheduler = new TaskSchedulerManager(this);
+    useCache: boolean;
+    cacheStore: ICacheStore;
+    cronJobScheduler: TTaskScheduler = DefaultCronJobScheduler;
 }
+
+export const Fort = new App();

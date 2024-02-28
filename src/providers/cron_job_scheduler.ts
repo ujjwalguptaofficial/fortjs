@@ -1,5 +1,4 @@
 import { ScheduleTask } from "../abstracts";
-import { FORT_GLOBAL } from "../constants";
 import { ITaskScheduler } from "../interfaces";
 import { CronJob } from "cron";
 
@@ -14,7 +13,7 @@ export class DefaultCronJobScheduler implements ITaskScheduler {
                 await cronTask.execute();
             }
             catch (ex) {
-                FORT_GLOBAL.logger.error(ex);
+                cronTask['appGlobal_'].logger.error(ex);
             }
             cronTask.onComplete();
         });
