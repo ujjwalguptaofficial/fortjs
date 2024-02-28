@@ -9,7 +9,7 @@
 
 # Fortjs
 
-fortjs is a lightweight and efficient web framework for [Node.js](https://nodejs.org/en/) that empowers developers to build scalable and performant applications with ease. With a focus on simplicity and speed, fortjs provides a robust foundation for creating web APIs and applications. Featuring intuitive routing, dependency injection, and a powerful middleware system, fortjs allows you to craft clean, organized architectures.
+Fortjs is efficient web framework for [Node.js](https://nodejs.org/en/) that empowers developers to build scalable and performant applications with ease. With a focus on simplicity and speed, fortjs provides a robust foundation for creating web APIs and applications. Featuring intuitive routing, dependency injection, and a powerful middleware system, fortjs allows you to craft clean, organized architectures.
 
 # Benchmark
 
