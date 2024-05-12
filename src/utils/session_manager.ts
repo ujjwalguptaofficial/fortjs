@@ -47,16 +47,21 @@ export class SessionManager {
         return this.sessionStore.getAll();
     }
 
-    async set(key: string, val: any) {
+    private async createSessionIfNotExist_() {
         const savedValue = await this.sessionStore.isAnyExist();
         if (savedValue === false) {
             this.createSession();
             this.sessionStore.sessionId = this.sessionId;
         }
+    }
+
+    async set(key: string, val: any) {
+        await this.createSessionIfNotExist_();
         await this.sessionStore.set(key, val);
     }
 
-    setMany(values: { [key: string]: any }) {
+    async setMany(values: { [key: string]: any }) {
+        await this.createSessionIfNotExist_();
         return this.sessionStore.setMany(values);
     }
 
