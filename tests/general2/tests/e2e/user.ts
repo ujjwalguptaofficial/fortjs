@@ -239,13 +239,11 @@ describe("/user", () => {
 
     it("user profile unauthenticated page", async () => {
         const res = await request.get('/user/profile/me', {
-            headers: {
-                maxRedirects: 0
-            }
+            maxRedirects: 0
         });
         // .redirects(0);
         expect(res).toHaveProperty('status', 302);
-        expect(res).toHaveProperty('header', { 'location': '/default/login' });
+        expect(res.headers).toHaveProperty('location', '/default/login');
     });
 
     it("/thrown by shield using header", async () => {
