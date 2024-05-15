@@ -7,3 +7,5 @@ export * from "./user";
 export * from "./session";
 export * from "./injection";
 export * from "./expect";
+export * from "./routes";
+export * from "./wall";
