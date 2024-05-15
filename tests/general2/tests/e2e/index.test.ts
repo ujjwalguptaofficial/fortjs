@@ -5,3 +5,5 @@ export * from "./file_test";
 export * from "./random";
 export * from "./user";
 export * from "./session";
+export * from "./injection";
+export * from "./expect";
