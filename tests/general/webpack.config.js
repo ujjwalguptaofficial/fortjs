@@ -1,9 +1,11 @@
 const path = require('path');
+const { webpack, BannerPlugin } = require('webpack');
 const nodeExternals = require('webpack-node-externals');
-const nodemonPlugin = require('nodemon-webpack-plugin')
+const rootFolder = path.join(__dirname);
+
 module.exports = {
     entry: [
-        path.resolve(__dirname, 'index.ts')
+        path.resolve(rootFolder, 'src/index.ts')
     ],
     devtool: 'source-map',
     target: "node",
@@ -15,10 +17,7 @@ module.exports = {
         nodeEnv: false
     },
     node: {
-        console: false,
         global: false,
-        process: false,
-        Buffer: false,
         __filename: false,
         __dirname: false,
     },
@@ -32,13 +31,30 @@ module.exports = {
         }]
     },
     resolve: {
-        extensions: ['.ts']
+        extensions: ['.ts', '.js'],
+        alias: {
+            "~": rootFolder,
+            "@": path.join(rootFolder, 'src')
+        },
     },
     output: {
         filename: 'app.js',
-        path: path.resolve(__dirname, 'build/'),
-        pathinfo: true
+        path: path.resolve(__dirname, process.env.BUILD_FOLDER || 'dist'),
+        pathinfo: true,
+        library: undefined,
+        libraryTarget: "commonjs2"
     },
-    plugins: [new nodemonPlugin()],
+    plugins: [
+        ...(
+            process.env.NODE_ENV === "production" ? [
+                new BannerPlugin({
+                    banner: (() => {
+                        const package = require("./package.json");
+                        return `App version : ${package.version}, createdAt - ${new Date().toDateString()}`
+                    })()
+                })
+            ] : []
+        )
+    ],
     externals: [nodeExternals()]
 };

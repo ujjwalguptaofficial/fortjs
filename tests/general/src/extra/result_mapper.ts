@@ -5,15 +5,16 @@ import jsontoxml from "jsontoxml";
 
 export class CustomResultMapper extends ResultMapper {
     map(type: MIME_TYPE, result) {
+        console.log("type", type, "result", result);
         switch (type) {
             case MIME_TYPE.Json:
             case MIME_TYPE.Text:
             case MIME_TYPE.Html:
-                if (typeof result === 'object' === true) {
+                if (typeof result === 'object') {
                     return JSON.stringify(result);
                 }
             case MIME_TYPE.Xml:
-                if (typeof result === 'object' === true) {
+                if (typeof result === 'object') {
                     return this.xmlConvert(result);
                 }
         }

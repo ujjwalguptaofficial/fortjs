@@ -1,4 +1,5 @@
 import { Controller, ScheduleTask, Guard, Shield, Wall, XmlParser } from '../abstracts';
+import { HTTP_STATUS_CODE } from '../enums';
 import { ICacheStore, IControllerRoute, IHttpResult, ISessonStore, ITaskScheduler } from '../interfaces';
 import { ErrorHandler } from '../models';
 
@@ -21,3 +22,4 @@ export type TXmlParser = Class<XmlParser, []>;
 export type TErrorHandler = Class<ErrorHandler, []>;
 export type TTaskScheduler = Class<ITaskScheduler, [ScheduleTask]>;
 export type TScheduleTask = Class<ScheduleTask>;
+export type THttpStatusCode = HTTP_STATUS_CODE | number;

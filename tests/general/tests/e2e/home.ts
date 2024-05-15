@@ -64,9 +64,7 @@ describe("/home", () => {
                 // Accept: 'text/html'
             }
         })
-        // throw res.data;
-        console.log("post with no body", res.data);
-        expect(res.status).toBe(400);
+        expect(res.data).toBe(400);
         expect(res.headers['content-type']).toBe('text/html');
         expect(res.data).toContain("Post data is invalid");
     });

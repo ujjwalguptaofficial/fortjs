@@ -32,11 +32,12 @@ describe("/expect", () => {
     it('convert post with less data', async () => {
         const res = await request.post('/expect/convert', { name: "", extra: "" }, {
             headers: {
-                "Accept": "text/html"
+                // "Accept": "text/html"
             }
         });
         expect(res.status).toBe(400);
-        expect(res.headers['content-type']).toBe('text/html');
+        expect(res.headers['content-type']).toBe('application/json');
+        expect(res.data).toEqual({ "error": { "message": "id must be a number conforming to the specified constraints", "type": "ValidationError" } });
         // expect(removeSpaceAndNewLine(res.text)).toBe(bodyErrorMessage);
     });
 
@@ -68,7 +69,7 @@ describe("/expect", () => {
         };
         const res = await request.post('/expect/model', user);
         expect(res.status).toBe(200);
-        // expect(res.header['content-type']).toBe('text/plain');
+        // expect(res.headers['content-type']).toBe('text/plain');
         // expect(removeSpaceAndNewLine(res.text)).toBe('ok');
     });
 
