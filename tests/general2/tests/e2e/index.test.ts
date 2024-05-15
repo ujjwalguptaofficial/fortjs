@@ -9,3 +9,4 @@ export * from "./injection";
 export * from "./expect";
 export * from "./routes";
 export * from "./wall";
+export * from "./cache";
