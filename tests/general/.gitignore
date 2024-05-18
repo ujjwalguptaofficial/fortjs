@@ -1,8 +1,6 @@
-#################
-## Directories
-#################
-
-node_modules
-build
-deploy_key
 dist
+bin
+build
+.npmrc
+.env
+node_modules
