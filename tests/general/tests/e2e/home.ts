@@ -1,6 +1,7 @@
 import { browserAccept, createRequest, methodNotAllowedMsg, url } from "../test_utils";
 import { AxiosResponse } from 'axios'; // Import AxiosResponse from 'axios' package
 import cookie from 'cookie';
+import fetch from "node-fetch";
 
 describe("/home", () => {
     const request = createRequest();
@@ -56,17 +57,29 @@ describe("/home", () => {
     });
 
     it('/post with no body', async () => {
-        const invalidJson = 'This is not valid JSON';
+        // const res: AxiosResponse<any> = await request.post('/home/post', "invalidJson", {
+        //     headers: {
+        //         // 'Content-Type': 'application/json',
+        //         // Accept: 'text/html'
+        //     }
+        // })
+        // expect(res.status).toBe(400);
+        // expect(res.headers['content-type']).toBe('text/html');
+        // expect(res.data).toContain("Post data is invalid");
 
-        const res: AxiosResponse<any> = await request.post('/home/post', invalidJson, {
+        const response = await fetch(url + '/home/post', {
+            method: "POST",
+            body: "fggg",
             headers: {
                 'Content-Type': 'application/json',
-                // Accept: 'text/html'
+                'Accept': 'text/html'
             }
-        })
-        expect(res.data).toBe(400);
-        expect(res.headers['content-type']).toBe('text/html');
-        expect(res.data).toContain("Post data is invalid");
+        });
+
+
+        expect(response.status).toBe(400);
+        expect(response.headers.get('content-type')).toBe('text/html');
+        expect(await response.text()).toContain("Post data is invalid");
     });
 
     it('/post with empty body', async () => {

@@ -34,11 +34,14 @@
   },
   "homepage": "https://github.com/ujjwalguptaofficial/fortjs-typescript-starter#readme",
   "dependencies": {
+    "@types/node-fetch": "^2.6.11",
+    "chai": "^5.1.1",
+    "chai-http": "^4.4.0",
     "cookie": "^0.3.1",
-    "fortjs": "^2.8.2",
     "jest-extended": "^4.0.2",
     "jsontoxml": "^1.0.1",
-    "mongodb": "^3.2.7"
+    "mongodb": "^3.2.7",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
