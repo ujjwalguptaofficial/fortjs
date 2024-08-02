@@ -1,9 +1,16 @@
-import { IException, IHttpResult } from "../interfaces";
+import { IComponentProp, IException, IHttpRequest, IHttpResult } from "../interfaces";
 import { htmlResult } from "../helpers";
 import { HTTP_STATUS_CODE } from "../enums";
 import { promiseResolve } from "../utils";
 
 export class ErrorHandler {
+
+    get request() {
+        return this.componentProp_.request as IHttpRequest;
+    }
+
+    private componentProp_: IComponentProp;
+
     onServerError(ex: IException): Promise<IHttpResult> {
         let errMessage = `<h1>Internal Server Error</h1>
             <h3>message : ${ex.message}</h3>`;

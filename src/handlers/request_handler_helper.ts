@@ -37,31 +37,37 @@ export class RequestHandlerHelper {
     }
 
     protected onBadRequest(error) {
-        return new this.config.errorHandler().onBadRequest(error).then(data => {
+        return this.errorHandler().onBadRequest(error).then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     protected onForbiddenRequest() {
-        return new this.config.errorHandler().onForbiddenRequest().then(data => {
+        return this.errorHandler().onForbiddenRequest().then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     protected onNotAcceptableRequest() {
-        return new this.config.errorHandler().onNotAcceptableRequest().then(data => {
+        return this.errorHandler().onNotAcceptableRequest().then(data => {
             return this.onResultFromError_(data);
         });
     }
 
+    errorHandler() {
+        const err = new this.config.errorHandler();
+        err['componentProp_'] = this.componentProps;
+        return err;
+    }
+
     public onNotFound() {
-        return new this.config.errorHandler().onNotFound(this.request.url).then(data => {
+        return this.errorHandler().onNotFound(this.request.url).then(data => {
             return this.onResultFromError_(data);
         });
     }
 
     protected onMethodNotAllowed(allowedMethods: HTTP_METHOD[]) {
-        return new this.config.errorHandler().onMethodNotAllowed().then(data => {
+        return this.errorHandler().onMethodNotAllowed().then(data => {
             this.response.setHeader("Allow", allowedMethods.join(","));
             return this.onResultFromError_(data);
         });
@@ -78,7 +84,7 @@ export class RequestHandlerHelper {
                 message: error
             } as IException;
         }
-        return new this.config.errorHandler().onServerError(error).then(data => {
+        return this.errorHandler().onServerError(error).then(data => {
             this.controllerResult = data;
             return this.returnResultFromError_();
         }).catch(ex => {
