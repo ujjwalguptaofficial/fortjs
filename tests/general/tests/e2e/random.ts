@@ -47,6 +47,8 @@ describe("/random", () => {
         });
 
         expect(res.status).toBe(406);
+        expect(res.headers['content-type']).toBe('application/xml');
+        expect(res.data).toEqual("<?xml version=\"1.0\" encoding=\"utf-8\"?><root><message>Not Acceptable.</message><url>/random/</url><status>406</status><method>GET</method><userAgent>axios/1.6.3</userAgent></root>");
     });
 
     it("/form", async () => {

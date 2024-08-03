@@ -43,6 +43,7 @@ describe("wall test", () => {
         expect(res.headers['custom-header-from-incoming-wall']).toBe('*');
         expect(res.headers['injection-result']).toBe('wall constructor onIncoming called on outgoing called');
         expect(res.headers['wall-without-outgoing-wall']).toBe('*');
+        expect(removeSpaceAndNewLine(res.data)).toEqual("<h1>Therequestedresource/home/getdatassswasnotfound.</h1>");
     });
 
     it("/500 by controler", async () => {
