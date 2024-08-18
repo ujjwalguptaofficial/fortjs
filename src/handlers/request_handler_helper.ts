@@ -110,7 +110,8 @@ export class RequestHandlerHelper {
 
     setCookie() {
         if (this.config.shouldParseCookie === false) return;
-        (this.componentProps.cookie['responseCookie_']).forEach(value => {
+        // empty array as default is required to make sure in case of responseCookie_ is not present
+        (this.componentProps.cookie['responseCookie_'] || []).forEach(value => {
             this.response.setHeader(SET_COOKIE, value);
         });
     }
