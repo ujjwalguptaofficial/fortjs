@@ -1,5 +1,5 @@
 import * as http from "http";
-import { App, CookieManager, FileManager } from "../models";
+import { App, CookieManager, FileManager, QueueManager } from "../models";
 import { SessionManager } from "../utils";
 import { TComponentQuery } from "../types";
 import { CacheManager } from "../utils/cache_manager";
@@ -15,6 +15,7 @@ export interface IComponentProp {
     param?: { [key: string]: string };
     data: { [key: string]: any };
     file?: FileManager;
+    queue: QueueManager;
     controllerName?: string;
     global: App;
     cache: CacheManager;

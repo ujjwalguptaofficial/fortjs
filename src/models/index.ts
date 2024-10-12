@@ -9,3 +9,4 @@ export * from "./logger";
 export * from './route_info';
 export * from "./components";
 export * from "./worker_info";
+export * from "./queue_manager";

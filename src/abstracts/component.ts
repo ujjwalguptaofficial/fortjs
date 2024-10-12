@@ -38,6 +38,10 @@ export class Component {
         return this.componentProp_.cache;
     }
 
+    get queue() {
+        return this.componentProp_.queue;
+    }
+
     private componentProp_: IComponentProp;
 
     middleware(middleware) {
