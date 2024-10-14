@@ -302,6 +302,8 @@ export class App {
     useCache: boolean;
     cacheStore: ICacheStore;
     cronJobScheduler: TTaskScheduler = DefaultCronJobScheduler;
+
+    queueConsumers: any[] = [];
 }
 
 export const Fort = new App();
