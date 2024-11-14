@@ -64,7 +64,7 @@
     "fs-extra": "^11.2.0",
     "multiparty": "^4.2.3",
     "mustache": "^4.2.0",
-    "negotiator": "^0.6.3",
+    "negotiator": "^1.0.0",
     "uniqid": "^5.4.0"
   }
 }
