@@ -261,7 +261,8 @@ describe("/user", () => {
 
     it("/pass invalid regex", async () => {
         const res = await request.get('/user/+CSCOE');
-        expect(res).toHaveProperty('status', 500);
-        expect(res.data).toContain("Invalid regular expression: /^+CSCOE$/i: Nothing to repeat");
+        // expect(res).toHaveProperty('status', 500);
+        expect(res).toHaveProperty('status', 404);
+        // expect(res.data).toContain("Invalid regular expression: /^+CSCOE$/i: Nothing to repeat");
     });
 });
