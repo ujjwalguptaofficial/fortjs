@@ -203,6 +203,11 @@ export class RequestHandlerHelper {
             case HTTP_RESULT_TYPE.Default:
                 {
                     const contentType = result.contentType || MIME_TYPE.Text;
+                    switch (this.request.method) {
+                        case HTTP_METHOD.Options:
+                        case HTTP_METHOD.Head:
+                            return this.endResponse_(contentType);
+                    }
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                     if (negotiateMimeType != null) {
                         this.endResponse_(negotiateMimeType);
