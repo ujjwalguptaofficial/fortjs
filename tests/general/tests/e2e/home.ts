@@ -23,7 +23,30 @@ describe("/home", () => {
                 'Content-Type': 'application/json'
             }
         });
+        expect(res.headers['content-type']).toBe('application/json');
         expect(res.data).toEqual({ "key": "hello", "value": "world" }); // Use 'data' property instead of 'text'
+    });
+
+    it('/json with head request', async () => {
+        const res: AxiosResponse<any> = await request.head('/home/json', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toBe('application/json');
+        expect(res.data).toEqual(""); // Use 'data' property instead of 'text'
+    });
+
+    it('/json with options request', async () => {
+        const res: AxiosResponse<any> = await request.options('/home/json', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toBe('text/plain');
+        expect(res.data).toEqual(""); // Use 'data' property instead of 'text'
     });
 
     it('/html', async () => {
@@ -36,6 +59,18 @@ describe("/home", () => {
         expect(res.headers['content-type']).toBe('text/html');
         expect(res.data).toBe('<h1>hey there i am html</h1>'); // Use 'data' property instead of 'text'
     });
+
+    it('/html option', async () => {
+        const res: AxiosResponse<any> = await request.options('/home/html', {
+            headers: {
+                'Accept': browserAccept
+            }
+        });
+        expect(res.status).toEqual(200);
+        expect(res.headers['content-type']).toBe('text/html');
+        expect(res.data).toEqual("");
+    });
+
 
     it('/text', async () => {
         const res: AxiosResponse<any> = await request.get('/home/text');
@@ -52,7 +87,7 @@ describe("/home", () => {
         expect(res.status).toBe(405);
         expect(res.headers['custom-header-from-outgoing-wall']).toBe('*');
         expect(res.headers['content-type']).toBe('text/html');
-        expect(res.headers['allow']).toBe('GET');
+        expect(res.headers['allow']).toBe('GET,HEAD');
         expect(res.data).toBe(methodNotAllowedMsg);
     });
 
@@ -136,7 +171,7 @@ describe("/home", () => {
             }
         });
         expect(res.status).toBe(200);
-        expect(res.headers['content-type']).toBe('text/html');
+        expect(res.headers['content-type']).toBe('text/plain');
         expect(res.headers['custom-header-from-outgoing-wall']).toBe('*');
         expect(res.headers['allow']).toBe('POST');
         expect(res.data).toBe("");

@@ -38,6 +38,12 @@ function put(...args) {
     return wrapMethodDecorator(args, createWorkerForPut);
 }
 
+function option(target, key: string): void;
+function option(route: string): MethodDecorator;
+function option(...args) {
+    return wrapMethodDecorator(args, createWorkerForOption);
+}
+
 function registerWorkerAndCreate(target, methodName, httpMethod: HTTP_METHOD, routes: string[]) {
     const routeArg = (routes.length === 0 ? null : routes[0]);
     (worker as any)(httpMethod)(
@@ -66,7 +72,11 @@ function createWorkerForDelete(target: any, methodName: string, ...routes: strin
     registerWorkerAndCreate(target, methodName, HTTP_METHOD.Delete, routes);
 }
 
+function createWorkerForOption(target: any, methodName: string, ...routes: string[]) {
+    registerWorkerAndCreate(target, methodName, HTTP_METHOD.Options, routes);
+}
+
 export const http = {
     get, post, delete: del,
-    patch, put
+    patch, put, option
 }
