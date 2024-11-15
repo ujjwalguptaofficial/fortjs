@@ -100,7 +100,11 @@ export class RequestHandlerHelper {
 
     protected onRequestOptions(allowedMethods: HTTP_METHOD[]) {
         this.response.setHeader("Allow", allowedMethods.join(","));
-        return this.onResultFromError_(textResult(""));
+        this.controllerResult = this.controllerResult || textResult("", HTTP_STATUS_CODE.Ok);
+        return this.endResponse_(
+            this.controllerResult?.contentType || MIME_TYPE.Text,
+            false
+        );
     }
 
     private onResultFromError_(result: IHttpResult) {

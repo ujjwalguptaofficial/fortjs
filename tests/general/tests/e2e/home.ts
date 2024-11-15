@@ -45,7 +45,7 @@ describe("/home", () => {
             }
         });
         expect(res.status).toBe(200);
-        // expect(res.headers['content-type']).toBe('application/json');
+        expect(res.headers['content-type']).toBe('text/plain');
         expect(res.data).toEqual(""); // Use 'data' property instead of 'text'
     });
 
@@ -159,7 +159,7 @@ describe("/home", () => {
             }
         });
         expect(res.status).toBe(200);
-        expect(res.headers['content-type']).toBe('text/html');
+        expect(res.headers['content-type']).toBe('text/plain');
         expect(res.headers['custom-header-from-outgoing-wall']).toBe('*');
         expect(res.headers['allow']).toBe('POST');
         expect(res.data).toBe("");
