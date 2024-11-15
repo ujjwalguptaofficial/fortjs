@@ -49,8 +49,6 @@ describe("/home", () => {
         expect(res.data).toEqual(""); // Use 'data' property instead of 'text'
     });
 
-    return;
-
     it('/html', async () => {
         const res: AxiosResponse<any> = await request.get('/home/html', {
             headers: {
@@ -77,7 +75,7 @@ describe("/home", () => {
         expect(res.status).toBe(405);
         expect(res.headers['custom-header-from-outgoing-wall']).toBe('*');
         expect(res.headers['content-type']).toBe('text/html');
-        expect(res.headers['allow']).toBe('GET');
+        expect(res.headers['allow']).toBe('GET,HEAD');
         expect(res.data).toBe(methodNotAllowedMsg);
     });
 

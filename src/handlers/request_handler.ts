@@ -117,7 +117,6 @@ export class RequestHandler extends RequestHandlerHelper {
     private async onRouteMatched_() {
         const routeMatchInfo = this.routeMatchInfo_;
         const workerInfo = routeMatchInfo.workerInfo;
-        console.log('workerInfo', workerInfo, routeMatchInfo);
         if (workerInfo == null) {
             return () => {
                 switch (this.request.method) {

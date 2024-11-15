@@ -153,10 +153,6 @@ export class RequestHandlerHelper {
     }
 
     protected endResponse_(negotiateMimeType: MIME_TYPE, shouldEvaluateData = true) {
-        if (this.request.method === HTTP_METHOD.Head) {
-            console.trace("contenttype returned", this.request.method);
-            console.log("controllerresult", this.controllerResult);
-        }
         const data = shouldEvaluateData ? getResultBasedOnMiMe(negotiateMimeType,
             (this.controllerResult).responseData
             , (type: MIME_TYPE) => {
