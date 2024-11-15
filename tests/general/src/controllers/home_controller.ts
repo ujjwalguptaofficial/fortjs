@@ -1,4 +1,4 @@
-import { Controller, viewResult, worker, asQuery, asParam, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult, singleton } from "fortjs";
+import { Controller, viewResult, worker, asQuery, asParam, HTTP_METHOD, route, jsonResult, htmlResult, textResult, defaultWorker, redirectResult, singleton, http } from "fortjs";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 import { StudentService } from "../services/student_service";
@@ -70,6 +70,11 @@ export class HomeController extends Controller {
         return new Promise((resolve, reject) => {
             resolve(htmlResult(`<h1>hey there i am html</h1>`));
         });
+    }
+
+    @http.option("/html")
+    async htmlOptionRequest() {
+        return htmlResult(`<h1>hey there i am html</h1>`)
     }
 
     @worker(HTTP_METHOD.Post)

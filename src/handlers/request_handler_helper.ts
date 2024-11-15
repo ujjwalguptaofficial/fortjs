@@ -100,9 +100,9 @@ export class RequestHandlerHelper {
 
     protected onRequestOptions(allowedMethods: HTTP_METHOD[]) {
         this.response.setHeader("Allow", allowedMethods.join(","));
-        this.controllerResult = this.controllerResult || textResult("", HTTP_STATUS_CODE.Ok);
+        this.controllerResult = textResult("");
         return this.endResponse_(
-            this.controllerResult?.contentType || MIME_TYPE.Text,
+            MIME_TYPE.Text,
             false
         );
     }
@@ -208,6 +208,7 @@ export class RequestHandlerHelper {
                     const contentType = result.contentType || MIME_TYPE.Text;
                     switch (this.request.method) {
                         case HTTP_METHOD.Head:
+                        case HTTP_METHOD.Options:
                             return this.endResponse_(contentType, false);
                     }
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;

@@ -60,6 +60,18 @@ describe("/home", () => {
         expect(res.data).toBe('<h1>hey there i am html</h1>'); // Use 'data' property instead of 'text'
     });
 
+    it('/html option', async () => {
+        const res: AxiosResponse<any> = await request.options('/home/html', {
+            headers: {
+                'Accept': browserAccept
+            }
+        });
+        expect(res.status).toEqual(200);
+        expect(res.headers['content-type']).toBe('text/html');
+        expect(res.data).toEqual("");
+    });
+
+
     it('/text', async () => {
         const res: AxiosResponse<any> = await request.get('/home/text');
         expect(res.headers['content-type']).toBe('text/plain');
