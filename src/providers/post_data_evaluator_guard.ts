@@ -23,8 +23,11 @@ export class PostDataEvaluatorGuard extends Guard {
     }
 
     async handlePostData() {
-        if (this.request.method === HTTP_METHOD.Get) {
-            return [new FileManager({}), {}];
+        switch (this.request.method) {
+            case HTTP_METHOD.Get:
+            case HTTP_METHOD.Delete:
+            case HTTP_METHOD.Head:
+                return [new FileManager({}), {}];
         }
         return this.parsePostData();
     }

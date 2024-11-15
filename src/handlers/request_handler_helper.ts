@@ -152,14 +152,17 @@ export class RequestHandlerHelper {
         }
     }
 
-    protected endResponse_(negotiateMimeType: MIME_TYPE) {
-
-        const data = getResultBasedOnMiMe(negotiateMimeType,
+    protected endResponse_(negotiateMimeType: MIME_TYPE, shouldEvaluateData = true) {
+        if (this.request.method === HTTP_METHOD.Head) {
+            console.trace("contenttype returned", this.request.method);
+            console.log("controllerresult", this.controllerResult);
+        }
+        const data = shouldEvaluateData ? getResultBasedOnMiMe(negotiateMimeType,
             (this.controllerResult).responseData
             , (type: MIME_TYPE) => {
                 negotiateMimeType = type;
             }
-        );
+        ) : "";
 
         if (this.response.headersSent) {
             console.trace("Request is finished, but triggered again");
@@ -204,9 +207,8 @@ export class RequestHandlerHelper {
                 {
                     const contentType = result.contentType || MIME_TYPE.Text;
                     switch (this.request.method) {
-                        case HTTP_METHOD.Options:
                         case HTTP_METHOD.Head:
-                            return this.endResponse_(contentType);
+                            return this.endResponse_(contentType, false);
                     }
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                     if (negotiateMimeType != null) {

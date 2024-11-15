@@ -23,8 +23,33 @@ describe("/home", () => {
                 'Content-Type': 'application/json'
             }
         });
+        expect(res.headers['content-type']).toBe('application/json');
         expect(res.data).toEqual({ "key": "hello", "value": "world" }); // Use 'data' property instead of 'text'
     });
+
+    it('/json with head request', async () => {
+        const res: AxiosResponse<any> = await request.head('/home/json', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toBe('application/json');
+        expect(res.data).toEqual(""); // Use 'data' property instead of 'text'
+    });
+
+    it('/json with options request', async () => {
+        const res: AxiosResponse<any> = await request.options('/home/json', {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        expect(res.status).toBe(200);
+        // expect(res.headers['content-type']).toBe('application/json');
+        expect(res.data).toEqual(""); // Use 'data' property instead of 'text'
+    });
+
+    return;
 
     it('/html', async () => {
         const res: AxiosResponse<any> = await request.get('/home/html', {

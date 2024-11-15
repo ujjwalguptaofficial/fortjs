@@ -117,12 +117,14 @@ export class RequestHandler extends RequestHandlerHelper {
     private async onRouteMatched_() {
         const routeMatchInfo = this.routeMatchInfo_;
         const workerInfo = routeMatchInfo.workerInfo;
-
+        console.log('workerInfo', workerInfo, routeMatchInfo);
         if (workerInfo == null) {
             return () => {
-                return this.request.method === HTTP_METHOD.Options ?
-                    this.onRequestOptions(routeMatchInfo.allowedHttpMethod) :
-                    this.onMethodNotAllowed(routeMatchInfo.allowedHttpMethod);
+                switch (this.request.method) {
+                    case HTTP_METHOD.Options:
+                        return this.onRequestOptions(routeMatchInfo.allowedHttpMethod);
+                }
+                return this.onMethodNotAllowed(routeMatchInfo.allowedHttpMethod);
             }
         }
 
