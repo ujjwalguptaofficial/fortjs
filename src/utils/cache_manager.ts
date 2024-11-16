@@ -23,6 +23,13 @@ export class CacheManager {
         await this.cacheStore_.set(cacheData);
     }
 
+    /**
+     * return data from cache by key if exist and not expired, otherwise return undefined
+     *
+     * @param {*} key
+     * @return {*} 
+     * @memberof CacheManager
+     */
     async get(key: any) {
         const value = await this.cacheStore_.get(key);
         if (value) {
@@ -34,6 +41,13 @@ export class CacheManager {
         }
     }
 
+    /**
+     * delete the cache by key
+     *
+     * @param {*} key
+     * @return {*} 
+     * @memberof CacheManager
+     */
     async delete(key: any) {
         return this.cacheStore_.delete(key);
     }
