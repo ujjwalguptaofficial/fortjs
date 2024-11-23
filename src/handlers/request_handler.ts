@@ -8,6 +8,7 @@ import { InjectorHandler } from "./injector_handler";
 import { IHttpResult, IRouteMatch } from "../interfaces";
 import { FileHandler } from "./file_handler";
 import { RequestHandlerHelper } from "./request_handler_helper";
+import { ON_INCOMING } from "../constants";
 
 export class RequestHandler extends RequestHandlerHelper {
 
@@ -37,7 +38,7 @@ export class RequestHandler extends RequestHandlerHelper {
                     wallObj['componentProp_'] = this.componentProps;
                     this.wallInstances.push(wallObj);
 
-                    const methodArgsValues = InjectorHandler.getMethodValues(wall.name, 'onIncoming', wallObj);
+                    const methodArgsValues = InjectorHandler.getMethodValues(wall.name, ON_INCOMING, wallObj);
                     wallObj.onIncoming(...methodArgsValues).then(result => {
                         result == null ? executeWallIncomingByIndex() : res(result);
                     }).catch(rej);
