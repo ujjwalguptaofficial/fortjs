@@ -33,7 +33,7 @@ export class CacheManager {
     async get(key: any) {
         const value = await this.cacheStore_.get(key);
         if (value) {
-            if (new Date().getTime() - value.expiry > 0) {
+            if (new Date().getTime() > value.expiry) {
                 await this.delete(key);
                 return;
             }
