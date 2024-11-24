@@ -90,8 +90,11 @@ export class PostDataEvaluatorGuard extends Guard {
                     postData = bodyDataAsString; break;
                 case MIME_TYPE.FormUrlEncoded:
                     postData = QueryString.parse(bodyDataAsString); break;
-                case MIME_TYPE.Xml:
-                    postData = new (this['componentProp_'].global as any).xmlParser().parse(bodyDataAsString);
+                case MIME_TYPE.Xml: {
+                    const xmlParser = new (this['componentProp_'].global as any).xmlParser();
+                    xmlParser['componentProp_'] = this['componentProp_'];
+                    postData = xmlParser.parse(bodyDataAsString);
+                }
                     break;
                 default:
                     postData = {};

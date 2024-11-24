@@ -152,6 +152,19 @@ describe("/home", () => {
         expect(res.data).toContain('no xml parser configured');
     });
 
+    it('/post with xml AND RETURN DATA', async () => {
+        const data = `<?xml version="1.0" encoding="UTF-8" ?>
+        <key>hello</key>`;
+        const res: AxiosResponse<any> = await request.post('/home/post', data, {
+            headers: {
+                'Content-Type': 'application/xml',
+                'return-xml': 'true'
+            }
+        });
+        expect(res.status).toBe(200);
+        expect(res.data).toEqual(`<xml>${data}</xml><method>POST</method><url>/home/post</url><contenttype>application/xml</contenttype>`);
+    });
+
     it('/post + http: get', async () => {
         const res: AxiosResponse<any> = await request.get('/home/post', {
             headers: {

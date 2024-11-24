@@ -8,6 +8,7 @@ import { WallWithoutOutgoing } from "./walls/wall_without_outgoing";
 import { Wall1 } from "./walls/wall1";
 import { RequestLogger } from "./walls/request_logger";
 import { CounterScheduler } from "./crons/counter";
+import { XmlToJsonParser } from "./xmlparser";
 
 const contentsPath = path.join(__dirname, "../contents");
 
@@ -37,6 +38,7 @@ export const createApp = async () => {
     });
     Fort.scheduler.startAll();
     Fort.useCache = true;
+    Fort.xmlParser = XmlToJsonParser;
     await Fort.create();
     process.env.APP_URL = `http://localhost:${Fort.port}`;
 };

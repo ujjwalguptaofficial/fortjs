@@ -1,3 +1,5 @@
-export abstract class XmlParser {
-    abstract parse(xml: string): Promise<string>;
+import { Component } from "./component";
+
+export abstract class XmlParser extends Component {
+    abstract parse(xml: string): string;
 }
