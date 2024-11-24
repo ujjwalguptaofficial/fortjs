@@ -5,10 +5,15 @@ import { IHttpResult } from "../interfaces";
 
 export class CacheGuard extends Guard {
     async check(): Promise<void | IHttpResult> {
-        if (this.request.method !== HTTP_METHOD.Get) {
-            // set cache true to allow walls to not cache data;
-            this.data[FROM_CACHE] = true;
-            return;
+        switch (this.request.method) {
+            case HTTP_METHOD.Get:
+            case HTTP_METHOD.Head:
+                // let the execution go to below
+                break;
+            default:
+                // set cache true to allow walls to not cache data;
+                this.data[FROM_CACHE] = true;
+                return;
         }
         // get cache condition from routes
         const componentProp = this['componentProp_']

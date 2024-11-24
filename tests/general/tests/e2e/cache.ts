@@ -150,4 +150,46 @@ describe("/user", () => {
         expect(storeKeys.length).toBe(1);
         expect(storeKeys).toEqual(["CacheController_getFruits"]);
     });
+
+    it("get cache hit", async () => {
+        const response = await request.get('/cache/hit');
+        expect(response.status).toBe(200);
+        const data = response.data;
+        expect(data).toEqual({ "GET": 1 });
+    });
+
+    it("get cache hit again", async () => {
+        const response = await request.get('/cache/hit');
+        expect(response.status).toBe(200);
+        const data = response.data;
+        expect(data).toEqual({ "GET": 1 });
+    });
+
+    it("head cache hit", async () => {
+        const response = await request.head('/cache/hit');
+        expect(response.status).toBe(200);
+        const data = response.data;
+        expect(data).toEqual("");
+    });
+
+    it("head cache hit again", async () => {
+        const response = await request.head('/cache/hit');
+        expect(response.status).toBe(200);
+        const data = response.data;
+        expect(data).toEqual("");
+    });
+
+    it("post cache hit", async () => {
+        const response = await request.post('/cache/hit');
+        expect(response.status).toBe(200);
+        const data = response.data;
+        expect(data).toEqual({ "GET": 1, "POST": 1 });
+    });
+
+    it("post cache hit again", async () => {
+        const response = await request.post('/cache/hit');
+        expect(response.status).toBe(200);
+        const data = response.data;
+        expect(data).toEqual({ "GET": 1, "POST": 2 });
+    });
 });

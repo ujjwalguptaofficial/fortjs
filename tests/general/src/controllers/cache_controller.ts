@@ -1,5 +1,8 @@
-import { Controller, http, cacheFor, HTTP_METHOD, textResult, jsonResult, route, HTTP_STATUS_CODE } from "fortjs";
+import { Controller, http, cacheFor, HTTP_METHOD, textResult, jsonResult, route, HTTP_STATUS_CODE, worker } from "fortjs";
 
+const hits = {
+
+};
 export class CacheController extends Controller {
 
     @http.post("/add")
@@ -73,5 +76,15 @@ export class CacheController extends Controller {
         return jsonResult({
             data: obj
         })
+    }
+
+    @worker()
+    @route("/hit")
+    @cacheFor(Infinity)
+    async cacheHit() {
+        let prevHitValue = hits[this.request.method];
+        prevHitValue = prevHitValue ? prevHitValue : 0;
+        hits[this.request.method] = ++prevHitValue;
+        return jsonResult(hits);
     }
 }
