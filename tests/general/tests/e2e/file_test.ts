@@ -53,6 +53,7 @@ describe("/file test", () => {
         });
         expect(res.status).toBe(200);
         expect(res.headers).toHaveProperty('content-type', 'image/png');
+        expect(res.headers).toHaveProperty('custom-header-from-outgoing-wall', '*');
     });
 
     it('folders allowed but with content not exist', async () => {

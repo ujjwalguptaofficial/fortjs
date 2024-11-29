@@ -60,7 +60,6 @@ export class FileHandler {
                 }
                 else {
                     return this.sendFile_(absolutePath, fileType, fileInfo);
-
                 }
             }
             else {
