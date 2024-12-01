@@ -67,6 +67,9 @@ export class HomeController extends Controller {
 
     @worker()
     html() {
+        // if (!this.request.headers['accept']) {
+        this.request.headers['accept'] = 'text/html;q=1.0';
+        // }
         return new Promise((resolve, reject) => {
             resolve(htmlResult(`<h1>hey there i am html</h1>`));
         });
@@ -79,7 +82,7 @@ export class HomeController extends Controller {
 
     @worker(HTTP_METHOD.Post)
     post() {
-        console.log("body", this.body, 'type', typeof this.body);
+        // console.log("body", this.body, 'type', typeof this.body);
         return new Promise((resolve, reject) => {
             resolve(jsonResult(this.body));
         });

@@ -60,6 +60,17 @@ describe("/home", () => {
         expect(res.data).toBe('<h1>hey there i am html</h1>'); // Use 'data' property instead of 'text'
     });
 
+    it('/html without any accept', async () => {
+        const res: AxiosResponse<any> = await request.get('/home/html', {
+            headers: {
+                // 'Accept': browserAccept
+            }
+        });
+        // expect(res.headers['custom-header-from-outgoing-wall']).toBe('*');
+        // expect(res.headers['content-type']).toBe('text/html');
+        expect(res.data).toBe('<h1>hey there i am html</h1>'); // Use 'data' property instead of 'text'
+    });
+
     it('/html option', async () => {
         const res: AxiosResponse<any> = await request.options('/home/html', {
             headers: {
