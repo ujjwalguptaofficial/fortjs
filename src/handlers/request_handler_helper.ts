@@ -31,9 +31,9 @@ export class RequestHandlerHelper {
         );
     }
 
-    protected getContentTypeFromNegotiationHavingMultipleTypes(types: MIME_TYPE[]) {
+    protected getContentTypeFromNegotiationHavingMultipleTypes(types: readonly MIME_TYPE[]) {
         const negotiator = new Negotiator(this.request);
-        return negotiator.mediaType(types) as MIME_TYPE;
+        return negotiator.mediaType(types as any) as MIME_TYPE;
     }
 
     protected onBadRequest(error) {
