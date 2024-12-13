@@ -7,4 +7,5 @@ export interface IHttpResponse {
     getHeaderNames(): string[];
     hasHeader(name: string): boolean;
     removeHeader(name: string): void;
+    statusCode: number;
 }
