@@ -12,6 +12,7 @@ interface IFileInfo {
     folder: string,
     file: string;
 }
+
 export class FileHandler {
 
     constructor(private requestHandler: RequestHandler) {

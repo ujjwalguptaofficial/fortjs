@@ -2,6 +2,8 @@ import { IHttpResponse } from "../../interfaces";
 
 export class HttpResponseStub implements IHttpResponse {
     private headers_;
+    statusCode;
+    
     constructor(headers) {
         this.headers_ = headers;
     }
@@ -29,4 +31,5 @@ export class HttpResponseStub implements IHttpResponse {
     removeHeader(name: string) {
         delete this.headers_[name];
     }
+
 }

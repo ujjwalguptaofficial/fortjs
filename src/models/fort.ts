@@ -241,6 +241,7 @@ export class App {
                 this.guards.unshift(
                     PostDataEvaluatorGuard as any
                 );
+                PostDataEvaluatorGuard.initEmptyFileManager();
             }
 
             const shouldEnableCache = this.useCache;

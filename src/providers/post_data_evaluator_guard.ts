@@ -1,13 +1,17 @@
-import { Guard } from "../abstracts";
-import { HTTP_METHOD, HTTP_STATUS_CODE } from "../enums";
-import { JsonHelper, promise, textResult } from "../helpers";
 import { FileManager } from "../models";
-import { MIME_TYPE } from "../enums";
+import { Guard } from "../abstracts";
+import { HTTP_METHOD, HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
+import { JsonHelper, promise, textResult } from "../helpers";
 import ContentType from "fast-content-type-parse";
 import * as QueryString from 'querystring';
 import * as Multiparty from "multiparty";
 import { IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
+
+// empty file manager is used when there is no file in the body
+// this is optimized to avoid creating new file manager object every time
+// tslint:disable-next-line
+let emptyFileManager: FileManager = null as any;
 
 export class PostDataEvaluatorGuard extends Guard {
 
@@ -27,7 +31,7 @@ export class PostDataEvaluatorGuard extends Guard {
             case HTTP_METHOD.Get:
             case HTTP_METHOD.Delete:
             case HTTP_METHOD.Head:
-                return [new FileManager({}), {}];
+                return [emptyFileManager, {}];
         }
         return this.parsePostData();
     }
@@ -99,7 +103,13 @@ export class PostDataEvaluatorGuard extends Guard {
                 default:
                     postData = {};
             }
-            return [new FileManager({}), postData];
+            return [emptyFileManager, postData];
         }
     }
+
+    static initEmptyFileManager() {
+        emptyFileManager = new FileManager({});
+    }
 }
+
+
