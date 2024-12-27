@@ -4,7 +4,6 @@ import { HTTP_METHOD, HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
 import { JsonHelper, promise, textResult } from "../helpers";
 import ContentType from "fast-content-type-parse";
 import * as QueryString from 'querystring';
-// import * as Multiparty from "multiparty";
 import { IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
 import * as busboy from "busboy";
