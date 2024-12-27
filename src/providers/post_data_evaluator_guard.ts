@@ -80,6 +80,7 @@ export class PostDataEvaluatorGuard extends Guard {
                     const fileValidateResult = fileProcessor.validate(fileInfo);
                     if (fileValidateResult) {
                         this.resultToReturn = fileValidateResult;
+                        this.request['unpipe'](bb);
                         return res(result);
                     }
                     result.file[fieldname] = fileInfo;
