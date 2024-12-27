@@ -1,12 +1,14 @@
-import { FileManager } from "../models";
+import { FileManager, HttpFile } from "../models";
 import { Guard } from "../abstracts";
 import { HTTP_METHOD, HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
 import { JsonHelper, promise, textResult } from "../helpers";
 import ContentType from "fast-content-type-parse";
 import * as QueryString from 'querystring';
-import * as Multiparty from "multiparty";
-import { IMultiPartParseResult } from "../interfaces";
+import { IHttpResult, IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
+import * as busboy from "busboy";
+import { promiseResolve } from "../utils";
+
 
 // empty file manager is used when there is no file in the body
 // this is optimized to avoid creating new file manager object every time
@@ -15,6 +17,8 @@ let emptyFileManager: FileManager = null as any;
 
 export class PostDataEvaluatorGuard extends Guard {
 
+    resultToReturn: IHttpResult;
+
     async check() {
         try {
             const postResult = await this.handlePostData();
@@ -22,8 +26,11 @@ export class PostDataEvaluatorGuard extends Guard {
             componentProps.file = postResult[0];
             componentProps.body = postResult[1];
         } catch (error) {
+            console.error(error);
             return textResult(error.message || `Invalid body data. Check your data format.`, HTTP_STATUS_CODE.BadRequest);
         }
+
+        return this.resultToReturn;
     }
 
     async handlePostData() {
@@ -51,25 +58,55 @@ export class PostDataEvaluatorGuard extends Guard {
     }
 
     private parseMultiPartData_(): Promise<IMultiPartParseResult> {
+        const result: IMultiPartParseResult = {
+            field: {},
+            file: {}
+        };
+        const fileProcessorClass = this['componentProp_'].workerInfo.fileProcessor;
+        if (!fileProcessorClass) return promiseResolve(result);
+        const fileProcessor = new fileProcessorClass();
+        const uploadPromises: Promise<void>[] = [];
         return promise((res, rej) => {
-            new Multiparty.Form().parse(this.request as http.IncomingMessage, (err, fields, files) => {
-                if (err) {
-                    rej(err);
-                }
-                else {
-                    const result: IMultiPartParseResult = {
-                        field: {},
-                        file: {}
-                    };
-                    for (const field in fields) {
-                        result.field[field] = fields[field].length === 1 ? fields[field][0] : fields[field];
+            try {
+                const bb = busboy({ headers: this.request.headers });
+                bb.on('field', (fieldname, val) => {
+                    result.field[fieldname] = val;
+                });
+                bb.on('file', (fieldname, file, fileDetails) => {
+                    const fileInfo: HttpFile = {
+                        fieldName: fieldname,
+                        fileName: fileDetails.filename,
+                    } as any;
+                    const fileValidateResult = fileProcessor.validate(fileInfo);
+                    if (fileValidateResult) {
+                        this.resultToReturn = fileValidateResult;
+                        this.request['unpipe'](bb);
+                        return res(result);
                     }
-                    for (const file in files) {
-                        result.file[file] = files[file].length === 1 ? files[file][0] : files[file];
+                    result.file[fieldname] = fileInfo;
+                    if (!fileValidateResult) {
+                        const uploadPromise = fileProcessor.upload(file, fileInfo).catch(ex => {
+                            rej(ex);
+                        });
+                        uploadPromises.push(uploadPromise);
                     }
-                    res(result);
-                }
-            });
+                    // else {
+                    //     file.resume();
+                    // }
+                });
+                bb.on('finish', async () => {
+                    try {
+                        await Promise.all(uploadPromises);
+                        res(result);
+                    } catch (error) {
+                        rej(error);
+                    }
+                });
+                this.request['pipe'](bb);
+            }
+            catch (ex) {
+                rej(ex);
+            }
         });
     }
 

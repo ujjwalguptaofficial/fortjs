@@ -1,5 +1,5 @@
 import { HttpFile } from "./http_file";
-import * as Fs from "fs-extra";
+import { createWriteStream } from "fs";
 
 export class FileManager {
 
@@ -20,7 +20,6 @@ export class FileManager {
     }
 
     get files() {
-
         return Object.keys(this.files_).map(fileId => {
             return this.files_[fileId];
         });
@@ -56,7 +55,5 @@ export class FileManager {
      * @returns
      * @memberof FileManager
      */
-    saveTo(fieldName: string, pathToSave: string) {
-        return Fs.copy(this.files_[fieldName].path, pathToSave);
-    }
+    
 }

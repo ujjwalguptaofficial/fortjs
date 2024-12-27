@@ -9,10 +9,28 @@ import {
     worker,
     HTTP_METHOD,
     jsonResult,
-    assign
+    assign,
+    fileProcessor,
+    FileProcessor
 } from "fortjs";
 
 import * as Path from "path";
+
+export class MyFileProcessor extends FileProcessor {
+    validate(fileInfo) {
+        if (fileInfo.fieldName !== 'jsstore') {
+            return jsonResult({
+                success: false,
+                message: 'invalid file'
+            })
+        }
+    }
+
+    async upload(stream) {
+        const pathToSave = Path.join(__dirname, "../upload.png");
+        await this.saveTo(stream, pathToSave);
+    }
+}
 
 export class FileController extends Controller {
 
@@ -47,8 +65,8 @@ export class FileController extends Controller {
 
     @worker(HTTP_METHOD.Post)
     @route("/upload")
+    @fileProcessor(MyFileProcessor)
     async uploadFile() {
-        const pathToSave = Path.join(__dirname, "../upload.png");
         console.log("count", this.file.count);
         let result = {
             count: this.file.count
@@ -60,7 +78,6 @@ export class FileController extends Controller {
             };
         }
         if (this.file.isExist('jsstore') === true) {
-            await this.file.saveTo('jsstore', pathToSave);
             result.responseText = "file saved";
         } else {
             result.responseText = "file not saved";

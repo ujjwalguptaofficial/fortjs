@@ -1,5 +1,5 @@
 import { HTTP_METHOD } from "../enums";
-import { TGuard } from "../types";
+import { TFileProcessor, TGuard } from "../types";
 import { ICacheOptionStored } from "./api_cache_option";
 
 export type IWorkerInfo = {
@@ -12,4 +12,5 @@ export type IWorkerInfo = {
     expectedBody?: any;
     expectedParam?: any;
     cache?: ICacheOptionStored;
+    fileProcessor?: TFileProcessor;
 };

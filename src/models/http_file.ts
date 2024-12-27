@@ -1,6 +1,6 @@
 import { IncomingHttpHeaders } from "http2";
 
- 
+
 export class HttpFile {
 
     /**
@@ -11,12 +11,12 @@ export class HttpFile {
     /**
      * the filename that the user reports for the file
      */
-    originalFilename: string;
+    fileName: string;
 
     /**
      * the absolute path of the uploaded file on disk
      */
-    path: string;
+    // stream: Readable & { truncated?: boolean };
 
     /**
      * the HTTP headers that were sent along with this file
@@ -27,5 +27,4 @@ export class HttpFile {
      * size of the file in bytes
      */
     size?: number;
-
 }
