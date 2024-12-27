@@ -61,7 +61,7 @@ export class PostDataEvaluatorGuard extends Guard {
         const fileProcessorClass = this['componentProp_'].workerInfo.fileProcessor;
         if (!fileProcessorClass) return promiseResolve(result);
         const fileProcessor = new fileProcessorClass();
-
+        const uploadPromises: Promise<void>[] = [];
         return promise((res, rej) => {
             try {
                 const bb = busboy({ headers: this.request.headers });
@@ -77,16 +77,22 @@ export class PostDataEvaluatorGuard extends Guard {
                     fileInfo.isValid = isValid;
                     result.file[fieldname] = fileInfo;
                     if (isValid) {
-                        fileProcessor.upload(file, fileInfo).catch(ex => {
+                        const uploadPromise = fileProcessor.upload(file, fileInfo).catch(ex => {
                             rej(ex);
                         });
+                        uploadPromises.push(uploadPromise);
                     }
                     else {
                         file.resume();
                     }
                 });
-                bb.on('finish', () => {
-                    res(result);
+                bb.on('finish', async () => {
+                    try {
+                        await Promise.all(uploadPromises);
+                        res(result);
+                    } catch (error) {
+                        rej(error);
+                    }
                 });
                 this.request['pipe'](bb);
             }
