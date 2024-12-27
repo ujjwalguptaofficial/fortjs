@@ -12,12 +12,12 @@ export class HttpFile {
     /**
      * the filename that the user reports for the file
      */
-    originalFilename: string;
+    fileName: string;
 
     /**
      * the absolute path of the uploaded file on disk
      */
-    stream: Readable & { truncated?: boolean };
+    // stream: Readable & { truncated?: boolean };
 
     /**
      * the HTTP headers that were sent along with this file
@@ -28,5 +28,7 @@ export class HttpFile {
      * size of the file in bytes
      */
     size?: number;
+
+    isValid: boolean;
 
 }

@@ -55,26 +55,5 @@ export class FileManager {
      * @returns
      * @memberof FileManager
      */
-    saveTo(fieldName: string, pathToSave: string) {
-        const stream = this.files_[fieldName].stream;
-        return new Promise<void>((resolve, reject) => {
-            const writeStream = createWriteStream(pathToSave);
-            // Pipe the stream directly to the file
-            stream.pipe(writeStream);
-
-            // Handle write completion
-            writeStream.on('finish', () => {
-                resolve();
-            });
-
-            // Handle errors in both streams
-            writeStream.on('error', (err) => {
-                reject(err);
-            });
-
-            stream.on('error', (err) => {
-                reject(err);
-            });
-        });
-    }
+    
 }

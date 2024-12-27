@@ -8,6 +8,7 @@ import * as QueryString from 'querystring';
 import { IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
 import * as busboy from "busboy";
+import { promiseResolve } from "../utils";
 
 
 // empty file manager is used when there is no file in the body
@@ -24,6 +25,7 @@ export class PostDataEvaluatorGuard extends Guard {
             componentProps.file = postResult[0];
             componentProps.body = postResult[1];
         } catch (error) {
+            console.error(error);
             return textResult(error.message || `Invalid body data. Check your data format.`, HTTP_STATUS_CODE.BadRequest);
         }
     }
@@ -53,14 +55,18 @@ export class PostDataEvaluatorGuard extends Guard {
     }
 
     private parseMultiPartData_(): Promise<IMultiPartParseResult> {
+        const result: IMultiPartParseResult = {
+            field: {},
+            file: {}
+        };
+        const fileProcessorClass = this['componentProp_'].workerInfo.fileProcessor;
+        if (!fileProcessorClass) return promiseResolve(result);
+        const fileProcessor = new fileProcessorClass();
         console.log('parsing multipart data');
+
         return promise((res, rej) => {
             try {
                 const bb = busboy({ headers: this.request.headers });
-                const result: IMultiPartParseResult = {
-                    field: {},
-                    file: {}
-                };
                 bb.on('field', (fieldname, val) => {
                     console.log('field', fieldname, val);
                     result.field[fieldname] = val;
@@ -69,15 +75,20 @@ export class PostDataEvaluatorGuard extends Guard {
                     console.log('file', fieldname, fileDetails);
                     const fileInfo: HttpFile = {
                         fieldName: fieldname,
-                        originalFilename: fileDetails.filename,
-                        stream: file,
-                    };
-                    result.file[fieldname] = {
-                        fileInfo,
-                        file
+                        fileName: fileDetails.filename,
                     } as any;
-                    console.log('file added', result.file);
-                    // file.resume();
+                    const isValid = fileProcessor.validate(fileInfo);
+                    fileInfo.isValid = isValid;
+                    result.file[fieldname] = fileInfo;
+                    console.log("isValid", result.file);
+                    if (isValid) {
+                        fileProcessor.upload(file, fileInfo).catch(ex => {
+                            rej(ex);
+                        });
+                    }
+                    else {
+                        file.resume();
+                    }
                 });
                 bb.on('finish', () => {
                     console.log('file parsed', result);
@@ -99,6 +110,7 @@ export class PostDataEvaluatorGuard extends Guard {
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
             const multipartyResult = await this.parseMultiPartData_();
+            console.log('multipartyResult', multipartyResult);
             return [new FileManager(multipartyResult.file), multipartyResult.field];
         }
         else {
