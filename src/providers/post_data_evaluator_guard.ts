@@ -62,17 +62,14 @@ export class PostDataEvaluatorGuard extends Guard {
         const fileProcessorClass = this['componentProp_'].workerInfo.fileProcessor;
         if (!fileProcessorClass) return promiseResolve(result);
         const fileProcessor = new fileProcessorClass();
-        console.log('parsing multipart data');
 
         return promise((res, rej) => {
             try {
                 const bb = busboy({ headers: this.request.headers });
                 bb.on('field', (fieldname, val) => {
-                    console.log('field', fieldname, val);
                     result.field[fieldname] = val;
                 });
                 bb.on('file', (fieldname, file, fileDetails) => {
-                    console.log('file', fieldname, fileDetails);
                     const fileInfo: HttpFile = {
                         fieldName: fieldname,
                         fileName: fileDetails.filename,
@@ -80,7 +77,6 @@ export class PostDataEvaluatorGuard extends Guard {
                     const isValid = fileProcessor.validate(fileInfo);
                     fileInfo.isValid = isValid;
                     result.file[fieldname] = fileInfo;
-                    console.log("isValid", result.file);
                     if (isValid) {
                         fileProcessor.upload(file, fileInfo).catch(ex => {
                             rej(ex);
@@ -91,11 +87,9 @@ export class PostDataEvaluatorGuard extends Guard {
                     }
                 });
                 bb.on('finish', () => {
-                    console.log('file parsed', result);
                     res(result);
                 });
                 this.request['pipe'](bb);
-                console.log('piped');
             }
             catch (ex) {
                 rej(ex);
@@ -110,7 +104,6 @@ export class PostDataEvaluatorGuard extends Guard {
         }
         if (contentType === MIME_TYPE.FormMultiPart) {
             const multipartyResult = await this.parseMultiPartData_();
-            console.log('multipartyResult', multipartyResult);
             return [new FileManager(multipartyResult.file), multipartyResult.field];
         }
         else {
