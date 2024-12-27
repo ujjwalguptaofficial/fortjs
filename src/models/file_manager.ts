@@ -1,5 +1,5 @@
 import { HttpFile } from "./http_file";
-import * as Fs from "fs-extra";
+import { createWriteStream } from "fs";
 
 export class FileManager {
 
@@ -20,7 +20,6 @@ export class FileManager {
     }
 
     get files() {
-
         return Object.keys(this.files_).map(fileId => {
             return this.files_[fileId];
         });
@@ -57,6 +56,25 @@ export class FileManager {
      * @memberof FileManager
      */
     saveTo(fieldName: string, pathToSave: string) {
-        return Fs.copy(this.files_[fieldName].path, pathToSave);
+        const stream = this.files_[fieldName].stream;
+        return new Promise<void>((resolve, reject) => {
+            const writeStream = createWriteStream(pathToSave);
+            // Pipe the stream directly to the file
+            stream.pipe(writeStream);
+
+            // Handle write completion
+            writeStream.on('finish', () => {
+                resolve();
+            });
+
+            // Handle errors in both streams
+            writeStream.on('error', (err) => {
+                reject(err);
+            });
+
+            stream.on('error', (err) => {
+                reject(err);
+            });
+        });
     }
 }

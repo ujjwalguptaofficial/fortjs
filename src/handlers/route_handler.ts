@@ -1,4 +1,4 @@
-import { TGuard, TShield } from "../types";
+import { TFileProcessor, TGuard, TShield } from "../types";
 import { compareString, isNull } from "../utils";
 import { RouteInfo, WorkerInfo } from "../models";
 import { IRouteInfo, IControllerRoute, IWorkerInfo, IRouteMatch, ICacheOptionStored } from "../interfaces";
@@ -367,4 +367,46 @@ export class RouteHandler {
         return routeCache.get(url);
     }
 
+    static addFileProcessor(fileProcessor: TFileProcessor, className: string, workerName: string) {
+        const route = routerCollection.get(className);
+        const pattern = workerName.toLowerCase();
+        if (route == null) {
+            pushRouterIntoCollection({
+                workers: new Map([
+                    [workerName, new WorkerInfo({
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: [],
+                        fileProcessor: fileProcessor
+                    })]
+                ]),
+                controller: null,
+                controllerName: className,
+                shields: [],
+                path: null,
+                values: []
+            });
+        }
+        else {
+            const savedAction = route.workers.get(workerName);
+            if (savedAction == null) {
+                route.workers.set(
+                    workerName,
+                    new WorkerInfo({
+                        workerName: workerName,
+                        guards: [],
+                        methodsAllowed: null,
+                        pattern: pattern,
+                        values: [],
+                        fileProcessor: fileProcessor
+                    })
+                );
+            }
+            else {
+                savedAction.fileProcessor = fileProcessor;
+            }
+        }
+    }
 }

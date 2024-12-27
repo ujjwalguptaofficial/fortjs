@@ -1,12 +1,14 @@
-import { FileManager } from "../models";
+import { FileManager, HttpFile } from "../models";
 import { Guard } from "../abstracts";
 import { HTTP_METHOD, HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
 import { JsonHelper, promise, textResult } from "../helpers";
 import ContentType from "fast-content-type-parse";
 import * as QueryString from 'querystring';
-import * as Multiparty from "multiparty";
+// import * as Multiparty from "multiparty";
 import { IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
+import * as busboy from "busboy";
+
 
 // empty file manager is used when there is no file in the body
 // this is optimized to avoid creating new file manager object every time
@@ -51,25 +53,42 @@ export class PostDataEvaluatorGuard extends Guard {
     }
 
     private parseMultiPartData_(): Promise<IMultiPartParseResult> {
+        console.log('parsing multipart data');
         return promise((res, rej) => {
-            new Multiparty.Form().parse(this.request as http.IncomingMessage, (err, fields, files) => {
-                if (err) {
-                    rej(err);
-                }
-                else {
-                    const result: IMultiPartParseResult = {
-                        field: {},
-                        file: {}
+            try {
+                const bb = busboy({ headers: this.request.headers });
+                const result: IMultiPartParseResult = {
+                    field: {},
+                    file: {}
+                };
+                bb.on('field', (fieldname, val) => {
+                    console.log('field', fieldname, val);
+                    result.field[fieldname] = val;
+                });
+                bb.on('file', (fieldname, file, fileDetails) => {
+                    console.log('file', fieldname, fileDetails);
+                    const fileInfo: HttpFile = {
+                        fieldName: fieldname,
+                        originalFilename: fileDetails.filename,
+                        stream: file,
                     };
-                    for (const field in fields) {
-                        result.field[field] = fields[field].length === 1 ? fields[field][0] : fields[field];
-                    }
-                    for (const file in files) {
-                        result.file[file] = files[file].length === 1 ? files[file][0] : files[file];
-                    }
+                    result.file[fieldname] = {
+                        fileInfo,
+                        file
+                    } as any;
+                    console.log('file added', result.file);
+                    // file.resume();
+                });
+                bb.on('finish', () => {
+                    console.log('file parsed', result);
                     res(result);
-                }
-            });
+                });
+                this.request['pipe'](bb);
+                console.log('piped');
+            }
+            catch (ex) {
+                rej(ex);
+            }
         });
     }
 

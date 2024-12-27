@@ -34,6 +34,7 @@
   "author": "Ujjwal Gupta",
   "license": "MIT",
   "devDependencies": {
+    "@types/busboy": "^1.5.4",
     "@types/content-type": "^1.1.2",
     "@types/etag": "^1.8.0",
     "@types/fresh": "^0.5.0",
@@ -56,6 +57,7 @@
     "webpack-node-externals": "^2.5.0"
   },
   "dependencies": {
+    "busboy": "^1.6.0",
     "class-validator": "^0.14.1",
     "cron": "^3.1.6",
     "etag": "^1.8.1",
