@@ -18,7 +18,12 @@ import * as Path from "path";
 
 export class MyFileProcessor extends FileProcessor {
     validate(fileInfo) {
-        return fileInfo.fieldName === 'jsstore';
+        if (fileInfo.fieldName !== 'jsstore') {
+            return jsonResult({
+                success: false,
+                message: 'invalid file'
+            })
+        }
     }
 
     async upload(stream) {

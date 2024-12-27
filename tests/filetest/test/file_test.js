@@ -104,9 +104,10 @@ describe("/file", () => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'application/json');
-            expect(res.body.responseText).to.be.equal('file not saved');
-            expect(res.body.fieldName).to.be.equal('jsstdddore');
-            expect(res.body.fileName).to.be.equal('fort_js_logo_200_137.png');
+            expect(res.body).to.eql({
+                success: false,
+                message: 'invalid file'
+            });
             done();
         });
     })

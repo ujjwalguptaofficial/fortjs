@@ -1,5 +1,4 @@
 import { IncomingHttpHeaders } from "http2";
-import { Readable } from "stream";
 
 
 export class HttpFile {
@@ -28,7 +27,4 @@ export class HttpFile {
      * size of the file in bytes
      */
     size?: number;
-
-    isValid: boolean;
-
 }

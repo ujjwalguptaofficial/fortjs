@@ -4,7 +4,7 @@ import { HTTP_METHOD, HTTP_STATUS_CODE, MIME_TYPE } from "../enums";
 import { JsonHelper, promise, textResult } from "../helpers";
 import ContentType from "fast-content-type-parse";
 import * as QueryString from 'querystring';
-import { IMultiPartParseResult } from "../interfaces";
+import { IHttpResult, IMultiPartParseResult } from "../interfaces";
 import * as http from "http";
 import * as busboy from "busboy";
 import { promiseResolve } from "../utils";
@@ -17,6 +17,8 @@ let emptyFileManager: FileManager = null as any;
 
 export class PostDataEvaluatorGuard extends Guard {
 
+    resultToReturn: IHttpResult;
+
     async check() {
         try {
             const postResult = await this.handlePostData();
@@ -27,6 +29,8 @@ export class PostDataEvaluatorGuard extends Guard {
             console.error(error);
             return textResult(error.message || `Invalid body data. Check your data format.`, HTTP_STATUS_CODE.BadRequest);
         }
+
+        return this.resultToReturn;
     }
 
     async handlePostData() {
@@ -73,18 +77,21 @@ export class PostDataEvaluatorGuard extends Guard {
                         fieldName: fieldname,
                         fileName: fileDetails.filename,
                     } as any;
-                    const isValid = fileProcessor.validate(fileInfo);
-                    fileInfo.isValid = isValid;
+                    const fileValidateResult = fileProcessor.validate(fileInfo);
+                    if (fileValidateResult) {
+                        this.resultToReturn = fileValidateResult;
+                        return res(result);
+                    }
                     result.file[fieldname] = fileInfo;
-                    if (isValid) {
+                    if (!fileValidateResult) {
                         const uploadPromise = fileProcessor.upload(file, fileInfo).catch(ex => {
                             rej(ex);
                         });
                         uploadPromises.push(uploadPromise);
                     }
-                    else {
-                        file.resume();
-                    }
+                    // else {
+                    //     file.resume();
+                    // }
                 });
                 bb.on('finish', async () => {
                     try {
