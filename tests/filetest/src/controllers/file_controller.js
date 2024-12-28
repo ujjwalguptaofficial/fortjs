@@ -10,7 +10,7 @@ import {
     HTTP_METHOD,
     jsonResult,
     assign,
-    fileProcessor,
+    file,
     FileProcessor
 } from "fortjs";
 
@@ -65,7 +65,7 @@ export class FileController extends Controller {
 
     @worker(HTTP_METHOD.Post)
     @route("/upload")
-    @fileProcessor(MyFileProcessor)
+    @file(MyFileProcessor)
     async uploadFile() {
         console.log("count", this.file.count);
         let result = {
