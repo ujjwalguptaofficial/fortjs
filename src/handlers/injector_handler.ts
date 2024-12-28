@@ -10,6 +10,12 @@ const injectorValues: any[] = [];
 // this stores the singletons name & their respective index in injector values
 const singletons: Map<string, number> = new Map();
 
+const getStoredValueIndex = (value) => {
+    const paramValueIndex = injectorValues.indexOf(value);
+    const storedValueIndex = paramValueIndex < 0 ? injectorValues.push(value) - 1 : paramValueIndex;
+    return storedValueIndex;
+}
+
 export class InjectorHandler {
 
     static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
@@ -73,15 +79,42 @@ export class InjectorHandler {
     static addSingleton(className: string, methodName: string, paramIndex, paramValue) {
         const singletonClassName = paramValue.name;
         if (singletonClassName) {
-            const singletonValueStored = singletons.get(singletonClassName);
-            if (singletonValueStored == null) {
-                singletons.set(singletonClassName,
-                    InjectorHandler.addWorkerValue(className, methodName, paramIndex, new paramValue())
-                );
+            let singletonValueStoredIndex = singletons.get(singletonClassName);
+            if (singletonValueStoredIndex == null) {
+                singletonValueStoredIndex = InjectorHandler.addSingletonValue(paramValue);
+                // singletons.set(singletonClassName, singletonValueStoredIndex);
             }
-            else {
-                InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletonValueStored, false);
-            }
+            // if (singletonValueStoredIndex == null) {
+            //     singletons.set(singletonClassName,
+            //         InjectorHandler.addWorkerValue(
+            //             className,
+            //             methodName,
+            //             paramIndex,
+            //             new paramValue()
+            //         )
+            //     );
+            // }
+            // else {
+            InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletonValueStoredIndex, false);
+            // }
         }
+    }
+
+    static getSingletonValue(classValue: any) {
+        const className: string = classValue.name || classValue.constructor.name;
+        let singletonValueStoredIndex = singletons.get(className);
+        if (singletonValueStoredIndex) {
+            return injectorValues[singletonValueStoredIndex];
+        }
+        singletonValueStoredIndex = InjectorHandler.addSingletonValue(classValue);
+        return injectorValues[singletonValueStoredIndex];
+    }
+
+    static addSingletonValue(classValue: any) {
+        const instance = new classValue();
+        const storedValueIndex = getStoredValueIndex(instance);
+        const className: string = classValue.name || classValue.constructor.name;
+        singletons.set(className, storedValueIndex);
+        return storedValueIndex;
     }
 }
