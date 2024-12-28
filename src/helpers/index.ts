@@ -28,3 +28,4 @@ export * from './validate_query_shield';
 export * from './multi_format_result';
 export * from './test';
 export * from './get_available_mime_type';
+export * from './getsingleton';

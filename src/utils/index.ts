@@ -6,4 +6,3 @@ export * from './compare_string';
 export * from './session_manager';
 export * from './cron_manager';
 export * from './cache_manager';
-export * from './getsingleton';

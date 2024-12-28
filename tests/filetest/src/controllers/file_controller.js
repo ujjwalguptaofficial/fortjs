@@ -16,6 +16,10 @@ import {
 
 import * as Path from "path";
 
+export class FileName {
+    name = "upload.png"
+}
+
 export class MyFileProcessor extends FileProcessor {
     validate(fileInfo) {
         if (fileInfo.fieldName !== 'jsstore') {
