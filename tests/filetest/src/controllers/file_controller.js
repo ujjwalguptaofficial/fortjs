@@ -11,18 +11,22 @@ import {
     jsonResult,
     assign,
     file,
-    FileProcessor
+    FileProcessor,
+    getSingleton
 } from "fortjs";
 
 import * as Path from "path";
 
-export class FileName {
-    name = "upload.png"
+class FileName {
+    constructor() {
+        this.name = "upload.png";
+    }
 }
 
 export class MyFileProcessor extends FileProcessor {
     validate(fileInfo) {
         if (fileInfo.fieldName !== 'jsstore') {
+            this.logger.debug('file not saved');
             return jsonResult({
                 success: false,
                 message: 'invalid file'
@@ -30,9 +34,17 @@ export class MyFileProcessor extends FileProcessor {
         }
     }
 
-    async upload(stream) {
-        const pathToSave = Path.join(__dirname, "../upload.png");
+    async upload(stream, fileInfo) {
+        const className = FileName.name || FileName.constructor.name;
+        const singleton = getSingleton(FileName);
+        const fileName = singleton.name;
+        const pathToSave = Path.join(__dirname, `../${fileName}`);
         await this.saveTo(stream, pathToSave);
+        this.data.singletonFileName = fileName;
+        this.data.fileInfo = fileInfo;
+        this.data.query = this.query;
+        this.data.className = className;
+        this.logger.debug('upload', 'file saved');
     }
 }
 
@@ -81,11 +93,13 @@ export class FileController extends Controller {
                 ...this.file.files[0]
             };
         }
+        result.data = this.data;
         if (this.file.isExist('jsstore') === true) {
             result.responseText = "file saved";
         } else {
             result.responseText = "file not saved";
         }
+        // console.log("result", result);
         return jsonResult(result);
     }
 
