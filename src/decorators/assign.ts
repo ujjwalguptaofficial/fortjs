@@ -7,6 +7,6 @@ export const assign = (value): ParameterDecorator => {
         if (methodName == null) {
             methodName = CONSTRUCTOR;
         }
-        InjectorHandler.addWorkerValue(className, methodName, paramIndex, value);
+        InjectorHandler.addAssignValue(className, methodName, paramIndex, value);
     };
 };

@@ -18,18 +18,7 @@ const getStoredValueIndex = (value) => {
 
 export class InjectorHandler {
 
-    static addWorkerValue(className: string, methodName: string, paramIndex, paramValue, shouldFindIndex = true): number {
-
-        if (shouldFindIndex === true) {
-            const paramValueIndex = injectorValues.indexOf(paramValue);
-            if (paramValueIndex < 0) {
-                paramValue = injectorValues.push(paramValue) - 1;
-            }
-            else {
-                paramValue = paramValueIndex;
-            }
-        }
-
+    static addWorkerValue(className: string, methodName: string, paramIndex, paramValue: number): number {
         const savedValue = injectorStoreInfos.get(className);
         if (savedValue == null) {
             const methods = [];
@@ -82,22 +71,14 @@ export class InjectorHandler {
             let singletonValueStoredIndex = singletons.get(singletonClassName);
             if (singletonValueStoredIndex == null) {
                 singletonValueStoredIndex = InjectorHandler.addSingletonValue(paramValue);
-                // singletons.set(singletonClassName, singletonValueStoredIndex);
             }
-            // if (singletonValueStoredIndex == null) {
-            //     singletons.set(singletonClassName,
-            //         InjectorHandler.addWorkerValue(
-            //             className,
-            //             methodName,
-            //             paramIndex,
-            //             new paramValue()
-            //         )
-            //     );
-            // }
-            // else {
-            InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletonValueStoredIndex, false);
-            // }
+            InjectorHandler.addWorkerValue(className, methodName, paramIndex, singletonValueStoredIndex);
         }
+    }
+
+    static addAssignValue(className: string, methodName: string, paramIndex, paramValue) {
+        const assignValueStoredIndex = getStoredValueIndex(paramValue);
+        InjectorHandler.addWorkerValue(className, methodName, paramIndex, assignValueStoredIndex);
     }
 
     static getSingletonValue(classValue: any) {
