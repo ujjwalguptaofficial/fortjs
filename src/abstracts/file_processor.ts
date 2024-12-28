@@ -2,10 +2,15 @@ import { Readable } from "stream";
 import { HttpFile } from "../models";
 import { createWriteStream } from "fs";
 import { IHttpResult } from "../interfaces";
+import { Component } from "./component";
 
-export abstract class FileProcessor {
+export abstract class FileProcessor extends Component {
     abstract validate(file: HttpFile): IHttpResult;
     abstract upload(stream: Readable & { truncated?: boolean }, file: HttpFile): Promise<void>;
+
+    get param() {
+        return this['componentProp_'].param;
+    }
 
     /**
      * saves file to supplied path

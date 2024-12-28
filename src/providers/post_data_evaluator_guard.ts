@@ -62,9 +62,11 @@ export class PostDataEvaluatorGuard extends Guard {
             field: {},
             file: {}
         };
-        const fileProcessorClass = this['componentProp_'].workerInfo.fileProcessor;
+        const componentProp_ = this['componentProp_'];
+        const fileProcessorClass = componentProp_.workerInfo.fileProcessor;
         if (!fileProcessorClass) return promiseResolve(result);
         const fileProcessor = new fileProcessorClass();
+        fileProcessor['componentProp_'] = componentProp_;
         const uploadPromises: Promise<void>[] = [];
         return promise((res, rej) => {
             try {
