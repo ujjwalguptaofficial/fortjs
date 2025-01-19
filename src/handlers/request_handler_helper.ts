@@ -211,6 +211,11 @@ export class RequestHandlerHelper {
                         case HTTP_METHOD.Options:
                             return this.endResponse_(contentType, false);
                     }
+                    switch (result.statusCode) {
+                        case HTTP_STATUS_CODE.NoContent:
+                        case HTTP_STATUS_CODE.NotModified:
+                            return this.endResponse_(contentType, false);
+                    }
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                     if (negotiateMimeType != null) {
                         this.endResponse_(negotiateMimeType);
