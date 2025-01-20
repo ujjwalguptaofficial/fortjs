@@ -143,12 +143,12 @@ export class FileHandler {
             weak: this.requestHandler.config.eTag.type === ETAG_TYPE.Weak
         });
         const response = this.requestHandler.response;
+        response.setHeader('Etag', eTagValue);
         if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
             response.statusCode = HTTP_STATUS_CODE.NotModified;
             response.end();
         }
         else {
-            response.setHeader('Etag', eTagValue);
             response.setHeader('Last-Modified', lastModified);
             this.sendFileAsResponse(filePath, getMimeTypeFromFileType(fileType));
         }

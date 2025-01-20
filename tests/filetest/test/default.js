@@ -35,20 +35,39 @@ describe("/default", () => {
     })
 
     it("/assets/", done => {
+        let etagVal;
+        function testWithEtag(done) {
+            const req = request.get('/assets/').accept(browserAccept).set('if-none-match', etagVal);
+            console.log("request", req);
+            req.end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(304);
+                expect(res).to.have.header('content-type', undefined);
+                expect(res).to.have.header('Etag');
+                expect(res.header['x-powered-by']).to.equal('MyFort');
+                done();
+            });
+        }
+
         request.get('/assets/').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
             expect(res).to.have.header('content-type', 'text/html');
             // if (isProduction) {
             expect(res).to.have.header('Etag');
+            expect(res).to.have.header('last-modified');
+            etagVal = res.headers['etag'];
+            console.log("etagVal", etagVal);
             // }
             // else {
             //     expect(res).to.not.have.header('Etag');
             // }
             expect(res.header['x-powered-by']).to.equal('MyFort');
-            done();
+            testWithEtag(done);
         });
     })
+
+
 
     it("/file/getCookie", done => {
         request.get('/file/getCookie').accept(browserAccept).end((err, res) => {
