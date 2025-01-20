@@ -8,7 +8,10 @@ const slowNetworkConditions = {
 };
 
 async function simulateSlowDownloadAndReturnContent(fileUrl) {
-    const browser = await puppeteer.launch({ headless: true }); // Launch Puppeteer in headless mode
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }); // Launch Puppeteer in headless mode
     const page = await browser.newPage();
     // page.
 
