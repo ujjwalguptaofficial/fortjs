@@ -11,6 +11,7 @@ let {
     createHtmlTextFile
 } = require('./common');
 const fs = require('fs').promises;
+const { simulateSlowDownloadAndReturnContent } = require('./slow_file_download');
 
 describe("/file", () => {
 
@@ -174,4 +175,17 @@ describe("/file", () => {
         // delete file
         await fs.unlink(filePath);
     })
+
+    it('/bigfile with slow network simulation', async () => {
+        const filePath = await createHtmlTextFile(5);
+
+        const fileUrl = `${url}/file/bigfile`;
+        console.log('url:', fileUrl);
+        // return;
+        const content = await simulateSlowDownloadAndReturnContent(fileUrl);
+        expect(content).to.include('</html>');
+
+        // delete file
+        await fs.unlink(filePath);
+    }).timeout(50000);
 });
