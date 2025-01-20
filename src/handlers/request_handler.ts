@@ -17,7 +17,9 @@ export class RequestHandler extends RequestHandlerHelper {
 
     private registerEvents_() {
         this.request.on('error', (err) => {
-            console.error(`Unexpected error occured`, err);
+            const errorArgs = [`Unexpected error occured`, err];
+            console.error(...errorArgs);
+            this.config.logger.error(...errorArgs);
             this.onBadRequest(err).catch(ex => {
                 this.onErrorOccured(ex);
             });
