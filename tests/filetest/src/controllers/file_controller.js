@@ -12,7 +12,8 @@ import {
     assign,
     file,
     FileProcessor,
-    getSingleton
+    getSingleton,
+    http
 } from "fortjs";
 
 import * as Path from "path";
@@ -120,5 +121,15 @@ export class FileController extends Controller {
         const result = textResult(this.cookie.getCookie('hello'));
         console.log(result);
         return result;
+    }
+
+    @http.get('/bigfile')
+    // @worker(HTTP_METHOD.Get)
+    // @route("/bigfile")
+    async getBigFile() {
+        const filePath = Path.join(__dirname, '../static', 'ignorefile.big_html_file.html');
+        // console.log("file", filePath);
+        // return textResult(filePath);
+        return fileResult(filePath);
     }
 }

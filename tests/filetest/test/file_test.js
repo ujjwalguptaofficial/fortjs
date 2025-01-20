@@ -7,8 +7,10 @@ let {
     forbiddenText,
     methodNotAllowedMsg,
     badRequestMsg,
-    removeSpaceAndNewLine
+    removeSpaceAndNewLine,
+    createHtmlTextFile
 } = require('./common');
+const fs = require('fs').promises;
 
 describe("/file", () => {
 
@@ -146,5 +148,30 @@ describe("/file", () => {
             });
             done();
         });
+    })
+
+    it("/bigfile", async () => {
+        const filePath = await createHtmlTextFile(10);
+
+        let res = await request.get('/file/bigfile').accept(browserAccept);
+        expect(res).to.have.status(200);
+        expect(res).to.have.header('content-type', 'text/html');
+        expect(res.header['x-powered-by']).to.equal('MyFort');
+
+        expect(res).to.have.header('Etag');
+        expect(res).to.have.header('last-modified');
+        etagVal = res.headers['etag'];
+        expect(res.text).to.include('</html>');
+
+        // check after etag
+        res = await request.get(`/file/bigfile`).accept(browserAccept).set('if-none-match', etagVal);
+        expect(res).to.have.status(304);
+        expect(res).to.have.header('content-type', undefined);
+        expect(res).to.have.header('Etag');
+        expect(res.header['x-powered-by']).to.equal('MyFort');
+
+
+        // delete file
+        await fs.unlink(filePath);
     })
 });
