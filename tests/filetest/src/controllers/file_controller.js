@@ -117,7 +117,6 @@ export class FileController extends Controller {
 
     @worker(HTTP_METHOD.Get)
     async getCookie() {
-
         const result = textResult(this.cookie.getCookie('hello'));
         console.log(result);
         return result;
