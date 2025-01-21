@@ -1,12 +1,13 @@
-import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
+import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE, HTTP_RESULT_TYPE } from "../enums";
 import * as path from "path";
 import { CONTENT_TYPE } from "../constants";
 import * as Fs from "fs";
-import { getMimeTypeFromFileType, promise } from "../helpers";
+import { getMimeTypeFromExtension, getMimeTypeFromFileType, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
 import { RequestHandler } from "./request_handler";
+import { IFileResultInfo, IHttpResult } from "../interfaces";
 
 interface IFileInfo {
     folder: string,
@@ -18,6 +19,13 @@ export class FileHandler {
     constructor(private requestHandler: RequestHandler) {
 
     }
+
+    private returnFileResult_(filePath: string, fileInfo: Fs.Stats) {
+        return {
+            filePath: filePath,
+            fileInfo: fileInfo
+        } as IFileResultInfo;
+    };
 
     private getFileInfoFromUrl_(urlPath: string) {
         const splittedValue = urlPath.split("/");
@@ -53,20 +61,19 @@ export class FileHandler {
         });
     }
 
-    handleFileRequestFromAbsolutePath(absolutePath: string, fileType: string) {
-        return this.getFileStats_(absolutePath).then(fileInfo => {
-            if (fileInfo != null) {
-                if (fileInfo.isDirectory() === true) {
-                    return this.handleFileRequestForFolderPath_(absolutePath);
-                }
-                else {
-                    return this.sendFile_(absolutePath, fileType, fileInfo);
-                }
+    async getFileResultFromAbsolutePath(absolutePath: string) {
+        const fileInfo = await this.getFileStats_(absolutePath);
+        if (fileInfo != null) {
+            if (fileInfo.isDirectory() === true) {
+                return this.getFileResultForFolderPath_(absolutePath);
             }
             else {
-                return this.requestHandler.onNotFound();
+                return this.getFile_(absolutePath, fileInfo);
             }
-        });
+        }
+        // else {
+        //     return this.requestHandler.onNotFound();
+        // }
     }
 
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
@@ -87,15 +94,21 @@ export class FileHandler {
         return absPath;
     }
 
-    handleFileRequest(urlPath: string) {
-        const extension = path.parse(urlPath).ext;
+    async handleFileRequest(urlPath: string) {
         const absFilePath = this.checkForFolderAllowAndReturnPath_(urlPath);
         if (absFilePath != null) {
-            return this.handleFileRequestFromAbsolutePath(absFilePath, extension);
+            const filePathInfo = await this.getFileResultFromAbsolutePath(absFilePath);
+            if (filePathInfo) {
+                return {
+                    type: HTTP_RESULT_TYPE.File,
+                    responseData: filePathInfo
+                } as IHttpResult;
+            }
         }
-        else {
-            return this.requestHandler.onNotFound();
-        }
+        // else {
+        //     return null;
+        //     // return this.requestHandler.onNotFound();
+        // }
     }
 
     /**
@@ -108,13 +121,12 @@ export class FileHandler {
      * @returns
      * @memberof FileHandler
      */
-    private handleFileRequestForFolderPath_(absolutePath: string) {
+    private async getFileResultForFolderPath_(absolutePath: string) {
         absolutePath = path.join(absolutePath, "index.html");
-        return this.getFileStats_(absolutePath).then(fileInfo => {
-            return fileInfo != null ?
-                this.sendFile_(absolutePath, MIME_TYPE.Html, fileInfo) :
-                this.requestHandler.onNotFound();
-        });
+        const fileInfo = await this.getFileStats_(absolutePath);
+        return fileInfo != null ?
+            this.getFile_(absolutePath, fileInfo) :
+            null;
     }
 
     protected isClientHasFreshFile(lastModified: string, etagValue: string) {
@@ -137,20 +149,27 @@ export class FileHandler {
         });
     }
 
-    sendFile_(filePath: string, fileType: string, fileInfo: Fs.Stats) {
+    send(filePathInfo: IFileResultInfo) {
+        const { fileInfo, filePath } = filePathInfo;
         const lastModified = fileInfo.mtime.toUTCString();
         const eTagValue = etag(fileInfo, {
             weak: this.requestHandler.config.eTag.type === ETAG_TYPE.Weak
         });
         const response = this.requestHandler.response;
         response.setHeader('Etag', eTagValue);
+        const extension = path.parse(filePath).ext;
+        const mimeType = getMimeTypeFromExtension(extension);
         if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
             response.statusCode = HTTP_STATUS_CODE.NotModified;
             response.end();
         }
         else {
             response.setHeader('Last-Modified', lastModified);
-            this.sendFileAsResponse(filePath, getMimeTypeFromFileType(fileType));
+            this.sendFileAsResponse(filePath, mimeType);
         }
+    }
+
+    private getFile_(filePath: string, fileInfo: Fs.Stats) {
+        return this.returnFileResult_(filePath, fileInfo);
     }
 }

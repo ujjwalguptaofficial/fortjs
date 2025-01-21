@@ -181,7 +181,7 @@ export class RequestHandlerHelper {
         return null;
     }
 
-    private handleFileResult_() {
+    private async handleFileResult_() {
         const result = this.controllerResult as IHttpResult;
         const fileResult = result.responseData as IFileResultInfo;
         const parsedPath = parse(fileResult.filePath);
@@ -193,9 +193,13 @@ export class RequestHandlerHelper {
             );
         }
         const fileHandler = new FileHandler(this as any);
-        return fileHandler.handleFileRequestFromAbsolutePath(
-            fileResult.filePath, parsedPath.ext
+        const fileResultForSendingResponse = fileResult.fileInfo ? fileResult : await fileHandler.getFileResultFromAbsolutePath(
+            fileResult.filePath
         );
+        if (fileResultForSendingResponse == null) {
+            return this.onNotFound();
+        }
+        return fileHandler.send(fileResultForSendingResponse);
     }
 
     protected handleFinalResult_() {

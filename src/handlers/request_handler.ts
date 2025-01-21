@@ -172,13 +172,19 @@ export class RequestHandler extends RequestHandlerHelper {
                 return this.handleFinalResult_();
             }
             const pathUrl = urlDetail.pathname;
-
             this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, request.method as HTTP_METHOD);
+            const onNotRouteMatched = async () => {
+                const fileHandler = new FileHandler(this);
+                const fileResult = await fileHandler.handleFileRequest(pathUrl);
+                if (fileResult == null) {
+                    return () => {
+                        return this.onNotFound();
+                    }
+                }
+                return this.onResultFromComponent(fileResult);
+            };
             const finalCallback = await (
-                this.routeMatchInfo_ == null ? () => {
-                    const fileHandler = new FileHandler(this);
-                    return fileHandler.handleFileRequest(pathUrl);
-                } :
+                this.routeMatchInfo_ == null ? onNotRouteMatched() :
                     this.onRouteMatched_()
             );
             await this.runWallOutgoing_();
