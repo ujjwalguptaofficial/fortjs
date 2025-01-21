@@ -14,18 +14,30 @@ interface IFileInfo {
     file: string;
 }
 
+function getFileStats_(filePath) {
+    return promise<Fs.Stats>((res, rej) => {
+        // eslint-disable-next-line
+        Fs.lstat(filePath, (err, status) => {
+            if (err) {
+                if (err.code === 'ENOENT') {
+                    res(null);
+                }
+                else {
+                    rej(err);
+                }
+            }
+            else {
+                res(status);
+            }
+        });
+    });
+}
+
 export class FileHandler {
 
     constructor(private requestHandler: RequestHandler) {
 
     }
-
-    private returnFileResult_(filePath: string, fileInfo: Fs.Stats) {
-        return {
-            filePath: filePath,
-            fileInfo: fileInfo
-        } as IFileResultInfo;
-    };
 
     private getFileInfoFromUrl_(urlPath: string) {
         const splittedValue = urlPath.split("/");
@@ -42,27 +54,8 @@ export class FileHandler {
 
     }
 
-    private getFileStats_(filePath) {
-        return promise<Fs.Stats>((res, rej) => {
-            // eslint-disable-next-line
-            Fs.lstat(filePath, (err, status) => {
-                if (err) {
-                    if (err.code === 'ENOENT') {
-                        res(null);
-                    }
-                    else {
-                        rej(err);
-                    }
-                }
-                else {
-                    res(status);
-                }
-            });
-        });
-    }
-
     async getFileResultFromAbsolutePath(absolutePath: string) {
-        const fileInfo = await this.getFileStats_(absolutePath);
+        const fileInfo = await getFileStats_(absolutePath);
         if (fileInfo != null) {
             if (fileInfo.isDirectory() === true) {
                 return this.getFileResultForFolderPath_(absolutePath);
@@ -116,7 +109,7 @@ export class FileHandler {
      */
     private async getFileResultForFolderPath_(absolutePath: string) {
         absolutePath = path.join(absolutePath, "index.html");
-        const fileInfo = await this.getFileStats_(absolutePath);
+        const fileInfo = await getFileStats_(absolutePath);
         return fileInfo != null ?
             this.getFile_(absolutePath, fileInfo) :
             null;
@@ -163,6 +156,9 @@ export class FileHandler {
     }
 
     private getFile_(filePath: string, fileInfo: Fs.Stats) {
-        return this.returnFileResult_(filePath, fileInfo);
+        return {
+            filePath: filePath,
+            fileInfo: fileInfo
+        } as IFileResultInfo;
     }
 }

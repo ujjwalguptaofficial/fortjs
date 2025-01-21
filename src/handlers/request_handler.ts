@@ -161,6 +161,17 @@ export class RequestHandler extends RequestHandlerHelper {
         return Promise.all(outgoingResults);
     }
 
+    private async onNotRouteMatched(pathUrl: string) {
+        const fileHandler = new FileHandler(this);
+        const fileResult = await fileHandler.handleFileRequest(pathUrl);
+        if (fileResult == null) {
+            return () => {
+                return this.onNotFound();
+            }
+        }
+        return this.onResultFromComponent(fileResult);
+    };
+
     private async execute_() {
         const request = this.componentProps.request;
         const urlDetail = url.parse(request.url, true);
@@ -172,19 +183,15 @@ export class RequestHandler extends RequestHandlerHelper {
                 return this.handleFinalResult_();
             }
             const pathUrl = urlDetail.pathname;
-            this.routeMatchInfo_ = parseAndMatchRoute(pathUrl, request.method as HTTP_METHOD);
-            const onNotRouteMatched = async () => {
-                const fileHandler = new FileHandler(this);
-                const fileResult = await fileHandler.handleFileRequest(pathUrl);
-                if (fileResult == null) {
-                    return () => {
-                        return this.onNotFound();
-                    }
-                }
-                return this.onResultFromComponent(fileResult);
-            };
+            this.routeMatchInfo_ = parseAndMatchRoute(
+                pathUrl,
+                request.method as HTTP_METHOD
+            );
+
             const finalCallback = await (
-                this.routeMatchInfo_ == null ? onNotRouteMatched() :
+                this.routeMatchInfo_ == null ? this.onNotRouteMatched(
+                    pathUrl
+                ) :
                     this.onRouteMatched_()
             );
             await this.runWallOutgoing_();
