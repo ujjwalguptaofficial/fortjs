@@ -2,7 +2,7 @@ import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE, HTTP_RESULT_TYPE } from "../enu
 import * as path from "path";
 import { CONTENT_TYPE } from "../constants";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension, getMimeTypeFromFileType, promise } from "../helpers";
+import { getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
@@ -71,9 +71,6 @@ export class FileHandler {
                 return this.getFile_(absolutePath, fileInfo);
             }
         }
-        // else {
-        //     return this.requestHandler.onNotFound();
-        // }
     }
 
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
@@ -105,10 +102,6 @@ export class FileHandler {
                 } as IHttpResult;
             }
         }
-        // else {
-        //     return null;
-        //     // return this.requestHandler.onNotFound();
-        // }
     }
 
     /**
