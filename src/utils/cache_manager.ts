@@ -17,7 +17,7 @@ export class CacheManager {
     async set(key: any, data: any, ttl = 600) {
         const cacheData = {
             data,
-            expiry: new Date().getTime() + ttl * 1000,
+            expiry: Date.now() + ttl * 1000,
             key: key
         } as ICacheData;
         await this.cacheStore_.set(cacheData);
@@ -33,7 +33,7 @@ export class CacheManager {
     async get(key: any) {
         const value = await this.cacheStore_.get(key);
         if (value) {
-            if (new Date().getTime() > value.expiry) {
+            if (Date.now() > value.expiry) {
                 await this.delete(key);
                 return;
             }
