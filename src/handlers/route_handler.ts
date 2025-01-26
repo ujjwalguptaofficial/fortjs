@@ -142,28 +142,7 @@ export class RouteHandler {
 
     static addWorker(newWorker: IWorkerInfo, className: string) {
         const workerName = newWorker.workerName;
-        // RouteHandler.addNewWorkerOption(className, workerName, (savedAction: WorkerInfo, route: RouteInfo) => {
-        //     // savedAction.pattern = getWorkerPattern(route.path, newWorker.pattern);
-        //     savedAction.pattern = newWorker.pattern;
-        //     savedAction.methodsAllowed = newWorker.methodsAllowed;
-        // });
-
-        // return;
-
-        const route = routerCollection.get(className);
-        if (route == null) {
-            pushRouterIntoCollection({
-                workers: new Map([
-                    [workerName, new WorkerInfo(newWorker)]
-                ]),
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null,
-                values: []
-            });
-        }
-        else {
+        RouteHandler.addNewWorkerOption(className, null, (_: WorkerInfo, route: RouteInfo) => {
             const savedAction = route.workers.get(workerName);
             if (savedAction == null) {
                 newWorker.pattern = getWorkerPattern(route.path, newWorker.pattern);
@@ -174,7 +153,7 @@ export class RouteHandler {
                 savedAction.pattern = getWorkerPattern(route.path, savedAction.pattern);
                 // route.path == null ? savedAction.pattern : `/${route.path}${savedAction.pattern}`;
             }
-        }
+        });
     }
 
     static addGuards(guards: Array<TGuard>, className: string, workerName: string) {
