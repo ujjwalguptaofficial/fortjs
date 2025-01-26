@@ -135,25 +135,21 @@ export class RouteHandler {
     }
 
     static addShields(shields: Array<TShield>, className: string) {
-        const route = routerCollection.get(className);
-        if (route == null) {
-            pushRouterIntoCollection({
-                workers: new Map(),
-                controller: null,
-                controllerName: className,
-                shields: shields,
-                path: null,
-                values: []
-            });
-        }
-        else {
+        RouteHandler.addNewWorkerOption(className, null, (savedAction: WorkerInfo, route: RouteInfo) => {
             route.shields = route.shields ? [...route.shields, ...shields] : shields;
-        }
+        });
     }
 
     static addWorker(newWorker: IWorkerInfo, className: string) {
-
         const workerName = newWorker.workerName;
+        // RouteHandler.addNewWorkerOption(className, workerName, (savedAction: WorkerInfo, route: RouteInfo) => {
+        //     // savedAction.pattern = getWorkerPattern(route.path, newWorker.pattern);
+        //     savedAction.pattern = newWorker.pattern;
+        //     savedAction.methodsAllowed = newWorker.methodsAllowed;
+        // });
+
+        // return;
+
         const route = routerCollection.get(className);
         if (route == null) {
             pushRouterIntoCollection({
