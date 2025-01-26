@@ -9,6 +9,7 @@ const routerCollection = new Map<string, RouteInfo>();
 const pushRouterIntoCollection = (route: IRouteInfo) => {
     const routeObj = new RouteInfo(route);
     routerCollection.set(route.controllerName, routeObj);
+    return routeObj;
 };
 
 const getWorkerPattern = (controllerPath: string, pattern: string) => {
@@ -181,87 +182,17 @@ export class RouteHandler {
     }
 
     static addGuards(guards: Array<TGuard>, className: string, workerName: string) {
-
-        const route = routerCollection.get(className);
-        const pattern = workerName.toLowerCase();
-        if (route == null) {
-            pushRouterIntoCollection({
-                workers: new Map([
-                    [workerName, new WorkerInfo({
-                        workerName: workerName,
-                        guards: guards,
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: []
-                    })]
-                ]),
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null,
-                values: []
-            });
-        }
-        else {
-            const savedAction = route.workers.get(workerName);
-            if (savedAction == null) {
-                route.workers.set(
-                    workerName,
-                    new WorkerInfo({
-                        workerName: workerName,
-                        guards: guards,
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: []
-                    })
-                );
-            }
-            else {
-                savedAction.guards = savedAction.guards ? [...savedAction.guards, ...guards]
-                    : guards;
-            }
-        }
+        RouteHandler.addNewWorkerOption(className, workerName, (savedAction: WorkerInfo, route: RouteInfo) => {
+            savedAction.guards = savedAction.guards ? [...savedAction.guards, ...guards]
+                : guards;
+        });
     }
 
     static addPattern(pattern: string, className: string, workerName: string) {
-        const route = routerCollection.get(className);
-        if (route == null) {
-            pushRouterIntoCollection({
-                workers: new Map([
-                    [workerName, new WorkerInfo({
-                        workerName: workerName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: []
-                    })]
-                ]),
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null,
-                values: []
-            });
-        }
-        else {
-            const savedAction = route.workers.get(workerName);
+        RouteHandler.addNewWorkerOption(className, workerName, (savedAction: WorkerInfo, route: RouteInfo) => {
             const workerRouteWithController = getWorkerPattern(route.path, pattern);
-            if (savedAction == null) {
-                route.workers.set(
-                    workerName,
-                    new WorkerInfo({
-                        workerName: workerName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: workerRouteWithController,
-                        values: []
-                    })
-                );
-            }
-            else {
-                savedAction.pattern = workerRouteWithController;
-            }
-        }
+            savedAction.pattern = workerRouteWithController;
+        });
     }
 
     static addExpected(type: "body" | "query" | "param", className: string, workerName: string, expectedValue: any) {
@@ -316,21 +247,12 @@ export class RouteHandler {
         }
     }
 
-    static addCache(cacheOption: ICacheOptionStored, className: string, workerName: string) {
-        const route = routerCollection.get(className);
-        const pattern = workerName.toLowerCase();
+    static addNewWorkerOption(className: string, workerName: string, addOptionHandler: Function) {
+        let route: RouteInfo = routerCollection.get(className);
+        let savedWorker: WorkerInfo;
         if (route == null) {
-            pushRouterIntoCollection({
-                workers: new Map([
-                    [workerName, new WorkerInfo({
-                        workerName: workerName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: [],
-                        cache: cacheOption
-                    })]
-                ]),
+            route = pushRouterIntoCollection({
+                workers: new Map(),
                 controller: null,
                 controllerName: className,
                 shields: [],
@@ -339,24 +261,30 @@ export class RouteHandler {
             });
         }
         else {
-            const savedAction = route.workers.get(workerName);
-            if (savedAction == null) {
-                route.workers.set(
-                    workerName,
-                    new WorkerInfo({
-                        workerName: workerName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: [],
-                        cache: cacheOption
-                    })
-                );
-            }
-            else {
-                savedAction.cache = cacheOption;
-            }
+            savedWorker = route.workers.get(workerName);
         }
+        if (savedWorker == null && workerName != null) {
+            const pattern = workerName.toLowerCase();
+            savedWorker = new WorkerInfo({
+                workerName: workerName,
+                guards: [],
+                methodsAllowed: null,
+                pattern: pattern,
+                values: [],
+                cache: null
+            });
+            route.workers.set(
+                workerName,
+                savedWorker
+            );
+        }
+        addOptionHandler(savedWorker, route);
+    }
+
+    static addCache(cacheOption: ICacheOptionStored, className: string, workerName: string) {
+        RouteHandler.addNewWorkerOption(className, workerName, (savedAction: WorkerInfo) => {
+            savedAction.cache = cacheOption;
+        });
     }
 
     static addRouteToCache(url: string, route: IRouteMatch) {
@@ -368,45 +296,8 @@ export class RouteHandler {
     }
 
     static addFileProcessor(fileProcessor: TFileProcessor, className: string, workerName: string) {
-        const route = routerCollection.get(className);
-        const pattern = workerName.toLowerCase();
-        if (route == null) {
-            pushRouterIntoCollection({
-                workers: new Map([
-                    [workerName, new WorkerInfo({
-                        workerName: workerName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: [],
-                        fileProcessor: fileProcessor
-                    })]
-                ]),
-                controller: null,
-                controllerName: className,
-                shields: [],
-                path: null,
-                values: []
-            });
-        }
-        else {
-            const savedAction = route.workers.get(workerName);
-            if (savedAction == null) {
-                route.workers.set(
-                    workerName,
-                    new WorkerInfo({
-                        workerName: workerName,
-                        guards: [],
-                        methodsAllowed: null,
-                        pattern: pattern,
-                        values: [],
-                        fileProcessor: fileProcessor
-                    })
-                );
-            }
-            else {
-                savedAction.fileProcessor = fileProcessor;
-            }
-        }
+        RouteHandler.addNewWorkerOption(className, workerName, (savedAction: WorkerInfo) => {
+            savedAction.fileProcessor = fileProcessor;
+        });
     }
 }
