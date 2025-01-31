@@ -1,5 +1,4 @@
 import { InjectorHandler } from "../handlers";
-
-export function getSingleton<T>(classValue: any) {
-    return InjectorHandler.getSingletonValue(classValue) as T | any;
+export function getSingleton<T>(classValue: new (...args: any[]) => T): T {
+    return InjectorHandler.getSingletonValue(classValue);
 }
