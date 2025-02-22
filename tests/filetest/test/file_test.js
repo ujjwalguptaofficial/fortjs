@@ -151,6 +151,14 @@ describe("/file", () => {
         });
     })
 
+    it('/influencers.rss', async () => {
+        let res = await request.get('/file/influencers.rss');
+        expect(res).to.have.status(200);
+        expect(res).to.have.header('content-type', 'application/rss+xml');
+        // console.log('text', res.text, 'body', res.body, 'data', res.data);
+        // expect(res.text).to.be.equal('hello=world');
+    })
+
     it("/bigfile", async () => {
         const filePath = await createHtmlTextFile(10);
 
@@ -188,4 +196,6 @@ describe("/file", () => {
         // delete file
         await fs.unlink(filePath);
     }).timeout(50000);
+
+
 });

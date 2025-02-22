@@ -144,7 +144,8 @@ export class FileHandler {
         const response = this.requestHandler.response;
         response.setHeader('Etag', eTagValue);
         const extension = path.parse(filePath).ext;
-        const mimeType = getMimeTypeFromExtension(extension);
+        const contentType = response.getHeader(CONTENT_TYPE);
+        const mimeType = contentType ? contentType as MIME_TYPE : getMimeTypeFromExtension(extension);
         if (this.isClientHasFreshFile(lastModified, eTagValue)) { // client has fresh file
             response.statusCode = HTTP_STATUS_CODE.NotModified;
             response.end();

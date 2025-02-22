@@ -132,4 +132,11 @@ export class FileController extends Controller {
         // return textResult(filePath);
         return fileResult(filePath);
     }
+
+    @http.get("/influencers.rss")
+    influencerRssFile() {
+        const filePath = Path.join(__dirname, '../static', `influencers.rss`);
+        this.response.setHeader('Content-Type', 'application/rss+xml');
+        return fileResult(filePath);
+    }
 }
