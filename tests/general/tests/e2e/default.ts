@@ -101,4 +101,12 @@ describe("/default", () => {
         expect(res.status).toBe(500);
         expect(res.data).toContain('Invalid route registration in Controller : EmptyController and method : dailyAccountBalance.Route exist but method has not been decorated with worker.');
     });
+
+    it('/influencers.rss', async () => {
+        let res = await request.get('/influencers.rss');
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toEqual('application/rss+xml');
+        // console.log('text', res.text, 'body', res.body, 'data', res.data);
+        expect(res.data).toContain('<rss');
+    })
 });

@@ -209,7 +209,8 @@ export class RequestHandlerHelper {
         switch (result.type) {
             case HTTP_RESULT_TYPE.Default:
                 {
-                    const contentType = result.contentType || MIME_TYPE.Text;
+                    const headerSetByUser = this.response.hasHeader(CONTENT_TYPE);
+                    const contentType = headerSetByUser ? this.response.getHeader(CONTENT_TYPE) as MIME_TYPE : (result.contentType || MIME_TYPE.Text);
                     switch (this.request.method) {
                         case HTTP_METHOD.Head:
                         case HTTP_METHOD.Options:
@@ -219,6 +220,10 @@ export class RequestHandlerHelper {
                         case HTTP_STATUS_CODE.NoContent:
                         case HTTP_STATUS_CODE.NotModified:
                             return this.endResponse_(contentType, false);
+                    }
+                    if (headerSetByUser) {
+                        return this.endResponse_(contentType);
+
                     }
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                     if (negotiateMimeType != null) {

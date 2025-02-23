@@ -1,7 +1,9 @@
-import { Controller, viewResult, worker, route, jsonResult, HTTP_METHOD, defaultWorker, assign, singleton, textResult } from "fortjs";
+import { Controller, viewResult, worker, route, jsonResult, HTTP_METHOD, defaultWorker, assign, singleton, textResult, http } from "fortjs";
 import { ObjectID } from "mongodb";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
+import { join } from "path";
+import { readFile } from "fs-extra";
 
 export class DefaultController extends Controller {
 
@@ -64,5 +66,13 @@ export class DefaultController extends Controller {
     workerWithoutPromise() {
         console.error('query', this.query);
         return textResult("I am a worker without promise");
+    }
+
+    @http.get("/influencers.rss")
+    async influencerRssFile() {
+        const filePath = join(__dirname, '../static', `influencers.rss`);
+        this.response.setHeader('Content-Type', 'application/rss+xml');
+        const fileData = await readFile(filePath);
+        return textResult(fileData.toString());
     }
 }

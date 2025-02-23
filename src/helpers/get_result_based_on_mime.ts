@@ -7,7 +7,7 @@ export let getResultBasedOnMiMe = (type: MIME_TYPE, result, setMimeType: (type) 
         case MIME_TYPE.Text:
         case MIME_TYPE.Html:
         case MIME_TYPE.Xml:
-            if (typeof result === 'object' === true) {
+            if (typeof result === 'object') {
                 setMimeType(MIME_TYPE.Json);
                 return JSON.stringify(result);
             }
