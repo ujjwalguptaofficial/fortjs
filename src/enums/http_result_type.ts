@@ -1,6 +1,7 @@
 export enum HTTP_RESULT_TYPE {
     Default,
-    File,
+    Custom,
     Redirect,
-    FormattedResult
+    FormattedResult,
+    File
 }

@@ -202,6 +202,12 @@ export class RequestHandlerHelper {
         return fileHandler.send(fileResultForSendingResponse);
     }
 
+    private async handleCustomResult_() {
+        const result = this.controllerResult as IHttpResult;
+        const customResult = result.responseData as any;
+        await customResult({ onNotFound: this.onNotFound });
+    }
+
     protected handleFinalResult_() {
         const result: IHttpResult = this.controllerResult;
         this.setCookie();
@@ -238,6 +244,8 @@ export class RequestHandlerHelper {
                 return this.handleRedirectResult_();
             case HTTP_RESULT_TYPE.File:
                 return this.handleFileResult_();
+            case HTTP_RESULT_TYPE.Custom:
+                return this.handleCustomResult_();
             case HTTP_RESULT_TYPE.FormattedResult:
                 return this.handleFormatResult_();
         }
