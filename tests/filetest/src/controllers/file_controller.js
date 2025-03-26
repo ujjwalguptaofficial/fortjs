@@ -171,10 +171,7 @@ export class FileController extends Controller {
                     reject(streamErr);  // Reject the promise in case of an error
                 });
             } catch (err) {
-                return textResult('File not found', HTTP_STATUS_CODE.NotFound);
-                // If the file doesn't exist or any error occurs
-                res.status(404).send('File not found');
-                reject(err);  // Reject the promise if there's an error
+                return jsonResult({ error: 'File not found' }, HTTP_STATUS_CODE.NotFound);
             }
         });
         // this.response.setHeader('Content-Type', 'application/rss+xml');

@@ -162,17 +162,17 @@ describe("/file", () => {
     it('/customresult with valid file', async () => {
         let res = await request.get('/file/customresult/index.html');
         expect(res).to.have.status(200);
-        expect(res).to.have.header('content-type', 'application/octet-stream');
+        expect(res).to.have.header('content-type', 'text/html');
         // console.log('text', res.text, 'body', res.body, 'data', res.data);
         expect(res.text).to.contains('cdn.jsdelivr.net');
     })
 
     it('/customresult with invalid file', async () => {
-        let res = await request.get('/file/customresult/invalid.html');
+        let res = await request.get('/file/customresult/invalid.html').accept(browserAccept);
         console.log('text', res.text, 'body', res.body, 'data', res.data);
         expect(res).to.have.status(404);
-        expect(res).to.have.header('content-type', 'text/plain');
-        expect(res.text).to.equal('File not found');
+        expect(res).to.have.header('content-type', 'application/json');
+        expect(res.body).to.eql({ "error": "File not found" });
     })
 
     it("/bigfile", async () => {
