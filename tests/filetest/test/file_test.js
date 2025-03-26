@@ -159,6 +159,22 @@ describe("/file", () => {
         // expect(res.text).to.be.equal('hello=world');
     })
 
+    it('/customresult with valid file', async () => {
+        let res = await request.get('/file/customresult/index.html');
+        expect(res).to.have.status(200);
+        expect(res).to.have.header('content-type', 'application/octet-stream');
+        // console.log('text', res.text, 'body', res.body, 'data', res.data);
+        expect(res.text).to.contains('cdn.jsdelivr.net');
+    })
+
+    it('/customresult with invalid file', async () => {
+        let res = await request.get('/file/customresult/invalid.html');
+        console.log('text', res.text, 'body', res.body, 'data', res.data);
+        expect(res).to.have.status(404);
+        expect(res).to.have.header('content-type', 'text/plain');
+        expect(res.text).to.equal('File not found');
+    })
+
     it("/bigfile", async () => {
         const filePath = await createHtmlTextFile(10);
 

@@ -13,10 +13,14 @@ import {
     file,
     FileProcessor,
     getSingleton,
-    http
+    http,
+    customResult,
+    HTTP_STATUS_CODE,
+    getMimeTypeFromExtension
 } from "fortjs";
 
 import * as Path from "path";
+import fs from "fs";
 
 class FileName {
     constructor() {
@@ -138,5 +142,42 @@ export class FileController extends Controller {
         const filePath = Path.join(__dirname, '../static', `influencers.rss`);
         this.response.setHeader('Content-Type', 'application/rss+xml');
         return fileResult(filePath);
+    }
+
+    @http.get("/customresult/{path}")
+    getCustomResultFile() {
+        const filePath = Path.join(__dirname, '../static', this.param.path);
+        const res = this.response;
+        return customResult(async () => {
+            try {
+                // Check if the file exists and it's a regular file using fs.promises
+                await fs.promises.access(filePath, fs.constants.F_OK);
+
+                // Set the correct headers for the file type (optional)
+                res.setHeader('Content-Type',
+                    getMimeTypeFromExtension(Path.extname(filePath))
+                );
+
+                // Create a readable stream for the file
+                const fileStream = fs.createReadStream(filePath);
+
+                // Pipe the file stream to the response
+                fileStream.pipe(res);
+
+                // Handle errors in the stream
+                fileStream.on('error', (streamErr) => {
+                    console.error('Error streaming the file:', streamErr);
+                    res.status(500).send('Error streaming the file');
+                    reject(streamErr);  // Reject the promise in case of an error
+                });
+            } catch (err) {
+                return textResult('File not found', HTTP_STATUS_CODE.NotFound);
+                // If the file doesn't exist or any error occurs
+                res.status(404).send('File not found');
+                reject(err);  // Reject the promise if there's an error
+            }
+        });
+        // this.response.setHeader('Content-Type', 'application/rss+xml');
+        // return fileResult(filePath);
     }
 }

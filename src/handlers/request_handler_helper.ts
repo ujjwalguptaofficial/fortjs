@@ -205,7 +205,11 @@ export class RequestHandlerHelper {
     private async handleCustomResult_() {
         const result = this.controllerResult as IHttpResult;
         const customResult = result.responseData as any;
-        await customResult({ onNotFound: this.onNotFound });
+        const resultFromCustomResult = await customResult({ onNotFound: this.onNotFound });
+        if (resultFromCustomResult) {
+            this.controllerResult = resultFromCustomResult;
+            return this.handleFinalResult_();
+        }
     }
 
     protected handleFinalResult_() {
