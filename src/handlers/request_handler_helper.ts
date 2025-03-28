@@ -181,26 +181,26 @@ export class RequestHandlerHelper {
         return null;
     }
 
-    private async handleFileResult_() {
-        const result = this.controllerResult as IHttpResult;
-        const fileResult = result.responseData as IFileResultInfo;
-        const parsedPath = parse(fileResult.filePath);
-        if (fileResult.shouldDownload === true) {
-            const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;
-            this.response.setHeader(
-                "content-disposition",
-                `attachment;filename=${fileName}${parsedPath.ext}`
-            );
-        }
-        const fileHandler = new FileHandler(this.componentProps);
-        const fileResultForSendingResponse = fileResult.fileInfo ? fileResult : await fileHandler.getFileResultFromAbsolutePath(
-            fileResult.filePath
-        );
-        if (fileResultForSendingResponse == null) {
-            return this.onNotFound();
-        }
-        return fileHandler.send(fileResultForSendingResponse);
-    }
+    // private async handleFileResult_() {
+    //     const result = this.controllerResult as IHttpResult;
+    //     const fileResult = result.responseData as IFileResultInfo;
+    //     const parsedPath = parse(fileResult.filePath);
+    //     if (fileResult.shouldDownload === true) {
+    //         const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;
+    //         this.response.setHeader(
+    //             "content-disposition",
+    //             `attachment;filename=${fileName}${parsedPath.ext}`
+    //         );
+    //     }
+    //     const fileHandler = new FileHandler(this.componentProps);
+    //     const fileResultForSendingResponse = fileResult.fileInfo ? fileResult : await fileHandler.getFileResultFromAbsolutePath(
+    //         fileResult.filePath
+    //     );
+    //     if (fileResultForSendingResponse == null) {
+    //         return this.onNotFound();
+    //     }
+    //     return fileHandler.send(fileResultForSendingResponse);
+    // }
 
     private async handleCustomResult_() {
         const result = this.controllerResult as IHttpResult;
@@ -249,8 +249,8 @@ export class RequestHandlerHelper {
                 break;
             case HTTP_RESULT_TYPE.Redirect:
                 return this.handleRedirectResult_();
-            case HTTP_RESULT_TYPE.File:
-                return this.handleFileResult_();
+            // case HTTP_RESULT_TYPE.File:
+            //     return this.handleFileResult_();
             case HTTP_RESULT_TYPE.Custom:
                 return this.handleCustomResult_();
             case HTTP_RESULT_TYPE.FormattedResult:

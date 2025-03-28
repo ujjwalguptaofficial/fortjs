@@ -6,7 +6,8 @@ import { getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
-import { IComponentProp, IFileResultInfo, IHttpResult } from "../interfaces";
+import { customResult, IComponentProp, IFileResultInfo, IHttpResult } from "../interfaces";
+import { handleFileResult } from "./handle_file_result";
 
 interface IFileInfo {
     folder: string,
@@ -88,10 +89,11 @@ export class FileHandler {
         if (absFilePath != null) {
             const filePathInfo = await this.getFileResultFromAbsolutePath(absFilePath);
             if (filePathInfo) {
-                return {
-                    type: HTTP_RESULT_TYPE.File,
-                    responseData: filePathInfo
-                } as IHttpResult;
+                return customResult(handleFileResult(filePathInfo));
+                // return {
+                //     type: HTTP_RESULT_TYPE.File,
+                //     responseData: filePathInfo
+                // } as IHttpResult;
             }
         }
     }

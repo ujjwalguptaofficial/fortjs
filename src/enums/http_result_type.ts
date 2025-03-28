@@ -3,5 +3,5 @@ export enum HTTP_RESULT_TYPE {
     Custom,
     Redirect,
     FormattedResult,
-    File
+    // File
 }

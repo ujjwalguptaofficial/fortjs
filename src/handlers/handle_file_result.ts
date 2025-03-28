@@ -1,13 +1,13 @@
 import { parse } from "path";
-import { customResult, IFileResultInfo } from "../interfaces";
-import { FileHandler } from "../handlers";
+import { CustomResultOption, IFileResultInfo } from "../interfaces";
+import { FileHandler } from "./file_handler";
 
 export function handleFileResult(fileResult: IFileResultInfo) {
-    return async (option) => {
+    return async (option: CustomResultOption) => {
         const parsedPath = parse(fileResult.filePath);
         if (fileResult.shouldDownload === true) {
             const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;
-            this.response.setHeader(
+            option.response.setHeader(
                 "content-disposition",
                 `attachment;filename=${fileName}${parsedPath.ext}`
             );
