@@ -1,8 +1,8 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../enums";
 import { CONTENT_TYPE, SET_COOKIE } from "../constants";
 import * as Negotiator from "negotiator";
-import { CustomResultOption, IComponentProp, IException, IHttpResult, T_CUSTOM_RESULT } from "../interfaces";
-import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes } from "../helpers";
+import { IComponentProp, IException, IHttpResult } from "../interfaces";
+import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes, CustomResultOption, T_CUSTOM_RESULT } from "../helpers";
 import { HttpFormatResult } from "../types";
 import { App } from "../models";
 

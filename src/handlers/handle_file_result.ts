@@ -1,6 +1,7 @@
 import { parse } from "path";
-import { CustomResultOption, IFileResultInfo } from "../interfaces";
+import { IFileResultInfo } from "../interfaces";
 import { FileHandler } from "./file_handler";
+import { CustomResultOption } from "../helpers";
 
 export function handleFileResult(fileResult: IFileResultInfo) {
     return async (option: CustomResultOption) => {

@@ -1,5 +1,5 @@
 import { HTTP_STATUS_CODE } from "../enums/http_status_code";
-import { customResult } from "../interfaces";
+import { customResult } from "../helpers/";
 
 export const redirectResult = (url: string) => {
     return customResult((option) => {

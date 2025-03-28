@@ -1,12 +1,12 @@
-import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE, HTTP_RESULT_TYPE } from "../enums";
+import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
 import * as path from "path";
 import { CONTENT_TYPE } from "../constants";
 import * as Fs from "fs";
-import { getMimeTypeFromExtension, promise } from "../helpers";
+import { customResult, getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
-import { customResult, IComponentProp, IFileResultInfo, IHttpResult } from "../interfaces";
+import { IComponentProp, IFileResultInfo } from "../interfaces";
 import { handleFileResult } from "./handle_file_result";
 
 interface IFileInfo {
@@ -90,10 +90,6 @@ export class FileHandler {
             const filePathInfo = await this.getFileResultFromAbsolutePath(absFilePath);
             if (filePathInfo) {
                 return customResult(handleFileResult(filePathInfo));
-                // return {
-                //     type: HTTP_RESULT_TYPE.File,
-                //     responseData: filePathInfo
-                // } as IHttpResult;
             }
         }
     }
@@ -126,13 +122,13 @@ export class FileHandler {
     protected sendFileAsResponse(filePath: string, mimeType: MIME_TYPE) {
         return promise((res, rej) => {
             const handler = this.option;
-            handler.response.writeHead(HTTP_STATUS_CODE.Ok, {
-                [CONTENT_TYPE]: mimeType
-            });
             const readStream = Fs.createReadStream(filePath);
             // Handle non-existent file
             readStream.on('error', rej);
             readStream.on('open', () => {
+                handler.response.writeHead(HTTP_STATUS_CODE.Ok, {
+                    [CONTENT_TYPE]: mimeType
+                });
                 readStream.pipe(handler.response);
             });
             readStream.on('end', res);
