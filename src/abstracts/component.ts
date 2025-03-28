@@ -30,6 +30,10 @@ export class Component {
         return this.componentProp_.global.logger;
     }
 
+    get app() {
+        return this.componentProp_.global;
+    }
+
     get option() {
         return this.componentProp_.global['componentOption_'];
     }

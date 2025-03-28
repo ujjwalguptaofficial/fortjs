@@ -6,8 +6,7 @@ import { getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
-import { RequestHandler } from "./request_handler";
-import { IFileResultInfo, IHttpResult } from "../interfaces";
+import { IComponentProp, IFileResultInfo, IHttpResult } from "../interfaces";
 
 interface IFileInfo {
     folder: string,
@@ -35,7 +34,7 @@ function getFileStats_(filePath) {
 
 export class FileHandler {
 
-    constructor(private requestHandler: RequestHandler) {
+    constructor(private option: IComponentProp) {
 
     }
 
@@ -69,7 +68,7 @@ export class FileHandler {
     private checkForFolderAllowAndReturnPath_(urlPath: string) {
         const fileInfo = this.getFileInfoFromUrl_(urlPath);
         const getAbsPath = () => {
-            const folder = this.requestHandler.config['folders_'].find(qry => qry.alias === fileInfo.folder);
+            const folder = this.option.global['folders_'].find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
                 return path.join(folder.path, fileInfo.file);
             }
@@ -116,32 +115,35 @@ export class FileHandler {
     }
 
     protected isClientHasFreshFile(lastModified: string, etagValue: string) {
-        return fresh(this.requestHandler.request.headers, {
+        return fresh(this.option.request.headers, {
             'etag': etagValue,
             'last-modified': lastModified
         });
     }
 
     protected sendFileAsResponse(filePath: string, mimeType: MIME_TYPE) {
-        const handler = this.requestHandler;
-        handler.response.writeHead(HTTP_STATUS_CODE.Ok, {
-            [CONTENT_TYPE]: mimeType
-        });
-        const readStream = Fs.createReadStream(filePath);
-        // Handle non-existent file
-        readStream.on('error', handler.onErrorOccured.bind(this));
-        readStream.on('open', () => {
-            readStream.pipe(handler.response);
-        });
+        return promise((res, rej) => {
+            const handler = this.option;
+            handler.response.writeHead(HTTP_STATUS_CODE.Ok, {
+                [CONTENT_TYPE]: mimeType
+            });
+            const readStream = Fs.createReadStream(filePath);
+            // Handle non-existent file
+            readStream.on('error', rej);
+            readStream.on('open', () => {
+                readStream.pipe(handler.response);
+            });
+            readStream.on('end', res);
+        })
     }
 
     send(filePathInfo: IFileResultInfo) {
         const { fileInfo, filePath } = filePathInfo;
         const lastModified = fileInfo.mtime.toUTCString();
         const eTagValue = etag(fileInfo, {
-            weak: this.requestHandler.config.eTag.type === ETAG_TYPE.Weak
+            weak: this.option.global.eTag.type === ETAG_TYPE.Weak
         });
-        const response = this.requestHandler.response;
+        const response = this.option.response;
         response.setHeader('Etag', eTagValue);
         const extension = path.parse(filePath).ext;
         const contentType = response.getHeader(CONTENT_TYPE);
@@ -152,7 +154,7 @@ export class FileHandler {
         }
         else {
             response.setHeader('Last-Modified', lastModified);
-            this.sendFileAsResponse(filePath, mimeType);
+            return this.sendFileAsResponse(filePath, mimeType);
         }
     }
 

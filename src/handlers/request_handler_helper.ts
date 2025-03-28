@@ -1,7 +1,7 @@
 import { HTTP_STATUS_CODE, MIME_TYPE, HTTP_METHOD, HTTP_RESULT_TYPE } from "../enums";
 import { CONTENT_TYPE, SET_COOKIE } from "../constants";
 import * as Negotiator from "negotiator";
-import { IComponentProp, IException, IFileResultInfo, IHttpResult } from "../interfaces";
+import { CustomResultOption, IComponentProp, IException, IFileResultInfo, IHttpResult, T_CUSTOM_RESULT } from "../interfaces";
 import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes } from "../helpers";
 import { HttpFormatResult } from "../types";
 import { parse } from "path";
@@ -192,7 +192,7 @@ export class RequestHandlerHelper {
                 `attachment;filename=${fileName}${parsedPath.ext}`
             );
         }
-        const fileHandler = new FileHandler(this as any);
+        const fileHandler = new FileHandler(this.componentProps);
         const fileResultForSendingResponse = fileResult.fileInfo ? fileResult : await fileHandler.getFileResultFromAbsolutePath(
             fileResult.filePath
         );
@@ -204,8 +204,11 @@ export class RequestHandlerHelper {
 
     private async handleCustomResult_() {
         const result = this.controllerResult as IHttpResult;
-        const customResult = result.responseData as any;
-        const resultFromCustomResult = await customResult({ onNotFound: this.onNotFound });
+        const customResult = result.responseData as T_CUSTOM_RESULT;
+        const option = new CustomResultOption(this.componentProps);
+        const resultFromCustomResult = await customResult(
+            option
+        );
         if (resultFromCustomResult) {
             this.controllerResult = resultFromCustomResult;
             return this.handleFinalResult_();

@@ -162,7 +162,7 @@ export class RequestHandler extends RequestHandlerHelper {
     }
 
     private async onNotRouteMatched(pathUrl: string) {
-        const fileHandler = new FileHandler(this);
+        const fileHandler = new FileHandler(this.componentProps);
         const fileResult = await fileHandler.handleFileRequest(pathUrl);
         if (fileResult == null) {
             return () => {
