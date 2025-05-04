@@ -206,7 +206,6 @@ export class RequestHandlerHelper {
                     }
                     if (headerSetByUser) {
                         return this.endResponse_(contentType);
-
                     }
                     const negotiateMimeType = this.getContentTypeFromNegotiation(contentType) as MIME_TYPE;
                     if (negotiateMimeType != null) {

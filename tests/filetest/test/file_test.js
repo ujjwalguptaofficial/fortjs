@@ -29,7 +29,7 @@ describe("/file", () => {
         request.get('/file/scripts/bundle.js').accept(browserAccept).end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res).to.have.header('content-type', 'application/javascript');
+            expect(res).to.have.header('content-type', 'text/javascript');
             done();
         });
     })

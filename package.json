@@ -64,6 +64,7 @@
     "fast-content-type-parse": "^1.1.0",
     "fresh": "^0.5.2",
     "fs-extra": "^11.2.0",
+    "mime-types": "^3.0.1",
     "mustache": "^4.2.0",
     "negotiator": "^1.0.0",
     "uniqid": "^5.4.0"

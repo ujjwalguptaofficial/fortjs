@@ -1,56 +1,44 @@
 import { MIME_TYPE } from "../enums";
+import { lookup } from "mime-types";
+
+// const extensionToMimeTypeMap: Record<string, MIME_TYPE> = {
+//     // HTML & Web
+//     ".htm": MIME_TYPE.Html,
+//     ".html": MIME_TYPE.Html,
+//     ".css": MIME_TYPE.Css,
+//     ".js": MIME_TYPE.Js,
+//     ".json": MIME_TYPE.Json,
+//     ".xml": MIME_TYPE.Xml,
+//     ".txt": MIME_TYPE.Text,
+//     ".csv": MIME_TYPE.Csv,
+//     ".pdf": MIME_TYPE.Pdf,
+//     ".rtf": MIME_TYPE.Rtf,
+
+//     // Images
+//     ".png": MIME_TYPE.Png,
+//     ".jpg": MIME_TYPE.Jpeg,
+//     ".jpeg": MIME_TYPE.Jpeg,
+//     ".bmp": MIME_TYPE.Bmp,
+//     ".gif": MIME_TYPE.Gif,
+//     ".svg": MIME_TYPE.Svg,
+//     ".webp": MIME_TYPE.Webp,
+
+//     // Fonts
+//     ".woff": MIME_TYPE.Woff,
+//     ".woff2": MIME_TYPE.Woff2,
+//     ".ttf": MIME_TYPE.Ttf,
+//     ".eot": MIME_TYPE.Eot,
+//     ".otf": MIME_TYPE.Otf,
+
+//     // Video & Animation
+//     ".swf": MIME_TYPE.Swf,
+//     ".avi": MIME_TYPE.Avi,
+
+//     // Spreadsheets
+//     ".xls": MIME_TYPE.Xls,
+//     ".xlsx": MIME_TYPE.Xlsx,
+// };
 
 export const getMimeTypeFromExtension = (ext: string): MIME_TYPE => {
-    switch (ext) {
-        case ".htm":
-        case ".html":
-            return MIME_TYPE.Html;
-        case ".css":
-            return MIME_TYPE.Css;
-        case ".js":
-            return MIME_TYPE.Js;
-        case ".png":
-            return MIME_TYPE.Png;
-        case ".woff":
-            return MIME_TYPE.Woff;
-        case ".woff2":
-            return MIME_TYPE.Woff2;
-        case ".json":
-            return MIME_TYPE.Json;
-        case ".txt":
-            return MIME_TYPE.Text;
-        case ".jpg":
-        case ".jpeg":
-            return MIME_TYPE.Jpeg;
-        case ".rtf":
-            return MIME_TYPE.Rtf;
-        case ".ttf":
-            return MIME_TYPE.Ttf;
-        case ".eot":
-            return MIME_TYPE.Eot;
-        case '.otf':
-            return MIME_TYPE.Otf;
-        case ".swf":
-            return MIME_TYPE.Swf;
-        case ".avi":
-            return MIME_TYPE.Avi;
-        case ".svg":
-            return MIME_TYPE.Svg;
-        case ".pdf":
-            return MIME_TYPE.Pdf;
-        case ".xml":
-            return MIME_TYPE.Xml;
-        case ".csv":
-            return MIME_TYPE.Csv;
-        case ".xls":
-            return MIME_TYPE.Xls;
-        case ".xlsx":
-            return MIME_TYPE.Xlsx;
-        case ".bmp":
-            return MIME_TYPE.Bmp;
-        case ".gif":
-            return MIME_TYPE.Gif;
-        default:
-            return "application/octet-stream" as MIME_TYPE;
-    }
+    return lookup(ext) || 'application/octet-stream' as MIME_TYPE;
 };
