@@ -5,6 +5,10 @@ import { CustomResultOption } from "../helpers";
 
 export function handleFileResult(fileResult: IFileResultInfo) {
     return async (option: CustomResultOption) => {
+        if (option.isResponseFinished()) {
+            console.trace("Response is already finished, cannot send file result");
+            return;
+        }
         const parsedPath = parse(fileResult.filePath);
         if (fileResult.shouldDownload === true) {
             const fileName = fileResult.alias == null ? parsedPath.name : fileResult.alias;

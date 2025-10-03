@@ -208,7 +208,8 @@ export class RequestHandler extends RequestHandlerHelper {
             request,
             response,
             data: {},
-            global: this.config
+            global: this.config,
+            isResponseFinished: this.isResponseFinished,
         } as any;
         this.registerEvents_();
         this.setPreHeader_();

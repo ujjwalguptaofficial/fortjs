@@ -211,6 +211,16 @@ describe("/home", () => {
         expect(res.headers['location']).toBe('html');
     });
 
+    it("/redirect test with statuscode", async () => {
+        const res: AxiosResponse<any> = await request.get('/home/redirect?statusCode=301', {
+            maxRedirects: 0
+        });
+        // .redirects(0);
+        expect(res.status).toBe(301);
+        expect(res.headers['custom-header-from-outgoing-wall']).toBe('*');
+        expect(res.headers['location']).toBe('html');
+    });
+
     it("/user allowMe without login", async () => {
         const res: AxiosResponse<any> = await request.get('/user/allow/Me');
         expect(res.status).toBe(200);

@@ -136,15 +136,16 @@ export class FileHandler {
     }
 
     send(filePathInfo: IFileResultInfo) {
-        const response = this.option.response;
-        if (response.writableEnded || response.headersSent) {
+        const option = this.option;
+        if (option.isResponseFinished()) {
             console.warn("FileHandler.send called after response was already sent/ended");
             return;
         }
+        const response = option.response;
         const { fileInfo, filePath } = filePathInfo;
         const lastModified = fileInfo.mtime.toUTCString();
         const eTagValue = etag(fileInfo, {
-            weak: this.option.global.eTag.type === ETAG_TYPE.Weak
+            weak: option.global.eTag.type === ETAG_TYPE.Weak
         });
         response.setHeader('Etag', eTagValue);
         const extension = path.parse(filePath).ext;

@@ -91,7 +91,11 @@ export class HomeController extends Controller {
 
     @worker()
     async redirect() {
-        return await redirectResult("html");
+        let { statusCode } = this.query;
+        if (statusCode) {
+            statusCode = Number(statusCode);
+        }
+        return await redirectResult("html", statusCode);
     }
 
     @worker()

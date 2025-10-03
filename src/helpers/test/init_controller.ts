@@ -15,9 +15,10 @@ export const initController = (controllerInstance: Controller, data?: IControlle
         cookie,
         Fort
     );
+    const response = new HttpResponseStub(headers) as any;
     controllerInstance['componentProp_'] = {
         request: new HttpRequestStub(headers) as any,
-        response: new HttpResponseStub(headers) as any,
+        response: response,
         query: data.query || {},
         body: data.body || {},
         cookie: cookie,
@@ -29,7 +30,10 @@ export const initController = (controllerInstance: Controller, data?: IControlle
             workerName: (data as any).workerName
         } as any,
         global: Fort,
-        cache: Fort['cacheManager_']
+        cache: Fort['cacheManager_'],
+        isResponseFinished: () => {
+            return response.writableEnded || response.headersSent;
+        }
     };
     return controllerInstance;
 };

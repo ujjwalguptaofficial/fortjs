@@ -5,6 +5,7 @@ import { IComponentProp, IException, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes, CustomResultOption, T_CUSTOM_RESULT } from "../helpers";
 import { HttpFormatResult } from "../types";
 import { App } from "../models";
+import * as http from "http";
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
@@ -178,6 +179,11 @@ export class RequestHandlerHelper {
         response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [CONTENT_TYPE]: negotiateMimeType });
         response.end(data);
+    }
+
+    isResponseFinished() {
+        const res = this.response;
+        return res.headersSent || res.writableEnded;
     }
 
     private async handleCustomResult_() {

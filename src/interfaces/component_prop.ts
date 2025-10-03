@@ -19,4 +19,5 @@ export interface IComponentProp {
     global: App;
     cache: CacheManager;
     workerInfo?: IWorkerInfo;
+    isResponseFinished: () => boolean;
 }
