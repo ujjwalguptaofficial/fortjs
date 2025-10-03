@@ -119,7 +119,7 @@ export class FileHandler {
         });
     }
 
-    protected sendFileAsResponse(filePath: string, mimeType: MIME_TYPE) {
+    private sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
         return promise((res, rej) => {
             const handler = this.option;
             const readStream = Fs.createReadStream(filePath);
@@ -136,12 +136,16 @@ export class FileHandler {
     }
 
     send(filePathInfo: IFileResultInfo) {
+        const response = this.option.response;
+        if (response.writableEnded || response.headersSent) {
+            console.warn("FileHandler.send called after response was already sent/ended");
+            return;
+        }
         const { fileInfo, filePath } = filePathInfo;
         const lastModified = fileInfo.mtime.toUTCString();
         const eTagValue = etag(fileInfo, {
             weak: this.option.global.eTag.type === ETAG_TYPE.Weak
         });
-        const response = this.option.response;
         response.setHeader('Etag', eTagValue);
         const extension = path.parse(filePath).ext;
         const contentType = response.getHeader(CONTENT_TYPE);
@@ -154,7 +158,7 @@ export class FileHandler {
         }
         else {
             response.setHeader('Last-Modified', lastModified);
-            return this.sendFileAsResponse(filePath, mimeType);
+            return this.sendFileAsResponse_(filePath, mimeType);
         }
     }
 

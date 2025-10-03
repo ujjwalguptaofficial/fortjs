@@ -77,6 +77,10 @@ export class RequestHandlerHelper {
     // which was not supposed to be done
     // then you don't follow regular rules but just throw them from anywhere
     onErrorOccured(error) {
+        if (this.response.headersSent) {
+            console.log("Response already sent, cannot send error response");
+            return;
+        }
         if (typeof error === 'string') {
             error = {
                 message: error
@@ -162,14 +166,18 @@ export class RequestHandlerHelper {
             }
         ) : "";
 
-        if (this.response.headersSent) {
+        const response = this.response;
+
+        // double check to avoid multiple end calls
+        // placement is before writing head to avoid writing head multiple times
+        if (response.headersSent || response.writableEnded) {
             console.trace("Request is finished, but triggered again");
             return;
         }
 
-        this.response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
+        response.writeHead(this.controllerResult.statusCode || HTTP_STATUS_CODE.Ok,
             { [CONTENT_TYPE]: negotiateMimeType });
-        this.response.end(data);
+        response.end(data);
     }
 
     private async handleCustomResult_() {
