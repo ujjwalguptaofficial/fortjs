@@ -53,6 +53,30 @@ describe("/static", () => {
         });
     })
 
+    it("should prevent path traversal attack", (done) => {
+        request
+            .get("/static/../../package.json")
+            .accept(browserAccept)
+            .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(404); // should not expose package.json
+                expect(res.text).to.not.include("name"); // package.json contents
+                done();
+            });
+    });
+
+    it("should prevent path traversal attack", (done) => {
+        request
+            .get("/static/../package.json")
+            .accept(browserAccept)
+            .end((err, res) => {
+                expect(err).to.be.null;
+                expect(res).to.have.status(404); // should not expose package.json
+                expect(res.text).to.not.include("name"); // package.json contents
+                done();
+            });
+    });
+
     let etagVal;
 
     it('big file test', async () => {

@@ -39,12 +39,14 @@ export class FileHandler {
 
     }
 
-    private getFileInfoFromUrl_(urlPath: string) {
-        const splittedValue = urlPath.split("/");
+    private getFileInfoFromUrl_(url: string) {
+        // normalize early
+        const normalizedPath = path.posix.normalize(url); // use posix to handle forward
+        const splittedValue = normalizedPath.split("/");
         const fileInfo = {
             file: ""
         } as IFileInfo;
-        if (splittedValue.length > 2 || !isNullOrEmpty(path.parse(urlPath).ext)) {
+        if (splittedValue.length > 2 || !isNullOrEmpty(path.parse(normalizedPath).ext)) {
             fileInfo.folder = splittedValue[1];
             fileInfo.file = splittedValue.splice(2).join("/");
             return fileInfo;
@@ -71,7 +73,14 @@ export class FileHandler {
         const getAbsPath = () => {
             const folder = this.option.global['folders_'].find(qry => qry.alias === fileInfo.folder);
             if (folder != null) {
-                return path.join(folder.path, fileInfo.file);
+                const absPath = path.join(folder.path, fileInfo.file);
+                const normalized = path.normalize(absPath);
+
+                // Security check: ensure path is inside allowed folder
+                if (!normalized.startsWith(folder.path)) {
+                    return null; // prevent path traversal
+                }
+                return normalized;
             }
             return null;
         };
