@@ -129,19 +129,48 @@ export class FileHandler {
     }
 
     private sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
-        return promise((res, rej) => {
+        return new Promise<void>((res, rej) => {
             const handler = this.option;
+            const { response } = handler;
             const readStream = Fs.createReadStream(filePath);
-            // Handle non-existent file
-            readStream.on('error', rej);
+
+            let finished = false;
+            const cleanup = () => {
+                if (!finished) {
+                    finished = true;
+                    readStream.destroy(); // ensures file handle is closed
+                }
+            };
+
+            readStream.on('error', err => {
+                cleanup();
+                rej(err);
+            });
+
+            response.on('close', () => {
+                // client disconnected or response finished early
+                cleanup();
+                res(); // resolve safely — nothing more to stream
+            });
+
             readStream.on('open', () => {
-                handler.response.writeHead(HTTP_STATUS_CODE.Ok, {
+                if (handler.isResponseFinished()) {
+                    cleanup();
+                    return res();
+                }
+
+                response.writeHead(HTTP_STATUS_CODE.Ok, {
                     [CONTENT_TYPE]: mimeType
                 });
-                readStream.pipe(handler.response);
+
+                readStream.pipe(response);
             });
-            readStream.on('end', res);
-        })
+
+            readStream.on('end', () => {
+                cleanup();
+                res();
+            });
+        });
     }
 
     send(filePathInfo: IFileResultInfo) {
