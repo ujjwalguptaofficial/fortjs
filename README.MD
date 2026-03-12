@@ -5,7 +5,7 @@
 [![GitHub version](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs.svg)](https://badge.fury.io/gh/ujjwalguptaofficial%2Ffortjs)
 [![TEST](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml/badge.svg)](https://github.com/ujjwalguptaofficial/fortjs/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/fortjs.svg)](https://badge.fury.io/js/fortjs)
-[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://fortjs.net/)
+[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://ujjwalguptaofficial.github.io/fortjs-doc/)
 
 # Fortjs
 
@@ -63,7 +63,7 @@ Fort.js aims to address this issue by leveraging modern JavaScript and TypeScrip
 
 # Docs
 
-https://fortjs.net/
+https://ujjwalguptaofficial.github.io/fortjs-doc/
 
 # Examples
 
