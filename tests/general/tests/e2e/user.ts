@@ -1,5 +1,6 @@
 import { browserAccept, createRequest } from "../test_utils";
 const cookie = require('cookie');
+import crypto from "crypto";
 
 describe("/user", () => {
 
@@ -223,9 +224,17 @@ describe("/user", () => {
             age: 10
         });
 
+        const secret = "test_secret";
+
+        const signature = crypto
+            .createHmac("sha256", secret)
+            .update(payload)
+            .digest("base64");
+
         const res = await request.post("/user/raw-body", payload, {
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-webhook-signature": signature
             }
         });
 
@@ -237,6 +246,33 @@ describe("/user", () => {
             name: "FortJS",
             age: 10
         });
+
+        expect(res.data.isValid).toEqual(true);
+    });
+
+    it("/raw body with fake signature", async () => {
+        const payload = JSON.stringify({
+            name: "FortJS",
+            age: 10
+        });
+
+        // const secret = "test_secret";
+
+        // const signature = crypto
+        //     .createHmac("sha256", secret)
+        //     .update(payload)
+        //     .digest("base64");
+
+        const res = await request.post("/user/raw-body", payload, {
+            headers: {
+                "Content-Type": "application/json",
+                "x-webhook-signature": "fake_signature"
+            }
+        });
+
+        expect(res.status).toBe(200);
+
+        expect(res.data.isValid).toEqual(false);
     });
 
     it("/logout", async () => {

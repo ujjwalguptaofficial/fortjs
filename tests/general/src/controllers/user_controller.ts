@@ -4,6 +4,7 @@ import { ModelUserGuard } from "../guards/user/model_user_guard";
 import { User } from "../models/user";
 import { UserService } from "../services/user_service";
 import { HTTP_STATUS_CODE } from "fortjs";
+import crypto from "crypto";
 
 class ParamDto {
     id: string;
@@ -127,9 +128,19 @@ export class UserController extends Controller {
     @http.post("/raw-body")
     async rawBody() {
         const rawBody = this.data.rawBody;
+        const signature = this.request.headers["x-webhook-signature"];
+
+        const expected = crypto
+            .createHmac("sha256", "test_secret")
+            .update(rawBody)
+            .digest("base64");
+
+        const isValid = expected === signature;
+
         return jsonResult({
             rawBody: rawBody.toString(),
-            parsedBody: this.body
+            parsedBody: this.body,
+            isValid
         });
     }
 }
