@@ -125,7 +125,7 @@ export class PostDataEvaluatorGuard extends Guard {
             let postData;
             const componentProp = this['componentProp_'];
             const bodyDataAsBuffer = await this.getPostRawData_();
-            componentProp.hooks.emit("rawBody", bodyDataAsBuffer);
+            await componentProp.hooks.emit("rawBody", bodyDataAsBuffer);
             // componentProp.
             const bodyDataAsString = bodyDataAsBuffer.toString();
             switch (contentType) {
