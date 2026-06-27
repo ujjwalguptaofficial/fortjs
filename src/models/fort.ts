@@ -6,7 +6,7 @@ import { ERROR_TYPE, ETAG_TYPE } from "../enums";
 import { LogHelper, promise, removeLastSlash, removeFirstSlash, setResultMapper } from "../helpers";
 import { CacheManager, TaskSchedulerManager, isArray } from "../utils";
 import { Logger } from "./logger";
-import { IDTOValidator, IEtagOption, IFolderMap, IControllerRoute, ICacheStore, IScheduleTaskInput } from "../interfaces";
+import { IDTOValidator, IEtagOption, IFolderMap, IControllerRoute, ICacheStore, IScheduleTaskInput, IHttpCookie, IHttpCookieWithoutValue } from "../interfaces";
 import { APP_NAME, CURRENT_PATH } from "../constants";
 import { BlankXmlParser, CacheGuard, CacheWall, CookieEvaluatorWall, DefaultCronJobScheduler, MemoryCacheStore, MemorySessionStore, PostDataEvaluatorGuard } from "../providers";
 import { DtoValidator, MustacheViewEngine } from "../extra";
@@ -16,13 +16,29 @@ export class App {
     private logger_: Logger;
     private viewEngine_: ViewEngine;
 
-    /**
-     * sessionStore class, default - MemorySessionStore
-     *
-     * @type {TSessionStore}
-     * @memberof App
-     */
-    sessionStore: TSessionStore;
+    session: {
+        cookieConfig: IHttpCookieWithoutValue,
+        /**
+         * sessionStore class, default - MemorySessionStore
+         *
+         * @type {TSessionStore}
+         */
+        store: TSessionStore,
+        /**
+         * session timeout in minute - default is 60 minute
+         *
+         * @type {number}
+         */
+        timeout: number
+    } = {
+            timeout: 60,
+            cookieConfig: {
+                name: "fort_session",
+                httpOnly: true,
+                path: "/",
+            },
+            store: MemorySessionStore
+        }
 
     /**
      * XmlParser class - used to parse the xml 
@@ -48,14 +64,6 @@ export class App {
      * @memberof App
      */
     shouldParseBody = true;
-
-    /**
-     * session timeout in minute - default is 60 minute
-     *
-     * @type {number}
-     * @memberof App
-     */
-    sessionTimeOut = 60;
 
     /**
      *  name of application - default is fort. Visible in header and cookie.
@@ -116,7 +124,6 @@ export class App {
     port = 4000;
 
     errorHandler: TErrorHandler;
-    private appSessionIdentifier_: string;
 
     set routes(value: IControllerRoute[]) {
         if (value == null) {
@@ -206,7 +213,6 @@ export class App {
             this.viewPath = this.viewPath || CURRENT_PATH;
             this.logger = this.logger || new Logger();
 
-            this.sessionStore = this.sessionStore || MemorySessionStore;
             this.cacheStore = this.cacheStore || new MemoryCacheStore();
             this.xmlParser = this.xmlParser || BlankXmlParser;
             this.viewEngine_ = this.viewEngine_ || new MustacheViewEngine();
@@ -219,7 +225,7 @@ export class App {
             }
             this.errorHandler = this.errorHandler || ErrorHandler;
             this.validator = this.validator || new DtoValidator();
-            this.appSessionIdentifier_ = `${this.appName}_session_id`;
+            this.session.cookieConfig.name = `${this.appName}_session_id`;
 
             if (this.shouldParseCookie === true) {
                 this.walls.unshift(

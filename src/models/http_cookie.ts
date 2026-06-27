@@ -1,4 +1,4 @@
-import { IHttpCookie } from "../interfaces";
+import { IHttpCookie, CookieSameSite } from "../interfaces";
 
 export class HttpCookie implements IHttpCookie {
     name: string;
@@ -9,7 +9,7 @@ export class HttpCookie implements IHttpCookie {
     httpOnly?: boolean;
     secure?: boolean;
     path?: string;
-    sameSite?: "Strict" | "Lax" | "Lax"
+    sameSite?: CookieSameSite
 
     constructor(name: string, value: string) {
         this.name = name;

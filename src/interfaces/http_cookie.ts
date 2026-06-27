@@ -1,6 +1,7 @@
-export interface IHttpCookie {
+export type CookieSameSite = "Strict" | "Lax" | "None";
+
+export interface IHttpCookieWithoutValue {
     name: string;
-    value: string;
     maxAge?: number;
 
     expires?: Date;
@@ -9,4 +10,9 @@ export interface IHttpCookie {
     httpOnly?: boolean;
     secure?: boolean;
     path?: string;
+    sameSite?: CookieSameSite;
+}
+
+export interface IHttpCookie extends IHttpCookieWithoutValue {
+    value: string;
 }

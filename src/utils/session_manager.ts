@@ -9,8 +9,8 @@ export class SessionManager {
     sessionStore: ISessonStore;
 
     constructor(cookie: CookieManager, private appGlobal_: App) {
-        this.sessionId = cookie.cookieCollection[appGlobal_['appSessionIdentifier_']];
-        this.sessionStore = new appGlobal_.sessionStore(this.sessionId);
+        this.sessionId = cookie.cookieCollection[appGlobal_.session.cookieConfig.name];
+        this.sessionStore = new appGlobal_.session.store(this.sessionId);
         this.cookie = cookie;
     }
 
@@ -18,18 +18,22 @@ export class SessionManager {
         const now = new Date();
         this.sessionId = sessionId != null ? sessionId : getUniqId();
         const appGlobal = this.appGlobal_;
+        const cookieConfig = appGlobal.session.cookieConfig;
+        const sessionTimeOut = appGlobal.session.timeout;
         this.cookie.addCookie({
-            name: appGlobal['appSessionIdentifier_'],
+            name: cookieConfig.name,
             value: this.sessionId,
-            httpOnly: true,
-            path: "/",
-            expires: new Date(now.setMinutes(now.getMinutes() + appGlobal.sessionTimeOut)),
-            maxAge: appGlobal.sessionTimeOut * 60
+            httpOnly: cookieConfig.httpOnly,
+            path: cookieConfig.path,
+            expires: new Date(now.setMinutes(now.getMinutes() + sessionTimeOut)),
+            maxAge: sessionTimeOut * 60,
+            secure: cookieConfig.secure,
+            sameSite: cookieConfig.sameSite
         });
     }
 
     private destroy_() {
-        const cookie = this.cookie.getCookie(this.appGlobal_['appSessionIdentifier_']);
+        const cookie = this.cookie.getCookie(this.appGlobal_.session.cookieConfig.name);
         cookie.httpOnly = true;
         cookie.path = "/";
         this.cookie.removeCookie(cookie);
