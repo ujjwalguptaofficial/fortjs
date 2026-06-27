@@ -4,6 +4,7 @@ import { SessionManager } from "../utils";
 import { TComponentQuery } from "../types";
 import { CacheManager } from "../utils/cache_manager";
 import { IWorkerInfo } from "./worker_info";
+import { HookRegistry } from "../utils/hook_registry";
 
 export interface IComponentProp {
     request: http.IncomingMessage;
@@ -20,4 +21,5 @@ export interface IComponentProp {
     cache: CacheManager;
     workerInfo?: IWorkerInfo;
     isResponseFinished: () => boolean;
+    hooks: HookRegistry;
 }

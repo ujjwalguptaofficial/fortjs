@@ -217,6 +217,28 @@ describe("/user", () => {
         expect(res.data).toContain("thrown by guard");
     });
 
+    it("/raw body", async () => {
+        const payload = JSON.stringify({
+            name: "FortJS",
+            age: 10
+        });
+
+        const res = await request.post("/user/raw-body", payload, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        expect(res.status).toBe(200);
+
+        expect(res.data.rawBody).toBe(payload);
+
+        expect(res.data.parsedBody).toEqual({
+            name: "FortJS",
+            age: 10
+        });
+    });
+
     it("/logout", async () => {
         const res = await request.get('/home/logout');
         expect(res).toHaveProperty('status', 200);
@@ -265,4 +287,7 @@ describe("/user", () => {
         expect(res).toHaveProperty('status', 404);
         // expect(res.data).toContain("Invalid regular expression: /^+CSCOE$/i: Nothing to repeat");
     });
+
+
+
 });

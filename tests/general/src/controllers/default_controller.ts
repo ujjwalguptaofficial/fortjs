@@ -20,7 +20,7 @@ export class DefaultController extends Controller {
         const query = this.query;
         const data = this.data;
         return new Promise((res, rej) => {
-            res(viewResult("src/views/default/index.html", { title: title }));
+            res(viewResult("default/index.html", { title: title }));
         });
     }
 

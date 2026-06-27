@@ -9,6 +9,7 @@ import { IHttpResult, IRouteMatch } from "../interfaces";
 import { FileHandler } from "./file_handler";
 import { RequestHandlerHelper } from "./request_handler_helper";
 import { ON_INCOMING } from "../constants";
+import { HookRegistry } from "../utils/hook_registry";
 
 export class RequestHandler extends RequestHandlerHelper {
 
@@ -210,6 +211,7 @@ export class RequestHandler extends RequestHandlerHelper {
             data: {},
             global: this.config,
             isResponseFinished: this.isResponseFinished,
+            hooks: new HookRegistry()
         } as any;
         this.registerEvents_();
         this.setPreHeader_();

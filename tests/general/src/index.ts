@@ -39,6 +39,7 @@ export const createApp = async () => {
     Fort.scheduler.startAll();
     Fort.useCache = true;
     Fort.xmlParser = XmlToJsonParser;
+    Fort.viewPath = path.join(process.cwd(), 'src', 'views');
     await Fort.create();
     process.env.APP_URL = `http://localhost:${Fort.port}`;
 };

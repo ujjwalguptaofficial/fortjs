@@ -64,4 +64,10 @@ export class Component {
     isResponseFinished() {
         return this.componentProp_.isResponseFinished();
     }
+
+    get hooks() {
+        return this.componentProp_.hooks;
+    }
 }
+
+

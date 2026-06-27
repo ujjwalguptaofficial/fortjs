@@ -43,14 +43,14 @@ export class PostDataEvaluatorGuard extends Guard {
         return this.parsePostData();
     }
 
-    private getPostRawData_(): Promise<string> {
-        const body = [];
+    private getPostRawData_(): Promise<Buffer> {
+        const body: any[] = [];
         return promise((res, rej) => {
             (this.request as http.IncomingMessage).on('data', (chunk) => {
                 body.push(chunk);
             }).on('end', () => {
                 const bodyBuffer = Buffer.concat(body);
-                res(bodyBuffer.toString());
+                res(bodyBuffer);
             }).on("error", function (err) {
                 rej(err);
             });
@@ -123,7 +123,11 @@ export class PostDataEvaluatorGuard extends Guard {
         }
         else {
             let postData;
-            const bodyDataAsString = await this.getPostRawData_();
+            const componentProp = this['componentProp_'];
+            const bodyDataAsBuffer = await this.getPostRawData_();
+            componentProp.hooks.emit("rawBody", bodyDataAsBuffer);
+            // componentProp.
+            const bodyDataAsString = bodyDataAsBuffer.toString();
             switch (contentType) {
                 case MIME_TYPE.Json:
                     postData = JsonHelper.parse(bodyDataAsString);

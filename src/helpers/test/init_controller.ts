@@ -5,6 +5,7 @@ import { HttpResponseStub } from "./http_response_stub";
 import { HttpRequestStub } from "./http_request_stub";
 import { Controller } from "../../abstracts";
 import { SessionManager } from "../../utils";
+import { HookRegistry } from "../../utils/hook_registry";
 
 export const initController = (controllerInstance: Controller, data?: IControllerTestData) => {
     data = data || {};
@@ -33,7 +34,8 @@ export const initController = (controllerInstance: Controller, data?: IControlle
         cache: Fort['cacheManager_'],
         isResponseFinished: () => {
             return response.writableEnded || response.headersSent;
-        }
+        },
+        hooks: new HookRegistry()
     };
     return controllerInstance;
 };

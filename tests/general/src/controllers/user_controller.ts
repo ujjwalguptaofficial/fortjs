@@ -123,4 +123,13 @@ export class UserController extends Controller {
     async allowMe() {
         return textResult("i am allowed");
     }
+
+    @http.post("/raw-body")
+    async rawBody() {
+        const rawBody = this.data.rawBody;
+        return jsonResult({
+            rawBody: rawBody.toString(),
+            parsedBody: this.body
+        });
+    }
 }

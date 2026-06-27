@@ -9,6 +9,13 @@ export class AuthenticationShield extends Shield {
     }
 
     async protect(@assign('protect called') value: string) {
+
+        if (this.workerName === 'rawBody') {
+            this.hooks.on<Buffer>('rawBody', (buffer) => {
+                this.data.rawBody = buffer;
+            })
+        }
+
         if (this.query.shield_injection_test != null) {
             return textResult(`${this.constructorValue} ${value}`, 200) as any;
         }
