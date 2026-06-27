@@ -9,6 +9,7 @@ export class HttpCookie implements IHttpCookie {
     httpOnly?: boolean;
     secure?: boolean;
     path?: string;
+    sameSite?: "Strict" | "Lax" | "Lax"
 
     constructor(name: string, value: string) {
         this.name = name;

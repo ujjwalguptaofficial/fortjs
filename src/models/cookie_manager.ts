@@ -86,6 +86,12 @@ export class CookieManager {
         if (cookie.domain) {
             cookies.push(`Domain=${cookie.domain}`);
         }
+        if (cookie.secure) {
+            cookies.push(`Secure`);
+        }
+        if (cookie.sameSite) {
+            cookies.push(`SameSite=${cookie.sameSite}`);
+        }
         return cookies.join('; ');
     }
 }
