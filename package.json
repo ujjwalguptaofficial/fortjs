@@ -10,6 +10,9 @@
     "url": "https://github.com/ujjwalguptaofficial/fortjs/issues"
   },
   "displayName": "FortJs",
+  "engines": {
+    "node": ">=22"
+  },
   "keywords": [
     "component based",
     "MVC",
@@ -66,7 +69,6 @@
     "fs-extra": "^11.2.0",
     "mime-types": "^3.0.1",
     "mustache": "^4.2.0",
-    "negotiator": "^1.0.0",
-    "uniqid": "^5.4.0"
+    "negotiator": "^1.0.0"
   }
 }

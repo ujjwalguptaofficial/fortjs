@@ -1,6 +1,7 @@
+import { generateUniqueId } from "./generate_unique_id";
 import { ISessonStore } from "../interfaces";
 import { App, CookieManager } from "../models";
-import * as getUniqId from "uniqid";
+
 
 export class SessionManager {
 
@@ -16,7 +17,7 @@ export class SessionManager {
 
     protected createSession(sessionId?) {
         const now = new Date();
-        this.sessionId = sessionId != null ? sessionId : getUniqId();
+        this.sessionId = sessionId != null ? sessionId : generateUniqueId();
         const appGlobal = this.appGlobal_;
         const cookieConfig = appGlobal.session.cookieConfig;
         const sessionTimeOut = appGlobal.session.timeout;
