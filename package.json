@@ -61,14 +61,14 @@
   },
   "dependencies": {
     "busboy": "^1.6.0",
-    "class-validator": "^0.14.1",
+    "class-validator": "^0.15.1",
     "cron": "^3.1.6",
     "etag": "^1.8.1",
     "fast-content-type-parse": "^1.1.0",
     "fresh": "^0.5.2",
     "fs-extra": "^11.2.0",
-    "mime-types": "^3.0.1",
+    "mime-types": "^3.0.2",
     "mustache": "^4.2.0",
-    "negotiator": "^1.0.0"
+    "negotiator": "^1.1.0"
   }
 }
