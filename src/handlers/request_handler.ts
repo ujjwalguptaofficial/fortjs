@@ -11,6 +11,15 @@ import { RequestHandlerHelper } from "./request_handler_helper";
 import { ON_INCOMING } from "../constants";
 import { HookRegistry } from "../utils/hook_registry";
 
+
+function shouldIgnoreHttpError(code: string) {
+    switch (code) {
+        case 'ECONNRESET':
+            return true;
+    }
+    return false;
+}
+
 export class RequestHandler extends RequestHandlerHelper {
 
     private routeMatchInfo_: IRouteMatch;
@@ -18,7 +27,15 @@ export class RequestHandler extends RequestHandlerHelper {
 
     private registerEvents_() {
         this.request.on('error', (err) => {
+            if (shouldIgnoreHttpError(err['code'])) {
+                if (process.env.NODE_ENV !== "production") {
+                    this.config.logger.debug(err);
+                }
+                return;
+            }
             const errorArgs = [`Unexpected error occured`, err];
+            // logging into console since logger.error might miss
+            // in case of debugging, user can see console.error
             console.error(...errorArgs);
             this.config.logger.error(...errorArgs);
             this.onBadRequest(err).catch(ex => {
