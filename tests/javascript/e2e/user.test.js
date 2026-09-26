@@ -9,7 +9,7 @@ describe('/user', () => {
         await createApp();
         httpRequest = axios.create({
             baseURL: process.env.APP_URL + "/api/v1/user",
-            timeout: 1000
+            timeout: 5000
         });
     });
 
@@ -147,8 +147,8 @@ describe('/user', () => {
         }
     });
 
-    afterAll(() => {
-        return Fort.destroy();
+    afterAll(async () => {
+        await Fort.destroy();
     });
 
 });

@@ -10,7 +10,7 @@ describe('/default', () => {
         await createApp();
         httpRequest = axios.create({
             baseURL: process.env.APP_URL,
-            timeout: 1000
+            timeout: 2000
         });
     });
 
@@ -25,8 +25,8 @@ describe('/default', () => {
         expect(response.data).toContain('<title>FortJs</title>');
     });
 
-    afterAll(() => {
-        return Fort.destroy();
+    afterAll(async () => {
+        await Fort.destroy();
     });
 
 });

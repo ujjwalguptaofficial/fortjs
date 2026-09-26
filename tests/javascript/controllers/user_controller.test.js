@@ -119,7 +119,7 @@ describe('UserController', () => {
         expect(result).toEqual(expectedResult);
     });
 
-    afterAll(() => {
-        return Fort.destroy();
+    afterAll(async () => {
+        await Fort.destroy();
     });
 });

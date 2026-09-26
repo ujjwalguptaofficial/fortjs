@@ -8,5 +8,7 @@ module.exports = {
         "<rootDir>/(build|bin|dist|node_modules)/"
     ],
     moduleFileExtensions: ['ts', 'js'],
-
+    setupFilesAfterEnv:[
+        "<rootDir>/jest.setup.js"
+    ]
 };
