@@ -3,7 +3,7 @@ import { ObjectID } from "mongodb";
 import { UserService } from "../services/user_service";
 import { MySingleton } from "../extra/singleton";
 import { join } from "path";
-import { readFile } from "fs-extra";
+import { readFile } from "fs/promises";
 
 export class DefaultController extends Controller {
 

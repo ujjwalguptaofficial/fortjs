@@ -1,4 +1,4 @@
-import { readFile } from "fs-extra";
+import { readFile } from "fs/promises";
 import * as path from "path";
 import { ViewReadOption } from "../interfaces";
 import { promiseResolve } from "../utils";
