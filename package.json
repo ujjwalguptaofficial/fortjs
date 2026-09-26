@@ -1,6 +1,6 @@
 {
   "name": "fortjs",
-  "version": "2.10.8",
+  "version": "2.10.9",
   "description": "A Node.js framework for scalable web applications. Simplify routing, embrace reusable components like walls and shields. Build efficiently with Fort.js",
   "main": "dist/npm.export.js",
   "types": "dist/ts/index.d.ts",
@@ -45,7 +45,7 @@
     "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
-    "copy-webpack-plugin": "^12.0.2",
+    "copy-webpack-plugin": "^14.0.0",
     "cross-env": "^6.0.3",
     "eslint": "^9.17.0",
     "eslint-plugin-security": "^3.0.1",
