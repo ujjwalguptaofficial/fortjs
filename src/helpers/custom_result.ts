@@ -11,7 +11,7 @@ export class CustomResultOption extends Component {
 
 export type T_CUSTOM_RESULT = (option?: CustomResultOption) => Promise<IHttpResult | null>;
 
-export const customResult = (resultEvaluator: (option?: CustomResultOption) => void) => {
+export const customResult = (resultEvaluator: (option: CustomResultOption) => void) => {
     return {
         type: HTTP_RESULT_TYPE.Custom,
         responseData: resultEvaluator,

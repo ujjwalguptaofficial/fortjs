@@ -32,6 +32,7 @@ export class CacheWall extends Wall {
         if (!isCacheable(cacheInfo.param, componentProp.param)) {
             return;
         }
+        
         // then cache result
         componentProp.cache.set(
             cacheInfo.key, finalResult, cacheInfo.ttl

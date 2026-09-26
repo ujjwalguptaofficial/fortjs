@@ -173,10 +173,12 @@ export class FileHandler {
         });
     }
 
-    send(filePathInfo: IFileResultInfo) {
+    async send(filePathInfo: IFileResultInfo) {
         const option = this.option;
         if (option.isResponseFinished()) {
-            console.warn("FileHandler.send called after response was already sent/ended");
+            if (process.env.NODE_ENV !== 'production') {
+                console.warn("FileHandler.send called after response was already sent/ended");
+            }
             return;
         }
         const response = option.response;

@@ -5,7 +5,6 @@ import { IComponentProp, IException, IHttpResult } from "../interfaces";
 import { textResult, getResultBasedOnMiMe, getAvailableMimeTypes, CustomResultOption, T_CUSTOM_RESULT } from "../helpers";
 import { HttpFormatResult } from "../types";
 import { App } from "../models";
-import * as http from "http";
 
 export class RequestHandlerHelper {
     protected componentProps: IComponentProp;
@@ -188,12 +187,16 @@ export class RequestHandlerHelper {
 
     private async handleCustomResult_() {
         const result = this.controllerResult as IHttpResult;
-        const customResult = result.responseData as T_CUSTOM_RESULT;
+        const customResultCallback = result.responseData as T_CUSTOM_RESULT;
         const option = new CustomResultOption(this.componentProps);
-        const resultFromCustomResult = await customResult(
+        const resultFromCustomResult = await customResultCallback(
             option
         );
+        // resultFromCustomResult can be null
+        // usecases like in case of file, stream is used to send the response
         if (resultFromCustomResult) {
+            // set the result once again 
+            // so that controller result is not method but httpresult
             this.controllerResult = resultFromCustomResult;
             return this.handleFinalResult_();
         }

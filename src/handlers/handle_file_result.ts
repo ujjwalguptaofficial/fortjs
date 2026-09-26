@@ -23,7 +23,7 @@ export function handleFileResult(fileResult: IFileResultInfo) {
         );
         if (fileResultForSendingResponse == null) {
             return new option.app.errorHandler().onNotFound(
-                option.request.url
+                option.request.url as string
             );
         }
         return fileHandler.send(fileResultForSendingResponse);

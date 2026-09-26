@@ -22,4 +22,5 @@ export interface IComponentProp {
     workerInfo?: IWorkerInfo;
     isResponseFinished: () => boolean;
     hooks: HookRegistry;
+
 }

@@ -22,6 +22,10 @@ export class CacheGuard extends Guard {
         const cacheData = await componentProp.cache.get(cacheInfo.key);
         // and check if condition exist
         if (cacheData) {
+            if (!cacheData.data.responseData) {
+                this.logger.error(`Cache not served for url ${this.request.url}, this happens in case of file result as file result are not cached`);
+                return;
+            }
             // then return cache result
             this.data[FROM_CACHE] = true;
             return cacheData.data;

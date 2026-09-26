@@ -221,6 +221,7 @@ export class RequestHandler extends RequestHandlerHelper {
         }
     }
 
+
     handle(request: http.IncomingMessage, response: http.ServerResponse) {
         this.componentProps = {
             request,
@@ -228,7 +229,7 @@ export class RequestHandler extends RequestHandlerHelper {
             data: {},
             global: this.config,
             isResponseFinished: this.isResponseFinished,
-            hooks: new HookRegistry()
+            hooks: new HookRegistry(),
         } as any;
         this.registerEvents_();
         this.setPreHeader_();
@@ -241,10 +242,12 @@ export class RequestHandler extends RequestHandlerHelper {
         const constructorValues = InjectorHandler.getConstructorValues(controllerName);
         const controllerObj: Controller = new controller(...constructorValues);
 
+
         controllerObj['componentProp_'] = this.componentProps;
         const workerName = this.routeMatchInfo_.workerInfo.workerName;
         const methodArgsValues = InjectorHandler.getMethodValues(controllerName, workerName, controllerObj);
-        return controllerObj[workerName](...methodArgsValues);
+        const result = controllerObj[workerName](...methodArgsValues);
+        return result;
     }
 
     onResultFromComponent(result: IHttpResult) {
