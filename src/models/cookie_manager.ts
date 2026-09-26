@@ -69,7 +69,7 @@ export class CookieManager {
     }
 
     private getCookieStringFromCookie_(cookie: HttpCookie) {
-        const cookies = [];
+        const cookies: string[] = [];
         cookies.push(`${cookie.name}=${cookie.value}`);
         if (cookie.expires) {
             cookies.push(`Expires=${cookie.expires.toUTCString()}`);
