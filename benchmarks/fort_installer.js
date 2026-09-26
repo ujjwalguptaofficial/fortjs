@@ -1,4 +1,4 @@
-const { readFileSync } = require('fs-extra');
+const { readFileSync } = require('fs');
 const { execSync } = require('child_process');
 
 const content = readFileSync("../package.json");
