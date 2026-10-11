@@ -19,35 +19,56 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
     const urlPartLength = urlParts.length;
     for (const worker of route.workers.values()) {
         const patternSplit = worker.patternSplitted;
-        if (urlPartLength !== patternSplit.length) continue;
+
+        // Check if this specific pattern has a wildcard
+        const hasWildcard = patternSplit.includes("*");
+
+        // Fast-fail: If NO wildcard, lengths MUST match exactly
+        if (!hasWildcard && urlPartLength !== patternSplit.length) {
+            continue;
+        }
+
+        // Fast-fail: If HAS wildcard, URL must be at least as long as the pattern (excluding the '*')
+        if (hasWildcard && urlPartLength < patternSplit.length - 1) {
+            continue;
+        }
+
         let isMatched = true;
         const params = {};
-        urlParts.every((urlPart, i) => {
+        let wildcardMatched = false;
+
+        for (let i = 0; i < patternSplit.length; i++) {
             const patternSplitAtIndex = patternSplit[i];
-            // if not equal then check for regex match
+
+            if (patternSplitAtIndex === "*") {
+                params["*"] = urlParts.slice(i).join("/");
+                wildcardMatched = true;
+                break;
+            }
+
+            const urlPart = urlParts[i];
             if (compareString(urlPart, patternSplitAtIndex) === false) {
                 const regMatch1 = patternSplitAtIndex.match(regex1);
                 if (regMatch1 != null) {
                     params[regMatch1[1]] = urlPart;
-                    return true;
+                    continue;
                 }
                 const regMatch2 = patternSplitAtIndex.match(regex2);
                 if (regMatch2 != null) {
                     const splitByDot = urlPart.split(".");
                     if (splitByDot[1] === regMatch2[2]) {
                         params[regMatch2[1]] = splitByDot[0];
-                        return true;
+                        continue;
                     }
                 }
                 isMatched = false;
+                break;
             }
-            // means its direct match
-            return isMatched;
-        });
+        }
 
         if (isMatched === true) {
             if (!worker.methodsAllowed) {
-                throw `Invalid route registration in Controller : ${route.controllerName} and method : ${worker.workerName}.Route exist but method has not been decorated with worker.`;
+                throw `Invalid route registration in Controller : ${route.controllerName} and method : ${worker.workerName}. Route exists but method has not been decorated with worker.`;
             }
 
             if (worker.methodsAllowed.indexOf(httpMethod) >= 0) {
@@ -61,12 +82,12 @@ const checkRouteInWorker = (route: RouteInfo, httpMethod: HTTP_METHOD, urlParts:
             }
         }
     }
+
     if (matchedRoute.allowedHttpMethod.length === 0) {
         return null;
     }
     matchedRoute.params = {};
     return matchedRoute;
-
 };
 
 export function parseAndMatchRoute(url: string, httpMethod: HTTP_METHOD) {

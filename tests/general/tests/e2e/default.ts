@@ -99,7 +99,7 @@ describe("/default", () => {
             }
         });
         expect(res.status).toBe(500);
-        expect(res.data).toContain('Invalid route registration in Controller : EmptyController and method : dailyAccountBalance.Route exist but method has not been decorated with worker.');
+        expect(res.data).toContain('Invalid route registration in Controller : EmptyController and method : dailyAccountBalance. Route exists but method has not been decorated with worker.');
     });
 
     it('/influencers.rss', async () => {
