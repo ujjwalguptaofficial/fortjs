@@ -12,6 +12,7 @@ import { WebPushController } from "./controllers/web_push_controller";
 import { EmptyController } from "./controllers/empty_controller";
 import { UserProfileController, UserProfileNestedController } from "./controllers/user_profile_controller";
 import { CacheController } from "./controllers/cache_controller";
+import { SwaggerController } from "./controllers/swagger_controller";
 
 export const routes: IControllerRoute[] = [{
     controller: DefaultController,
@@ -64,5 +65,9 @@ export const routes: IControllerRoute[] = [{
 {
     controller: CacheController,
     path: "/cache"
+},
+{
+    controller: SwaggerController,
+    path: "/swagger"
 }
 ];
