@@ -11,7 +11,7 @@ export class SwaggerController extends Controller {
     @http.get("/*")
     async wildcard() {
         const path = this.param['*'];
-        console.log(`hit by path`, path);
+        // console.log(`hit by path`, path);
         return customResult((option) => {
             const req = option.request;
             const res = option.response;
