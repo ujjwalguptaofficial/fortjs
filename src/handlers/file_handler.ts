@@ -2,35 +2,30 @@ import { HTTP_STATUS_CODE, MIME_TYPE, ETAG_TYPE } from "../enums";
 import * as path from "path";
 import { CONTENT_TYPE } from "../constants";
 import * as Fs from "fs";
+import { lstat } from "fs/promises";
 import { customResult, getMimeTypeFromExtension, promise } from "../helpers";
 import * as etag from "etag";
 import * as fresh from "fresh";
 import { isNullOrEmpty } from "../utils";
 import { IComponentProp, IFileResultInfo } from "../interfaces";
 import { handleFileResult } from "./handle_file_result";
+import { pipeline } from "stream/promises";
+import { createReadStream } from "fs";
 
 interface IFileInfo {
     folder: string,
     file: string;
 }
 
-function getFileStats_(filePath) {
-    return promise<Fs.Stats>((res, rej) => {
-        // eslint-disable-next-line
-        Fs.lstat(filePath, (err, status) => {
-            if (err) {
-                if (err.code === 'ENOENT') {
-                    res(null);
-                }
-                else {
-                    rej(err);
-                }
-            }
-            else {
-                res(status);
-            }
-        });
-    });
+async function getFileStats_(filePath: string): Promise<Fs.Stats | null> {
+    try {
+        return await lstat(filePath);
+    } catch (err: any) {
+        if (err.code === 'ENOENT') {
+            return null;
+        }
+        throw err;
+    }
 }
 
 export class FileHandler {
@@ -128,49 +123,30 @@ export class FileHandler {
         });
     }
 
-    private sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE) {
-        return new Promise<void>((res, rej) => {
-            const handler = this.option;
-            const { response } = handler;
-            const readStream = Fs.createReadStream(filePath);
+    private async sendFileAsResponse_(filePath: string, mimeType: MIME_TYPE): Promise<void> {
+        const handler = this.option;
+        const { response } = handler;
 
-            let finished = false;
-            const cleanup = () => {
-                if (!finished) {
-                    finished = true;
-                    readStream.destroy(); // ensures file handle is closed
-                }
-            };
+        if (handler.isResponseFinished()) {
+            return;
+        }
 
-            readStream.on('error', err => {
-                cleanup();
-                rej(err);
-            });
-
-            response.on('close', () => {
-                // client disconnected or response finished early
-                cleanup();
-                res(); // resolve safely — nothing more to stream
-            });
-
-            readStream.on('open', () => {
-                if (handler.isResponseFinished()) {
-                    cleanup();
-                    return res();
-                }
-
-                response.writeHead(HTTP_STATUS_CODE.Ok, {
-                    [CONTENT_TYPE]: mimeType
-                });
-
-                readStream.pipe(response);
-            });
-
-            readStream.on('end', () => {
-                cleanup();
-                res();
-            });
+        response.writeHead(HTTP_STATUS_CODE.Ok, {
+            [CONTENT_TYPE]: mimeType
         });
+
+        const readStream = createReadStream(filePath);
+
+        try {
+            // pipeline automatically pipes and cleans up streams on error or close
+            await pipeline(readStream, response);
+        } catch (err: any) {
+            // If client aborted/disconnected early, pipeline throws an error (ERR_STREAM_PREMATURE_CLOSE)
+            // You can safely ignore client disconnects, but rethrow other unexpected errors
+            if (err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+                throw err;
+            }
+        }
     }
 
     async send(filePathInfo: IFileResultInfo) {
