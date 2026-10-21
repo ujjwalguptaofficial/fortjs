@@ -24,29 +24,17 @@ const readAndMap = async (option: ViewReadOption, pathOfView: string): Promise<C
     };
 };
 
-export let getViewFromFile: (option: ViewReadOption) => Promise<string | any>;
+export const getViewFromFile = async function (option: ViewReadOption): Promise<string | any> {
+    const fullPath = path.join(Fort.viewPath, option.fileLocation);
+    const fileStats = await stat(fullPath);
 
-// ... inside production block:
-if (process.env.NODE_ENV === "production") {
-    getViewFromFile = async function (option: ViewReadOption): Promise<string | any> {
-        const fullPath = path.join(Fort.viewPath, option.fileLocation);
-        const fileStats = await stat(fullPath);
+    const cached = viewCache.get(option.fileLocation); // Use .get()
 
-        const cached = viewCache.get(option.fileLocation); // Use .get()
+    if (cached && cached.mtimeMs === fileStats.mtimeMs) {
+        return promiseResolve(cached.content);
+    }
 
-        if (cached && cached.mtimeMs === fileStats.mtimeMs) {
-            return promiseResolve(cached.content);
-        }
-
-        const entry = await readAndMap(option, fullPath);
-        viewCache.set(option.fileLocation, entry); // Use .set()
-        return entry.content;
-    };
-}
-else {
-    getViewFromFile = async function (option: ViewReadOption): Promise<string | any> {
-        const fullPath = path.join(Fort.viewPath, option.fileLocation);
-        const entry = await readAndMap(option, fullPath);
-        return entry.content;
-    };
-}
+    const entry = await readAndMap(option, fullPath);
+    viewCache.set(option.fileLocation, entry); // Use .set()
+    return entry.content;
+};
